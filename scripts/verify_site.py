@@ -20,6 +20,17 @@ EXPECTED_IDS = (
     "terminal-bench-3.0",
     "terminal-bench-4.0",
 )
+SOURCE_TYPES = {"benchmark_official", "vendor_reported", "penguin_run"}
+VENDOR_SOURCE_PREFIXES = {
+    "DeepSeek": (
+        "https://api-docs.deepseek.com/",
+        "https://huggingface.co/deepseek-ai/",
+    ),
+    "Z.ai": ("https://huggingface.co/zai-org/",),
+    "Qwen": ("https://huggingface.co/Qwen/",),
+    "Moonshot AI": ("https://huggingface.co/moonshotai/", "https://www.kimi.com/"),
+}
+PENGUIN_SOURCE_PREFIX = "https://github.com/hw3150cu/TB2.1_penguin_dsv4_flash"
 
 
 def load_importer() -> ModuleType:
@@ -62,29 +73,46 @@ def expected_competition_ranks(rows: list[dict[str, Any]]) -> list[int]:
 
 def verify_benchmark(bench: dict[str, Any]) -> None:
     rows = bench["results"]
+    official_rows = [row for row in rows if row["source_type"] == "benchmark_official"]
     assert rows, f"{bench['id']}: no rows"
     assert bench["official_url"] == f"https://www.tbench.ai/?version={bench['version']}"
     assert bench["snapshot_updated_at"], f"{bench['id']}: missing upstream timestamp"
     assert bench["result_count"] == len(rows)
+    assert bench["official_result_count"] == len(official_rows)
+    assert bench["vendor_result_count"] == sum(
+        row["source_type"] == "vendor_reported" for row in rows
+    )
+    assert bench["penguin_result_count"] == sum(
+        row["source_type"] == "penguin_run" for row in rows
+    )
     assert bench["model_count"] == len({row["model"]["label"] for row in rows})
     assert bench["harness_count"] == len({row["harness"]["label"] for row in rows})
     assert bench["best_accuracy"] == max(row["accuracy"] for row in rows)
+    assert bench["official_best_accuracy"] == max(
+        row["accuracy"] for row in official_rows
+    )
 
-    actual_ranks = [row["rank"] for row in rows]
-    assert actual_ranks == expected_competition_ranks(rows), (
+    official_rows_by_rank = sorted(official_rows, key=lambda row: row["rank"])
+    actual_ranks = [row["rank"] for row in official_rows_by_rank]
+    official_rows_by_score = sorted(
+        official_rows, key=lambda row: (-row["accuracy"], row["model"]["label"])
+    )
+    assert actual_ranks == expected_competition_ranks(official_rows_by_score), (
         f"{bench['id']}: official rank sequence does not match score order"
     )
 
     for row in rows:
         row_id = row["id"]
         assert row["benchmark_id"] == bench["id"], row_id
+        assert row["source_type"] in SOURCE_TYPES, row_id
         assert 0 <= row["accuracy"] <= 100, row_id
         ci95 = row["accuracy_ci95_half_width"]
         assert ci95 is None or 0 <= ci95 <= 100, row_id
         stderr = row["accuracy_stderr"]
         assert stderr is None or 0 <= stderr <= 100, row_id
-        assert valid_date(row["release_date"]), row_id
-        assert row["display_release_date"], row_id
+        assert row["release_date"] is None or valid_date(row["release_date"]), row_id
+        assert row["published_at"] is None or valid_date(row["published_at"]), row_id
+        assert row["verified_at"] is None or valid_date(row["verified_at"]), row_id
         assert row["total_tokens"] is None or row["total_tokens"] >= 0, row_id
         assert row["total_cost_usd"] is None or row["total_cost_usd"] >= 0, row_id
         assert row["trial_count"] is None or row["trial_count"] > 0, row_id
@@ -107,10 +135,31 @@ def verify_benchmark(bench: dict[str, Any]) -> None:
             verify_link(row["display_reward_hacks"], "display_reward_hacks", row_id)
         if row["submission"] is not None:
             verify_link(row["submission"], "submission", row_id)
-        detail_url = row["official_detail_url"]
-        expected_suffix = f"/leaderboards/{bench['source_api']['leaderboard']}/rows/{row_id}"
-        assert detail_url.startswith("https://hub.harborframework.com/datasets/"), row_id
-        assert detail_url.endswith(expected_suffix), row_id
+        assert row["source_url"].startswith("https://"), row_id
+        assert row["source_title"], row_id
+        assert row["source_publisher"], row_id
+
+        if row["source_type"] == "benchmark_official":
+            assert isinstance(row["rank"], int) and row["rank"] > 0, row_id
+            assert valid_date(row["release_date"]), row_id
+            assert row["display_release_date"], row_id
+            detail_url = row["official_detail_url"]
+            expected_suffix = f"/leaderboards/{bench['source_api']['leaderboard']}/rows/{row_id}"
+            assert detail_url.startswith("https://hub.harborframework.com/datasets/"), row_id
+            assert detail_url.endswith(expected_suffix), row_id
+            assert row["source_url"] == detail_url, row_id
+        else:
+            assert row["rank"] is None, f"{row_id}: non-official result has a rank"
+            assert row["official_detail_url"] is None, row_id
+            assert valid_date(row["verified_at"]), row_id
+            assert isinstance(row["protocol_note"], dict), row_id
+            assert row["protocol_note"].get("en") and row["protocol_note"].get("zh"), row_id
+            if row["source_type"] == "vendor_reported":
+                prefixes = VENDOR_SOURCE_PREFIXES.get(row["source_publisher"])
+                assert prefixes, f"{row_id}: unrecognized vendor publisher"
+                assert row["source_url"].startswith(prefixes), row_id
+            else:
+                assert row["source_url"].startswith(PENGUIN_SOURCE_PREFIX), row_id
 
 
 def verify_frontend_contract() -> None:
@@ -122,17 +171,18 @@ def verify_frontend_contract() -> None:
     assert "official_detail_url" in script, "Official result detail link is missing"
     assert 'class="bench-switcher"' in html, "Top navigation benchmark switcher missing"
     assert 'class="locale-control"' in html, "Language control missing"
+    assert 'class="filter-select source-filter"' in html, "Source filter missing"
     assert "accuracy_ci95_half_width" in script, "Confidence-interval comparison is missing"
     column_contract = (
         '["rank", "rank"]',
         '["harness", "harness"]',
         '["model", "model"]',
         '["accuracy", "resolutionRate"]',
-        '["trial_count", "trials"]',
         '["average_trial_duration_seconds", "avgDuration"]',
         '["release_date", "releaseDate"]',
         '["total_tokens", "tokens"]',
         '["total_cost_usd", "cost"]',
+        '["source_type", "source"]',
     )
     positions = [script.find(column) for column in column_contract]
     assert all(position >= 0 for position in positions), "A required table column is missing"
@@ -141,6 +191,9 @@ def verify_frontend_contract() -> None:
     for removed_selector in ("ci-whisker", "rate-track", "rate-fill"):
         assert removed_selector not in script, f"Removed {removed_selector} markup is still rendered"
         assert removed_selector not in css, f"Removed {removed_selector} styling is still present"
+    assert 'class="ci-plot"' in script, "Confidence interval plot is missing"
+    assert ".ci-range" in css and ".ci-point" in css, "Confidence interval styling is missing"
+    assert 'row.protocol_note !== null' in script, "Official Details null guard is missing"
     assert "linkedName(row.harness, row.harness_org)" not in script, (
         "Harness organization is still repeated in the main table"
     )
@@ -158,12 +211,12 @@ def main() -> None:
     args = parser.parse_args()
 
     actual = json.loads(PUBLISHED.read_text(encoding="utf-8"))
-    assert actual["schema_version"] == 3
-    assert actual["default_benchmark"] == "terminal-bench-4.0"
+    assert actual["schema_version"] == 4
+    assert actual["default_benchmark"] == "terminal-bench-2.1"
     assert tuple(bench["id"] for bench in actual["benchmarks"]) == EXPECTED_IDS
 
     ids = [row["id"] for bench in actual["benchmarks"] for row in bench["results"]]
-    assert len(ids) == len(set(ids)), "Duplicate official row IDs"
+    assert len(ids) == len(set(ids)), "Duplicate public row IDs"
     for bench in actual["benchmarks"]:
         verify_benchmark(bench)
     verify_frontend_contract()
@@ -177,11 +230,12 @@ def main() -> None:
         )
 
     summary = ", ".join(
-        f"TB {bench['version']}: {bench['result_count']} official rows"
+        f"TB {bench['version']}: {bench['result_count']} public / "
+        f"{bench['official_result_count']} official rows"
         for bench in actual["benchmarks"]
     )
     suffix = " + live API match" if args.check_live else ""
-    print(f"Verified schema, ranks, metrics, dates and frontend contract{suffix}: {summary}.")
+    print(f"Verified schema, sources, ranks, metrics, dates and frontend contract{suffix}: {summary}.")
 
 
 if __name__ == "__main__":

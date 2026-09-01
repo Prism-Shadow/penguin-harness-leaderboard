@@ -17,12 +17,18 @@ const translations = {
     heroTitle: "Compare the whole setup,<br /><span>not just the model.</span>",
     viewResults: "View results",
     viewOfficial: "Open official leaderboard",
-    officialResults: "Official results",
+    publicResults: "Public results",
     models: "Models",
     harnesses: "Harnesses",
     officialBest: "Official best",
-    officialSnapshot: "Official snapshot",
-    snapshotUpdated: "Official snapshot updated {date}.",
+    publicSnapshot: "Public results",
+    snapshotUpdated: "Official snapshot updated {date}; curated sources verified {verified}.",
+    source: "Source",
+    sourceFilter: "Filter by source",
+    allSources: "All sources",
+    benchmarkOfficial: "Benchmark official",
+    vendorReported: "Vendor-reported",
+    penguinRun: "Penguin run",
     harness: "Harness",
     model: "Model",
     thinkingLevel: "Thinking level",
@@ -32,19 +38,19 @@ const translations = {
     allHarnesses: "All harnesses",
     allModels: "All models",
     allLevels: "All levels",
-    showingResults: "Showing {shown} of {total} official results",
+    showingResults: "Showing {shown} of {total} public results",
     tableHint: "Swipe to view the full table →",
-    loadingResults: "Loading official results…",
-    confidenceNote: "Resolution rate includes the official 95% confidence interval. Tokens and cost are totals reported by tbench.ai.",
+    loadingResults: "Loading public results…",
+    confidenceNote: "The 95% confidence interval is shown only when the source reports it. Vendor and Penguin rows have no official rank.",
     readMetrics: "Read the metrics",
     metricsTitle: "The comparable result, at a glance.",
     resolutionRate: "Resolution rate",
-    resolutionDescription: "Pass rate with the official 95% confidence interval shown on the same scale.",
+    resolutionDescription: "Pass rate with the reported 95% confidence interval shown on the same 0–100 scale.",
     tokens: "Tokens",
     tokensDescription: "Total reported token usage across the evaluated trials.",
     cost: "Cost",
     costDescription: "Total reported API cost for the published evaluation.",
-    footerText: "Official Terminal-Bench snapshot · ready for future Penguin runs",
+    footerText: "Terminal-Bench official baselines · vendor reports · Penguin runs",
     rank: "Rank",
     releaseDate: "Release date",
     notReported: "Not reported",
@@ -54,8 +60,10 @@ const translations = {
     resultDetails: "Result details",
     closeDetails: "Close details",
     openOfficialDetail: "Open official detail",
+    openSource: "Open source",
     done: "Done",
     officialRank: "Official rank",
+    notOfficiallyRanked: "Not officially ranked",
     configuration: "Configuration",
     scoreMetrics: "Score metrics",
     usageMetrics: "Usage metrics",
@@ -78,8 +86,15 @@ const translations = {
     submission: "Submission",
     benchmarkSnapshot: "Benchmark snapshot",
     officialRow: "Official result row",
+    sourceType: "Source type",
+    publisher: "Publisher",
+    sourcePage: "Evidence page",
+    sourcePublished: "Source published",
+    verifiedOn: "Verified on",
+    protocolNote: "Reported protocol",
+    harnessVersion: "Harness version",
     sorting: "Sort by {column}",
-    dataError: "Official results could not be loaded. Start a local web server and refresh.",
+    dataError: "Public results could not be loaded. Start a local web server and refresh.",
   },
   zh: {
     skipToResults: "跳到榜单",
@@ -95,12 +110,18 @@ const translations = {
     heroTitle: "对比完整配置，<br /><span>而不只是模型。</span>",
     viewResults: "查看榜单",
     viewOfficial: "打开官方榜单",
-    officialResults: "官方结果",
+    publicResults: "公开结果",
     models: "模型",
     harnesses: "Harness",
     officialBest: "官方最高分",
-    officialSnapshot: "官方快照",
-    snapshotUpdated: "官方快照更新时间：{date}。",
+    publicSnapshot: "公开结果",
+    snapshotUpdated: "官方快照更新时间：{date}；人工来源核验于 {verified}。",
+    source: "来源",
+    sourceFilter: "按来源筛选",
+    allSources: "全部来源",
+    benchmarkOfficial: "Benchmark 官方",
+    vendorReported: "厂商自报",
+    penguinRun: "Penguin 实测",
     harness: "Harness",
     model: "模型",
     thinkingLevel: "思考等级",
@@ -110,19 +131,19 @@ const translations = {
     allHarnesses: "全部 Harness",
     allModels: "全部模型",
     allLevels: "全部等级",
-    showingResults: "显示 {shown} / {total} 条官方结果",
+    showingResults: "显示 {shown} / {total} 条公开结果",
     tableHint: "横向滑动查看完整表格 →",
-    loadingResults: "正在加载官方结果…",
-    confidenceNote: "解决率同时展示官方 95% 置信区间；Token 和成本均为 tbench.ai 公布的评测总量。",
+    loadingResults: "正在加载公开结果…",
+    confidenceNote: "仅当来源披露时才显示 95% 置信区间；厂商自报和 Penguin 实测不拥有官方名次。",
     readMetrics: "指标说明",
     metricsTitle: "一眼看懂可比结果。",
     resolutionRate: "解决率",
-    resolutionDescription: "通过率与官方 95% 置信区间在同一刻度上展示。",
+    resolutionDescription: "通过率与来源披露的 95% 置信区间在同一条 0–100 刻度上展示。",
     tokens: "Token",
     tokensDescription: "本次公开评测全部 trials 的 Token 总用量。",
     cost: "成本",
     costDescription: "本次公开评测报告的 API 总成本。",
-    footerText: "Terminal-Bench 官方快照 · 可继续接入 Penguin 实测结果",
+    footerText: "Terminal-Bench 官方基线 · 厂商自报 · Penguin 实测",
     rank: "排名",
     releaseDate: "发布日期",
     notReported: "未披露",
@@ -132,8 +153,10 @@ const translations = {
     resultDetails: "结果详情",
     closeDetails: "关闭详情",
     openOfficialDetail: "打开官方详情",
+    openSource: "打开来源",
     done: "完成",
     officialRank: "官方排名",
+    notOfficiallyRanked: "未参与官方排名",
     configuration: "评测配置",
     scoreMetrics: "成绩指标",
     usageMetrics: "用量指标",
@@ -156,8 +179,15 @@ const translations = {
     submission: "提交记录",
     benchmarkSnapshot: "Benchmark 官方快照",
     officialRow: "官方结果详情",
+    sourceType: "来源类型",
+    publisher: "发布方",
+    sourcePage: "证据页面",
+    sourcePublished: "来源发布日期",
+    verifiedOn: "核验日期",
+    protocolNote: "来源披露的协议",
+    harnessVersion: "Harness 版本",
     sorting: "按{column}排序",
-    dataError: "无法加载官方结果，请启动本地 Web 服务后刷新。",
+    dataError: "无法加载公开结果，请启动本地 Web 服务后刷新。",
   },
 };
 
@@ -165,14 +195,15 @@ const state = {
   payload: null,
   benchmark: null,
   locale: document.documentElement.dataset.locale || "en",
-  filters: { harness: "", model: "", thinking: "" },
-  sort: { key: "rank", direction: "asc" },
+  filters: { source: "", harness: "", model: "", thinking: "" },
+  sort: { key: "accuracy", direction: "desc" },
 };
 
 const elements = {
   benchSwitcher: document.querySelector(".bench-switcher"),
   localeSelect: document.querySelector(".locale-select"),
   themeToggle: document.querySelector(".theme-toggle"),
+  sourceFilter: document.querySelector(".source-filter"),
   harnessFilter: document.querySelector(".harness-filter"),
   modelFilter: document.querySelector(".model-filter"),
   thinkingFilter: document.querySelector(".thinking-filter"),
@@ -184,6 +215,7 @@ const elements = {
   dialogSubtitle: document.querySelector(".dialog-subtitle"),
   dialogBody: document.querySelector(".dialog-body"),
   dialogOfficialLink: document.querySelector(".official-detail-link"),
+  dialogOfficialLinkLabel: document.querySelector(".official-detail-link-label"),
   dialogClose: document.querySelector(".dialog-close"),
   dialogDone: document.querySelector(".dialog-done"),
 };
@@ -380,10 +412,40 @@ function updateSelect(select, values, current, emptyLabel) {
   select.value = values.includes(current) ? current : "";
 }
 
+function sourceTypeLabel(sourceType) {
+  const labels = {
+    benchmark_official: t("benchmarkOfficial"),
+    vendor_reported: t("vendorReported"),
+    penguin_run: t("penguinRun"),
+  };
+  return labels[sourceType] || sourceType;
+}
+
+function updateSourceSelect(rows) {
+  const values = [...new Set(rows.map((row) => row.source_type))];
+  elements.sourceFilter.replaceChildren();
+  const all = document.createElement("option");
+  all.value = "";
+  all.textContent = t("allSources");
+  elements.sourceFilter.append(all);
+  ["benchmark_official", "vendor_reported", "penguin_run"]
+    .filter((value) => values.includes(value))
+    .forEach((value) => {
+      const option = document.createElement("option");
+      option.value = value;
+      option.textContent = sourceTypeLabel(value);
+      elements.sourceFilter.append(option);
+    });
+  elements.sourceFilter.value = values.includes(state.filters.source)
+    ? state.filters.source
+    : "";
+}
+
 function renderFilters() {
   const rows = state.benchmark.results;
   const unique = (project) => [...new Set(rows.map(project).filter(Boolean))]
     .sort((a, b) => a.localeCompare(b));
+  updateSourceSelect(rows);
   updateSelect(
     elements.harnessFilter,
     unique((row) => row.harness.label),
@@ -402,6 +464,7 @@ function renderFilters() {
     state.filters.thinking,
     t("allLevels"),
   );
+  state.filters.source = elements.sourceFilter.value;
   state.filters.harness = elements.harnessFilter.value;
   state.filters.model = elements.modelFilter.value;
   state.filters.thinking = elements.thinkingFilter.value;
@@ -409,7 +472,8 @@ function renderFilters() {
 
 function filteredRows() {
   return state.benchmark.results.filter((row) => (
-    (!state.filters.harness || row.harness.label === state.filters.harness)
+    (!state.filters.source || row.source_type === state.filters.source)
+    && (!state.filters.harness || row.harness.label === state.filters.harness)
     && (!state.filters.model || row.model.label === state.filters.model)
     && (!state.filters.thinking || row.thinking_level === state.filters.thinking)
   ));
@@ -421,11 +485,15 @@ function sortedRows(rows) {
   const value = (row) => {
     if (key === "harness") return row.harness.label;
     if (key === "model") return row.model.label;
+    if (key === "source_type") return sourceTypeLabel(row.source_type);
     return row[key];
   };
   return [...rows].sort((left, right) => {
     const a = value(left);
     const b = value(right);
+    if (a == null && b == null) return 0;
+    if (a == null) return 1;
+    if (b == null) return -1;
     if (typeof a === "string" || typeof b === "string") {
       return String(a ?? "").localeCompare(String(b ?? "")) * multiplier;
     }
@@ -437,7 +505,7 @@ function setSort(key) {
   if (state.sort.key === key) {
     state.sort.direction = state.sort.direction === "asc" ? "desc" : "asc";
   } else {
-    state.sort = { key, direction: key === "rank" ? "asc" : "desc" };
+    state.sort = { key, direction: ["rank", "harness", "model", "source_type"].includes(key) ? "asc" : "desc" };
   }
   renderTable();
 }
@@ -448,11 +516,11 @@ function renderTableHead() {
     ["harness", "harness"],
     ["model", "model"],
     ["accuracy", "resolutionRate"],
-    ["trial_count", "trials"],
     ["average_trial_duration_seconds", "avgDuration"],
     ["release_date", "releaseDate"],
     ["total_tokens", "tokens"],
     ["total_cost_usd", "cost"],
+    ["source_type", "source"],
   ];
   const row = document.createElement("tr");
   columns.forEach(([key, labelKey]) => {
@@ -495,9 +563,28 @@ function accuracyCell(row) {
     });
   return `
     <div class="rate-cell">
-      <strong>${row.accuracy.toFixed(1)}%</strong>
-      <span>${escapeHtml(interval)}</span>
+      <div class="rate-copy">
+        <strong>${row.accuracy.toFixed(1)}%</strong>
+        <span>${escapeHtml(interval)}</span>
+      </div>
+      <span class="ci-plot" aria-hidden="true">
+        ${ci == null ? "" : `<i class="ci-range" style="left:${lower}%;width:${upper - lower}%"></i>`}
+        <b class="ci-point" style="left:${Math.min(100, Math.max(0, row.accuracy))}%"></b>
+      </span>
     </div>`;
+}
+
+function sourceBadge(row) {
+  const href = safeUrl(row.source_url);
+  const label = escapeHtml(sourceTypeLabel(row.source_type));
+  const content = `<span class="source-badge source-${escapeHtml(row.source_type)}">${label}</span>`;
+  return href
+    ? `<a class="source-link" href="${escapeHtml(href)}" target="_blank" rel="noreferrer">${content}<span aria-hidden="true">↗</span></a>`
+    : content;
+}
+
+function missingValue() {
+  return `<span class="missing-value">${escapeHtml(t("notReported"))}</span>`;
 }
 
 function renderTable() {
@@ -519,17 +606,17 @@ function renderTable() {
       : `<span class="effort-pill muted">${escapeHtml(t("notReported"))}</span>`;
     return `
       <tr>
-        <td class="rank-cell"><span class="rank-badge${row.rank <= 3 ? ` rank-${row.rank}` : ""}">${row.rank}</span></td>
+        <td class="rank-cell"><span class="rank-badge${row.rank != null && row.rank <= 3 ? ` rank-${row.rank}` : ""}" title="${escapeHtml(row.rank == null ? t("notOfficiallyRanked") : t("officialRank"))}">${row.rank ?? "—"}</span></td>
         <td class="entity-cell harness-cell">${linkedName(row.harness)}</td>
         <td class="entity-cell model-cell">
           <div class="model-primary">${linkedName(row.model)}${effort}</div>
         </td>
         <td>${accuracyCell(row)}</td>
-        <td class="number-cell">${row.trial_count == null ? escapeHtml(t("notReported")) : escapeHtml(formatNumber(row.trial_count))}</td>
-        <td class="number-cell">${row.average_trial_duration_seconds == null ? escapeHtml(t("notReported")) : escapeHtml(formatDuration(row.average_trial_duration_seconds))}</td>
+        <td class="number-cell">${row.average_trial_duration_seconds == null ? missingValue() : escapeHtml(formatDuration(row.average_trial_duration_seconds))}</td>
         <td class="date-cell">${escapeHtml(formatDate(row.release_date))}</td>
-        <td class="number-cell">${escapeHtml(formatTokens(row.total_tokens))}</td>
-        <td class="number-cell">${escapeHtml(formatCost(row.total_cost_usd))}</td>
+        <td class="number-cell">${row.total_tokens == null ? missingValue() : escapeHtml(formatTokens(row.total_tokens))}</td>
+        <td class="number-cell">${row.total_cost_usd == null ? missingValue() : escapeHtml(formatCost(row.total_cost_usd))}</td>
+        <td class="source-cell">${sourceBadge(row)}</td>
         <td class="details-cell"><button class="details-button" type="button" data-result-id="${escapeHtml(row.id)}">${escapeHtml(t("details"))}<span aria-hidden="true">→</span></button></td>
       </tr>`;
   }).join("");
@@ -564,12 +651,13 @@ function openDetails(row, trigger) {
   const summary = `
     <div class="detail-summary">
       <div><strong>${escapeHtml(formatPercent(row.accuracy, 1))}</strong><span>${escapeHtml(t("resolutionRate"))}</span></div>
-      <div><strong>${escapeHtml(String(row.rank))}</strong><span>${escapeHtml(t("officialRank"))}</span></div>
+      <div><strong>${row.rank == null ? "—" : escapeHtml(String(row.rank))}</strong><span>${escapeHtml(row.rank == null ? t("notOfficiallyRanked") : t("officialRank"))}</span></div>
       <div><strong>${escapeHtml(formatDate(row.release_date))}</strong><span>${escapeHtml(t("releaseDate"))}</span></div>
     </div>`;
 
   const configuration = detailGroup(t("configuration"), [
     detailItem(t("harness"), detailLink(row.harness, row.harness?.label) || escapeHtml(row.harness?.label)),
+    detailItem(t("harnessVersion"), row.harness_version ? escapeHtml(row.harness_version) : null),
     detailItem(t("harnessOrganization"), detailLink(row.harness_org, row.harness_org?.label) || escapeHtml(row.harness_org?.label)),
     detailItem(t("model"), detailLink(row.model, row.model?.label) || escapeHtml(row.model?.label)),
     detailItem(t("modelOrganization"), detailLink(row.model_org, row.model_org?.label) || escapeHtml(row.model_org?.label)),
@@ -600,7 +688,19 @@ function openDetails(row, trigger) {
   ]);
 
   const officialRow = safeUrl(row.official_detail_url);
+  const evidenceUrl = safeUrl(row.source_url);
+  const protocolNote = row.protocol_note !== null && typeof row.protocol_note === "object"
+    ? row.protocol_note[state.locale] || row.protocol_note.en
+    : row.protocol_note;
   const sourceLinks = detailGroup(t("sourceLinks"), [
+    detailItem(t("sourceType"), escapeHtml(sourceTypeLabel(row.source_type))),
+    detailItem(t("publisher"), row.source_publisher ? escapeHtml(row.source_publisher) : null),
+    detailItem(t("sourcePage"), evidenceUrl
+      ? `<a href="${escapeHtml(evidenceUrl)}" target="_blank" rel="noreferrer">${escapeHtml(row.source_title || row.source_publisher || t("source"))} ↗</a>`
+      : null),
+    detailItem(t("sourcePublished"), row.published_at ? escapeHtml(formatDate(row.published_at)) : null),
+    detailItem(t("verifiedOn"), row.verified_at ? escapeHtml(formatDate(row.verified_at)) : null),
+    detailItem(t("protocolNote"), protocolNote ? escapeHtml(protocolNote) : null),
     detailItem(t("officialRow"), officialRow
       ? `<a href="${escapeHtml(officialRow)}" target="_blank" rel="noreferrer">Harbor ↗</a>`
       : null),
@@ -609,7 +709,8 @@ function openDetails(row, trigger) {
   ]);
 
   elements.dialogBody.innerHTML = `${summary}<div class="detail-groups">${configuration}${scores}${usage}${sourceLinks}</div>`;
-  elements.dialogOfficialLink.href = officialRow || state.benchmark.official_url;
+  elements.dialogOfficialLink.href = officialRow || evidenceUrl || state.benchmark.official_url;
+  elements.dialogOfficialLinkLabel.textContent = officialRow ? t("openOfficialDetail") : t("openSource");
   elements.resultDialog.showModal();
 }
 
@@ -629,12 +730,13 @@ function renderBenchmark() {
   document.querySelector(".results-title").textContent = bench.name;
   document.querySelector(".results-description").textContent = t("snapshotUpdated", {
     date: formatSnapshot(bench.snapshot_updated_at),
+    verified: formatDate(state.payload.curated_verified_at),
   });
   document.querySelector(".stat-results").textContent = bench.result_count;
   document.querySelector(".stat-models").textContent = bench.model_count;
   document.querySelector(".stat-harnesses").textContent = bench.harness_count;
-  document.querySelector(".stat-best").textContent = `${bench.best_accuracy.toFixed(1)}%`;
-  document.querySelector(".table-caption").textContent = `${bench.name} official results`;
+  document.querySelector(".stat-best").textContent = `${bench.official_best_accuracy.toFixed(1)}%`;
+  document.querySelector(".table-caption").textContent = `${bench.name} public results`;
   document.querySelectorAll(".benchmark-source-link").forEach((link) => {
     link.href = bench.official_url;
   });
@@ -646,8 +748,8 @@ function selectBenchmark(id, updateUrl = true) {
   const bench = state.payload.benchmarks.find((item) => item.id === id);
   if (!bench) return;
   state.benchmark = bench;
-  state.filters = { harness: "", model: "", thinking: "" };
-  state.sort = { key: "rank", direction: "asc" };
+  state.filters = { source: "", harness: "", model: "", thinking: "" };
+  state.sort = { key: "accuracy", direction: "desc" };
   if (updateUrl) {
     const url = new URL(window.location.href);
     url.searchParams.delete("bench");
@@ -670,6 +772,10 @@ async function init() {
   elements.localeSelect.value = document.documentElement.dataset.localePref || "system";
   elements.localeSelect.addEventListener("change", (event) => setLocale(event.target.value));
   elements.themeToggle.addEventListener("click", cycleTheme);
+  elements.sourceFilter.addEventListener("change", (event) => {
+    state.filters.source = event.target.value;
+    renderTable();
+  });
   elements.harnessFilter.addEventListener("change", (event) => {
     state.filters.harness = event.target.value;
     renderTable();

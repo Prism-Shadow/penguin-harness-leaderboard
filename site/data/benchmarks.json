@@ -1,7 +1,8 @@
 {
-  "schema_version": 3,
-  "default_benchmark": "terminal-bench-4.0",
+  "schema_version": 4,
+  "default_benchmark": "terminal-bench-2.1",
   "official_api": "https://ofhuhcpkvzjlejydnvyd.supabase.co/functions/v1/leaderboard-read",
+  "curated_verified_at": "2026-09-01",
   "benchmarks": [
     {
       "id": "terminal-bench-2.1",
@@ -14,15 +15,304 @@
         "dataset_version": "latest"
       },
       "snapshot_updated_at": "2026-08-29T00:04:08.213344+00:00",
-      "result_count": 17,
-      "model_count": 12,
-      "harness_count": 6,
-      "best_accuracy": 83.82,
+      "result_count": 27,
+      "official_result_count": 17,
+      "vendor_result_count": 9,
+      "penguin_result_count": 1,
+      "model_count": 20,
+      "harness_count": 10,
+      "best_accuracy": 88.3,
+      "official_best_accuracy": 83.82,
       "description": {
-        "en": "Official Terminal-Bench 2.1 leaderboard snapshot from tbench.ai.",
-        "zh": "来自 tbench.ai 的 Terminal-Bench 2.1 官方榜单快照。"
+        "en": "Public Terminal-Bench 2.1 results, with official ranks kept separate from reported runs.",
+        "zh": "Terminal-Bench 2.1 公开结果；官方排名与厂商、Penguin 报告结果严格区分。"
       },
       "results": [
+        {
+          "id": "vendor-kimi-k3-tb21-kimi-code",
+          "benchmark_id": "terminal-bench-2.1",
+          "rank": null,
+          "harness": {
+            "label": "Kimi Code",
+            "url": null
+          },
+          "harness_org": {
+            "label": "Moonshot AI",
+            "url": "https://www.kimi.com"
+          },
+          "model": {
+            "label": "Kimi K3",
+            "url": "https://huggingface.co/moonshotai/Kimi-K3"
+          },
+          "model_org": {
+            "label": "Moonshot AI",
+            "url": "https://www.kimi.com"
+          },
+          "thinking_level": "max",
+          "accuracy": 88.3,
+          "accuracy_stderr": null,
+          "accuracy_ci95_half_width": null,
+          "display_accuracy": null,
+          "release_date": null,
+          "display_release_date": null,
+          "total_tokens": null,
+          "display_total_tokens": null,
+          "total_cost_usd": null,
+          "display_cost": null,
+          "trial_count": null,
+          "pass_at_2": null,
+          "pass_at_3": null,
+          "pass_at_4": null,
+          "pass_at_5": null,
+          "successes": null,
+          "uncached_input_tokens": null,
+          "cached_input_tokens": null,
+          "output_tokens": null,
+          "average_trial_duration_seconds": null,
+          "reward_hacks": null,
+          "display_reward_hacks": null,
+          "submission": null,
+          "official_detail_url": null,
+          "source_type": "vendor_reported",
+          "source_url": "https://huggingface.co/moonshotai/Kimi-K3",
+          "source_title": "Kimi K3 model card",
+          "source_publisher": "Moonshot AI",
+          "published_at": "2026-08-20",
+          "verified_at": "2026-09-01",
+          "harness_version": null,
+          "protocol_note": {
+            "en": "Kimi Code harness; max reasoning effort; temperature=1.0 and top_p=1.0 for agentic tasks.",
+            "zh": "Kimi Code Harness；max 思考等级；Agent 任务使用 temperature=1.0、top_p=1.0。"
+          }
+        },
+        {
+          "id": "vendor-glm-5-3-tb21-claude-code",
+          "benchmark_id": "terminal-bench-2.1",
+          "rank": null,
+          "harness": {
+            "label": "Claude Code",
+            "url": "https://claude.com/claude-code"
+          },
+          "harness_org": {
+            "label": "Anthropic",
+            "url": "https://www.anthropic.com"
+          },
+          "model": {
+            "label": "GLM-5.3",
+            "url": "https://huggingface.co/zai-org/GLM-5.3"
+          },
+          "model_org": {
+            "label": "Z.ai",
+            "url": "https://z.ai"
+          },
+          "thinking_level": null,
+          "accuracy": 88.2,
+          "accuracy_stderr": null,
+          "accuracy_ci95_half_width": null,
+          "display_accuracy": null,
+          "release_date": null,
+          "display_release_date": null,
+          "total_tokens": null,
+          "display_total_tokens": null,
+          "total_cost_usd": null,
+          "display_cost": null,
+          "trial_count": null,
+          "pass_at_2": null,
+          "pass_at_3": null,
+          "pass_at_4": null,
+          "pass_at_5": null,
+          "successes": null,
+          "uncached_input_tokens": null,
+          "cached_input_tokens": null,
+          "output_tokens": null,
+          "average_trial_duration_seconds": null,
+          "reward_hacks": null,
+          "display_reward_hacks": null,
+          "submission": null,
+          "official_detail_url": null,
+          "source_type": "vendor_reported",
+          "source_url": "https://huggingface.co/zai-org/GLM-5.3",
+          "source_title": "GLM-5.3 model card",
+          "source_publisher": "Z.ai",
+          "published_at": null,
+          "verified_at": "2026-09-01",
+          "harness_version": "2.1.207",
+          "protocol_note": {
+            "en": "Claude Code 2.1.207; temperature=1.0, top_p=1, max_new_tokens=65,536, 6-hour timeout. The TB 2.1 note does not state the effort level.",
+            "zh": "Claude Code 2.1.207；temperature=1.0、top_p=1、max_new_tokens=65,536、6 小时超时；TB 2.1 注释未明确思考等级。"
+          }
+        },
+        {
+          "id": "vendor-deepseek-v4-pro-0813-tb21",
+          "benchmark_id": "terminal-bench-2.1",
+          "rank": null,
+          "harness": {
+            "label": "DeepSeek Harness",
+            "url": null
+          },
+          "harness_org": {
+            "label": "DeepSeek",
+            "url": "https://www.deepseek.com"
+          },
+          "model": {
+            "label": "DeepSeek-V4-Pro-0813",
+            "url": "https://huggingface.co/deepseek-ai/DeepSeek-V4-Pro-0813"
+          },
+          "model_org": {
+            "label": "DeepSeek",
+            "url": "https://www.deepseek.com"
+          },
+          "thinking_level": "max",
+          "accuracy": 87.9,
+          "accuracy_stderr": null,
+          "accuracy_ci95_half_width": null,
+          "display_accuracy": null,
+          "release_date": null,
+          "display_release_date": null,
+          "total_tokens": null,
+          "display_total_tokens": null,
+          "total_cost_usd": null,
+          "display_cost": null,
+          "trial_count": null,
+          "pass_at_2": null,
+          "pass_at_3": null,
+          "pass_at_4": null,
+          "pass_at_5": null,
+          "successes": null,
+          "uncached_input_tokens": null,
+          "cached_input_tokens": null,
+          "output_tokens": null,
+          "average_trial_duration_seconds": null,
+          "reward_hacks": null,
+          "display_reward_hacks": null,
+          "submission": null,
+          "official_detail_url": null,
+          "source_type": "vendor_reported",
+          "source_url": "https://huggingface.co/deepseek-ai/DeepSeek-V4-Pro-0813",
+          "source_title": "DeepSeek-V4-Pro-0813 model card",
+          "source_publisher": "DeepSeek",
+          "published_at": "2026-08-13",
+          "verified_at": "2026-09-01",
+          "harness_version": "minimal mode",
+          "protocol_note": {
+            "en": "DeepSeek Harness minimal mode; max reasoning effort; temperature=1.0, top_p=0.95.",
+            "zh": "DeepSeek Harness minimal mode；max 思考等级；temperature=1.0、top_p=0.95。"
+          }
+        },
+        {
+          "id": "vendor-qwen3-8-max-tb21-claude-code",
+          "benchmark_id": "terminal-bench-2.1",
+          "rank": null,
+          "harness": {
+            "label": "Claude Code",
+            "url": "https://claude.com/claude-code"
+          },
+          "harness_org": {
+            "label": "Anthropic",
+            "url": "https://www.anthropic.com"
+          },
+          "model": {
+            "label": "Qwen3.8-Max",
+            "url": "https://huggingface.co/Qwen/Qwen3.8-2.4T-A95B"
+          },
+          "model_org": {
+            "label": "Qwen",
+            "url": "https://qwen.ai"
+          },
+          "thinking_level": null,
+          "accuracy": 86.6,
+          "accuracy_stderr": null,
+          "accuracy_ci95_half_width": null,
+          "display_accuracy": null,
+          "release_date": null,
+          "display_release_date": null,
+          "total_tokens": null,
+          "display_total_tokens": null,
+          "total_cost_usd": null,
+          "display_cost": null,
+          "trial_count": null,
+          "pass_at_2": null,
+          "pass_at_3": null,
+          "pass_at_4": null,
+          "pass_at_5": null,
+          "successes": null,
+          "uncached_input_tokens": null,
+          "cached_input_tokens": null,
+          "output_tokens": null,
+          "average_trial_duration_seconds": null,
+          "reward_hacks": null,
+          "display_reward_hacks": null,
+          "submission": null,
+          "official_detail_url": null,
+          "source_type": "vendor_reported",
+          "source_url": "https://huggingface.co/Qwen/Qwen3.8-2.4T-A95B",
+          "source_title": "Qwen3.8-Max model card",
+          "source_publisher": "Qwen",
+          "published_at": null,
+          "verified_at": "2026-09-01",
+          "harness_version": null,
+          "protocol_note": {
+            "en": "Claude Code; avg@10; 5-hour timeout; max_tokens=131,072. The effort level is not disclosed.",
+            "zh": "Claude Code；avg@10；5 小时超时；max_tokens=131,072；未披露思考等级。"
+          }
+        },
+        {
+          "id": "vendor-glm-5-3-flash-tb21-claude-code",
+          "benchmark_id": "terminal-bench-2.1",
+          "rank": null,
+          "harness": {
+            "label": "Claude Code",
+            "url": "https://claude.com/claude-code"
+          },
+          "harness_org": {
+            "label": "Anthropic",
+            "url": "https://www.anthropic.com"
+          },
+          "model": {
+            "label": "GLM-5.3-Flash",
+            "url": "https://huggingface.co/zai-org/GLM-5.3-Flash"
+          },
+          "model_org": {
+            "label": "Z.ai",
+            "url": "https://z.ai"
+          },
+          "thinking_level": null,
+          "accuracy": 84.3,
+          "accuracy_stderr": null,
+          "accuracy_ci95_half_width": null,
+          "display_accuracy": null,
+          "release_date": null,
+          "display_release_date": null,
+          "total_tokens": null,
+          "display_total_tokens": null,
+          "total_cost_usd": null,
+          "display_cost": null,
+          "trial_count": null,
+          "pass_at_2": null,
+          "pass_at_3": null,
+          "pass_at_4": null,
+          "pass_at_5": null,
+          "successes": null,
+          "uncached_input_tokens": null,
+          "cached_input_tokens": null,
+          "output_tokens": null,
+          "average_trial_duration_seconds": null,
+          "reward_hacks": null,
+          "display_reward_hacks": null,
+          "submission": null,
+          "official_detail_url": null,
+          "source_type": "vendor_reported",
+          "source_url": "https://huggingface.co/zai-org/GLM-5.3-Flash",
+          "source_title": "GLM-5.3-Flash model card",
+          "source_publisher": "Z.ai",
+          "published_at": null,
+          "verified_at": "2026-09-01",
+          "harness_version": "2.1.207",
+          "protocol_note": {
+            "en": "Claude Code 2.1.207; temperature=1.0, top_p=1, max_new_tokens=65,536, 6-hour timeout. The effort level is not disclosed.",
+            "zh": "Claude Code 2.1.207；temperature=1.0、top_p=1、max_new_tokens=65,536、6 小时超时；未披露思考等级。"
+          }
+        },
         {
           "id": "40dbe33d-e8af-475b-8eba-7d5d8f70054c",
           "benchmark_id": "terminal-bench-2.1",
@@ -73,7 +363,15 @@
             "label": "#75",
             "url": "https://github.com/harbor-framework/terminal-bench-2-1/pull/75"
           },
-          "official_detail_url": "https://hub.harborframework.com/datasets/terminal-bench/terminal-bench-2-1/latest/leaderboards/main/rows/40dbe33d-e8af-475b-8eba-7d5d8f70054c"
+          "official_detail_url": "https://hub.harborframework.com/datasets/terminal-bench/terminal-bench-2-1/latest/leaderboards/main/rows/40dbe33d-e8af-475b-8eba-7d5d8f70054c",
+          "source_type": "benchmark_official",
+          "source_url": "https://hub.harborframework.com/datasets/terminal-bench/terminal-bench-2-1/latest/leaderboards/main/rows/40dbe33d-e8af-475b-8eba-7d5d8f70054c",
+          "source_title": "Harbor result detail",
+          "source_publisher": "Terminal-Bench / Harbor",
+          "published_at": null,
+          "verified_at": null,
+          "harness_version": null,
+          "protocol_note": null
         },
         {
           "id": "6d091468-3fda-4cbf-ba1c-645b0f522e97",
@@ -125,7 +423,186 @@
             "label": "#45",
             "url": "https://github.com/harbor-framework/terminal-bench-2-1/pull/45"
           },
-          "official_detail_url": "https://hub.harborframework.com/datasets/terminal-bench/terminal-bench-2-1/latest/leaderboards/main/rows/6d091468-3fda-4cbf-ba1c-645b0f522e97"
+          "official_detail_url": "https://hub.harborframework.com/datasets/terminal-bench/terminal-bench-2-1/latest/leaderboards/main/rows/6d091468-3fda-4cbf-ba1c-645b0f522e97",
+          "source_type": "benchmark_official",
+          "source_url": "https://hub.harborframework.com/datasets/terminal-bench/terminal-bench-2-1/latest/leaderboards/main/rows/6d091468-3fda-4cbf-ba1c-645b0f522e97",
+          "source_title": "Harbor result detail",
+          "source_publisher": "Terminal-Bench / Harbor",
+          "published_at": null,
+          "verified_at": null,
+          "harness_version": null,
+          "protocol_note": null
+        },
+        {
+          "id": "vendor-deepseek-v4-flash-0731-tb21",
+          "benchmark_id": "terminal-bench-2.1",
+          "rank": null,
+          "harness": {
+            "label": "DeepSeek Harness",
+            "url": null
+          },
+          "harness_org": {
+            "label": "DeepSeek",
+            "url": "https://www.deepseek.com"
+          },
+          "model": {
+            "label": "DeepSeek-V4-Flash-0731",
+            "url": "https://api-docs.deepseek.com/updates/"
+          },
+          "model_org": {
+            "label": "DeepSeek",
+            "url": "https://www.deepseek.com"
+          },
+          "thinking_level": "max",
+          "accuracy": 82.7,
+          "accuracy_stderr": null,
+          "accuracy_ci95_half_width": null,
+          "display_accuracy": null,
+          "release_date": null,
+          "display_release_date": null,
+          "total_tokens": null,
+          "display_total_tokens": null,
+          "total_cost_usd": null,
+          "display_cost": null,
+          "trial_count": null,
+          "pass_at_2": null,
+          "pass_at_3": null,
+          "pass_at_4": null,
+          "pass_at_5": null,
+          "successes": null,
+          "uncached_input_tokens": null,
+          "cached_input_tokens": null,
+          "output_tokens": null,
+          "average_trial_duration_seconds": null,
+          "reward_hacks": null,
+          "display_reward_hacks": null,
+          "submission": null,
+          "official_detail_url": null,
+          "source_type": "vendor_reported",
+          "source_url": "https://api-docs.deepseek.com/updates/",
+          "source_title": "DeepSeek API change log — V4 Flash update",
+          "source_publisher": "DeepSeek",
+          "published_at": "2026-07-31",
+          "verified_at": "2026-09-01",
+          "harness_version": "minimal mode",
+          "protocol_note": {
+            "en": "DeepSeek Harness minimal mode; max reasoning effort; temperature=1.0, top_p=0.95.",
+            "zh": "DeepSeek Harness minimal mode；max 思考等级；temperature=1.0、top_p=0.95。"
+          }
+        },
+        {
+          "id": "vendor-glm-5-2-tb21-claude-code",
+          "benchmark_id": "terminal-bench-2.1",
+          "rank": null,
+          "harness": {
+            "label": "Claude Code",
+            "url": "https://claude.com/claude-code"
+          },
+          "harness_org": {
+            "label": "Anthropic",
+            "url": "https://www.anthropic.com"
+          },
+          "model": {
+            "label": "GLM-5.2",
+            "url": "https://huggingface.co/zai-org/GLM-5.2"
+          },
+          "model_org": {
+            "label": "Z.ai",
+            "url": "https://z.ai"
+          },
+          "thinking_level": null,
+          "accuracy": 82.7,
+          "accuracy_stderr": null,
+          "accuracy_ci95_half_width": null,
+          "display_accuracy": null,
+          "release_date": null,
+          "display_release_date": null,
+          "total_tokens": null,
+          "display_total_tokens": null,
+          "total_cost_usd": null,
+          "display_cost": null,
+          "trial_count": null,
+          "pass_at_2": null,
+          "pass_at_3": null,
+          "pass_at_4": null,
+          "pass_at_5": null,
+          "successes": null,
+          "uncached_input_tokens": null,
+          "cached_input_tokens": null,
+          "output_tokens": null,
+          "average_trial_duration_seconds": null,
+          "reward_hacks": null,
+          "display_reward_hacks": null,
+          "submission": null,
+          "official_detail_url": null,
+          "source_type": "vendor_reported",
+          "source_url": "https://huggingface.co/zai-org/GLM-5.2",
+          "source_title": "GLM-5.2 model card",
+          "source_publisher": "Z.ai",
+          "published_at": "2026-07-02",
+          "verified_at": "2026-09-01",
+          "harness_version": "2.1.167",
+          "protocol_note": {
+            "en": "Claude Code 2.1.167; temperature=1.0, top_p=0.95, max_new_tokens=131,072; no wall-clock limit; average of five runs.",
+            "zh": "Claude Code 2.1.167；temperature=1.0、top_p=0.95、max_new_tokens=131,072；无 wall-clock 限制；5 次运行平均。"
+          }
+        },
+        {
+          "id": "vendor-glm-5-2-tb21-terminus-2",
+          "benchmark_id": "terminal-bench-2.1",
+          "rank": null,
+          "harness": {
+            "label": "Terminus 2",
+            "url": "https://github.com/harbor-framework/terminal-bench"
+          },
+          "harness_org": {
+            "label": "Terminal-Bench",
+            "url": "https://github.com/harbor-framework"
+          },
+          "model": {
+            "label": "GLM-5.2",
+            "url": "https://huggingface.co/zai-org/GLM-5.2"
+          },
+          "model_org": {
+            "label": "Z.ai",
+            "url": "https://z.ai"
+          },
+          "thinking_level": null,
+          "accuracy": 81.0,
+          "accuracy_stderr": null,
+          "accuracy_ci95_half_width": null,
+          "display_accuracy": null,
+          "release_date": null,
+          "display_release_date": null,
+          "total_tokens": null,
+          "display_total_tokens": null,
+          "total_cost_usd": null,
+          "display_cost": null,
+          "trial_count": null,
+          "pass_at_2": null,
+          "pass_at_3": null,
+          "pass_at_4": null,
+          "pass_at_5": null,
+          "successes": null,
+          "uncached_input_tokens": null,
+          "cached_input_tokens": null,
+          "output_tokens": null,
+          "average_trial_duration_seconds": null,
+          "reward_hacks": null,
+          "display_reward_hacks": null,
+          "submission": null,
+          "official_detail_url": null,
+          "source_type": "vendor_reported",
+          "source_url": "https://huggingface.co/zai-org/GLM-5.2",
+          "source_title": "GLM-5.2 model card",
+          "source_publisher": "Z.ai",
+          "published_at": "2026-07-02",
+          "verified_at": "2026-09-01",
+          "harness_version": null,
+          "protocol_note": {
+            "en": "Terminus 2; JSON parser; 4-hour timeout; temperature=1.0, top_p=1.0, max_new_tokens=48K, max_episodes=500, 256K context; 4 CPUs and 8 GB RAM.",
+            "zh": "Terminus 2；JSON parser；4 小时超时；temperature=1.0、top_p=1.0、max_new_tokens=48K、max_episodes=500、256K 上下文；4 CPU、8 GB RAM。"
+          }
         },
         {
           "id": "ce0677b9-0fea-46ce-b8de-893c4d68e77a",
@@ -177,7 +654,15 @@
             "label": "#78",
             "url": "https://github.com/harbor-framework/terminal-bench-2-1/pull/78"
           },
-          "official_detail_url": "https://hub.harborframework.com/datasets/terminal-bench/terminal-bench-2-1/latest/leaderboards/main/rows/ce0677b9-0fea-46ce-b8de-893c4d68e77a"
+          "official_detail_url": "https://hub.harborframework.com/datasets/terminal-bench/terminal-bench-2-1/latest/leaderboards/main/rows/ce0677b9-0fea-46ce-b8de-893c4d68e77a",
+          "source_type": "benchmark_official",
+          "source_url": "https://hub.harborframework.com/datasets/terminal-bench/terminal-bench-2-1/latest/leaderboards/main/rows/ce0677b9-0fea-46ce-b8de-893c4d68e77a",
+          "source_title": "Harbor result detail",
+          "source_publisher": "Terminal-Bench / Harbor",
+          "published_at": null,
+          "verified_at": null,
+          "harness_version": null,
+          "protocol_note": null
         },
         {
           "id": "1fe87c62-99ed-477b-9f6c-23ffbabc49f6",
@@ -229,7 +714,15 @@
             "label": "#86",
             "url": "https://github.com/harbor-framework/terminal-bench-2-1/pull/86"
           },
-          "official_detail_url": "https://hub.harborframework.com/datasets/terminal-bench/terminal-bench-2-1/latest/leaderboards/main/rows/1fe87c62-99ed-477b-9f6c-23ffbabc49f6"
+          "official_detail_url": "https://hub.harborframework.com/datasets/terminal-bench/terminal-bench-2-1/latest/leaderboards/main/rows/1fe87c62-99ed-477b-9f6c-23ffbabc49f6",
+          "source_type": "benchmark_official",
+          "source_url": "https://hub.harborframework.com/datasets/terminal-bench/terminal-bench-2-1/latest/leaderboards/main/rows/1fe87c62-99ed-477b-9f6c-23ffbabc49f6",
+          "source_title": "Harbor result detail",
+          "source_publisher": "Terminal-Bench / Harbor",
+          "published_at": null,
+          "verified_at": null,
+          "harness_version": null,
+          "protocol_note": null
         },
         {
           "id": "dcd48d03-9df9-46ab-bc4c-ade6dc35b8da",
@@ -281,7 +774,15 @@
             "label": "#92",
             "url": "https://github.com/harbor-framework/terminal-bench-2-1/pull/92"
           },
-          "official_detail_url": "https://hub.harborframework.com/datasets/terminal-bench/terminal-bench-2-1/latest/leaderboards/main/rows/dcd48d03-9df9-46ab-bc4c-ade6dc35b8da"
+          "official_detail_url": "https://hub.harborframework.com/datasets/terminal-bench/terminal-bench-2-1/latest/leaderboards/main/rows/dcd48d03-9df9-46ab-bc4c-ade6dc35b8da",
+          "source_type": "benchmark_official",
+          "source_url": "https://hub.harborframework.com/datasets/terminal-bench/terminal-bench-2-1/latest/leaderboards/main/rows/dcd48d03-9df9-46ab-bc4c-ade6dc35b8da",
+          "source_title": "Harbor result detail",
+          "source_publisher": "Terminal-Bench / Harbor",
+          "published_at": null,
+          "verified_at": null,
+          "harness_version": null,
+          "protocol_note": null
         },
         {
           "id": "23ab6a14-4b2d-461d-9171-f8109f5692f1",
@@ -333,7 +834,15 @@
             "label": "#115",
             "url": "https://github.com/harbor-framework/terminal-bench-2-1/pull/115"
           },
-          "official_detail_url": "https://hub.harborframework.com/datasets/terminal-bench/terminal-bench-2-1/latest/leaderboards/main/rows/23ab6a14-4b2d-461d-9171-f8109f5692f1"
+          "official_detail_url": "https://hub.harborframework.com/datasets/terminal-bench/terminal-bench-2-1/latest/leaderboards/main/rows/23ab6a14-4b2d-461d-9171-f8109f5692f1",
+          "source_type": "benchmark_official",
+          "source_url": "https://hub.harborframework.com/datasets/terminal-bench/terminal-bench-2-1/latest/leaderboards/main/rows/23ab6a14-4b2d-461d-9171-f8109f5692f1",
+          "source_title": "Harbor result detail",
+          "source_publisher": "Terminal-Bench / Harbor",
+          "published_at": null,
+          "verified_at": null,
+          "harness_version": null,
+          "protocol_note": null
         },
         {
           "id": "db1f499b-d948-43d2-9aaf-27cfe97f6caf",
@@ -385,7 +894,15 @@
             "label": "#47",
             "url": "https://github.com/harbor-framework/terminal-bench-2-1/pull/47"
           },
-          "official_detail_url": "https://hub.harborframework.com/datasets/terminal-bench/terminal-bench-2-1/latest/leaderboards/main/rows/db1f499b-d948-43d2-9aaf-27cfe97f6caf"
+          "official_detail_url": "https://hub.harborframework.com/datasets/terminal-bench/terminal-bench-2-1/latest/leaderboards/main/rows/db1f499b-d948-43d2-9aaf-27cfe97f6caf",
+          "source_type": "benchmark_official",
+          "source_url": "https://hub.harborframework.com/datasets/terminal-bench/terminal-bench-2-1/latest/leaderboards/main/rows/db1f499b-d948-43d2-9aaf-27cfe97f6caf",
+          "source_title": "Harbor result detail",
+          "source_publisher": "Terminal-Bench / Harbor",
+          "published_at": null,
+          "verified_at": null,
+          "harness_version": null,
+          "protocol_note": null
         },
         {
           "id": "64890377-54de-4cc2-bcd7-e76610983482",
@@ -437,7 +954,15 @@
             "label": "#94",
             "url": "https://github.com/harbor-framework/terminal-bench-2-1/pull/94"
           },
-          "official_detail_url": "https://hub.harborframework.com/datasets/terminal-bench/terminal-bench-2-1/latest/leaderboards/main/rows/64890377-54de-4cc2-bcd7-e76610983482"
+          "official_detail_url": "https://hub.harborframework.com/datasets/terminal-bench/terminal-bench-2-1/latest/leaderboards/main/rows/64890377-54de-4cc2-bcd7-e76610983482",
+          "source_type": "benchmark_official",
+          "source_url": "https://hub.harborframework.com/datasets/terminal-bench/terminal-bench-2-1/latest/leaderboards/main/rows/64890377-54de-4cc2-bcd7-e76610983482",
+          "source_title": "Harbor result detail",
+          "source_publisher": "Terminal-Bench / Harbor",
+          "published_at": null,
+          "verified_at": null,
+          "harness_version": null,
+          "protocol_note": null
         },
         {
           "id": "e5f3feda-4629-46ba-963f-300dcf7c2a4c",
@@ -489,7 +1014,72 @@
             "label": "#112",
             "url": "https://github.com/harbor-framework/terminal-bench-2-1/pull/112"
           },
-          "official_detail_url": "https://hub.harborframework.com/datasets/terminal-bench/terminal-bench-2-1/latest/leaderboards/main/rows/e5f3feda-4629-46ba-963f-300dcf7c2a4c"
+          "official_detail_url": "https://hub.harborframework.com/datasets/terminal-bench/terminal-bench-2-1/latest/leaderboards/main/rows/e5f3feda-4629-46ba-963f-300dcf7c2a4c",
+          "source_type": "benchmark_official",
+          "source_url": "https://hub.harborframework.com/datasets/terminal-bench/terminal-bench-2-1/latest/leaderboards/main/rows/e5f3feda-4629-46ba-963f-300dcf7c2a4c",
+          "source_title": "Harbor result detail",
+          "source_publisher": "Terminal-Bench / Harbor",
+          "published_at": null,
+          "verified_at": null,
+          "harness_version": null,
+          "protocol_note": null
+        },
+        {
+          "id": "penguin-deepseek-v4-flash-0731-tb21-k2",
+          "benchmark_id": "terminal-bench-2.1",
+          "rank": null,
+          "harness": {
+            "label": "Penguin",
+            "url": "https://github.com/hw3150cu/TB2.1_penguin_dsv4_flash"
+          },
+          "harness_org": {
+            "label": "Penguin",
+            "url": null
+          },
+          "model": {
+            "label": "DeepSeek-V4-Flash-0731",
+            "url": "https://github.com/hw3150cu/TB2.1_penguin_dsv4_flash"
+          },
+          "model_org": {
+            "label": "DeepSeek",
+            "url": "https://www.deepseek.com"
+          },
+          "thinking_level": "xhigh",
+          "accuracy": 75.2809,
+          "accuracy_stderr": null,
+          "accuracy_ci95_half_width": null,
+          "display_accuracy": null,
+          "release_date": null,
+          "display_release_date": null,
+          "total_tokens": null,
+          "display_total_tokens": null,
+          "total_cost_usd": null,
+          "display_cost": null,
+          "trial_count": 178,
+          "pass_at_2": 0.7978,
+          "pass_at_3": null,
+          "pass_at_4": null,
+          "pass_at_5": null,
+          "successes": 134,
+          "uncached_input_tokens": null,
+          "cached_input_tokens": null,
+          "output_tokens": null,
+          "average_trial_duration_seconds": null,
+          "reward_hacks": null,
+          "display_reward_hacks": null,
+          "submission": null,
+          "official_detail_url": null,
+          "source_type": "penguin_run",
+          "source_url": "https://github.com/hw3150cu/TB2.1_penguin_dsv4_flash/blob/main/REPORT.md",
+          "source_title": "Terminal-Bench 2.1 Report — DeepSeek-V4-Flash One DGX Spark",
+          "source_publisher": "Penguin run report",
+          "published_at": null,
+          "verified_at": "2026-09-01",
+          "harness_version": "0.2.2",
+          "protocol_note": {
+            "en": "Penguin 0.2.2 with Harbor 0.21.0; two scoreable attempts for each of 89 tasks; NVIDIA GB10; timeout multiplier 3.172; 128K context; max tokens 256K; skills and memory disabled.",
+            "zh": "Penguin 0.2.2 + Harbor 0.21.0；89 个任务各 2 次有效尝试；NVIDIA GB10；timeout multiplier 3.172；128K 上下文；max tokens 256K；关闭 skills 和 memory。"
+          }
         },
         {
           "id": "d7540f21-67af-4b3a-ad31-b81b85fef895",
@@ -541,7 +1131,15 @@
             "label": "#98",
             "url": "https://github.com/harbor-framework/terminal-bench-2-1/pull/98"
           },
-          "official_detail_url": "https://hub.harborframework.com/datasets/terminal-bench/terminal-bench-2-1/latest/leaderboards/main/rows/d7540f21-67af-4b3a-ad31-b81b85fef895"
+          "official_detail_url": "https://hub.harborframework.com/datasets/terminal-bench/terminal-bench-2-1/latest/leaderboards/main/rows/d7540f21-67af-4b3a-ad31-b81b85fef895",
+          "source_type": "benchmark_official",
+          "source_url": "https://hub.harborframework.com/datasets/terminal-bench/terminal-bench-2-1/latest/leaderboards/main/rows/d7540f21-67af-4b3a-ad31-b81b85fef895",
+          "source_title": "Harbor result detail",
+          "source_publisher": "Terminal-Bench / Harbor",
+          "published_at": null,
+          "verified_at": null,
+          "harness_version": null,
+          "protocol_note": null
         },
         {
           "id": "b03a8a69-fea8-42dd-a4fb-96a6a39e6857",
@@ -593,7 +1191,72 @@
             "label": "#48",
             "url": "https://github.com/harbor-framework/terminal-bench-2-1/pull/48"
           },
-          "official_detail_url": "https://hub.harborframework.com/datasets/terminal-bench/terminal-bench-2-1/latest/leaderboards/main/rows/b03a8a69-fea8-42dd-a4fb-96a6a39e6857"
+          "official_detail_url": "https://hub.harborframework.com/datasets/terminal-bench/terminal-bench-2-1/latest/leaderboards/main/rows/b03a8a69-fea8-42dd-a4fb-96a6a39e6857",
+          "source_type": "benchmark_official",
+          "source_url": "https://hub.harborframework.com/datasets/terminal-bench/terminal-bench-2-1/latest/leaderboards/main/rows/b03a8a69-fea8-42dd-a4fb-96a6a39e6857",
+          "source_title": "Harbor result detail",
+          "source_publisher": "Terminal-Bench / Harbor",
+          "published_at": null,
+          "verified_at": null,
+          "harness_version": null,
+          "protocol_note": null
+        },
+        {
+          "id": "vendor-qwen3-8-27b-tb21-terminus",
+          "benchmark_id": "terminal-bench-2.1",
+          "rank": null,
+          "harness": {
+            "label": "Terminus",
+            "url": "https://github.com/harbor-framework/terminal-bench"
+          },
+          "harness_org": {
+            "label": "Terminal-Bench",
+            "url": "https://github.com/harbor-framework"
+          },
+          "model": {
+            "label": "Qwen3.8-27B",
+            "url": "https://huggingface.co/Qwen/Qwen3.8-27B"
+          },
+          "model_org": {
+            "label": "Qwen",
+            "url": "https://qwen.ai"
+          },
+          "thinking_level": null,
+          "accuracy": 73.0,
+          "accuracy_stderr": null,
+          "accuracy_ci95_half_width": null,
+          "display_accuracy": null,
+          "release_date": null,
+          "display_release_date": null,
+          "total_tokens": null,
+          "display_total_tokens": null,
+          "total_cost_usd": null,
+          "display_cost": null,
+          "trial_count": null,
+          "pass_at_2": null,
+          "pass_at_3": null,
+          "pass_at_4": null,
+          "pass_at_5": null,
+          "successes": null,
+          "uncached_input_tokens": null,
+          "cached_input_tokens": null,
+          "output_tokens": null,
+          "average_trial_duration_seconds": null,
+          "reward_hacks": null,
+          "display_reward_hacks": null,
+          "submission": null,
+          "official_detail_url": null,
+          "source_type": "vendor_reported",
+          "source_url": "https://huggingface.co/Qwen/Qwen3.8-27B",
+          "source_title": "Qwen3.8-27B model card",
+          "source_publisher": "Qwen",
+          "published_at": null,
+          "verified_at": "2026-09-01",
+          "harness_version": null,
+          "protocol_note": {
+            "en": "The model card names the harness as Terminus and does not disclose the effort level or further TB 2.1 configuration.",
+            "zh": "Model Card 将 Harness 标为 Terminus，未披露思考等级和更多 TB 2.1 配置。"
+          }
         },
         {
           "id": "fdb8393b-5b29-4645-b784-84f52cf31722",
@@ -645,7 +1308,15 @@
             "label": "#44",
             "url": "https://github.com/harbor-framework/terminal-bench-2-1/pull/44"
           },
-          "official_detail_url": "https://hub.harborframework.com/datasets/terminal-bench/terminal-bench-2-1/latest/leaderboards/main/rows/fdb8393b-5b29-4645-b784-84f52cf31722"
+          "official_detail_url": "https://hub.harborframework.com/datasets/terminal-bench/terminal-bench-2-1/latest/leaderboards/main/rows/fdb8393b-5b29-4645-b784-84f52cf31722",
+          "source_type": "benchmark_official",
+          "source_url": "https://hub.harborframework.com/datasets/terminal-bench/terminal-bench-2-1/latest/leaderboards/main/rows/fdb8393b-5b29-4645-b784-84f52cf31722",
+          "source_title": "Harbor result detail",
+          "source_publisher": "Terminal-Bench / Harbor",
+          "published_at": null,
+          "verified_at": null,
+          "harness_version": null,
+          "protocol_note": null
         },
         {
           "id": "f867b631-36c8-476e-aa2f-96007ae70da0",
@@ -697,7 +1368,15 @@
             "label": "#46",
             "url": "https://github.com/harbor-framework/terminal-bench-2-1/pull/46"
           },
-          "official_detail_url": "https://hub.harborframework.com/datasets/terminal-bench/terminal-bench-2-1/latest/leaderboards/main/rows/f867b631-36c8-476e-aa2f-96007ae70da0"
+          "official_detail_url": "https://hub.harborframework.com/datasets/terminal-bench/terminal-bench-2-1/latest/leaderboards/main/rows/f867b631-36c8-476e-aa2f-96007ae70da0",
+          "source_type": "benchmark_official",
+          "source_url": "https://hub.harborframework.com/datasets/terminal-bench/terminal-bench-2-1/latest/leaderboards/main/rows/f867b631-36c8-476e-aa2f-96007ae70da0",
+          "source_title": "Harbor result detail",
+          "source_publisher": "Terminal-Bench / Harbor",
+          "published_at": null,
+          "verified_at": null,
+          "harness_version": null,
+          "protocol_note": null
         },
         {
           "id": "660c330f-9cd8-4ce7-8890-3ce573d038a0",
@@ -749,7 +1428,15 @@
             "label": "#66",
             "url": "https://github.com/harbor-framework/terminal-bench-2-1/pull/66"
           },
-          "official_detail_url": "https://hub.harborframework.com/datasets/terminal-bench/terminal-bench-2-1/latest/leaderboards/main/rows/660c330f-9cd8-4ce7-8890-3ce573d038a0"
+          "official_detail_url": "https://hub.harborframework.com/datasets/terminal-bench/terminal-bench-2-1/latest/leaderboards/main/rows/660c330f-9cd8-4ce7-8890-3ce573d038a0",
+          "source_type": "benchmark_official",
+          "source_url": "https://hub.harborframework.com/datasets/terminal-bench/terminal-bench-2-1/latest/leaderboards/main/rows/660c330f-9cd8-4ce7-8890-3ce573d038a0",
+          "source_title": "Harbor result detail",
+          "source_publisher": "Terminal-Bench / Harbor",
+          "published_at": null,
+          "verified_at": null,
+          "harness_version": null,
+          "protocol_note": null
         },
         {
           "id": "1095d399-9d66-44f4-8adc-e11fbb407a68",
@@ -801,7 +1488,15 @@
             "label": "#68",
             "url": "https://github.com/harbor-framework/terminal-bench-2-1/pull/68"
           },
-          "official_detail_url": "https://hub.harborframework.com/datasets/terminal-bench/terminal-bench-2-1/latest/leaderboards/main/rows/1095d399-9d66-44f4-8adc-e11fbb407a68"
+          "official_detail_url": "https://hub.harborframework.com/datasets/terminal-bench/terminal-bench-2-1/latest/leaderboards/main/rows/1095d399-9d66-44f4-8adc-e11fbb407a68",
+          "source_type": "benchmark_official",
+          "source_url": "https://hub.harborframework.com/datasets/terminal-bench/terminal-bench-2-1/latest/leaderboards/main/rows/1095d399-9d66-44f4-8adc-e11fbb407a68",
+          "source_title": "Harbor result detail",
+          "source_publisher": "Terminal-Bench / Harbor",
+          "published_at": null,
+          "verified_at": null,
+          "harness_version": null,
+          "protocol_note": null
         },
         {
           "id": "360942d9-d27b-4f7e-bcf6-e0ea9cdcdee8",
@@ -853,7 +1548,15 @@
             "label": "#69",
             "url": "https://github.com/harbor-framework/terminal-bench-2-1/pull/69"
           },
-          "official_detail_url": "https://hub.harborframework.com/datasets/terminal-bench/terminal-bench-2-1/latest/leaderboards/main/rows/360942d9-d27b-4f7e-bcf6-e0ea9cdcdee8"
+          "official_detail_url": "https://hub.harborframework.com/datasets/terminal-bench/terminal-bench-2-1/latest/leaderboards/main/rows/360942d9-d27b-4f7e-bcf6-e0ea9cdcdee8",
+          "source_type": "benchmark_official",
+          "source_url": "https://hub.harborframework.com/datasets/terminal-bench/terminal-bench-2-1/latest/leaderboards/main/rows/360942d9-d27b-4f7e-bcf6-e0ea9cdcdee8",
+          "source_title": "Harbor result detail",
+          "source_publisher": "Terminal-Bench / Harbor",
+          "published_at": null,
+          "verified_at": null,
+          "harness_version": null,
+          "protocol_note": null
         },
         {
           "id": "ef2b00eb-f360-41e6-8c97-23c4d762d06b",
@@ -905,7 +1608,15 @@
             "label": "#67",
             "url": "https://github.com/harbor-framework/terminal-bench-2-1/pull/67"
           },
-          "official_detail_url": "https://hub.harborframework.com/datasets/terminal-bench/terminal-bench-2-1/latest/leaderboards/main/rows/ef2b00eb-f360-41e6-8c97-23c4d762d06b"
+          "official_detail_url": "https://hub.harborframework.com/datasets/terminal-bench/terminal-bench-2-1/latest/leaderboards/main/rows/ef2b00eb-f360-41e6-8c97-23c4d762d06b",
+          "source_type": "benchmark_official",
+          "source_url": "https://hub.harborframework.com/datasets/terminal-bench/terminal-bench-2-1/latest/leaderboards/main/rows/ef2b00eb-f360-41e6-8c97-23c4d762d06b",
+          "source_title": "Harbor result detail",
+          "source_publisher": "Terminal-Bench / Harbor",
+          "published_at": null,
+          "verified_at": null,
+          "harness_version": null,
+          "protocol_note": null
         }
       ]
     },
@@ -920,13 +1631,17 @@
         "dataset_version": "1"
       },
       "snapshot_updated_at": "2026-08-29T00:04:10.421509+00:00",
-      "result_count": 12,
-      "model_count": 12,
+      "result_count": 13,
+      "official_result_count": 12,
+      "vendor_result_count": 1,
+      "penguin_result_count": 0,
+      "model_count": 13,
       "harness_count": 6,
       "best_accuracy": 42.7,
+      "official_best_accuracy": 42.7,
       "description": {
-        "en": "Official Terminal-Bench 3.0 leaderboard snapshot from tbench.ai.",
-        "zh": "来自 tbench.ai 的 Terminal-Bench 3.0 官方榜单快照。"
+        "en": "Public Terminal-Bench 3.0 results, with official ranks kept separate from reported runs.",
+        "zh": "Terminal-Bench 3.0 公开结果；官方排名与厂商、Penguin 报告结果严格区分。"
       },
       "results": [
         {
@@ -973,7 +1688,15 @@
           "reward_hacks": null,
           "display_reward_hacks": null,
           "submission": null,
-          "official_detail_url": "https://hub.harborframework.com/datasets/terminal-bench/terminal-bench/1/leaderboards/3-0-0/rows/b26434fb-f08b-4f95-bcc5-ce0c7310e047"
+          "official_detail_url": "https://hub.harborframework.com/datasets/terminal-bench/terminal-bench/1/leaderboards/3-0-0/rows/b26434fb-f08b-4f95-bcc5-ce0c7310e047",
+          "source_type": "benchmark_official",
+          "source_url": "https://hub.harborframework.com/datasets/terminal-bench/terminal-bench/1/leaderboards/3-0-0/rows/b26434fb-f08b-4f95-bcc5-ce0c7310e047",
+          "source_title": "Harbor result detail",
+          "source_publisher": "Terminal-Bench / Harbor",
+          "published_at": null,
+          "verified_at": null,
+          "harness_version": null,
+          "protocol_note": null
         },
         {
           "id": "b8d9ccae-23a2-485e-b9f1-a7654c79c560",
@@ -1019,7 +1742,15 @@
           "reward_hacks": null,
           "display_reward_hacks": null,
           "submission": null,
-          "official_detail_url": "https://hub.harborframework.com/datasets/terminal-bench/terminal-bench/1/leaderboards/3-0-0/rows/b8d9ccae-23a2-485e-b9f1-a7654c79c560"
+          "official_detail_url": "https://hub.harborframework.com/datasets/terminal-bench/terminal-bench/1/leaderboards/3-0-0/rows/b8d9ccae-23a2-485e-b9f1-a7654c79c560",
+          "source_type": "benchmark_official",
+          "source_url": "https://hub.harborframework.com/datasets/terminal-bench/terminal-bench/1/leaderboards/3-0-0/rows/b8d9ccae-23a2-485e-b9f1-a7654c79c560",
+          "source_title": "Harbor result detail",
+          "source_publisher": "Terminal-Bench / Harbor",
+          "published_at": null,
+          "verified_at": null,
+          "harness_version": null,
+          "protocol_note": null
         },
         {
           "id": "b8ed61a2-838a-495f-8d24-3ebffb9be16b",
@@ -1065,7 +1796,15 @@
           "reward_hacks": null,
           "display_reward_hacks": null,
           "submission": null,
-          "official_detail_url": "https://hub.harborframework.com/datasets/terminal-bench/terminal-bench/1/leaderboards/3-0-0/rows/b8ed61a2-838a-495f-8d24-3ebffb9be16b"
+          "official_detail_url": "https://hub.harborframework.com/datasets/terminal-bench/terminal-bench/1/leaderboards/3-0-0/rows/b8ed61a2-838a-495f-8d24-3ebffb9be16b",
+          "source_type": "benchmark_official",
+          "source_url": "https://hub.harborframework.com/datasets/terminal-bench/terminal-bench/1/leaderboards/3-0-0/rows/b8ed61a2-838a-495f-8d24-3ebffb9be16b",
+          "source_title": "Harbor result detail",
+          "source_publisher": "Terminal-Bench / Harbor",
+          "published_at": null,
+          "verified_at": null,
+          "harness_version": null,
+          "protocol_note": null
         },
         {
           "id": "d5152814-6bf2-473f-be57-b1908ed480a9",
@@ -1111,7 +1850,72 @@
           "reward_hacks": null,
           "display_reward_hacks": null,
           "submission": null,
-          "official_detail_url": "https://hub.harborframework.com/datasets/terminal-bench/terminal-bench/1/leaderboards/3-0-0/rows/d5152814-6bf2-473f-be57-b1908ed480a9"
+          "official_detail_url": "https://hub.harborframework.com/datasets/terminal-bench/terminal-bench/1/leaderboards/3-0-0/rows/d5152814-6bf2-473f-be57-b1908ed480a9",
+          "source_type": "benchmark_official",
+          "source_url": "https://hub.harborframework.com/datasets/terminal-bench/terminal-bench/1/leaderboards/3-0-0/rows/d5152814-6bf2-473f-be57-b1908ed480a9",
+          "source_title": "Harbor result detail",
+          "source_publisher": "Terminal-Bench / Harbor",
+          "published_at": null,
+          "verified_at": null,
+          "harness_version": null,
+          "protocol_note": null
+        },
+        {
+          "id": "vendor-glm-5-3-tb30-claude-code",
+          "benchmark_id": "terminal-bench-3.0",
+          "rank": null,
+          "harness": {
+            "label": "Claude Code",
+            "url": "https://claude.com/claude-code"
+          },
+          "harness_org": {
+            "label": "Anthropic",
+            "url": "https://www.anthropic.com"
+          },
+          "model": {
+            "label": "GLM-5.3",
+            "url": "https://huggingface.co/zai-org/GLM-5.3"
+          },
+          "model_org": {
+            "label": "Z.ai",
+            "url": "https://z.ai"
+          },
+          "thinking_level": "max",
+          "accuracy": 28.3,
+          "accuracy_stderr": null,
+          "accuracy_ci95_half_width": null,
+          "display_accuracy": null,
+          "release_date": null,
+          "display_release_date": null,
+          "total_tokens": null,
+          "display_total_tokens": null,
+          "total_cost_usd": null,
+          "display_cost": null,
+          "trial_count": null,
+          "pass_at_2": null,
+          "pass_at_3": null,
+          "pass_at_4": null,
+          "pass_at_5": null,
+          "successes": null,
+          "uncached_input_tokens": null,
+          "cached_input_tokens": null,
+          "output_tokens": null,
+          "average_trial_duration_seconds": null,
+          "reward_hacks": null,
+          "display_reward_hacks": null,
+          "submission": null,
+          "official_detail_url": null,
+          "source_type": "vendor_reported",
+          "source_url": "https://huggingface.co/zai-org/GLM-5.3",
+          "source_title": "GLM-5.3 model card",
+          "source_publisher": "Z.ai",
+          "published_at": null,
+          "verified_at": "2026-09-01",
+          "harness_version": "2.1.207",
+          "protocol_note": {
+            "en": "Claude Code 2.1.207; max effort; 400K context; 128K max output; avg@3; isolated official task containers; 600-turn cap; 10-hour timeout; Tool Search disabled; official verifiers.",
+            "zh": "Claude Code 2.1.207；max 思考等级；400K 上下文；128K 最大输出；avg@3；官方任务隔离容器；最多 600 turns；10 小时超时；关闭 Tool Search；官方 verifier。"
+          }
         },
         {
           "id": "61adb66e-1cf1-4194-b68d-703554d21193",
@@ -1157,7 +1961,15 @@
           "reward_hacks": null,
           "display_reward_hacks": null,
           "submission": null,
-          "official_detail_url": "https://hub.harborframework.com/datasets/terminal-bench/terminal-bench/1/leaderboards/3-0-0/rows/61adb66e-1cf1-4194-b68d-703554d21193"
+          "official_detail_url": "https://hub.harborframework.com/datasets/terminal-bench/terminal-bench/1/leaderboards/3-0-0/rows/61adb66e-1cf1-4194-b68d-703554d21193",
+          "source_type": "benchmark_official",
+          "source_url": "https://hub.harborframework.com/datasets/terminal-bench/terminal-bench/1/leaderboards/3-0-0/rows/61adb66e-1cf1-4194-b68d-703554d21193",
+          "source_title": "Harbor result detail",
+          "source_publisher": "Terminal-Bench / Harbor",
+          "published_at": null,
+          "verified_at": null,
+          "harness_version": null,
+          "protocol_note": null
         },
         {
           "id": "e728cc33-0f2b-4eda-9749-a46be31c01bb",
@@ -1203,7 +2015,15 @@
           "reward_hacks": null,
           "display_reward_hacks": null,
           "submission": null,
-          "official_detail_url": "https://hub.harborframework.com/datasets/terminal-bench/terminal-bench/1/leaderboards/3-0-0/rows/e728cc33-0f2b-4eda-9749-a46be31c01bb"
+          "official_detail_url": "https://hub.harborframework.com/datasets/terminal-bench/terminal-bench/1/leaderboards/3-0-0/rows/e728cc33-0f2b-4eda-9749-a46be31c01bb",
+          "source_type": "benchmark_official",
+          "source_url": "https://hub.harborframework.com/datasets/terminal-bench/terminal-bench/1/leaderboards/3-0-0/rows/e728cc33-0f2b-4eda-9749-a46be31c01bb",
+          "source_title": "Harbor result detail",
+          "source_publisher": "Terminal-Bench / Harbor",
+          "published_at": null,
+          "verified_at": null,
+          "harness_version": null,
+          "protocol_note": null
         },
         {
           "id": "9e11b624-6922-4ac8-a26f-c38146b957d9",
@@ -1249,7 +2069,15 @@
           "reward_hacks": null,
           "display_reward_hacks": null,
           "submission": null,
-          "official_detail_url": "https://hub.harborframework.com/datasets/terminal-bench/terminal-bench/1/leaderboards/3-0-0/rows/9e11b624-6922-4ac8-a26f-c38146b957d9"
+          "official_detail_url": "https://hub.harborframework.com/datasets/terminal-bench/terminal-bench/1/leaderboards/3-0-0/rows/9e11b624-6922-4ac8-a26f-c38146b957d9",
+          "source_type": "benchmark_official",
+          "source_url": "https://hub.harborframework.com/datasets/terminal-bench/terminal-bench/1/leaderboards/3-0-0/rows/9e11b624-6922-4ac8-a26f-c38146b957d9",
+          "source_title": "Harbor result detail",
+          "source_publisher": "Terminal-Bench / Harbor",
+          "published_at": null,
+          "verified_at": null,
+          "harness_version": null,
+          "protocol_note": null
         },
         {
           "id": "7ebd2bd7-9a4c-4c62-bccd-843908653c16",
@@ -1295,7 +2123,15 @@
           "reward_hacks": null,
           "display_reward_hacks": null,
           "submission": null,
-          "official_detail_url": "https://hub.harborframework.com/datasets/terminal-bench/terminal-bench/1/leaderboards/3-0-0/rows/7ebd2bd7-9a4c-4c62-bccd-843908653c16"
+          "official_detail_url": "https://hub.harborframework.com/datasets/terminal-bench/terminal-bench/1/leaderboards/3-0-0/rows/7ebd2bd7-9a4c-4c62-bccd-843908653c16",
+          "source_type": "benchmark_official",
+          "source_url": "https://hub.harborframework.com/datasets/terminal-bench/terminal-bench/1/leaderboards/3-0-0/rows/7ebd2bd7-9a4c-4c62-bccd-843908653c16",
+          "source_title": "Harbor result detail",
+          "source_publisher": "Terminal-Bench / Harbor",
+          "published_at": null,
+          "verified_at": null,
+          "harness_version": null,
+          "protocol_note": null
         },
         {
           "id": "e660765d-7b96-48f7-97ed-3c2abe17dbb5",
@@ -1341,7 +2177,15 @@
           "reward_hacks": null,
           "display_reward_hacks": null,
           "submission": null,
-          "official_detail_url": "https://hub.harborframework.com/datasets/terminal-bench/terminal-bench/1/leaderboards/3-0-0/rows/e660765d-7b96-48f7-97ed-3c2abe17dbb5"
+          "official_detail_url": "https://hub.harborframework.com/datasets/terminal-bench/terminal-bench/1/leaderboards/3-0-0/rows/e660765d-7b96-48f7-97ed-3c2abe17dbb5",
+          "source_type": "benchmark_official",
+          "source_url": "https://hub.harborframework.com/datasets/terminal-bench/terminal-bench/1/leaderboards/3-0-0/rows/e660765d-7b96-48f7-97ed-3c2abe17dbb5",
+          "source_title": "Harbor result detail",
+          "source_publisher": "Terminal-Bench / Harbor",
+          "published_at": null,
+          "verified_at": null,
+          "harness_version": null,
+          "protocol_note": null
         },
         {
           "id": "a945badd-d54b-4c45-965d-aa35a042c27e",
@@ -1387,7 +2231,15 @@
           "reward_hacks": null,
           "display_reward_hacks": null,
           "submission": null,
-          "official_detail_url": "https://hub.harborframework.com/datasets/terminal-bench/terminal-bench/1/leaderboards/3-0-0/rows/a945badd-d54b-4c45-965d-aa35a042c27e"
+          "official_detail_url": "https://hub.harborframework.com/datasets/terminal-bench/terminal-bench/1/leaderboards/3-0-0/rows/a945badd-d54b-4c45-965d-aa35a042c27e",
+          "source_type": "benchmark_official",
+          "source_url": "https://hub.harborframework.com/datasets/terminal-bench/terminal-bench/1/leaderboards/3-0-0/rows/a945badd-d54b-4c45-965d-aa35a042c27e",
+          "source_title": "Harbor result detail",
+          "source_publisher": "Terminal-Bench / Harbor",
+          "published_at": null,
+          "verified_at": null,
+          "harness_version": null,
+          "protocol_note": null
         },
         {
           "id": "5b10f961-312a-48ae-83d9-d5ce4de60a0e",
@@ -1433,7 +2285,15 @@
           "reward_hacks": null,
           "display_reward_hacks": null,
           "submission": null,
-          "official_detail_url": "https://hub.harborframework.com/datasets/terminal-bench/terminal-bench/1/leaderboards/3-0-0/rows/5b10f961-312a-48ae-83d9-d5ce4de60a0e"
+          "official_detail_url": "https://hub.harborframework.com/datasets/terminal-bench/terminal-bench/1/leaderboards/3-0-0/rows/5b10f961-312a-48ae-83d9-d5ce4de60a0e",
+          "source_type": "benchmark_official",
+          "source_url": "https://hub.harborframework.com/datasets/terminal-bench/terminal-bench/1/leaderboards/3-0-0/rows/5b10f961-312a-48ae-83d9-d5ce4de60a0e",
+          "source_title": "Harbor result detail",
+          "source_publisher": "Terminal-Bench / Harbor",
+          "published_at": null,
+          "verified_at": null,
+          "harness_version": null,
+          "protocol_note": null
         },
         {
           "id": "b3c7db0e-0289-4fa5-ac3a-da600b15a72a",
@@ -1479,7 +2339,15 @@
           "reward_hacks": null,
           "display_reward_hacks": null,
           "submission": null,
-          "official_detail_url": "https://hub.harborframework.com/datasets/terminal-bench/terminal-bench/1/leaderboards/3-0-0/rows/b3c7db0e-0289-4fa5-ac3a-da600b15a72a"
+          "official_detail_url": "https://hub.harborframework.com/datasets/terminal-bench/terminal-bench/1/leaderboards/3-0-0/rows/b3c7db0e-0289-4fa5-ac3a-da600b15a72a",
+          "source_type": "benchmark_official",
+          "source_url": "https://hub.harborframework.com/datasets/terminal-bench/terminal-bench/1/leaderboards/3-0-0/rows/b3c7db0e-0289-4fa5-ac3a-da600b15a72a",
+          "source_title": "Harbor result detail",
+          "source_publisher": "Terminal-Bench / Harbor",
+          "published_at": null,
+          "verified_at": null,
+          "harness_version": null,
+          "protocol_note": null
         }
       ]
     },
@@ -1495,12 +2363,16 @@
       },
       "snapshot_updated_at": "2026-08-29T01:40:34.831678+00:00",
       "result_count": 10,
+      "official_result_count": 10,
+      "vendor_result_count": 0,
+      "penguin_result_count": 0,
       "model_count": 10,
       "harness_count": 3,
       "best_accuracy": 51.82,
+      "official_best_accuracy": 51.82,
       "description": {
-        "en": "Official Terminal-Bench 4.0 leaderboard snapshot from tbench.ai.",
-        "zh": "来自 tbench.ai 的 Terminal-Bench 4.0 官方榜单快照。"
+        "en": "Public Terminal-Bench 4.0 results, with official ranks kept separate from reported runs.",
+        "zh": "Terminal-Bench 4.0 公开结果；官方排名与厂商、Penguin 报告结果严格区分。"
       },
       "results": [
         {
@@ -1547,7 +2419,15 @@
           "reward_hacks": null,
           "display_reward_hacks": null,
           "submission": null,
-          "official_detail_url": "https://hub.harborframework.com/datasets/terminal-bench/terminal-bench/4/leaderboards/4-0-0/rows/d71ac3d0-da36-49cb-89d9-323136e77111"
+          "official_detail_url": "https://hub.harborframework.com/datasets/terminal-bench/terminal-bench/4/leaderboards/4-0-0/rows/d71ac3d0-da36-49cb-89d9-323136e77111",
+          "source_type": "benchmark_official",
+          "source_url": "https://hub.harborframework.com/datasets/terminal-bench/terminal-bench/4/leaderboards/4-0-0/rows/d71ac3d0-da36-49cb-89d9-323136e77111",
+          "source_title": "Harbor result detail",
+          "source_publisher": "Terminal-Bench / Harbor",
+          "published_at": null,
+          "verified_at": null,
+          "harness_version": null,
+          "protocol_note": null
         },
         {
           "id": "36c077e0-4879-4444-b315-8532d66401d6",
@@ -1593,7 +2473,15 @@
           "reward_hacks": null,
           "display_reward_hacks": null,
           "submission": null,
-          "official_detail_url": "https://hub.harborframework.com/datasets/terminal-bench/terminal-bench/4/leaderboards/4-0-0/rows/36c077e0-4879-4444-b315-8532d66401d6"
+          "official_detail_url": "https://hub.harborframework.com/datasets/terminal-bench/terminal-bench/4/leaderboards/4-0-0/rows/36c077e0-4879-4444-b315-8532d66401d6",
+          "source_type": "benchmark_official",
+          "source_url": "https://hub.harborframework.com/datasets/terminal-bench/terminal-bench/4/leaderboards/4-0-0/rows/36c077e0-4879-4444-b315-8532d66401d6",
+          "source_title": "Harbor result detail",
+          "source_publisher": "Terminal-Bench / Harbor",
+          "published_at": null,
+          "verified_at": null,
+          "harness_version": null,
+          "protocol_note": null
         },
         {
           "id": "d72e8775-f4f1-4313-99e7-35b1cb499f24",
@@ -1639,7 +2527,15 @@
           "reward_hacks": null,
           "display_reward_hacks": null,
           "submission": null,
-          "official_detail_url": "https://hub.harborframework.com/datasets/terminal-bench/terminal-bench/4/leaderboards/4-0-0/rows/d72e8775-f4f1-4313-99e7-35b1cb499f24"
+          "official_detail_url": "https://hub.harborframework.com/datasets/terminal-bench/terminal-bench/4/leaderboards/4-0-0/rows/d72e8775-f4f1-4313-99e7-35b1cb499f24",
+          "source_type": "benchmark_official",
+          "source_url": "https://hub.harborframework.com/datasets/terminal-bench/terminal-bench/4/leaderboards/4-0-0/rows/d72e8775-f4f1-4313-99e7-35b1cb499f24",
+          "source_title": "Harbor result detail",
+          "source_publisher": "Terminal-Bench / Harbor",
+          "published_at": null,
+          "verified_at": null,
+          "harness_version": null,
+          "protocol_note": null
         },
         {
           "id": "0e349bde-b264-494d-a853-fada9c696192",
@@ -1685,7 +2581,15 @@
           "reward_hacks": null,
           "display_reward_hacks": null,
           "submission": null,
-          "official_detail_url": "https://hub.harborframework.com/datasets/terminal-bench/terminal-bench/4/leaderboards/4-0-0/rows/0e349bde-b264-494d-a853-fada9c696192"
+          "official_detail_url": "https://hub.harborframework.com/datasets/terminal-bench/terminal-bench/4/leaderboards/4-0-0/rows/0e349bde-b264-494d-a853-fada9c696192",
+          "source_type": "benchmark_official",
+          "source_url": "https://hub.harborframework.com/datasets/terminal-bench/terminal-bench/4/leaderboards/4-0-0/rows/0e349bde-b264-494d-a853-fada9c696192",
+          "source_title": "Harbor result detail",
+          "source_publisher": "Terminal-Bench / Harbor",
+          "published_at": null,
+          "verified_at": null,
+          "harness_version": null,
+          "protocol_note": null
         },
         {
           "id": "952b4217-421f-4d14-849b-9968fcb2063b",
@@ -1731,7 +2635,15 @@
           "reward_hacks": null,
           "display_reward_hacks": null,
           "submission": null,
-          "official_detail_url": "https://hub.harborframework.com/datasets/terminal-bench/terminal-bench/4/leaderboards/4-0-0/rows/952b4217-421f-4d14-849b-9968fcb2063b"
+          "official_detail_url": "https://hub.harborframework.com/datasets/terminal-bench/terminal-bench/4/leaderboards/4-0-0/rows/952b4217-421f-4d14-849b-9968fcb2063b",
+          "source_type": "benchmark_official",
+          "source_url": "https://hub.harborframework.com/datasets/terminal-bench/terminal-bench/4/leaderboards/4-0-0/rows/952b4217-421f-4d14-849b-9968fcb2063b",
+          "source_title": "Harbor result detail",
+          "source_publisher": "Terminal-Bench / Harbor",
+          "published_at": null,
+          "verified_at": null,
+          "harness_version": null,
+          "protocol_note": null
         },
         {
           "id": "e53da412-5e92-408c-b369-c767924c7c1c",
@@ -1777,7 +2689,15 @@
           "reward_hacks": null,
           "display_reward_hacks": null,
           "submission": null,
-          "official_detail_url": "https://hub.harborframework.com/datasets/terminal-bench/terminal-bench/4/leaderboards/4-0-0/rows/e53da412-5e92-408c-b369-c767924c7c1c"
+          "official_detail_url": "https://hub.harborframework.com/datasets/terminal-bench/terminal-bench/4/leaderboards/4-0-0/rows/e53da412-5e92-408c-b369-c767924c7c1c",
+          "source_type": "benchmark_official",
+          "source_url": "https://hub.harborframework.com/datasets/terminal-bench/terminal-bench/4/leaderboards/4-0-0/rows/e53da412-5e92-408c-b369-c767924c7c1c",
+          "source_title": "Harbor result detail",
+          "source_publisher": "Terminal-Bench / Harbor",
+          "published_at": null,
+          "verified_at": null,
+          "harness_version": null,
+          "protocol_note": null
         },
         {
           "id": "26354542-edc0-40cd-8f8d-9fe6fbe92ac3",
@@ -1823,7 +2743,15 @@
           "reward_hacks": null,
           "display_reward_hacks": null,
           "submission": null,
-          "official_detail_url": "https://hub.harborframework.com/datasets/terminal-bench/terminal-bench/4/leaderboards/4-0-0/rows/26354542-edc0-40cd-8f8d-9fe6fbe92ac3"
+          "official_detail_url": "https://hub.harborframework.com/datasets/terminal-bench/terminal-bench/4/leaderboards/4-0-0/rows/26354542-edc0-40cd-8f8d-9fe6fbe92ac3",
+          "source_type": "benchmark_official",
+          "source_url": "https://hub.harborframework.com/datasets/terminal-bench/terminal-bench/4/leaderboards/4-0-0/rows/26354542-edc0-40cd-8f8d-9fe6fbe92ac3",
+          "source_title": "Harbor result detail",
+          "source_publisher": "Terminal-Bench / Harbor",
+          "published_at": null,
+          "verified_at": null,
+          "harness_version": null,
+          "protocol_note": null
         },
         {
           "id": "51c6d76e-5baa-48c1-97b3-88656c620eef",
@@ -1869,7 +2797,15 @@
           "reward_hacks": null,
           "display_reward_hacks": null,
           "submission": null,
-          "official_detail_url": "https://hub.harborframework.com/datasets/terminal-bench/terminal-bench/4/leaderboards/4-0-0/rows/51c6d76e-5baa-48c1-97b3-88656c620eef"
+          "official_detail_url": "https://hub.harborframework.com/datasets/terminal-bench/terminal-bench/4/leaderboards/4-0-0/rows/51c6d76e-5baa-48c1-97b3-88656c620eef",
+          "source_type": "benchmark_official",
+          "source_url": "https://hub.harborframework.com/datasets/terminal-bench/terminal-bench/4/leaderboards/4-0-0/rows/51c6d76e-5baa-48c1-97b3-88656c620eef",
+          "source_title": "Harbor result detail",
+          "source_publisher": "Terminal-Bench / Harbor",
+          "published_at": null,
+          "verified_at": null,
+          "harness_version": null,
+          "protocol_note": null
         },
         {
           "id": "0eed5a0d-96b6-491b-aeb7-cd5e4700c2d7",
@@ -1915,7 +2851,15 @@
           "reward_hacks": null,
           "display_reward_hacks": null,
           "submission": null,
-          "official_detail_url": "https://hub.harborframework.com/datasets/terminal-bench/terminal-bench/4/leaderboards/4-0-0/rows/0eed5a0d-96b6-491b-aeb7-cd5e4700c2d7"
+          "official_detail_url": "https://hub.harborframework.com/datasets/terminal-bench/terminal-bench/4/leaderboards/4-0-0/rows/0eed5a0d-96b6-491b-aeb7-cd5e4700c2d7",
+          "source_type": "benchmark_official",
+          "source_url": "https://hub.harborframework.com/datasets/terminal-bench/terminal-bench/4/leaderboards/4-0-0/rows/0eed5a0d-96b6-491b-aeb7-cd5e4700c2d7",
+          "source_title": "Harbor result detail",
+          "source_publisher": "Terminal-Bench / Harbor",
+          "published_at": null,
+          "verified_at": null,
+          "harness_version": null,
+          "protocol_note": null
         },
         {
           "id": "8180b9e4-4990-43d0-b906-cd8b43adaaa2",
@@ -1961,7 +2905,15 @@
           "reward_hacks": null,
           "display_reward_hacks": null,
           "submission": null,
-          "official_detail_url": "https://hub.harborframework.com/datasets/terminal-bench/terminal-bench/4/leaderboards/4-0-0/rows/8180b9e4-4990-43d0-b906-cd8b43adaaa2"
+          "official_detail_url": "https://hub.harborframework.com/datasets/terminal-bench/terminal-bench/4/leaderboards/4-0-0/rows/8180b9e4-4990-43d0-b906-cd8b43adaaa2",
+          "source_type": "benchmark_official",
+          "source_url": "https://hub.harborframework.com/datasets/terminal-bench/terminal-bench/4/leaderboards/4-0-0/rows/8180b9e4-4990-43d0-b906-cd8b43adaaa2",
+          "source_title": "Harbor result detail",
+          "source_publisher": "Terminal-Bench / Harbor",
+          "published_at": null,
+          "verified_at": null,
+          "harness_version": null,
+          "protocol_note": null
         }
       ]
     }

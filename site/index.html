@@ -6,12 +6,12 @@
     <meta name="theme-color" content="#000000" />
     <meta
       name="description"
-      content="Penguin Harness Leaderboard — official Terminal-Bench 2.1, 3.0, and 4.0 model and harness results."
+      content="Penguin Harness Leaderboard — sourced Terminal-Bench 2.1, 3.0, and 4.0 model and harness results."
     />
     <meta property="og:title" content="Penguin Harness Leaderboard" />
     <meta
       property="og:description"
-      content="Compare official Terminal-Bench results across model, harness, reasoning effort, tokens, and cost."
+      content="Compare Terminal-Bench official baselines, vendor-reported results, and Penguin runs."
     />
     <meta property="og:type" content="website" />
     <meta property="og:url" content="https://leaderboard.penguin.ooo/" />
@@ -40,8 +40,8 @@
         document.documentElement.lang = locale === "zh" ? "zh-CN" : "en";
       } catch {}
     </script>
-    <link rel="stylesheet" href="styles.css?v=20260901-9" />
-    <script src="script.js?v=20260901-9" defer></script>
+    <link rel="stylesheet" href="styles.css?v=20260901-10" />
+    <script src="script.js?v=20260901-10" defer></script>
   </head>
   <body>
     <a class="skip-link" href="#results" data-i18n="skipToResults">Skip to results</a>
@@ -100,7 +100,7 @@
           </div>
           <p class="eyebrow current-bench-name">Terminal-Bench</p>
           <h1 data-i18n-html="heroTitle">Compare the whole setup,<br /><span>not just the model.</span></h1>
-          <p class="hero-copy current-bench-description">Loading official benchmark metadata…</p>
+          <p class="hero-copy current-bench-description">Loading public benchmark metadata…</p>
           <div class="hero-actions">
             <a class="button button-primary" href="#results">
               <span data-i18n="viewResults">View results</span>
@@ -115,7 +115,7 @@
           <dl class="hero-stats" data-i18n-aria="benchmarkSummary" aria-label="Benchmark summary">
             <div>
               <dd class="stat-results">—</dd>
-              <dt data-i18n="officialResults">Official results</dt>
+              <dt data-i18n="publicResults">Public results</dt>
             </div>
             <div>
               <dd class="stat-models">—</dd>
@@ -137,9 +137,9 @@
         <div class="section-shell">
           <header class="section-heading results-heading">
             <div>
-              <p class="eyebrow" data-i18n="officialSnapshot">Official snapshot</p>
+              <p class="eyebrow" data-i18n="publicSnapshot">Public results</p>
               <h2 class="results-title">Leaderboard</h2>
-              <p class="results-description">Loading official results…</p>
+              <p class="results-description">Loading public results…</p>
             </div>
             <a class="snapshot-link benchmark-source-link" href="https://www.tbench.ai">
               <span class="snapshot-status" aria-hidden="true"></span>
@@ -150,6 +150,12 @@
 
           <div class="result-toolbar">
             <div class="result-controls">
+              <label>
+                <span data-i18n="source">Source</span>
+                <select class="filter-select source-filter" data-i18n-aria="sourceFilter" aria-label="Filter by source">
+                  <option value="">All sources</option>
+                </select>
+              </label>
               <label>
                 <span data-i18n="harness">Harness</span>
                 <select class="filter-select harness-filter" data-i18n-aria="harnessFilter" aria-label="Filter by harness">
@@ -175,15 +181,15 @@
           <p class="table-hint" aria-hidden="true" data-i18n="tableHint">Swipe to view the full table →</p>
           <div class="table-wrap">
             <table>
-              <caption class="sr-only table-caption">Official Terminal-Bench results</caption>
+              <caption class="sr-only table-caption">Public Terminal-Bench results</caption>
               <thead class="results-head"></thead>
               <tbody class="results-body">
-                <tr><td class="loading-cell" colspan="10" data-i18n="loadingResults">Loading official results…</td></tr>
+                <tr><td class="loading-cell" colspan="10" data-i18n="loadingResults">Loading public results…</td></tr>
               </tbody>
             </table>
           </div>
           <p class="confidence-note">
-            <span data-i18n="confidenceNote">Resolution rate includes the official 95% confidence interval. Tokens and cost are totals reported by tbench.ai.</span>
+            <span data-i18n="confidenceNote">The 95% confidence interval is shown only when the source reports it. Vendor and Penguin rows have no official rank.</span>
           </p>
         </div>
       </section>
@@ -198,7 +204,7 @@
             <article>
               <span>01</span>
               <h3 data-i18n="resolutionRate">Resolution rate</h3>
-              <p data-i18n="resolutionDescription">Pass rate with the official 95% confidence interval shown on the same scale.</p>
+              <p data-i18n="resolutionDescription">Pass rate with the reported 95% confidence interval shown on the same 0–100 scale.</p>
             </article>
             <article>
               <span>02</span>
@@ -218,7 +224,7 @@
     <footer class="footer">
       <div class="section-shell footer-inner">
         <span>© 2026 Prism Shadow</span>
-        <span data-i18n="footerText">Official Terminal-Bench snapshot · ready for future Penguin runs</span>
+        <span data-i18n="footerText">Terminal-Bench official baselines · vendor reports · Penguin runs</span>
         <a href="https://github.com/Prism-Shadow/penguin-harness-leaderboard">GitHub ↗</a>
       </div>
     </footer>
@@ -235,8 +241,8 @@
         </header>
         <div class="dialog-body"></div>
         <footer class="dialog-footer">
-          <a class="button button-primary official-detail-link" href="https://hub.harborframework.com">
-            <span data-i18n="openOfficialDetail">Open official detail</span>
+          <a class="button button-primary official-detail-link" href="https://hub.harborframework.com" target="_blank" rel="noreferrer">
+            <span class="official-detail-link-label" data-i18n="openOfficialDetail">Open official detail</span>
             <span aria-hidden="true">↗</span>
           </a>
           <button class="button button-secondary dialog-done" type="button" data-i18n="done">Done</button>

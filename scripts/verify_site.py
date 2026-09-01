@@ -171,6 +171,10 @@ def verify_frontend_contract() -> None:
     assert "official_detail_url" in script, "Official result detail link is missing"
     assert 'class="bench-switcher"' in html, "Top navigation benchmark switcher missing"
     assert 'class="locale-control"' in html, "Language control missing"
+    assert '<option value="system">' not in html, "Language control still displays Follow system"
+    assert 'elements.localeSelect.value = state.locale' in script, (
+        "Language control does not display the resolved language"
+    )
     assert 'class="filter-select source-filter"' in html, "Source filter missing"
     assert "accuracy_ci95_half_width" in script, "Confidence-interval comparison is missing"
     column_contract = (

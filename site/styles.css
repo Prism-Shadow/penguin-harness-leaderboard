@@ -796,86 +796,62 @@ tbody tr:hover td {
 
 .rate-cell {
   display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  gap: 8px;
+  align-items: center;
+  gap: 12px;
   font-variant-numeric: tabular-nums;
 }
 
 .rate-cell strong {
-  color: var(--accent-strong);
-  font-size: 16px;
+  color: var(--text);
+  font-size: 15px;
   font-weight: 800;
 }
 
 .rate-copy {
   display: flex;
   align-items: baseline;
-  gap: 8px;
+  width: 98px;
+  flex: 0 0 98px;
+  gap: 5px;
+  white-space: nowrap;
 }
 
 .rate-copy span {
   color: var(--muted);
-  font-size: 12px;
-  white-space: nowrap;
+  font-size: 11px;
 }
 
-.ci-plot {
+.accuracy-track {
   position: relative;
   display: block;
-  width: 100%;
+  min-width: 0;
   height: 12px;
+  flex: 1;
+  overflow: visible;
+  background: var(--line-soft);
 }
 
-.ci-plot::before {
+.accuracy-fill {
   position: absolute;
-  top: 5px;
-  right: 0;
-  left: 0;
-  height: 2px;
-  background: var(--line-strong);
-  border-radius: 99px;
-  content: "";
+  inset: 0 auto 0 0;
+  background: var(--text);
 }
 
-.ci-range {
+.accuracy-ci {
   position: absolute;
-  top: 4px;
-  min-width: 2px;
-  height: 4px;
-  background: var(--accent);
-  border-radius: 99px;
+  top: 50%;
+  height: 1px;
+  background: var(--muted);
+  transform: translateY(-50%);
 }
 
-.ci-range::before,
-.ci-range::after {
+.accuracy-cap {
   position: absolute;
-  top: -3px;
-  width: 2px;
-  height: 10px;
-  background: var(--accent);
-  border-radius: 2px;
-  content: "";
-}
-
-.ci-range::before {
-  left: 0;
-}
-
-.ci-range::after {
-  right: 0;
-}
-
-.ci-point {
-  position: absolute;
-  top: 1px;
-  width: 10px;
-  height: 10px;
-  background: var(--surface);
-  border: 3px solid var(--accent);
-  border-radius: 50%;
-  box-shadow: 0 0 0 2px var(--surface);
-  transform: translateX(-50%);
+  top: 50%;
+  width: 1px;
+  height: 6px;
+  background: var(--muted);
+  transform: translate(-50%, -50%);
 }
 
 .source-link {

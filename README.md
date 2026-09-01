@@ -74,9 +74,10 @@ before a push to `main` is deployed.
 
 - Source type is a strict enum: `benchmark_official`, `vendor_reported`, or
   `penguin_run`.
-- Official rows are returned with `status=display` by tbench.ai. Their rank is
-  preserved; vendor and Penguin rows always show `—` and never receive an
-  inferred official rank.
+- Official rows are returned with `status=display` by tbench.ai and retain
+  their official rank in the data and Details. The main table shows a dynamic
+  comparison rank across the current filtered view, including vendor and
+  Penguin rows, without presenting that number as an official rank.
 - Vendor rows require a primary page controlled by the model vendor. Secondary
   articles and aggregation sites are not accepted as evidence.
 - Missing reasoning effort or metrics remain undisclosed rather than guessed.

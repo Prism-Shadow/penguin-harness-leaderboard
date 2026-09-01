@@ -479,10 +479,28 @@ function filteredRows() {
   ));
 }
 
-function sortedRows(rows) {
+function comparisonRanks(rows) {
+  const ranked = [...rows].sort((left, right) => (
+    right.accuracy - left.accuracy || left.model.label.localeCompare(right.model.label)
+  ));
+  const ranks = new Map();
+  let previousAccuracy = null;
+  let rank = 0;
+  ranked.forEach((row, index) => {
+    if (row.accuracy !== previousAccuracy) {
+      rank = index + 1;
+      previousAccuracy = row.accuracy;
+    }
+    ranks.set(row.id, rank);
+  });
+  return ranks;
+}
+
+function sortedRows(rows, ranks) {
   const { key, direction } = state.sort;
   const multiplier = direction === "asc" ? 1 : -1;
   const value = (row) => {
+    if (key === "rank") return ranks.get(row.id);
     if (key === "harness") return row.harness.label;
     if (key === "model") return row.model.label;
     if (key === "source_type") return sourceTypeLabel(row.source_type);
@@ -555,21 +573,20 @@ function accuracyCell(row) {
   const ci = row.accuracy_ci95_half_width;
   const lower = Math.max(0, row.accuracy - (ci ?? 0));
   const upper = Math.min(100, row.accuracy + (ci ?? 0));
-  const interval = ci == null
-    ? t("notReported")
-    : t("confidenceRange", {
-      lower: `${lower.toFixed(1)}%`,
-      upper: `${upper.toFixed(1)}%`,
-    });
+  const interval = ci == null ? "CI —" : `± ${ci.toFixed(1)}%`;
   return `
     <div class="rate-cell">
       <div class="rate-copy">
         <strong>${row.accuracy.toFixed(1)}%</strong>
         <span>${escapeHtml(interval)}</span>
       </div>
-      <span class="ci-plot" aria-hidden="true">
-        ${ci == null ? "" : `<i class="ci-range" style="left:${lower}%;width:${upper - lower}%"></i>`}
-        <b class="ci-point" style="left:${Math.min(100, Math.max(0, row.accuracy))}%"></b>
+      <span class="accuracy-track" aria-hidden="true">
+        <i class="accuracy-fill" style="width:${Math.min(100, Math.max(0, row.accuracy))}%"></i>
+        ${ci == null ? "" : `
+          <i class="accuracy-ci" style="left:${lower}%;width:${upper - lower}%"></i>
+          <i class="accuracy-cap accuracy-cap-lower" style="left:${lower}%"></i>
+          <i class="accuracy-cap accuracy-cap-upper" style="left:${upper}%"></i>
+        `}
       </span>
     </div>`;
 }
@@ -589,7 +606,9 @@ function missingValue() {
 
 function renderTable() {
   renderTableHead();
-  const rows = sortedRows(filteredRows());
+  const filtered = filteredRows();
+  const ranks = comparisonRanks(filtered);
+  const rows = sortedRows(filtered, ranks);
   elements.resultCount.textContent = t("showingResults", {
     shown: rows.length,
     total: state.benchmark.result_count,
@@ -601,12 +620,13 @@ function renderTable() {
   }
 
   elements.resultsBody.innerHTML = rows.map((row) => {
+    const comparisonRank = ranks.get(row.id);
     const effort = row.thinking_level
       ? `<span class="effort-pill">${escapeHtml(row.thinking_level)}</span>`
       : `<span class="effort-pill muted">${escapeHtml(t("notReported"))}</span>`;
     return `
       <tr>
-        <td class="rank-cell"><span class="rank-badge${row.rank != null && row.rank <= 3 ? ` rank-${row.rank}` : ""}" title="${escapeHtml(row.rank == null ? t("notOfficiallyRanked") : t("officialRank"))}">${row.rank ?? "—"}</span></td>
+        <td class="rank-cell"><span class="rank-badge${comparisonRank <= 3 ? ` rank-${comparisonRank}` : ""}">${comparisonRank}</span></td>
         <td class="entity-cell harness-cell">${linkedName(row.harness)}</td>
         <td class="entity-cell model-cell">
           <div class="model-primary">${linkedName(row.model)}${effort}</div>

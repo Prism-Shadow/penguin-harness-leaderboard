@@ -191,8 +191,14 @@ def verify_frontend_contract() -> None:
     for removed_selector in ("ci-whisker", "rate-track", "rate-fill"):
         assert removed_selector not in script, f"Removed {removed_selector} markup is still rendered"
         assert removed_selector not in css, f"Removed {removed_selector} styling is still present"
-    assert 'class="ci-plot"' in script, "Confidence interval plot is missing"
-    assert ".ci-range" in css and ".ci-point" in css, "Confidence interval styling is missing"
+    assert 'class="accuracy-track"' in script, "Accuracy bar is missing"
+    assert ".accuracy-fill" in css, "Accuracy fill styling is missing"
+    assert ".accuracy-ci" in css and ".accuracy-cap" in css, (
+        "Confidence interval whisker styling is missing"
+    )
+    assert "function comparisonRanks(rows)" in script, "Adaptive comparison ranking is missing"
+    assert "ranks.get(row.id)" in script, "Filtered rows do not use comparison ranks"
+    assert 'row.rank ?? "—"' not in script, "Unranked rows still render a dash in the main table"
     assert 'row.protocol_note !== null' in script, "Official Details null guard is missing"
     assert "linkedName(row.harness, row.harness_org)" not in script, (
         "Harness organization is still repeated in the main table"

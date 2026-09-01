@@ -40,8 +40,8 @@
         document.documentElement.lang = locale === "zh" ? "zh-CN" : "en";
       } catch {}
     </script>
-    <link rel="stylesheet" href="styles.css?v=20260901-3" />
-    <script src="script.js?v=20260901-3" defer></script>
+    <link rel="stylesheet" href="styles.css?v=20260901-4" />
+    <script src="script.js?v=20260901-4" defer></script>
   </head>
   <body>
     <a class="skip-link" href="#results" data-i18n="skipToResults">Skip to results</a>
@@ -124,8 +124,8 @@
             </div>
             <div>
               <dd class="stat-submissions">—</dd>
-              <dt data-i18n="submissions">Submissions</dt>
-              <dd class="metric-desc" data-i18n="submissionsDescription">Merged, auditable result configurations.</dd>
+              <dt data-i18n="submissions">Public results</dt>
+              <dd class="metric-desc" data-i18n="submissionsDescription">Auditable result configurations across source types.</dd>
             </div>
             <div>
               <dd class="stat-models">—</dd>
@@ -134,7 +134,7 @@
             </div>
             <div class="accent">
               <dd class="stat-best">—</dd>
-              <dt data-i18n="bestAccuracy">Best Accuracy</dt>
+              <dt data-i18n="bestAccuracy">Official best</dt>
               <dd class="metric-desc stat-best-label">Loading…</dd>
             </div>
           </dl>
@@ -144,7 +144,7 @@
       <section id="results" class="section section-anchor">
         <div class="section-shell">
           <header class="section-heading">
-            <p class="eyebrow" data-i18n="resultsEyebrow">Official results</p>
+            <p class="eyebrow" data-i18n="resultsEyebrow">Public results</p>
             <h2 class="results-title">Leaderboard</h2>
             <p class="results-description">Loading published results…</p>
           </header>
@@ -163,6 +163,9 @@
             <select class="filter-select thinking-filter" data-i18n-aria="thinkingFilter" aria-label="Filter by thinking level">
               <option value="">All thinking levels</option>
             </select>
+            <select class="filter-select source-filter" data-i18n-aria="sourceFilter" aria-label="Filter by source type">
+              <option value="">All sources</option>
+            </select>
             <label class="best-only-control">
               <input class="best-only-filter" type="checkbox" />
               <span data-i18n="bestOnly">Best per model</span>
@@ -171,12 +174,12 @@
 
           <div class="result-meta">
             <span class="result-count" aria-live="polite">Loading…</span>
-            <span data-i18n="tableHelp">Runs are total task trials · open Details for protocol, cost, tokens, and review</span>
+            <span data-i18n="tableHelp">Only benchmark-official rows receive an official rank · open Details for evidence and configuration</span>
           </div>
           <p class="table-hint" aria-hidden="true" data-i18n="tableHint">Swipe to view the full table →</p>
           <div class="table-wrap">
             <table>
-              <caption class="sr-only" data-i18n="tableCaption">Terminal-Bench 2.1 official model and harness results</caption>
+              <caption class="sr-only table-caption">Published model and harness results</caption>
               <thead class="results-head"></thead>
               <tbody class="results-body">
                 <tr><td class="loading-cell" colspan="7" data-i18n="loadingResults">Loading published results…</td></tr>
@@ -220,7 +223,7 @@
             <article>
               <span>03</span>
               <h3 data-i18n="detailsTitle">Runs and review</h3>
-              <p data-i18n="detailsDescription">Each task is attempted at least five times. Trials flagged for reward hacking stay in the total and score zero.</p>
+              <p data-i18n="detailsDescription">Run settings are shown only when the cited source reports them; missing fields remain explicitly undisclosed.</p>
             </article>
           </div>
         </div>

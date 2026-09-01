@@ -1,48 +1,35 @@
 # Penguin Harness Leaderboard
 
-Static benchmark leaderboard for comparing the complete evaluation setup:
-Harness, model, Thinking Level, score, and detailed run configuration.
+Static leaderboard for comparing the complete benchmark setup: Harness, model,
+Thinking Level, disclosed run configuration, and Accuracy.
 
-The first published view contains Terminal-Bench 2.1 results only. Its data is
-generated from the merged submission records in the official
-[harbor-framework/terminal-bench-2-1](https://github.com/harbor-framework/terminal-bench-2-1)
-repository. The disabled bench tab demonstrates how more benchmarks can be
-added without mixing scores from different evaluation protocols.
+The site has two real benchmark views:
+
+- Terminal-Bench 2.1: 20 merged benchmark submissions plus 8 first-party
+  vendor reports.
+- Terminal-Bench 3.0: 12 rows from a dated export of Harbor Hub's public leaderboard
+  plus 1 first-party vendor report.
+
+All results share one table, with explicit source labels and a source filter.
+Only `benchmark_official` rows receive an official rank. `vendor_reported` rows
+are public reference results and may use different protocols.
 
 The layout is visually inspired by
-[RAG Bench Essential](https://prism-shadow.github.io/rag-bench-essential/),
-and adapts parts of its frontend structure. See
-[THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md) for the retained MIT notice.
-This project's data schema and data-import pipeline are maintained
-independently.
-
-## What is included
-
-- Top-level benchmark switcher with a multi-benchmark-ready data model
-- Sortable and searchable result table
-- Harness and Thinking Level filters
-- Best-configuration-per-model view
-- Accuracy, standard error, pass@2 through pass@5, cost, token, duration, and
-  reward-hack review details
-- Nullable sandbox field reserved in the result schema and shown in Details
-- Links from every row to the merged official pull request and Harbor jobs
-- English and Chinese UI, light and dark themes, and responsive mobile layout
-- GitHub Actions deployment to GitHub Pages
-
-The current snapshot contains 89 tasks, 20 merged submissions, 13 models, and
-6 harnesses. Accuracy already includes official reward-hack disqualifications;
-pass@k is shown separately and must not be compared as if it were Accuracy.
-The official submission schema does not report sandbox configuration, so the
-current rows explicitly show it as not reported instead of guessing a value.
+[RAG Bench Essential](https://prism-shadow.github.io/rag-bench-essential/).
+See [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md) for the retained MIT notice.
 
 ## Repository layout
 
+    data/curated-results.json
+                                  Manually verified first-party model reports
+    data/terminal-bench-3.0-official.json
+                                  Dated export of the official TB 3.0 leaderboard
     site/                         Static GitHub Pages artifact
-    site/data/benchmarks.json    Published result data
+    site/data/benchmarks.json    Generated data consumed by the page
     scripts/import_terminal_bench.py
-                                  Import official submissions
-    scripts/verify_site.py       Verify published data against the source
-    .github/workflows/pages.yml  GitHub Pages deployment
+                                  Build official + curated site data
+    scripts/verify_site.py       Verify data, ranks, nullable fields, and sources
+    .github/workflows/pages.yml  Validate and deploy GitHub Pages
 
 ## Local preview
 
@@ -50,14 +37,17 @@ From this repository:
 
     python3 -m http.server 8765 --directory site
 
-Then open http://localhost:8765/.
+Then open:
 
-Opening site/index.html directly is not supported because browsers block the
+- http://localhost:8765/?bench=terminal-bench-2.1
+- http://localhost:8765/?bench=terminal-bench-3.0
+
+Opening `site/index.html` directly is not supported because browsers block the
 JSON request from local files.
 
-## Refresh Terminal-Bench data
+## Refresh and verify
 
-The importer expects the official repository next to this repository:
+The importer expects the official TB 2.1 repository next to this repository:
 
     Terminal-bench-2.1/
     ├── penguin-harness-leaderboard/
@@ -67,25 +57,30 @@ Regenerate and verify:
 
     python3 scripts/import_terminal_bench.py
     python3 scripts/verify_site.py
+    node --check site/script.js
 
-Review the JSON diff before committing. The generated file records the exact
-official source commit in snapshot_commit for traceability. The updated value
-is derived from that commit date, so regenerating an unchanged snapshot is
-deterministic.
-
-Results with the same official Accuracy share a competition rank; the next
-rank skips the corresponding number of positions.
-
-## Deployment
-
-The Pages workflow publishes the site directory after a push to main and can
-also be started manually from the Actions tab. Feature branches do not deploy
-automatically, which keeps the public leaderboard unchanged until review and
-merge.
+Review both the input evidence and generated JSON diff before committing.
+GitHub Actions repeats the data and JavaScript validation before deployment.
 
 ## Data policy
 
-The main table includes only merged official Terminal-Bench 2.1 submissions.
-Community or local experiments, including runs using different k values or
-other protocols, should use a clearly separated benchmark or result tier
-instead of being mixed into the official ranking.
+- Benchmark-official and vendor-reported results remain distinguishable even
+  when sorted in one table.
+- Vendor results require a direct first-party HTTPS source: an official vendor
+  page or a file in the vendor's official model repository.
+- Vendor rows always have `official_rank: null`.
+- Missing Harness, Thinking Level, trial, timeout, or Sandbox data remains
+  `null`; it is never replaced with a guessed default.
+- Multiple reliable observations for one model are preserved as separate rows.
+- Terminal-Bench versions never share scores or ranks.
+- The TB 3.0 view is a point-in-time Harbor Hub snapshot, not a live mirror.
+
+Source evidence was checked on 2026-09-01. Update `retrieved_at` and review the
+primary page whenever a curated record changes.
+
+## Deployment
+
+The Pages workflow runs on pushes to `main` that change the site, data, scripts,
+or workflow. Feature branches do not deploy automatically. The repository's
+GitHub Pages settings already configure `leaderboard.penguin.ooo` as the custom
+domain, so no repository `CNAME` file is required for the current setup.

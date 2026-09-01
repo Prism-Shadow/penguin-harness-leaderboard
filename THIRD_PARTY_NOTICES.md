@@ -2,6 +2,9 @@
 
 The leaderboard frontend adapts parts of the structure and presentation of
 [PrismShadow/rag-bench-essential](https://github.com/Prism-Shadow/rag-bench-essential).
+The local Penguin logo asset is mirrored from
+[penguin.ooo/penguin-logo.svg](https://penguin.ooo/penguin-logo.svg), as used
+by that reference site.
 That project is licensed under the following MIT License:
 
 MIT License

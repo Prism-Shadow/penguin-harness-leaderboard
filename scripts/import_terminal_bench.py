@@ -173,11 +173,13 @@ def build_payload(source: Path) -> dict[str, Any]:
                 "score_note": {
                     "en": (
                         "Accuracy is successful trials divided by all trials. "
-                        "Reward-hack disqualifications are already scored as zero."
+                        "Trials flagged for reward hacking stay in the total and "
+                        "receive reward zero before Accuracy is recalculated."
                     ),
                     "zh": (
                         "Accuracy 为成功 trials 除以全部 trials；被判定为 "
-                        "reward hacking 的试验已经按 0 分计入。"
+                        "reward hacking 的 Trial 仍计入总数，并在重新计算 "
+                        "Accuracy 前按 0 分处理。"
                     ),
                 },
                 "protocol_note": {

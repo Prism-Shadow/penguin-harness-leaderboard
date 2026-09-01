@@ -27,6 +27,8 @@
           : themeMode;
         document.documentElement.dataset.themeMode = themeMode;
         document.documentElement.dataset.theme = theme;
+        document.querySelector('meta[name="theme-color"]').content =
+          theme === "dark" ? "#000000" : "#ffffff";
 
         const savedLocale = localStorage.getItem("penguin-leaderboard.locale");
         const localePref = ["en", "zh", "system"].includes(savedLocale) ? savedLocale : "system";
@@ -38,8 +40,8 @@
         document.documentElement.lang = locale === "zh" ? "zh-CN" : "en";
       } catch {}
     </script>
-    <link rel="stylesheet" href="styles.css?v=20260901-1" />
-    <script src="script.js?v=20260901-1" defer></script>
+    <link rel="stylesheet" href="styles.css?v=20260901-3" />
+    <script src="script.js?v=20260901-3" defer></script>
   </head>
   <body>
     <a class="skip-link" href="#results" data-i18n="skipToResults">Skip to results</a>
@@ -52,17 +54,17 @@
 
     <header class="site-header">
       <div class="nav-shell">
-        <a class="brand" href="#top" aria-label="Penguin Harness Leaderboard home">
+        <a class="brand" href="#top" data-i18n-aria="home" aria-label="Penguin Harness Leaderboard home">
           <img src="favicon.svg" alt="" />
           <span>Penguin Harness Leaderboard</span>
         </a>
-        <nav class="nav-actions" aria-label="Site controls">
+        <nav class="nav-actions" data-i18n-aria="siteControls" aria-label="Site controls">
           <div class="locale-control">
             <svg class="nav-icon locale-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
               <circle cx="12" cy="12" r="10"></circle>
               <path d="M2 12h20M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10Z"></path>
             </svg>
-            <label class="sr-only" for="locale-select">Language</label>
+            <label class="sr-only" for="locale-select" data-i18n="language">Language</label>
             <select id="locale-select" class="locale-select">
               <option value="system">Follow system</option>
               <option value="en">English</option>
@@ -91,7 +93,7 @@
         <div class="hero-inner">
           <div class="bench-switch-block">
             <span class="bench-switch-label" data-i18n="selectBenchmark">Select benchmark</span>
-            <div class="bench-switcher" aria-label="Benchmark"></div>
+            <div class="bench-switcher" data-i18n-aria="benchmarkSwitcher" aria-label="Benchmark selector"></div>
           </div>
 
           <div class="hero-brand">
@@ -114,7 +116,7 @@
               <span data-i18n="viewSource">View source</span>
             </a>
           </div>
-          <dl class="hero-stats" aria-label="Benchmark summary">
+          <dl class="hero-stats" data-i18n-aria="benchmarkSummary" aria-label="Benchmark summary">
             <div>
               <dd class="stat-tasks">—</dd>
               <dt data-i18n="tasks">Tasks</dt>
@@ -155,10 +157,10 @@
               </svg>
               <input class="result-search" type="search" data-i18n-placeholder="searchPlaceholder" placeholder="Search harness or model…" />
             </label>
-            <select class="filter-select harness-filter" aria-label="Harness">
+            <select class="filter-select harness-filter" data-i18n-aria="harnessFilter" aria-label="Filter by harness">
               <option value="">All harnesses</option>
             </select>
-            <select class="filter-select thinking-filter" aria-label="Thinking Level">
+            <select class="filter-select thinking-filter" data-i18n-aria="thinkingFilter" aria-label="Filter by thinking level">
               <option value="">All thinking levels</option>
             </select>
             <label class="best-only-control">
@@ -168,15 +170,16 @@
           </div>
 
           <div class="result-meta">
-            <span class="result-count">Loading…</span>
-            <span data-i18n="tableHelp">Sort with column headers · open Details for the full configuration</span>
+            <span class="result-count" aria-live="polite">Loading…</span>
+            <span data-i18n="tableHelp">Runs are total task trials · open Details for protocol, cost, tokens, and review</span>
           </div>
           <p class="table-hint" aria-hidden="true" data-i18n="tableHint">Swipe to view the full table →</p>
-          <div class="table-wrap" aria-label="Benchmark result table">
+          <div class="table-wrap">
             <table>
+              <caption class="sr-only" data-i18n="tableCaption">Terminal-Bench 2.1 official model and harness results</caption>
               <thead class="results-head"></thead>
               <tbody class="results-body">
-                <tr><td class="loading-cell" colspan="8" data-i18n="loadingResults">Loading published results…</td></tr>
+                <tr><td class="loading-cell" colspan="7" data-i18n="loadingResults">Loading published results…</td></tr>
               </tbody>
             </table>
           </div>
@@ -216,8 +219,8 @@
             </article>
             <article>
               <span>03</span>
-              <h3 data-i18n="detailsTitle">Run details</h3>
-              <p data-i18n="detailsDescription">Trials, pass@k, cost, tokens, duration, review adjustments, and source evidence.</p>
+              <h3 data-i18n="detailsTitle">Runs and review</h3>
+              <p data-i18n="detailsDescription">Each task is attempted at least five times. Trials flagged for reward hacking stay in the total and score zero.</p>
             </article>
           </div>
         </div>

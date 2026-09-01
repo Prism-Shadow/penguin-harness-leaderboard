@@ -32,6 +32,14 @@ const page = {
 const copy = {
   en: {
     skipToResults: "Skip to results",
+    home: "Penguin Harness Leaderboard home",
+    siteControls: "Site controls",
+    language: "Language",
+    benchmarkSwitcher: "Benchmark selector",
+    benchmarkSummary: "Benchmark summary",
+    tableCaption: "Terminal-Bench 2.1 official model and harness results",
+    harnessFilter: "Filter by harness",
+    thinkingFilter: "Filter by thinking level",
     selectBenchmark: "Select benchmark",
     heroTitle: "Compare the whole setup,<br /><span>not just the model.</span>",
     viewResults: "View results",
@@ -47,7 +55,7 @@ const copy = {
     searchLabel: "Search results",
     searchPlaceholder: "Search harness or model…",
     bestOnly: "Best per model",
-    tableHelp: "Sort with column headers · open Details for the full configuration",
+    tableHelp: "Runs are total task trials · open Details for protocol, cost, tokens, and review",
     tableHint: "Swipe to view the full table →",
     loadingResults: "Loading published results…",
     scoreProtocol: "Score protocol",
@@ -59,8 +67,8 @@ const copy = {
     harnessDescription: "The agent runtime and exact version that operated the terminal.",
     thinkingTitle: "Thinking Level",
     thinkingDescription: "Reasoning effort such as high, xhigh, or max is shown explicitly.",
-    detailsTitle: "Run details",
-    detailsDescription: "Trials, pass@k, cost, tokens, duration, review adjustments, and source evidence.",
+    detailsTitle: "Runs and review",
+    detailsDescription: "Each task is attempted at least five times. Trials flagged for reward hacking stay in the total and score zero.",
     footerText: "Auditable model × harness benchmark results",
     configurationEyebrow: "Submission configuration",
     allHarnesses: "All harnesses",
@@ -73,13 +81,12 @@ const copy = {
     model: "Model",
     thinkingLevel: "Thinking Level",
     accuracy: "Accuracy",
-    runConfig: "Run config",
+    runConfig: "Runs",
     source: "Source",
     details: "Details",
-    official: "Official",
     trials: "trials",
-    rewardHacks: "reward hacks",
-    disqualified: "disqualified",
+    averageShort: "Avg.",
+    rewardHacks: "Reward-hack rate",
     submissionDate: "Submission date",
     configuration: "Configuration",
     scoreAndTrials: "Score and trials",
@@ -98,7 +105,7 @@ const copy = {
     outputTokens: "Output",
     totalCost: "Total cost",
     averageDuration: "Average trial duration",
-    disqualifiedTrials: "Disqualified trials",
+    disqualifiedTrials: "Trials scored zero after review",
     sourceFile: "Source file",
     sourceSnapshot: "Source snapshot",
     pullRequest: "Official pull request",
@@ -113,6 +120,14 @@ const copy = {
   },
   zh: {
     skipToResults: "跳到榜单",
+    home: "Penguin Harness Leaderboard 首页",
+    siteControls: "网站控制",
+    language: "语言",
+    benchmarkSwitcher: "Benchmark 选择器",
+    benchmarkSummary: "Benchmark 摘要",
+    tableCaption: "Terminal-Bench 2.1 官方模型与 Harness 结果",
+    harnessFilter: "按 Harness 筛选",
+    thinkingFilter: "按 Thinking Level 筛选",
     selectBenchmark: "选择 Benchmark",
     heroTitle: "比较完整配置，<br /><span>不只比较模型。</span>",
     viewResults: "查看榜单",
@@ -128,7 +143,7 @@ const copy = {
     searchLabel: "搜索结果",
     searchPlaceholder: "搜索 Harness 或模型…",
     bestOnly: "每个模型仅看最佳",
-    tableHelp: "点击表头排序 · 点击详情查看完整配置",
+    tableHelp: "评测次数为全部任务的 Trial 总数 · 协议、成本、Token 和审核信息见详情",
     tableHint: "左右滑动查看完整表格 →",
     loadingResults: "正在加载公开结果…",
     scoreProtocol: "计分说明",
@@ -140,8 +155,8 @@ const copy = {
     harnessDescription: "执行终端任务的 Agent Runtime 及其准确版本。",
     thinkingTitle: "Thinking Level",
     thinkingDescription: "明确展示 high、xhigh、max 等推理强度。",
-    detailsTitle: "运行详情",
-    detailsDescription: "展示 trials、pass@k、成本、Token、耗时、审核调整和来源证据。",
+    detailsTitle: "评测次数与审核",
+    detailsDescription: "每道任务至少运行 5 次；被判定为 reward hacking 的 Trial 仍计入总数，并按 0 分处理。",
     footerText: "可核验的模型 × Harness Benchmark 结果",
     configurationEyebrow: "Submission 配置",
     allHarnesses: "全部 Harness",
@@ -154,16 +169,15 @@ const copy = {
     model: "模型",
     thinkingLevel: "Thinking Level",
     accuracy: "Accuracy",
-    runConfig: "运行配置",
+    runConfig: "评测次数",
     source: "来源",
     details: "详情",
-    official: "官方",
-    trials: "次 trials",
-    rewardHacks: "reward hacks",
-    disqualified: "次取消资格",
+    trials: "次评测",
+    averageShort: "平均",
+    rewardHacks: "Reward-hack 比例",
     submissionDate: "提交日期",
     configuration: "配置",
-    scoreAndTrials: "分数与 Trials",
+    scoreAndTrials: "分数与评测",
     resources: "资源消耗",
     reviewAndEvidence: "审核与来源证据",
     standardError: "标准误",
@@ -171,15 +185,15 @@ const copy = {
     modelId: "模型 ID",
     sandbox: "Sandbox",
     notReportedOfficial: "官方 submission 未报告",
-    minimumTrials: "每任务最少 Trials",
-    totalTrials: "总 Trials",
+    minimumTrials: "每任务最少评测次数",
+    totalTrials: "总评测次数",
     totalTokens: "总 Tokens",
     uncachedInput: "未缓存输入",
     cachedInput: "缓存输入",
     outputTokens: "输出",
     totalCost: "总成本",
     averageDuration: "平均单次耗时",
-    disqualifiedTrials: "取消资格 Trials",
+    disqualifiedTrials: "审核后计为 0 分的 Trials",
     sourceFile: "来源文件",
     sourceSnapshot: "数据快照",
     pullRequest: "官方 Pull Request",
@@ -201,8 +215,8 @@ const state = {
   harness: "",
   thinking: "",
   bestOnly: false,
-  sortKey: "accuracy_rank",
-  sortDirection: "asc",
+  sortKey: "accuracy",
+  sortDirection: "desc",
   locale: document.documentElement.dataset.locale || "en"
 };
 
@@ -242,6 +256,7 @@ function formatDuration(seconds) {
   if (seconds == null) return "—";
   const minutes = Math.floor(seconds / 60);
   const rest = Math.round(seconds % 60);
+  if (state.locale === "zh") return minutes + " 分 " + rest + " 秒";
   return minutes + "m " + String(rest).padStart(2, "0") + "s";
 }
 
@@ -264,6 +279,9 @@ function applyTranslations() {
   });
   document.querySelectorAll("[data-i18n-placeholder]").forEach(function (element) {
     element.placeholder = t(element.dataset.i18nPlaceholder);
+  });
+  document.querySelectorAll("[data-i18n-aria]").forEach(function (element) {
+    element.setAttribute("aria-label", t(element.dataset.i18nAria));
   });
 
   const preference = document.documentElement.dataset.localePref || "system";
@@ -340,10 +358,10 @@ function renderFilterOptions(bench) {
 
 const columns = [
   { key: "accuracy_rank", label: "rank", className: "rank-column", numeric: true },
-  { key: "harness", label: "harnessTitle", className: "harness-column" },
   { key: "model", label: "model", className: "model-column" },
-  { key: "thinking_level", label: "thinkingLevel", className: "thinking-column" },
   { key: "accuracy", label: "accuracy", className: "accuracy-column", numeric: true },
+  { key: "harness", label: "harnessTitle", className: "harness-column" },
+  { key: "thinking_level", label: "thinkingLevel", className: "thinking-column" },
   { key: "trial_count", label: "runConfig", className: "config-column" }
 ];
 
@@ -362,9 +380,8 @@ function renderTableHead() {
       "<span>", escapeHtml(t(column.label)), '</span><span class="sort-arrow" aria-hidden="true">',
       arrow, "</span></button></th>"
     ].join("");
-  }).join("") +
-    '<th scope="col" class="source-column">' + escapeHtml(t("source")) + "</th>" +
-    '<th scope="col">' + escapeHtml(t("details")) + "</th></tr>";
+  }).join("") + '<th scope="col" class="details-column">' +
+    escapeHtml(t("details")) + "</th></tr>";
 
   page.tableHead.querySelectorAll("[data-sort]").forEach(function (button) {
     button.addEventListener("click", function () {
@@ -413,24 +430,22 @@ function filteredResults(bench) {
 
 function accuracyCell(row) {
   return [
-    '<div class="accuracy-measure"><div class="accuracy-value"><strong>',
-    row.accuracy.toFixed(2), '%</strong><small>± ', row.accuracy_stderr.toFixed(2),
-    '%</small></div><div class="accuracy-track"><span class="accuracy-fill" style="--accuracy:',
-    Math.min(row.accuracy, 100), '%"></span></div></div>'
+    '<div class="accuracy-measure"><div class="accuracy-track"><span class="accuracy-fill" style="--accuracy:',
+    Math.min(row.accuracy, 100), '%"></span></div><div class="accuracy-value"><strong>',
+    row.accuracy.toFixed(2), '%</strong><small><span class="sr-only">',
+    escapeHtml(t("standardError")), " </span>± ", row.accuracy_stderr.toFixed(2),
+    '%</small></div></div>'
   ].join("");
 }
 
 function configCell(row) {
-  const reviewClass = row.disqualified_trials > 0 ? " config-danger" :
-    (row.reward_hacks > 0 ? " config-warning" : "");
+  const minimum = state.locale === "zh"
+    ? "每任务至少 " + row.minimum_trials_per_task + " 次"
+    : "Min. " + row.minimum_trials_per_task + " per task";
   return [
-    '<div class="config-summary"><strong>k ≥ ', row.minimum_trials_per_task,
-    " · ", formatNumber(row.trial_count), " ", escapeHtml(t("trials")), "</strong>",
-    "<span>", formatDuration(row.average_trial_duration_seconds), " avg · ",
-    formatMoney(row.total_cost_usd), "</span>",
-    '<span class="', reviewClass.trim(), '">',
-    row.reward_hacks.toFixed(2), "% ", escapeHtml(t("rewardHacks")),
-    row.disqualified_trials ? " · " + row.disqualified_trials + " " + escapeHtml(t("disqualified")) : "",
+    '<div class="config-summary"><strong>', formatNumber(row.trial_count), " ",
+    escapeHtml(t("trials")), "</strong><span>", escapeHtml(minimum), " · ",
+    escapeHtml(t("averageShort")), " ", formatDuration(row.average_trial_duration_seconds),
     "</span></div>"
   ].join("");
 }
@@ -444,7 +459,7 @@ function renderTable() {
     (results.length === 1 ? t("resultSingular") : t("resultPlural"));
 
   if (!results.length) {
-    page.tableBody.innerHTML = '<tr><td class="loading-cell" colspan="8">' +
+    page.tableBody.innerHTML = '<tr><td class="loading-cell" colspan="7">' +
       escapeHtml(t("noResults")) + "</td></tr>";
     return;
   }
@@ -452,19 +467,18 @@ function renderTable() {
   page.tableBody.innerHTML = results.map(function (row) {
     return [
       '<tr data-result-id="', escapeHtml(row.id), '">',
-      '<td class="rank-cell"><span class="rank-badge rank-', row.accuracy_rank, '">#',
+      '<td class="rank-cell"><span class="rank-badge rank-', row.accuracy_rank, '">',
       row.accuracy_rank, "</span></td>",
+      '<td><span class="primary-cell">', escapeHtml(row.model),
+      '</span><span class="secondary-cell">', escapeHtml(row.model_org), "</span></td>",
+      '<td class="accuracy-cell', state.sortKey === "accuracy" ? " is-active" : "", '">',
+      accuracyCell(row), "</td>",
       '<td><span class="primary-cell">', escapeHtml(row.harness),
       '</span><span class="secondary-cell">v', escapeHtml(row.harness_version), " · ",
       escapeHtml(row.harness_org), "</span></td>",
-      '<td><span class="primary-cell">', escapeHtml(row.model),
-      '</span><span class="secondary-cell">', escapeHtml(row.model_org), "</span></td>",
       '<td><span class="thinking-pill">', escapeHtml(row.thinking_level || "none"), "</span></td>",
-      "<td>", accuracyCell(row), "</td>",
       "<td>", configCell(row), "</td>",
-      '<td class="source-column"><a class="source-pill" href="', escapeHtml(row.source_pr),
-      '" target="_blank" rel="noreferrer">', escapeHtml(t("official")), " ↗</a></td>",
-      '<td><button class="details-button" type="button" data-details="',
+      '<td class="details-column"><button class="details-button" type="button" data-details="',
       escapeHtml(row.id), '">', escapeHtml(t("details")), "</button></td></tr>"
     ].join("");
   }).join("");
@@ -588,6 +602,8 @@ function cycleTheme() {
   localStorage.setItem("penguin-leaderboard.theme", next);
   document.documentElement.dataset.themeMode = next;
   document.documentElement.dataset.theme = resolvedTheme(next);
+  document.querySelector('meta[name="theme-color"]').content =
+    resolvedTheme(next) === "dark" ? "#000000" : "#ffffff";
   updateThemeButton();
 }
 
@@ -623,6 +639,8 @@ page.dialog.addEventListener("click", function (event) {
 matchMedia("(prefers-color-scheme: dark)").addEventListener("change", function () {
   if (document.documentElement.dataset.themeMode === "system") {
     document.documentElement.dataset.theme = resolvedTheme("system");
+    document.querySelector('meta[name="theme-color"]').content =
+      resolvedTheme("system") === "dark" ? "#000000" : "#ffffff";
     updateThemeButton();
   }
 });
@@ -640,7 +658,7 @@ fetch("data/benchmarks.json")
   .catch(function (error) {
     console.error(error);
     applyTranslations();
-    page.tableBody.innerHTML = '<tr><td class="loading-cell" colspan="8">' +
+    page.tableBody.innerHTML = '<tr><td class="loading-cell" colspan="7">' +
       escapeHtml(t("loadError")) + "</td></tr>";
     page.resultCount.textContent = t("loadError");
   });

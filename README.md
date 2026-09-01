@@ -1,31 +1,40 @@
 # Penguin Harness Leaderboard
 
-Static leaderboard for comparing the complete benchmark setup: Harness, model,
-Thinking Level, disclosed run configuration, and Accuracy.
+A static GitHub Pages leaderboard for comparing the complete evaluation setup,
+not only the model. The current demo mirrors the official Terminal-Bench 2.1,
+3.0, and 4.0 result tables published by [tbench.ai](https://www.tbench.ai/).
 
-The site has two real benchmark views: Terminal-Bench 2.1 and Terminal-Bench
-3.0. Counts, snapshot dates, and summary copy are derived from the input data
-rather than duplicated as constants in the generated page.
+The main table intentionally follows the official comparison surface, with one
+requested change: Harness appears before Model. It shows official rank,
+Harness, Model and reasoning effort, Resolution Rate with a 95% confidence
+interval, Release Date, total Tokens, and total Cost. The page has no
+secondary Details dialog because these are the metrics currently exposed by the
+official leaderboard.
 
-All results share one table, with explicit source labels and a source filter.
-Only `benchmark_official` rows receive an official rank. `vendor_reported` rows
-are public reference results and may use different protocols.
+## Data source
 
-The layout is visually inspired by
-[RAG Bench Essential](https://prism-shadow.github.io/rag-bench-essential/).
-See [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md) for the retained MIT notice.
+The static JSON is a normalized snapshot of the same official API used by
+tbench.ai. Benchmark routing follows the open-source website configuration in
+[`lib/leaderboard.ts`](https://github.com/harbor-framework/terminal-bench-website/blob/main/lib/leaderboard.ts):
+
+| View | Package | Official leaderboard |
+| --- | --- | --- |
+| Terminal-Bench 2.1 | `terminal-bench/terminal-bench-2-1` | `main` |
+| Terminal-Bench 3.0 | `terminal-bench/terminal-bench` | `3-0-0` |
+| Terminal-Bench 4.0 | `terminal-bench/terminal-bench` | `4-0-0` |
+
+`site/data/benchmarks.json` stores the current snapshot and its upstream
+`updated_at` timestamp. `scripts/verify_site.py --check-live` fetches all three
+leaderboards and requires an exact normalized match, so a changed official
+leaderboard cannot silently deploy stale rows.
 
 ## Repository layout
 
-    data/curated-results.json
-                                  Manually verified first-party model reports
-    data/terminal-bench-3.0-official.json
-                                  Dated export of the official TB 3.0 leaderboard
-    site/                         Static GitHub Pages artifact
-    site/data/benchmarks.json    Generated data consumed by the page
+    site/                         Static GitHub Pages site
+    site/data/benchmarks.json    Normalized official snapshot
     scripts/import_terminal_bench.py
-                                  Build official + curated site data
-    scripts/verify_site.py       Verify schema, ranks, dates, source evidence
+                                  Refresh snapshot from tbench.ai
+    scripts/verify_site.py       Verify schema, ranks, metrics, and live parity
     .github/workflows/pages.yml  Validate and deploy GitHub Pages
 
 ## Local preview
@@ -34,66 +43,48 @@ From this repository:
 
     python3 -m http.server 8765 --directory site
 
-Then open:
+Then open one of:
 
-- http://localhost:8765/?bench=terminal-bench-2.1
-- http://localhost:8765/?bench=terminal-bench-3.0
+- http://localhost:8765/?version=2.1
+- http://localhost:8765/?version=3.0
+- http://localhost:8765/?version=4.0
 
 Opening `site/index.html` directly is not supported because browsers block the
 JSON request from local files.
 
 ## Refresh and verify
 
-The importer expects the official TB 2.1 repository next to this repository:
-
-    Terminal-bench-2.1/
-    ├── penguin-harness-leaderboard/
-    └── terminal-bench-2-1/
-
-Regenerate and verify:
-
     python3 scripts/import_terminal_bench.py
     python3 scripts/verify_site.py
-    python3 scripts/verify_site.py --check-remote-sources
+    python3 scripts/verify_site.py --check-live
     node --check site/script.js
 
-Review both the input evidence and generated JSON diff before committing.
-GitHub Actions repeats the data and JavaScript validation before deployment.
+Always review the generated JSON diff before committing. The GitHub Actions
+workflow repeats the live parity and frontend syntax checks on pull requests and
+before a push to `main` is deployed.
 
-## Data policy
+## Data policy and future Penguin results
 
-- Benchmark-official and vendor-reported results remain distinguishable even
-  when sorted in one table.
-- Vendor results require a direct first-party HTTPS source: an official vendor
-  page or a file in the vendor's official model repository.
-- Every vendor row also carries machine-checkable evidence metadata. Text
-  claims use pinned first-party files and exact markers. If a score exists only
-  in an official image, the reviewed image and its context are pinned and the
-  image SHA-256 is verified; the validator does not pretend to OCR it.
-- Vendor rows always have `official_rank: null`.
-- `source_type` is a closed enum. Adding a future `penguin_self_run` tier must
-  be an explicit schema change with its own evidence policy.
-- Missing Harness, Thinking Level, trial, timeout, or Sandbox data remains
-  `null`; it is never replaced with a guessed default.
-- Multiple reliable observations for one model are preserved as separate rows.
-- Terminal-Bench versions never share scores or ranks.
-- Unknown curated `benchmark_id` values and duplicate result IDs fail the build
-  instead of being silently ignored.
-- The TB 3.0 view is a point-in-time Harbor Hub snapshot, not a live mirror.
-- `published_at` means the date that result was submitted or published, not the
-  model's general release date. `retrieved_at` means the date the cited result
-  or snapshot was checked. `snapshot_updated_at` is the upstream snapshot's own
-  update time.
+- The current three tables contain only official rows returned with
+  `status=display` by tbench.ai.
+- Rank is the official rank; the page never recomputes a different public rank.
+- Missing reasoning effort or metrics remain undisclosed rather than guessed.
+- Benchmark versions never share scores or ranks.
+- Dates retain the official Release Date semantics: TB 3.0 uses its
+  `release_date`; other views use the official `date` field. These are model
+  release dates, not evaluation run dates. The snapshot timestamp remains
+  visible above the table.
+- Future Penguin experiments can be added after real runs are available, but
+  they must use a separate source type and must not receive an official rank.
+  Their Harness, Model, effort, tokens, cost, run date, and evidence should be
+  recorded under the same comparable columns.
 
-The current evidence review date lives in `data/curated-results.json` as
-`verified_at`. Update it together with each affected `retrieved_at` value when
-reviewing or changing curated records.
+The layout began with visual inspiration from
+[RAG Bench Essential](https://prism-shadow.github.io/rag-bench-essential/).
+See [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md) for its retained MIT notice.
 
 ## Deployment
 
-Pull requests that change the site, data, scripts, or workflow run schema,
-frontend, and remote source-evidence checks before merge. Pushes to `main` run
-the same verification and then deploy Pages; feature branches do not deploy.
-The repository's GitHub Pages settings already configure
-`leaderboard.penguin.ooo` as the custom domain, so no repository `CNAME` file
-is required for the current setup.
+Pull requests validate the static snapshot against the live official API.
+Pushes to `main` run the same checks and deploy `site/` through GitHub Pages.
+Feature branches do not deploy.

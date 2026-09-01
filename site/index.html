@@ -3,15 +3,15 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta name="theme-color" content="#000000" />
+    <meta name="theme-color" content="#07090c" />
     <meta
       name="description"
-      content="Penguin Harness Leaderboard compares model and harness configurations across agent benchmarks."
+      content="Penguin Harness Leaderboard — official Terminal-Bench 2.1, 3.0, and 4.0 model and harness results."
     />
     <meta property="og:title" content="Penguin Harness Leaderboard" />
     <meta
       property="og:description"
-      content="Auditable benchmark results with harness, model, thinking level, and configuration details."
+      content="Compare official Terminal-Bench results across model, harness, reasoning effort, tokens, and cost."
     />
     <meta property="og:type" content="website" />
     <meta property="og:url" content="https://leaderboard.penguin.ooo/" />
@@ -28,7 +28,7 @@
         document.documentElement.dataset.themeMode = themeMode;
         document.documentElement.dataset.theme = theme;
         document.querySelector('meta[name="theme-color"]').content =
-          theme === "dark" ? "#000000" : "#ffffff";
+          theme === "dark" ? "#07090c" : "#f5f7f8";
 
         const savedLocale = localStorage.getItem("penguin-leaderboard.locale");
         const localePref = ["en", "zh", "system"].includes(savedLocale) ? savedLocale : "system";
@@ -40,24 +40,23 @@
         document.documentElement.lang = locale === "zh" ? "zh-CN" : "en";
       } catch {}
     </script>
-    <link rel="stylesheet" href="styles.css?v=20260901-6" />
-    <script src="script.js?v=20260901-6" defer></script>
+    <link rel="stylesheet" href="styles.css?v=20260901-7" />
+    <script src="script.js?v=20260901-7" defer></script>
   </head>
   <body>
     <a class="skip-link" href="#results" data-i18n="skipToResults">Skip to results</a>
 
-    <div class="neon-bg" aria-hidden="true">
-      <div class="neon-blob neon-blob-a"></div>
-      <div class="neon-blob neon-blob-b"></div>
-      <div class="neon-blob neon-blob-c"></div>
-    </div>
+    <div class="page-glow" aria-hidden="true"></div>
 
     <header class="site-header">
       <div class="nav-shell">
         <a class="brand" href="#top" data-i18n-aria="home" aria-label="Penguin Harness Leaderboard home">
           <img src="favicon.svg" alt="" />
-          <span>Penguin Harness Leaderboard</span>
+          <span>Penguin Harness</span>
         </a>
+
+        <nav class="bench-switcher" data-i18n-aria="benchmarkSwitcher" aria-label="Benchmark selector"></nav>
+
         <nav class="nav-actions" data-i18n-aria="siteControls" aria-label="Site controls">
           <div class="locale-control">
             <svg class="nav-icon locale-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
@@ -89,53 +88,37 @@
 
     <main id="top">
       <section class="hero">
-        <div class="hero-dots" aria-hidden="true"></div>
-        <div class="hero-inner">
-          <div class="bench-switch-block">
-            <span class="bench-switch-label" data-i18n="selectBenchmark">Select benchmark</span>
-            <div class="bench-switcher" data-i18n-aria="benchmarkSwitcher" aria-label="Benchmark selector"></div>
-          </div>
-
-          <div class="hero-brand">
-            <img src="favicon.svg" alt="" />
-            <span>Penguin Harness Leaderboard</span>
-          </div>
+        <div class="section-shell hero-inner">
+          <p class="eyebrow current-bench-name">Terminal-Bench</p>
           <h1 data-i18n-html="heroTitle">Compare the whole setup,<br /><span>not just the model.</span></h1>
-          <p class="hero-copy current-bench-description">
-            Loading benchmark metadata…
-          </p>
+          <p class="hero-copy current-bench-description">Loading official benchmark metadata…</p>
           <div class="hero-actions">
             <a class="button button-primary" href="#results">
               <span data-i18n="viewResults">View results</span>
-              <span aria-hidden="true">→</span>
+              <span aria-hidden="true">↓</span>
             </a>
-            <a
-              class="button button-secondary benchmark-source-link"
-              href="https://github.com/harbor-framework/terminal-bench-2-1"
-            >
-              <span data-i18n="viewSource">View source</span>
+            <a class="button button-secondary benchmark-source-link" href="https://www.tbench.ai">
+              <span data-i18n="viewOfficial">Open official leaderboard</span>
+              <span aria-hidden="true">↗</span>
             </a>
           </div>
+
           <dl class="hero-stats" data-i18n-aria="benchmarkSummary" aria-label="Benchmark summary">
             <div>
-              <dd class="stat-tasks">—</dd>
-              <dt data-i18n="tasks">Tasks</dt>
-              <dd class="metric-desc" data-i18n="tasksDescription">Tasks in the selected benchmark.</dd>
-            </div>
-            <div>
-              <dd class="stat-submissions">—</dd>
-              <dt data-i18n="submissions">Public results</dt>
-              <dd class="metric-desc" data-i18n="submissionsDescription">Auditable result configurations across source types.</dd>
+              <dd class="stat-results">—</dd>
+              <dt data-i18n="officialResults">Official results</dt>
             </div>
             <div>
               <dd class="stat-models">—</dd>
               <dt data-i18n="models">Models</dt>
-              <dd class="metric-desc" data-i18n="modelsDescription">Unique model names in published results.</dd>
+            </div>
+            <div>
+              <dd class="stat-harnesses">—</dd>
+              <dt data-i18n="harnesses">Harnesses</dt>
             </div>
             <div class="accent">
               <dd class="stat-best">—</dd>
-              <dt data-i18n="bestAccuracy">Official best</dt>
-              <dd class="metric-desc stat-best-label">Loading…</dd>
+              <dt data-i18n="officialBest">Official best</dt>
             </div>
           </dl>
         </div>
@@ -143,83 +126,81 @@
 
       <section id="results" class="section section-anchor">
         <div class="section-shell">
-          <header class="section-heading">
-            <p class="eyebrow" data-i18n="resultsEyebrow">Public results</p>
-            <h2 class="results-title">Leaderboard</h2>
-            <p class="results-description">Loading published results…</p>
+          <header class="section-heading results-heading">
+            <div>
+              <p class="eyebrow" data-i18n="officialSnapshot">Official snapshot</p>
+              <h2 class="results-title">Leaderboard</h2>
+              <p class="results-description">Loading official results…</p>
+            </div>
+            <a class="snapshot-link benchmark-source-link" href="https://www.tbench.ai">
+              <span class="snapshot-status" aria-hidden="true"></span>
+              <span class="snapshot-label">tbench.ai</span>
+              <span aria-hidden="true">↗</span>
+            </a>
           </header>
 
-          <div class="result-controls">
-            <select class="filter-select model-filter" data-i18n-aria="modelFilter" aria-label="Filter by model">
-              <option value="">All models</option>
-            </select>
-            <select class="filter-select harness-filter" data-i18n-aria="harnessFilter" aria-label="Filter by harness">
-              <option value="">All harnesses</option>
-            </select>
-            <select class="filter-select thinking-filter" data-i18n-aria="thinkingFilter" aria-label="Filter by thinking level">
-              <option value="">All thinking levels</option>
-            </select>
-            <select class="filter-select source-filter" data-i18n-aria="sourceFilter" aria-label="Filter by source type">
-              <option value="">All sources</option>
-            </select>
-            <label class="best-only-control">
-              <input class="best-only-filter" type="checkbox" />
-              <span data-i18n="bestOnly">Best per model</span>
-            </label>
+          <div class="result-toolbar">
+            <div class="result-controls">
+              <label>
+                <span data-i18n="harness">Harness</span>
+                <select class="filter-select harness-filter" data-i18n-aria="harnessFilter" aria-label="Filter by harness">
+                  <option value="">All harnesses</option>
+                </select>
+              </label>
+              <label>
+                <span data-i18n="model">Model</span>
+                <select class="filter-select model-filter" data-i18n-aria="modelFilter" aria-label="Filter by model">
+                  <option value="">All models</option>
+                </select>
+              </label>
+              <label>
+                <span data-i18n="thinkingLevel">Thinking level</span>
+                <select class="filter-select thinking-filter" data-i18n-aria="thinkingFilter" aria-label="Filter by thinking level">
+                  <option value="">All levels</option>
+                </select>
+              </label>
+            </div>
+            <span class="result-count" aria-live="polite">Loading…</span>
           </div>
 
-          <div class="result-meta">
-            <span class="result-count" aria-live="polite">Loading…</span>
-            <span data-i18n="tableHelp">Only benchmark-official rows receive an official rank · open Details for evidence and configuration</span>
-          </div>
           <p class="table-hint" aria-hidden="true" data-i18n="tableHint">Swipe to view the full table →</p>
           <div class="table-wrap">
             <table>
-              <caption class="sr-only table-caption">Published model and harness results</caption>
+              <caption class="sr-only table-caption">Official Terminal-Bench results</caption>
               <thead class="results-head"></thead>
               <tbody class="results-body">
-                <tr><td class="loading-cell" colspan="7" data-i18n="loadingResults">Loading published results…</td></tr>
+                <tr><td class="loading-cell" colspan="7" data-i18n="loadingResults">Loading official results…</td></tr>
               </tbody>
             </table>
           </div>
-
-          <aside class="protocol-note">
-            <div>
-              <strong data-i18n="scoreProtocol">Score protocol</strong>
-              <p class="score-note"></p>
-            </div>
-            <div>
-              <strong data-i18n="submissionProtocol">Submission protocol</strong>
-              <p class="submission-note"></p>
-            </div>
-          </aside>
+          <p class="confidence-note">
+            <span aria-hidden="true" class="ci-key"><i></i><b></b></span>
+            <span data-i18n="confidenceNote">Resolution rate ± 95% confidence interval. Tokens and cost are totals reported by tbench.ai.</span>
+          </p>
         </div>
       </section>
 
-      <section id="methodology" class="section section-anchor methodology-section">
+      <section class="section metrics-section">
         <div class="section-shell">
           <header class="section-heading">
-            <p class="eyebrow" data-i18n="methodologyEyebrow">How to read the table</p>
-            <h2 data-i18n="methodologyTitle">Configuration is part of the result.</h2>
-            <p data-i18n="methodologyDescription">
-              Harness, model, thinking level, and run policy can all change the score.
-            </p>
+            <p class="eyebrow" data-i18n="readMetrics">Read the metrics</p>
+            <h2 data-i18n="metricsTitle">The comparable result, at a glance.</h2>
           </header>
-          <div class="methodology-grid">
+          <div class="metrics-grid">
             <article>
               <span>01</span>
-              <h3 data-i18n="harnessTitle">Harness</h3>
-              <p data-i18n="harnessDescription">The agent runtime and exact version that operated the terminal.</p>
+              <h3 data-i18n="resolutionRate">Resolution rate</h3>
+              <p data-i18n="resolutionDescription">Pass rate with the official 95% confidence interval shown on the same scale.</p>
             </article>
             <article>
               <span>02</span>
-              <h3 data-i18n="thinkingTitle">Thinking Level</h3>
-              <p data-i18n="thinkingDescription">Reasoning effort such as high, xhigh, or max is shown explicitly.</p>
+              <h3 data-i18n="tokens">Tokens</h3>
+              <p data-i18n="tokensDescription">Total reported token usage across the evaluated trials.</p>
             </article>
             <article>
               <span>03</span>
-              <h3 data-i18n="detailsTitle">Runs and review</h3>
-              <p data-i18n="detailsDescription">Run settings are shown only when the cited source reports them; missing fields remain explicitly undisclosed.</p>
+              <h3 data-i18n="cost">Cost</h3>
+              <p data-i18n="costDescription">Total reported API cost for the published evaluation.</p>
             </article>
           </div>
         </div>
@@ -229,22 +210,9 @@
     <footer class="footer">
       <div class="section-shell footer-inner">
         <span>© 2026 Prism Shadow</span>
-        <span data-i18n="footerText">Auditable model × harness benchmark results</span>
+        <span data-i18n="footerText">Official Terminal-Bench snapshot · ready for future Penguin runs</span>
         <a href="https://github.com/Prism-Shadow/penguin-harness-leaderboard">GitHub ↗</a>
       </div>
     </footer>
-
-    <dialog class="details-dialog" aria-labelledby="details-dialog-title">
-      <div class="dialog-shell">
-        <header class="dialog-header">
-          <div>
-            <p class="eyebrow" data-i18n="configurationEyebrow">Submission configuration</p>
-            <h2 id="details-dialog-title">Details</h2>
-          </div>
-          <button class="dialog-close" type="button" aria-label="Close">×</button>
-        </header>
-        <div class="dialog-body"></div>
-      </div>
-    </dialog>
   </body>
 </html>

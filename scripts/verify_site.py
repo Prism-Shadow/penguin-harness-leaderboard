@@ -1,15 +1,12 @@
 #!/usr/bin/env python3
-"""Verify generated site data, source tiers, ranks, and evidence metadata."""
+"""Validate the static data and optionally compare it with tbench.ai live data."""
 
 from __future__ import annotations
 
 import argparse
-import hashlib
 import importlib.util
 import json
 import sys
-import urllib.error
-import urllib.request
 from datetime import date
 from pathlib import Path
 from types import ModuleType
@@ -17,39 +14,12 @@ from typing import Any
 
 
 ROOT = Path(__file__).resolve().parents[1]
-DEFAULT_SOURCE = ROOT.parent / "terminal-bench-2-1"
 PUBLISHED = ROOT / "site" / "data" / "benchmarks.json"
-VENDOR_SOURCE_PREFIXES = {
-    "DeepSeek": ("https://api-docs.deepseek.com/", "https://deepseek.com/"),
-    "Z.ai": ("https://z.ai/", "https://huggingface.co/zai-org/"),
-    "Qwen": ("https://qwen.ai/", "https://huggingface.co/Qwen/"),
-    "Moonshot AI": ("https://www.kimi.com/", "https://huggingface.co/moonshotai/"),
-}
-EVIDENCE_SOURCE_PREFIXES = {
-    **VENDOR_SOURCE_PREFIXES,
-    "Z.ai": VENDOR_SOURCE_PREFIXES["Z.ai"] + (
-        "https://raw.githubusercontent.com/zai-org/",
-    ),
-}
-OPTIONAL_FIELDS = {
-    "official_rank",
-    "model_id",
-    "harness",
-    "harness_version",
-    "harness_org",
-    "thinking_level",
-    "sandbox",
-    "accuracy_stderr",
-    "pass_at_2",
-    "pass_at_3",
-    "pass_at_4",
-    "pass_at_5",
-    "minimum_trials_per_task",
-    "trial_count",
-    "published_at",
-    "source_jobs",
-    "protocol_note",
-}
+EXPECTED_IDS = (
+    "terminal-bench-2.1",
+    "terminal-bench-3.0",
+    "terminal-bench-4.0",
+)
 
 
 def load_importer() -> ModuleType:
@@ -63,19 +33,6 @@ def load_importer() -> ModuleType:
     return module
 
 
-def official_competition_ranks(rows: list[dict[str, Any]]) -> list[int]:
-    rows = sorted(rows, key=lambda row: (-row["accuracy"], row["model"]))
-    ranks = []
-    previous: float | None = None
-    rank = 0
-    for position, row in enumerate(rows, start=1):
-        if row["accuracy"] != previous:
-            rank = position
-            previous = row["accuracy"]
-        ranks.append(rank)
-    return ranks
-
-
 def valid_date(value: Any) -> bool:
     try:
         date.fromisoformat(value)
@@ -84,139 +41,114 @@ def valid_date(value: Any) -> bool:
     return True
 
 
-def fetch(url: str, cache: dict[str, bytes]) -> bytes:
-    if url not in cache:
-        request = urllib.request.Request(
-            url,
-            headers={"User-Agent": "penguin-harness-leaderboard-audit/1.0"},
-        )
-        try:
-            with urllib.request.urlopen(request, timeout=30) as response:
-                cache[url] = response.read()
-        except (urllib.error.URLError, TimeoutError) as error:
-            raise AssertionError(f"Could not retrieve evidence URL {url}: {error}") from error
-    return cache[url]
+def verify_link(value: Any, field: str, row_id: str) -> None:
+    assert isinstance(value, dict), f"{row_id}: {field} must be an object"
+    assert value.get("label"), f"{row_id}: {field} label is empty"
+    url = value.get("url")
+    assert url is None or url.startswith("https://"), f"{row_id}: invalid {field} URL"
 
 
-def verify_curated_evidence(check_remote: bool) -> None:
-    curated = json.loads((ROOT / "data" / "curated-results.json").read_text(encoding="utf-8"))
-    cache: dict[str, bytes] = {}
-    for row in curated["results"]:
-        evidence = row.get("evidence")
-        assert isinstance(evidence, dict), f"Missing evidence metadata: {row['id']}"
-        kind = evidence.get("kind")
-        assert kind in {"text", "reviewed_image"}, f"Unknown evidence kind: {row['id']}"
-
-        evidence_url = evidence.get("url", "")
-        assert row["publisher"] in EVIDENCE_SOURCE_PREFIXES, row["id"]
-        allowed = EVIDENCE_SOURCE_PREFIXES[row["publisher"]]
-        assert evidence_url.startswith(allowed), evidence_url
-        evidence_text = " ".join(
-            str(value)
-            for value in evidence.get("markers", evidence.get("context_markers", []))
-        ) + " " + str(evidence.get("note", "")) + " " + evidence_url
-        assert row["model"].casefold() in evidence_text.casefold(), row["id"]
-        assert row["benchmark_id"].removeprefix("terminal-bench-") in evidence_text, row["id"]
-        assert str(row["accuracy"]) in evidence_text, row["id"]
-
-        if kind == "text":
-            markers = evidence.get("markers")
-            assert isinstance(markers, list) and markers, row["id"]
-            if check_remote:
-                body = fetch(evidence_url, cache).decode("utf-8", errors="replace").casefold()
-                for marker in markers:
-                    assert marker.casefold() in body, f"Evidence marker missing for {row['id']}: {marker}"
-            continue
-
-        digest = evidence.get("sha256", "")
-        context_url = evidence.get("context_url", "")
-        context_markers = evidence.get("context_markers")
-        assert len(digest) == 64 and all(char in "0123456789abcdef" for char in digest), row["id"]
-        assert context_url.startswith(allowed), context_url
-        assert isinstance(context_markers, list) and context_markers, row["id"]
-        assert evidence.get("note"), row["id"]
-        if check_remote:
-            actual_digest = hashlib.sha256(fetch(evidence_url, cache)).hexdigest()
-            assert actual_digest == digest, f"Evidence image changed for {row['id']}"
-            context = fetch(context_url, cache).decode("utf-8", errors="replace").casefold()
-            for marker in context_markers:
-                assert marker.casefold() in context, (
-                    f"Evidence context marker missing for {row['id']}: {marker}"
-                )
+def expected_competition_ranks(rows: list[dict[str, Any]]) -> list[int]:
+    result = []
+    previous: float | None = None
+    rank = 0
+    for position, row in enumerate(rows, start=1):
+        if row["accuracy"] != previous:
+            rank = position
+            previous = row["accuracy"]
+        result.append(rank)
+    return result
 
 
-def verify_benchmark(bench: dict[str, Any], source_types: frozenset[str]) -> None:
+def verify_benchmark(bench: dict[str, Any]) -> None:
     rows = bench["results"]
-    official = [row for row in rows if row["source_type"] == "benchmark_official"]
-    external = [row for row in rows if row["source_type"] != "benchmark_official"]
-
+    assert rows, f"{bench['id']}: no rows"
+    assert bench["official_url"] == f"https://www.tbench.ai/?version={bench['version']}"
+    assert bench["snapshot_updated_at"], f"{bench['id']}: missing upstream timestamp"
     assert bench["result_count"] == len(rows)
-    assert bench["official_result_count"] == len(official)
-    assert bench["model_count"] == len({row["model"] for row in rows})
-    assert bench["official_best_accuracy"] == max(row["accuracy"] for row in official)
-    assert all(row["benchmark_id"] == bench["id"] for row in rows)
-    assert all(0 <= row["accuracy"] <= 100 for row in rows)
-    assert all(OPTIONAL_FIELDS <= row.keys() for row in rows)
-    assert all(row["source_type"] in source_types for row in rows)
-    assert all(row["official_rank"] is None for row in external)
+    assert bench["model_count"] == len({row["model"]["label"] for row in rows})
+    assert bench["harness_count"] == len({row["harness"]["label"] for row in rows})
+    assert bench["best_accuracy"] == max(row["accuracy"] for row in rows)
 
-    ordered_official = sorted(official, key=lambda row: (-row["accuracy"], row["model"]))
-    if bench["id"] == "terminal-bench-2.1":
-        actual = [row["official_rank"] for row in ordered_official]
-        assert actual == official_competition_ranks(official)
-    else:
-        assert [row["official_rank"] for row in ordered_official] == list(
-            range(1, len(official) + 1)
-        )
+    actual_ranks = [row["rank"] for row in rows]
+    assert actual_ranks == expected_competition_ranks(rows), (
+        f"{bench['id']}: official rank sequence does not match score order"
+    )
 
     for row in rows:
-        assert row["source_url"].startswith("https://")
-        assert row["source_title"]
-        assert row["publisher"]
-        assert valid_date(row["retrieved_at"]), row["id"]
-        assert row["published_at"] is None or valid_date(row["published_at"]), row["id"]
-        if row["source_type"] == "vendor_reported":
-            assert row["publisher"] in VENDOR_SOURCE_PREFIXES, row["id"]
-            allowed = VENDOR_SOURCE_PREFIXES[row["publisher"]]
-            assert row["source_url"].startswith(allowed), row["source_url"]
-            assert row["protocol_note"], row["id"]
+        row_id = row["id"]
+        assert row["benchmark_id"] == bench["id"], row_id
+        assert 0 <= row["accuracy"] <= 100, row_id
+        ci95 = row["accuracy_ci95_half_width"]
+        assert ci95 is None or 0 <= ci95 <= 100, row_id
+        assert valid_date(row["release_date"]), row_id
+        assert row["display_release_date"], row_id
+        assert row["total_tokens"] is None or row["total_tokens"] >= 0, row_id
+        assert row["total_cost_usd"] is None or row["total_cost_usd"] >= 0, row_id
+        assert row["trial_count"] is None or row["trial_count"] > 0, row_id
+        assert row["thinking_level"] is None or isinstance(row["thinking_level"], str), row_id
+        verify_link(row["harness"], "harness", row_id)
+        verify_link(row["harness_org"], "harness_org", row_id)
+        verify_link(row["model"], "model", row_id)
+        verify_link(row["model_org"], "model_org", row_id)
+
+
+def verify_frontend_contract() -> None:
+    html = (ROOT / "site" / "index.html").read_text(encoding="utf-8")
+    script = (ROOT / "site" / "script.js").read_text(encoding="utf-8")
+    assert "<dialog" not in html, "The removed details dialog is still present"
+    assert "details-dialog" not in script, "The removed details logic is still present"
+    assert 'class="bench-switcher"' in html, "Top navigation benchmark switcher missing"
+    assert 'class="locale-control"' in html, "Language control missing"
+    assert "accuracy_ci95_half_width" in script, "Confidence-interval comparison is missing"
+    column_contract = (
+        '["rank", "rank"]',
+        '["harness", "harness"]',
+        '["model", "model"]',
+        '["accuracy", "resolutionRate"]',
+        '["release_date", "releaseDate"]',
+        '["total_tokens", "tokens"]',
+        '["total_cost_usd", "cost"]',
+    )
+    positions = [script.find(column) for column in column_contract]
+    assert all(position >= 0 for position in positions), "A required table column is missing"
+    assert positions == sorted(positions), "The table column order changed"
 
 
 def main() -> None:
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("--source", type=Path, default=DEFAULT_SOURCE)
     parser.add_argument(
-        "--check-remote-sources",
+        "--check-live",
         action="store_true",
-        help="Fetch pinned first-party evidence and verify its markers or digest",
+        help="Fetch all three official leaderboards and require an exact normalized match",
     )
     args = parser.parse_args()
-    source = args.source.resolve()
-    if not source.is_dir():
-        raise SystemExit(f"Official Terminal-Bench 2.1 checkout not found at {source}")
 
-    importer = load_importer()
-    expected = importer.build_payload(source)
-    verify_curated_evidence(args.check_remote_sources)
     actual = json.loads(PUBLISHED.read_text(encoding="utf-8"))
-    assert actual == expected, "Published JSON is stale; run scripts/import_terminal_bench.py"
-    assert actual["schema_version"] == 2
-    assert [bench["id"] for bench in actual["benchmarks"]] == list(importer.BENCHMARK_IDS)
+    assert actual["schema_version"] == 3
+    assert actual["default_benchmark"] == "terminal-bench-4.0"
+    assert tuple(bench["id"] for bench in actual["benchmarks"]) == EXPECTED_IDS
 
     ids = [row["id"] for bench in actual["benchmarks"] for row in bench["results"]]
-    assert len(ids) == len(set(ids)), "Duplicate result IDs"
+    assert len(ids) == len(set(ids)), "Duplicate official row IDs"
     for bench in actual["benchmarks"]:
-        verify_benchmark(bench, importer.SOURCE_TYPES)
+        verify_benchmark(bench)
+    verify_frontend_contract()
+
+    if args.check_live:
+        importer = load_importer()
+        expected = importer.build_payload()
+        assert actual == expected, (
+            "The committed snapshot differs from tbench.ai; "
+            "run scripts/import_terminal_bench.py and review the diff"
+        )
 
     summary = ", ".join(
-        f"{bench['short_name']} {bench['official_result_count']} official + "
-        f"{bench['result_count'] - bench['official_result_count']} vendor"
+        f"TB {bench['version']}: {bench['result_count']} official rows"
         for bench in actual["benchmarks"]
     )
-    checks = ["schema", "ranks", "dates", "source enums", "first-party domains"]
-    if args.check_remote_sources:
-        checks.append("remote evidence")
-    print(f"Verified {', '.join(checks)}: {summary}.")
+    suffix = " + live API match" if args.check_live else ""
+    print(f"Verified schema, ranks, metrics, dates and frontend contract{suffix}: {summary}.")
 
 
 if __name__ == "__main__":

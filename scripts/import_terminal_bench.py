@@ -1,353 +1,174 @@
 #!/usr/bin/env python3
-"""Build site data from official snapshots and curated first-party reports."""
+"""Refresh the static leaderboard from the official tbench.ai API."""
 
 from __future__ import annotations
 
 import argparse
 import json
-import subprocess
-from datetime import date
+import urllib.error
+import urllib.request
 from pathlib import Path
 from typing import Any
 
 
 ROOT = Path(__file__).resolve().parents[1]
-DEFAULT_SOURCE = ROOT.parent / "terminal-bench-2-1"
 DEFAULT_OUTPUT = ROOT / "site" / "data" / "benchmarks.json"
-TB3_SOURCE = ROOT / "data" / "terminal-bench-3.0-official.json"
-CURATED_SOURCE = ROOT / "data" / "curated-results.json"
-BENCHMARK_IDS = ("terminal-bench-2.1", "terminal-bench-3.0")
-SOURCE_TYPES = frozenset({"benchmark_official", "vendor_reported"})
-
-OPTIONAL_FIELDS: dict[str, Any] = {
-    "official_rank": None,
-    "model_id": None,
-    "harness": None,
-    "harness_version": None,
-    "harness_org": None,
-    "thinking_level": None,
-    "sandbox": None,
-    "accuracy_stderr": None,
-    "pass_at_2": None,
-    "pass_at_3": None,
-    "pass_at_4": None,
-    "pass_at_5": None,
-    "minimum_trials_per_task": None,
-    "trial_count": None,
-    "disqualified_trials": None,
-    "reward_hacks": None,
-    "uncached_input_tokens": None,
-    "cached_input_tokens": None,
-    "output_tokens": None,
-    "total_tokens": None,
-    "total_cost_usd": None,
-    "average_trial_duration_seconds": None,
-    "published_at": None,
-    "retrieved_at": None,
-    "publisher": None,
-    "source_title": None,
-    "source_url": None,
-    "source_file": None,
-    "source_jobs": [],
-    "protocol_note": None,
-}
+API_URL = "https://ofhuhcpkvzjlejydnvyd.supabase.co/functions/v1/leaderboard-read"
+BENCHMARKS = (
+    {
+        "id": "terminal-bench-2.1",
+        "version": "2.1",
+        "package": "terminal-bench/terminal-bench-2-1",
+        "leaderboard": "main",
+    },
+    {
+        "id": "terminal-bench-3.0",
+        "version": "3.0",
+        "package": "terminal-bench/terminal-bench",
+        "leaderboard": "3-0-0",
+    },
+    {
+        "id": "terminal-bench-4.0",
+        "version": "4.0",
+        "package": "terminal-bench/terminal-bench",
+        "leaderboard": "4-0-0",
+    },
+)
 
 
-def read_json(path: Path) -> dict[str, Any]:
-    return json.loads(path.read_text(encoding="utf-8"))
-
-
-def label(value: Any) -> str:
-    if isinstance(value, dict):
-        return str(value.get("label") or value.get("url") or "")
-    return str(value or "")
-
-
-def url(value: Any) -> str:
-    return str(value.get("url") or "") if isinstance(value, dict) else str(value or "")
-
-
-def percent(value: Any) -> float | None:
-    return None if value is None else round(float(value) * 100, 2)
-
-
-def git_value(repo: Path, *args: str) -> str:
-    result = subprocess.run(
-        ["git", "-C", str(repo), *args],
-        check=True,
-        capture_output=True,
-        text=True,
+def fetch_leaderboard(package: str, leaderboard: str) -> dict[str, Any]:
+    body = json.dumps({"package": package, "name": leaderboard}).encode("utf-8")
+    request = urllib.request.Request(
+        API_URL,
+        data=body,
+        headers={
+            "Content-Type": "application/json",
+            "User-Agent": "penguin-harness-leaderboard/1.0",
+        },
+        method="POST",
     )
-    return result.stdout.strip()
-
-
-def normalize(raw: dict[str, Any]) -> dict[str, Any]:
-    row = {
-        key: ([] if isinstance(value, list) else value)
-        for key, value in OPTIONAL_FIELDS.items()
-    }
-    row.update(raw)
-    return row
-
-
-def load_tb21(source: Path, retrieved_at: str) -> tuple[list[dict[str, Any]], str, str]:
-    files = sorted((source / "leaderboard" / "submissions").glob("*.json"))
-    if not files:
-        raise SystemExit(f"No official submission files found under {source}")
-
-    rows: list[dict[str, Any]] = []
-    for path in files:
-        raw = read_json(path)
-        meta = raw["metadata"]
-        metrics = raw["metrics"]
-        source_filter = raw["source_filter"]
-        token_keys = ("uncached_input_tokens", "cached_input_tokens", "output_tokens")
-        rows.append(normalize({
-            "id": path.stem,
-            "benchmark_id": "terminal-bench-2.1",
-            "source_type": "benchmark_official",
-            "model": label(meta["model_display"]),
-            "model_id": source_filter["model_name"],
-            "model_org": label(meta["model_org"]),
-            "harness": label(meta["agent_display"]),
-            "harness_version": source_filter.get("agent_version") or None,
-            "harness_org": label(meta["agent_org"]),
-            "thinking_level": meta.get("reasoning_effort") or "none",
-            "accuracy": float(metrics["accuracy"]),
-            "accuracy_stderr": float(metrics["accuracy_stderr"]),
-            "pass_at_2": percent(metrics.get("pass_at_2")),
-            "pass_at_3": percent(metrics.get("pass_at_3")),
-            "pass_at_4": percent(metrics.get("pass_at_4")),
-            "pass_at_5": percent(metrics.get("pass_at_5")),
-            "minimum_trials_per_task": 5,
-            "trial_count": int(metrics["n_trials"]),
-            "disqualified_trials": len(raw.get("disqualified_trials") or []),
-            "reward_hacks": float(metrics["reward_hacks"]),
-            "uncached_input_tokens": int(metrics.get("uncached_input_tokens") or 0),
-            "cached_input_tokens": int(metrics.get("cached_input_tokens") or 0),
-            "output_tokens": int(metrics.get("output_tokens") or 0),
-            "total_tokens": sum(int(metrics.get(key) or 0) for key in token_keys),
-            "total_cost_usd": float(metrics["total_cost_usd"]),
-            "average_trial_duration_seconds": float(metrics["avg_trial_duration_sec"]),
-            "published_at": meta["date"],
-            "publisher": "Harbor Framework",
-            "source_title": "Merged Terminal-Bench 2.1 submission",
-            "source_url": url(meta["pr_url"]),
-            "source_file": str(path.relative_to(source)),
-            "source_jobs": [
-                f"https://hub.harborframework.com/jobs/{job_id}"
-                for job_id in raw.get("source_jobs") or []
-            ],
-        }))
-
-    rows.sort(key=lambda row: (-row["accuracy"], row["model"], row["harness"]))
-    previous: float | None = None
-    rank = 0
-    for position, row in enumerate(rows, start=1):
-        if row["accuracy"] != previous:
-            rank = position
-            previous = row["accuracy"]
-        row["official_rank"] = rank
-
-    commit = git_value(source, "rev-parse", "HEAD")
-    commit_date = git_value(source, "show", "-s", "--format=%cs", "HEAD")
-    for row in rows:
-        row["retrieved_at"] = retrieved_at
-    return rows, commit, commit_date
-
-
-def load_tb30() -> tuple[list[dict[str, Any]], dict[str, Any]]:
-    source = read_json(TB3_SOURCE)
-    rows = []
-    for raw in source["results"]:
-        row = normalize(raw)
-        row_url = (
-            "https://hub.harborframework.com/datasets/terminal-bench/"
-            f"terminal-bench/1/leaderboards/3-0-0/rows/{raw['id']}"
-        )
-        row.update({
-            "benchmark_id": source["benchmark_id"],
-            "source_type": "benchmark_official",
-            "retrieved_at": source["retrieved_at"],
-            "publisher": "Harbor Framework",
-            "source_title": source["source_title"],
-            "source_url": row_url,
-        })
-        rows.append(row)
-    return rows, source
-
-
-def load_curated() -> tuple[list[dict[str, Any]], str]:
-    source = read_json(CURATED_SOURCE)
-    verified_at = source.get("verified_at")
     try:
-        date.fromisoformat(verified_at)
-    except (TypeError, ValueError) as error:
-        raise SystemExit("curated-results.json verified_at must be YYYY-MM-DD") from error
-
-    raw_rows = source.get("results")
-    if not isinstance(raw_rows, list):
-        raise SystemExit("curated-results.json results must be a list")
-
-    rows = []
-    ids = set()
-    for raw in raw_rows:
-        row_id = raw.get("id")
-        if not row_id or row_id in ids:
-            raise SystemExit(f"Missing or duplicate curated result id: {row_id!r}")
-        ids.add(row_id)
-        if raw.get("benchmark_id") not in BENCHMARK_IDS:
-            raise SystemExit(
-                f"Unknown benchmark_id for curated result {row_id}: "
-                f"{raw.get('benchmark_id')!r}"
-            )
-        if raw.get("source_type") not in SOURCE_TYPES:
-            raise SystemExit(
-                f"Unknown source_type for curated result {row_id}: "
-                f"{raw.get('source_type')!r}"
-            )
-        if raw.get("source_type") != "vendor_reported":
-            raise SystemExit(
-                f"Curated result {row_id} must use source_type='vendor_reported'"
-            )
-        for field in ("published_at", "retrieved_at"):
-            value = raw.get(field)
-            if value is not None:
-                try:
-                    date.fromisoformat(value)
-                except (TypeError, ValueError) as error:
-                    raise SystemExit(
-                        f"Curated result {row_id} {field} must be YYYY-MM-DD or null"
-                    ) from error
-
-        published = {key: value for key, value in raw.items() if key != "evidence"}
-        row = normalize(published)
-        row["official_rank"] = None
-        rows.append(row)
-    return rows, verified_at
+        with urllib.request.urlopen(request, timeout=30) as response:
+            return json.load(response)
+    except (urllib.error.URLError, TimeoutError, json.JSONDecodeError) as error:
+        raise SystemExit(f"Could not read the official leaderboard API: {error}") from error
 
 
-def make_benchmark(
-    *,
-    benchmark_id: str,
-    name: str,
-    short_name: str,
-    task_count: int,
-    repository_url: str,
-    snapshot_commit: str | None,
-    snapshot_updated_at: str,
-    verified_at: str,
-    description: dict[str, str],
-    score_note: dict[str, str],
-    protocol_note: dict[str, str],
-    results: list[dict[str, Any]],
-) -> dict[str, Any]:
-    results.sort(key=lambda row: (
-        -row["accuracy"],
-        0 if row["source_type"] == "benchmark_official" else 1,
-        row["model"],
-        row["harness"] or "",
-    ))
-    official = [row for row in results if row["source_type"] == "benchmark_official"]
-    best = max(official, key=lambda row: row["accuracy"])
+def linked(value: Any) -> dict[str, str | None]:
+    if not isinstance(value, dict):
+        return {"label": str(value or ""), "url": None}
     return {
-        "id": benchmark_id,
-        "status": "available",
-        "name": name,
-        "short_name": short_name,
-        "description": description,
-        "task_count": task_count,
-        "result_count": len(results),
-        "official_result_count": len(official),
-        "model_count": len({row["model"] for row in results}),
-        "official_best_accuracy": best["accuracy"],
-        "official_best_result_label": f"{best['harness']} · {best['model']}",
-        "score_note": score_note,
-        "protocol_note": protocol_note,
-        "repository_url": repository_url,
-        "snapshot_commit": snapshot_commit,
-        "snapshot_updated_at": snapshot_updated_at,
-        "verified_at": verified_at,
-        "results": results,
+        "label": str(value.get("label") or ""),
+        "url": str(value["url"]) if value.get("url") else None,
     }
 
 
-def build_payload(source: Path) -> dict[str, Any]:
-    curated, verified_at = load_curated()
-    tb21_rows, tb21_commit, tb21_date = load_tb21(source, verified_at)
-    tb30_rows, tb30_meta = load_tb30()
-    by_benchmark = {
-        bench: [row for row in curated if row["benchmark_id"] == bench]
-        for bench in BENCHMARK_IDS
-    }
+def normalize_row(raw: dict[str, Any], benchmark_id: str) -> dict[str, Any]:
+    metadata = raw.get("metadata") or {}
+    metrics = raw.get("metrics") or {}
+    ci95 = metrics.get("accuracy_ci95_half_width")
+    stderr = metrics.get("accuracy_stderr")
+    if ci95 is None and stderr is not None:
+        ci95 = float(stderr) * 1.96
 
-    shared_score_note = {
-        "en": "Rows may use different run protocols. Only benchmark-official rows receive an official rank; vendor-reported rows are reference results.",
-        "zh": "不同结果可能采用不同运行协议。只有 Benchmark 官方结果拥有正式排名；厂商自报仅作为公开参考。",
-    }
-    tb21 = make_benchmark(
-        benchmark_id="terminal-bench-2.1",
-        name="Terminal-Bench 2.1",
-        short_name="TB 2.1",
-        task_count=89,
-        repository_url="https://github.com/harbor-framework/terminal-bench-2-1",
-        snapshot_commit=tb21_commit,
-        snapshot_updated_at=tb21_date,
-        verified_at=verified_at,
-        description={
-            "en": "89 terminal tasks with benchmark-official submissions and first-party model reports shown together with explicit source labels.",
-            "zh": "89 道终端任务；统一展示 Benchmark 官方 submission 与厂商一手报告，并明确标注来源。",
-        },
-        score_note=shared_score_note,
-        protocol_note={
-            "en": f"The repository snapshot contains {len(tb21_rows)} merged submissions. Vendor rows include only settings explicitly disclosed by first-party sources.",
-            "zh": f"官方仓库快照包含 {len(tb21_rows)} 条已合并 submission；厂商记录只填写一手来源明确披露的配置。",
-        },
-        results=tb21_rows + by_benchmark["terminal-bench-2.1"],
-    )
-    tb30 = make_benchmark(
-        benchmark_id="terminal-bench-3.0",
-        name=tb30_meta["name"],
-        short_name=tb30_meta["short_name"],
-        task_count=int(tb30_meta["task_count"]),
-        repository_url=tb30_meta["repository_url"],
-        snapshot_commit=None,
-        snapshot_updated_at=tb30_meta["snapshot_updated_at"],
-        verified_at=verified_at,
-        description={
-            "en": "The 74-task v3.0 benchmark, using a dated export of the public Harbor Hub leaderboard plus separately labeled first-party model reports.",
-            "zh": "包含 74 道任务的 v3.0；采用带日期的 Harbor Hub 公开榜单快照，并补充单独标注的厂商一手报告。",
-        },
-        score_note=shared_score_note,
-        protocol_note={
-            "en": f"This is a {tb30_meta['snapshot_updated_at'][:10]} Harbor Hub snapshot, not a live mirror. All {len(tb30_rows)} rows returned by the official public leaderboard were marked for display.",
-            "zh": f"这是 {tb30_meta['snapshot_updated_at'][:10]} 的 Harbor Hub 快照，并非实时镜像；官方公开榜单返回的 {len(tb30_rows)} 条记录均标记为展示。",
-        },
-        results=tb30_rows + by_benchmark["terminal-bench-3.0"],
-    )
+    release_date = metadata.get("release_date") or metadata.get("date")
     return {
-        "schema_version": 2,
-        "updated": verified_at,
-        "default_benchmark": "terminal-bench-2.1",
-        "benchmarks": [tb21, tb30],
+        "id": str(raw["id"]),
+        "benchmark_id": benchmark_id,
+        "rank": int(raw["rank"]),
+        "harness": linked(metadata.get("agent_display")),
+        "harness_org": linked(metadata.get("agent_org")),
+        "model": linked(metadata.get("model_display")),
+        "model_org": linked(metadata.get("model_org")),
+        "thinking_level": metadata.get("reasoning_effort"),
+        "accuracy": float(metrics["accuracy"]),
+        "accuracy_ci95_half_width": round(float(ci95), 2) if ci95 is not None else None,
+        "display_accuracy": metrics.get("display_accuracy"),
+        "release_date": release_date,
+        "display_release_date": (
+            metadata.get("display_release_date")
+            or metadata.get("display_date")
+            or release_date
+        ),
+        "total_tokens": metrics.get("total_tokens"),
+        "display_total_tokens": metrics.get("display_total_tokens"),
+        "total_cost_usd": metrics.get("total_cost_usd"),
+        "display_cost": (
+            metrics.get("display_cost")
+            or metrics.get("display_total_cost_usd")
+        ),
+        "trial_count": raw.get("n_trials") or metrics.get("n_trials"),
+    }
+
+
+def normalize_benchmark(config: dict[str, str], raw: dict[str, Any]) -> dict[str, Any]:
+    leaderboard = raw.get("leaderboard") or {}
+    visible_rows = [row for row in raw.get("rows", []) if row.get("status") == "display"]
+    rows = [normalize_row(row, config["id"]) for row in visible_rows]
+    rows.sort(key=lambda row: (row["rank"], -row["accuracy"], row["model"]["label"]))
+
+    expected_total = (raw.get("pagination") or {}).get("total")
+    if expected_total is not None and int(expected_total) != len(rows):
+        raise SystemExit(
+            f"Official API pagination for {config['version']} reports {expected_total} rows, "
+            f"but {len(rows)} display rows were returned"
+        )
+
+    version = config["version"]
+    return {
+        "id": config["id"],
+        "version": version,
+        "name": str(leaderboard.get("title") or f"Terminal-Bench {version}"),
+        "official_url": f"https://www.tbench.ai/?version={version}",
+        "source_api": {
+            "package": config["package"],
+            "leaderboard": config["leaderboard"],
+        },
+        "snapshot_updated_at": leaderboard.get("updated_at"),
+        "result_count": len(rows),
+        "model_count": len({row["model"]["label"] for row in rows}),
+        "harness_count": len({row["harness"]["label"] for row in rows}),
+        "best_accuracy": max(row["accuracy"] for row in rows),
+        "description": {
+            "en": f"Official Terminal-Bench {version} leaderboard snapshot from tbench.ai.",
+            "zh": f"来自 tbench.ai 的 Terminal-Bench {version} 官方榜单快照。",
+        },
+        "results": rows,
+    }
+
+
+def build_payload() -> dict[str, Any]:
+    benchmarks = [
+        normalize_benchmark(
+            config,
+            fetch_leaderboard(config["package"], config["leaderboard"]),
+        )
+        for config in BENCHMARKS
+    ]
+    return {
+        "schema_version": 3,
+        "default_benchmark": "terminal-bench-4.0",
+        "official_api": API_URL,
+        "benchmarks": benchmarks,
     }
 
 
 def main() -> None:
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("--source", type=Path, default=DEFAULT_SOURCE)
     parser.add_argument("--output", type=Path, default=DEFAULT_OUTPUT)
     args = parser.parse_args()
 
-    payload = build_payload(args.source.resolve())
-    output = args.output.resolve()
-    output.parent.mkdir(parents=True, exist_ok=True)
-    output.write_text(json.dumps(payload, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
-    summary = ", ".join(
-        f"{bench['short_name']}: {bench['result_count']} results"
+    payload = build_payload()
+    args.output.parent.mkdir(parents=True, exist_ok=True)
+    args.output.write_text(
+        json.dumps(payload, ensure_ascii=False, indent=2) + "\n",
+        encoding="utf-8",
+    )
+    counts = ", ".join(
+        f"TB {bench['version']}: {bench['result_count']} rows"
         for bench in payload["benchmarks"]
     )
-    print(f"Wrote {summary} to {output}")
+    print(f"Wrote {args.output} ({counts}).")
 
 
 if __name__ == "__main__":

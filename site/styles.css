@@ -108,7 +108,7 @@ select:focus-visible {
 }
 
 .nav-shell {
-  width: min(1280px, calc(100% - 32px));
+  width: min(1360px, calc(100% - 32px));
   margin-inline: auto;
 }
 

@@ -35,7 +35,7 @@ const translations = {
     showingResults: "Showing {shown} of {total} official results",
     tableHint: "Swipe to view the full table →",
     loadingResults: "Loading official results…",
-    confidenceNote: "Resolution rate ± 95% confidence interval. Tokens and cost are totals reported by tbench.ai.",
+    confidenceNote: "Resolution rate includes the official 95% confidence interval. Tokens and cost are totals reported by tbench.ai.",
     readMetrics: "Read the metrics",
     metricsTitle: "The comparable result, at a glance.",
     resolutionRate: "Resolution rate",
@@ -72,6 +72,8 @@ const translations = {
     outputTokens: "Output tokens",
     totalCost: "Total cost",
     averageTrialDuration: "Average trial duration",
+    avgDuration: "Avg. duration",
+    confidenceRange: "95% CI {lower}–{upper}",
     rewardHacks: "Reward hacks",
     submission: "Submission",
     benchmarkSnapshot: "Benchmark snapshot",
@@ -111,7 +113,7 @@ const translations = {
     showingResults: "显示 {shown} / {total} 条官方结果",
     tableHint: "横向滑动查看完整表格 →",
     loadingResults: "正在加载官方结果…",
-    confidenceNote: "解决率 ± 95% 置信区间；Token 和成本均为 tbench.ai 公布的评测总量。",
+    confidenceNote: "解决率同时展示官方 95% 置信区间；Token 和成本均为 tbench.ai 公布的评测总量。",
     readMetrics: "指标说明",
     metricsTitle: "一眼看懂可比结果。",
     resolutionRate: "解决率",
@@ -148,6 +150,8 @@ const translations = {
     outputTokens: "输出 Token",
     totalCost: "总成本",
     averageTrialDuration: "平均试验时长",
+    avgDuration: "平均时长",
+    confidenceRange: "95% 置信区间 {lower}–{upper}",
     rewardHacks: "Reward hack",
     submission: "提交记录",
     benchmarkSnapshot: "Benchmark 官方快照",
@@ -339,13 +343,12 @@ function formatDuration(value) {
   return `${minutes}m ${seconds % 60}s`;
 }
 
-function linkedName(item, org) {
+function linkedName(item) {
   const label = escapeHtml(item.label);
   const href = safeUrl(item.url);
-  const name = href
+  return href
     ? `<a class="entity-link" href="${escapeHtml(href)}">${label}<span aria-hidden="true">↗</span></a>`
     : `<span class="entity-name">${label}</span>`;
-  return `${name}<small>${escapeHtml(org.label)}</small>`;
 }
 
 function renderBenchSwitcher() {
@@ -445,6 +448,8 @@ function renderTableHead() {
     ["harness", "harness"],
     ["model", "model"],
     ["accuracy", "resolutionRate"],
+    ["trial_count", "trials"],
+    ["average_trial_duration_seconds", "avgDuration"],
     ["release_date", "releaseDate"],
     ["total_tokens", "tokens"],
     ["total_cost_usd", "cost"],
@@ -482,19 +487,16 @@ function accuracyCell(row) {
   const ci = row.accuracy_ci95_half_width;
   const lower = Math.max(0, row.accuracy - (ci ?? 0));
   const upper = Math.min(100, row.accuracy + (ci ?? 0));
-  const intervalWidth = Math.max(0, upper - lower);
-  const interval = ci == null ? "" : `<span>± ${escapeHtml(ci.toFixed(1))}%</span>`;
-  const whisker = ci == null ? "" : `
-    <i class="ci-whisker" style="left:${lower.toFixed(2)}%;width:${intervalWidth.toFixed(2)}%">
-      <b></b><b></b>
-    </i>`;
+  const interval = ci == null
+    ? t("notReported")
+    : t("confidenceRange", {
+      lower: `${lower.toFixed(1)}%`,
+      upper: `${upper.toFixed(1)}%`,
+    });
   return `
     <div class="rate-cell">
-      <span class="rate-value"><strong>${row.accuracy.toFixed(1)}%</strong>${interval}</span>
-      <span class="rate-track" aria-hidden="true">
-        <i class="rate-fill" style="width:${row.accuracy}%"></i>
-        ${whisker}
-      </span>
+      <strong>${row.accuracy.toFixed(1)}%</strong>
+      <span>${escapeHtml(interval)}</span>
     </div>`;
 }
 
@@ -507,7 +509,7 @@ function renderTable() {
   });
 
   if (!rows.length) {
-    elements.resultsBody.innerHTML = `<tr><td class="empty-cell" colspan="8">${escapeHtml(t("noResults"))}</td></tr>`;
+    elements.resultsBody.innerHTML = `<tr><td class="empty-cell" colspan="10">${escapeHtml(t("noResults"))}</td></tr>`;
     return;
   }
 
@@ -518,12 +520,13 @@ function renderTable() {
     return `
       <tr>
         <td class="rank-cell"><span class="rank-badge${row.rank <= 3 ? ` rank-${row.rank}` : ""}">${row.rank}</span></td>
-        <td class="entity-cell harness-cell">${linkedName(row.harness, row.harness_org)}</td>
+        <td class="entity-cell harness-cell">${linkedName(row.harness)}</td>
         <td class="entity-cell model-cell">
-          ${linkedName(row.model, row.model_org)}
-          ${effort}
+          <div class="model-primary">${linkedName(row.model)}${effort}</div>
         </td>
         <td>${accuracyCell(row)}</td>
+        <td class="number-cell">${row.trial_count == null ? escapeHtml(t("notReported")) : escapeHtml(formatNumber(row.trial_count))}</td>
+        <td class="number-cell">${row.average_trial_duration_seconds == null ? escapeHtml(t("notReported")) : escapeHtml(formatDuration(row.average_trial_duration_seconds))}</td>
         <td class="date-cell">${escapeHtml(formatDate(row.release_date))}</td>
         <td class="number-cell">${escapeHtml(formatTokens(row.total_tokens))}</td>
         <td class="number-cell">${escapeHtml(formatCost(row.total_cost_usd))}</td>
@@ -707,7 +710,7 @@ async function init() {
     selectBenchmark(initialBenchmark(state.payload).id, false);
   } catch (error) {
     console.error(error);
-    elements.resultsBody.innerHTML = `<tr><td class="empty-cell" colspan="8">${escapeHtml(t("dataError"))}</td></tr>`;
+    elements.resultsBody.innerHTML = `<tr><td class="empty-cell" colspan="10">${escapeHtml(t("dataError"))}</td></tr>`;
     elements.resultCount.textContent = t("dataError");
   }
 }

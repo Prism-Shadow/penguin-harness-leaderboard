@@ -128,6 +128,8 @@ def verify_frontend_contract() -> None:
         '["harness", "harness"]',
         '["model", "model"]',
         '["accuracy", "resolutionRate"]',
+        '["trial_count", "trials"]',
+        '["average_trial_duration_seconds", "avgDuration"]',
         '["release_date", "releaseDate"]',
         '["total_tokens", "tokens"]',
         '["total_cost_usd", "cost"]',
@@ -136,6 +138,12 @@ def verify_frontend_contract() -> None:
     assert all(position >= 0 for position in positions), "A required table column is missing"
     assert positions == sorted(positions), "The table column order changed"
     assert 'detailsCell.textContent = t("details")' in script, "Details column missing"
+    for removed_selector in ("ci-whisker", "rate-track", "rate-fill"):
+        assert removed_selector not in script, f"Removed {removed_selector} markup is still rendered"
+        assert removed_selector not in css, f"Removed {removed_selector} styling is still present"
+    assert "linkedName(row.harness, row.harness_org)" not in script, (
+        "Harness organization is still repeated in the main table"
+    )
     assert ".column-total-tokens .sort-button" in css, "Token header alignment missing"
     assert ".number-cell" in css and "text-align: right" in css, "Numeric alignment missing"
 

@@ -40,8 +40,8 @@
         document.documentElement.lang = locale === "zh" ? "zh-CN" : "en";
       } catch {}
     </script>
-    <link rel="stylesheet" href="styles.css?v=20260901-8" />
-    <script src="script.js?v=20260901-8" defer></script>
+    <link rel="stylesheet" href="styles.css?v=20260901-9" />
+    <script src="script.js?v=20260901-9" defer></script>
   </head>
   <body>
     <a class="skip-link" href="#results" data-i18n="skipToResults">Skip to results</a>
@@ -178,13 +178,12 @@
               <caption class="sr-only table-caption">Official Terminal-Bench results</caption>
               <thead class="results-head"></thead>
               <tbody class="results-body">
-                <tr><td class="loading-cell" colspan="8" data-i18n="loadingResults">Loading official results…</td></tr>
+                <tr><td class="loading-cell" colspan="10" data-i18n="loadingResults">Loading official results…</td></tr>
               </tbody>
             </table>
           </div>
           <p class="confidence-note">
-            <span aria-hidden="true" class="ci-key"><i></i><b></b></span>
-            <span data-i18n="confidenceNote">Resolution rate ± 95% confidence interval. Tokens and cost are totals reported by tbench.ai.</span>
+            <span data-i18n="confidenceNote">Resolution rate includes the official 95% confidence interval. Tokens and cost are totals reported by tbench.ai.</span>
           </p>
         </div>
       </section>

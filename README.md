@@ -7,11 +7,12 @@ not only the model. The current demo mirrors the official Terminal-Bench 2.1,
 The main table intentionally follows the official comparison surface, with one
 requested change: Harness appears before Model. It shows official rank,
 Harness, Model and reasoning effort, Resolution Rate with a 95% confidence
-interval, Release Date, total Tokens, and total Cost. The main comparison
-surface remains compact, while each row opens a Details dialog with additional
-fields actually disclosed by the official API, such as trial count, pass@k,
-token breakdown, average duration, and source links. The dialog links to the
-corresponding Harbor result page for a full official record.
+interval, Trials, average Trial duration, Release Date, total Tokens, and total
+Cost. Harness and Model organization names stay in Details instead of being
+repeated under every result. Each row opens a Details dialog with additional
+fields actually disclosed by the official API, such as pass@k, token breakdown,
+and source links. The dialog links to the corresponding Harbor result page for
+a full official record.
 
 ## Data source
 

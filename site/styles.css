@@ -117,6 +117,10 @@ select:focus-visible {
   margin-inline: auto;
 }
 
+#results .section-shell {
+  width: min(1440px, calc(100% - 32px));
+}
+
 .section-anchor {
   scroll-margin-top: 5rem;
 }
@@ -627,7 +631,7 @@ main,
 
 table {
   width: 100%;
-  min-width: 1240px;
+  min-width: 1380px;
   border-collapse: collapse;
   table-layout: fixed;
   font-size: 14px;
@@ -666,11 +670,11 @@ tbody tr:hover td {
 }
 
 .column-model {
-  width: 210px;
+  width: 205px;
 }
 
 .column-accuracy {
-  width: 225px;
+  width: 350px;
 }
 
 .column-average-trial-duration-seconds {
@@ -693,7 +697,7 @@ tbody tr:hover td {
 }
 
 .column-source-type {
-  width: 130px;
+  width: 135px;
 }
 
 .column-details {
@@ -810,9 +814,9 @@ tbody tr:hover td {
 .rate-copy {
   display: flex;
   align-items: baseline;
-  width: 98px;
-  flex: 0 0 98px;
-  gap: 5px;
+  width: 86px;
+  flex: 0 0 86px;
+  gap: 4px;
   white-space: nowrap;
 }
 
@@ -840,7 +844,7 @@ tbody tr:hover td {
 .accuracy-ci {
   position: absolute;
   top: 50%;
-  height: 1px;
+  height: 2px;
   background: var(--muted);
   transform: translateY(-50%);
 }
@@ -849,7 +853,7 @@ tbody tr:hover td {
   position: absolute;
   top: 50%;
   width: 1px;
-  height: 6px;
+  height: 8px;
   background: var(--muted);
   transform: translate(-50%, -50%);
 }

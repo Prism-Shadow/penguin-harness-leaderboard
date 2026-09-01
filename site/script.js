@@ -11,7 +11,7 @@ const page = {
   statBestLabel: document.querySelector(".stat-best-label"),
   resultsTitle: document.querySelector(".results-title"),
   resultsDescription: document.querySelector(".results-description"),
-  search: document.querySelector(".result-search"),
+  modelFilter: document.querySelector(".model-filter"),
   harnessFilter: document.querySelector(".harness-filter"),
   thinkingFilter: document.querySelector(".thinking-filter"),
   sourceFilter: document.querySelector(".source-filter"),
@@ -55,8 +55,7 @@ const copy = {
     modelsDescription: "Unique model names in published results.",
     bestAccuracy: "Official best",
     resultsEyebrow: "Public results",
-    searchLabel: "Search results",
-    searchPlaceholder: "Search harness or model…",
+    modelFilter: "Filter by model",
     bestOnly: "Best per model",
     tableHelp: "Only benchmark-official rows receive an official rank · open Details for evidence and configuration",
     tableHint: "Swipe to view the full table →",
@@ -75,6 +74,7 @@ const copy = {
     footerText: "Auditable model × harness benchmark results",
     configurationEyebrow: "Submission configuration",
     allHarnesses: "All harnesses",
+    allModels: "All models",
     allThinking: "All thinking levels",
     allSources: "All sources",
     benchmarkOfficial: "Benchmark official",
@@ -87,8 +87,7 @@ const copy = {
     model: "Model",
     thinkingLevel: "Thinking Level",
     accuracy: "Accuracy",
-    runConfig: "Run config",
-    sourceReported: "Source-reported",
+    runConfig: "Evaluation config",
     source: "Source",
     details: "Details",
     trials: "trials",
@@ -152,8 +151,7 @@ const copy = {
     modelsDescription: "公开结果中的不同模型。",
     bestAccuracy: "官方最高分",
     resultsEyebrow: "公开结果",
-    searchLabel: "搜索结果",
-    searchPlaceholder: "搜索 Harness 或模型…",
+    modelFilter: "按模型筛选",
     bestOnly: "每个模型仅看最佳",
     tableHelp: "只有 Benchmark 官方结果拥有正式排名 · 来源证据与详细配置见详情",
     tableHint: "左右滑动查看完整表格 →",
@@ -172,6 +170,7 @@ const copy = {
     footerText: "可核验的模型 × Harness Benchmark 结果",
     configurationEyebrow: "Submission 配置",
     allHarnesses: "全部 Harness",
+    allModels: "全部模型",
     allThinking: "全部 Thinking Level",
     allSources: "全部来源",
     benchmarkOfficial: "Benchmark 官方",
@@ -184,8 +183,7 @@ const copy = {
     model: "模型",
     thinkingLevel: "Thinking Level",
     accuracy: "Accuracy",
-    runConfig: "运行配置",
-    sourceReported: "来源已披露",
+    runConfig: "评测配置",
     source: "来源",
     details: "详情",
     trials: "次评测",
@@ -231,7 +229,7 @@ const copy = {
 const state = {
   data: null,
   benchmarkId: null,
-  query: "",
+  model: "",
   harness: "",
   thinking: "",
   sourceType: "",
@@ -347,12 +345,11 @@ function renderBenchmarkTabs() {
   page.benchSwitcher.querySelectorAll("[data-benchmark]").forEach(function (button) {
     button.addEventListener("click", function () {
       state.benchmarkId = button.dataset.benchmark;
-      state.query = "";
+      state.model = "";
       state.harness = "";
       state.thinking = "";
       state.sourceType = "";
       state.bestOnly = false;
-      page.search.value = "";
       page.bestOnly.checked = false;
       const nextUrl = new URL(window.location.href);
       nextUrl.searchParams.set("bench", state.benchmarkId);
@@ -379,6 +376,9 @@ function renderSummary(bench) {
 }
 
 function renderFilterOptions(bench) {
+  const models = Array.from(new Set(bench.results.map(function (row) {
+    return row.model;
+  }))).sort();
   const harnesses = Array.from(new Set(bench.results.map(function (row) {
     return row.harness;
   }).filter(Boolean))).sort();
@@ -389,6 +389,10 @@ function renderFilterOptions(bench) {
     return row.source_type;
   }))).sort();
 
+  page.modelFilter.innerHTML = '<option value="">' + escapeHtml(t("allModels")) + "</option>" +
+    models.map(function (name) {
+      return '<option value="' + escapeHtml(name) + '">' + escapeHtml(name) + "</option>";
+    }).join("");
   page.harnessFilter.innerHTML = '<option value="">' + escapeHtml(t("allHarnesses")) + "</option>" +
     harnesses.map(function (name) {
       return '<option value="' + escapeHtml(name) + '">' + escapeHtml(name) + "</option>";
@@ -403,6 +407,7 @@ function renderFilterOptions(bench) {
         escapeHtml(sourceTypeLabel(sourceType)) + "</option>";
     }).join("");
 
+  page.modelFilter.value = state.model;
   page.harnessFilter.value = state.harness;
   page.thinkingFilter.value = state.thinking;
   page.sourceFilter.value = state.sourceType;
@@ -450,20 +455,8 @@ function renderTableHead() {
 }
 
 function filteredResults(bench) {
-  const query = state.query.trim().toLowerCase();
   let filtered = bench.results.filter(function (row) {
-    const searchable = [
-      row.harness,
-      row.harness_version,
-      row.harness_org,
-      row.model,
-      row.model_id,
-      row.model_org,
-      row.thinking_level,
-      row.publisher,
-      sourceTypeLabel(row.source_type)
-    ].join(" ").toLowerCase();
-    return (!query || searchable.includes(query)) &&
+    return (!state.model || row.model === state.model) &&
       (!state.harness || row.harness === state.harness) &&
       (!state.thinking || row.thinking_level === state.thinking) &&
       (!state.sourceType || row.source_type === state.sourceType);
@@ -510,8 +503,7 @@ function configCell(row) {
       row.average_trial_duration_seconds == null) {
     const note = localized(row.protocol_note);
     if (note) {
-      return '<div class="config-summary"><strong>' + escapeHtml(t("sourceReported")) +
-        '</strong><span class="reported-config" title="' + escapeHtml(note) + '">' +
+      return '<div class="config-summary"><span class="reported-config" title="' + escapeHtml(note) + '">' +
         escapeHtml(note) + "</span></div>";
     }
     return '<span class="not-reported">' + escapeHtml(t("notReported")) + "</span>";
@@ -716,8 +708,8 @@ function cycleTheme() {
   updateThemeButton();
 }
 
-page.search.addEventListener("input", function () {
-  state.query = page.search.value;
+page.modelFilter.addEventListener("change", function () {
+  state.model = page.modelFilter.value;
   renderTable();
 });
 page.harnessFilter.addEventListener("change", function () {

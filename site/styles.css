@@ -427,23 +427,6 @@ html[data-theme="dark"] .button-primary:hover { border-color: #ffffff; backgroun
   background: var(--surface);
 }
 
-.search-control {
-  position: relative;
-  display: block;
-}
-
-.search-control svg {
-  position: absolute;
-  top: 50%;
-  left: 12px;
-  width: 16px;
-  height: 16px;
-  color: var(--muted);
-  transform: translateY(-50%);
-  pointer-events: none;
-}
-
-.result-search,
 .filter-select,
 .best-only-control {
   min-height: 40px;
@@ -452,11 +435,6 @@ html[data-theme="dark"] .button-primary:hover { border-color: #ffffff; backgroun
   background: var(--surface-soft);
   color: var(--text);
   font-size: 12px;
-}
-
-.result-search {
-  width: 100%;
-  padding: 0 12px 0 37px;
 }
 
 .filter-select { width: 100%; padding: 0 10px; }

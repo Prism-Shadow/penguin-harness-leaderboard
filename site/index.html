@@ -40,8 +40,8 @@
         document.documentElement.lang = locale === "zh" ? "zh-CN" : "en";
       } catch {}
     </script>
-    <link rel="stylesheet" href="styles.css?v=20260901-4" />
-    <script src="script.js?v=20260901-4" defer></script>
+    <link rel="stylesheet" href="styles.css?v=20260901-5" />
+    <script src="script.js?v=20260901-5" defer></script>
   </head>
   <body>
     <a class="skip-link" href="#results" data-i18n="skipToResults">Skip to results</a>
@@ -150,13 +150,9 @@
           </header>
 
           <div class="result-controls">
-            <label class="search-control">
-              <span class="sr-only" data-i18n="searchLabel">Search results</span>
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
-                <circle cx="11" cy="11" r="8"></circle><path d="m21 21-4.35-4.35"></path>
-              </svg>
-              <input class="result-search" type="search" data-i18n-placeholder="searchPlaceholder" placeholder="Search harness or model…" />
-            </label>
+            <select class="filter-select model-filter" data-i18n-aria="modelFilter" aria-label="Filter by model">
+              <option value="">All models</option>
+            </select>
             <select class="filter-select harness-filter" data-i18n-aria="harnessFilter" aria-label="Filter by harness">
               <option value="">All harnesses</option>
             </select>

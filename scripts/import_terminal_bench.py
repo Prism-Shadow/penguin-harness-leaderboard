@@ -6,6 +6,7 @@ from __future__ import annotations
 import argparse
 import json
 import subprocess
+from datetime import date
 from pathlib import Path
 from typing import Any
 
@@ -15,6 +16,8 @@ DEFAULT_SOURCE = ROOT.parent / "terminal-bench-2-1"
 DEFAULT_OUTPUT = ROOT / "site" / "data" / "benchmarks.json"
 TB3_SOURCE = ROOT / "data" / "terminal-bench-3.0-official.json"
 CURATED_SOURCE = ROOT / "data" / "curated-results.json"
+BENCHMARK_IDS = ("terminal-bench-2.1", "terminal-bench-3.0")
+SOURCE_TYPES = frozenset({"benchmark_official", "vendor_reported"})
 
 OPTIONAL_FIELDS: dict[str, Any] = {
     "official_rank": None,
@@ -87,7 +90,7 @@ def normalize(raw: dict[str, Any]) -> dict[str, Any]:
     return row
 
 
-def load_tb21(source: Path) -> tuple[list[dict[str, Any]], str, str]:
+def load_tb21(source: Path, retrieved_at: str) -> tuple[list[dict[str, Any]], str, str]:
     files = sorted((source / "leaderboard" / "submissions").glob("*.json"))
     if not files:
         raise SystemExit(f"No official submission files found under {source}")
@@ -149,7 +152,7 @@ def load_tb21(source: Path) -> tuple[list[dict[str, Any]], str, str]:
     commit = git_value(source, "rev-parse", "HEAD")
     commit_date = git_value(source, "show", "-s", "--format=%cs", "HEAD")
     for row in rows:
-        row["retrieved_at"] = commit_date
+        row["retrieved_at"] = retrieved_at
     return rows, commit, commit_date
 
 
@@ -176,12 +179,52 @@ def load_tb30() -> tuple[list[dict[str, Any]], dict[str, Any]]:
 
 def load_curated() -> tuple[list[dict[str, Any]], str]:
     source = read_json(CURATED_SOURCE)
+    verified_at = source.get("verified_at")
+    try:
+        date.fromisoformat(verified_at)
+    except (TypeError, ValueError) as error:
+        raise SystemExit("curated-results.json verified_at must be YYYY-MM-DD") from error
+
+    raw_rows = source.get("results")
+    if not isinstance(raw_rows, list):
+        raise SystemExit("curated-results.json results must be a list")
+
     rows = []
-    for raw in source["results"]:
-        row = normalize(raw)
+    ids = set()
+    for raw in raw_rows:
+        row_id = raw.get("id")
+        if not row_id or row_id in ids:
+            raise SystemExit(f"Missing or duplicate curated result id: {row_id!r}")
+        ids.add(row_id)
+        if raw.get("benchmark_id") not in BENCHMARK_IDS:
+            raise SystemExit(
+                f"Unknown benchmark_id for curated result {row_id}: "
+                f"{raw.get('benchmark_id')!r}"
+            )
+        if raw.get("source_type") not in SOURCE_TYPES:
+            raise SystemExit(
+                f"Unknown source_type for curated result {row_id}: "
+                f"{raw.get('source_type')!r}"
+            )
+        if raw.get("source_type") != "vendor_reported":
+            raise SystemExit(
+                f"Curated result {row_id} must use source_type='vendor_reported'"
+            )
+        for field in ("published_at", "retrieved_at"):
+            value = raw.get(field)
+            if value is not None:
+                try:
+                    date.fromisoformat(value)
+                except (TypeError, ValueError) as error:
+                    raise SystemExit(
+                        f"Curated result {row_id} {field} must be YYYY-MM-DD or null"
+                    ) from error
+
+        published = {key: value for key, value in raw.items() if key != "evidence"}
+        row = normalize(published)
         row["official_rank"] = None
         rows.append(row)
-    return rows, source["verified_at"]
+    return rows, verified_at
 
 
 def make_benchmark(
@@ -230,12 +273,12 @@ def make_benchmark(
 
 
 def build_payload(source: Path) -> dict[str, Any]:
-    tb21_rows, tb21_commit, tb21_date = load_tb21(source)
-    tb30_rows, tb30_meta = load_tb30()
     curated, verified_at = load_curated()
+    tb21_rows, tb21_commit, tb21_date = load_tb21(source, verified_at)
+    tb30_rows, tb30_meta = load_tb30()
     by_benchmark = {
         bench: [row for row in curated if row["benchmark_id"] == bench]
-        for bench in ("terminal-bench-2.1", "terminal-bench-3.0")
+        for bench in BENCHMARK_IDS
     }
 
     shared_score_note = {
@@ -257,8 +300,8 @@ def build_payload(source: Path) -> dict[str, Any]:
         },
         score_note=shared_score_note,
         protocol_note={
-            "en": "The repository snapshot contains 20 merged submissions. Vendor rows include only settings explicitly disclosed by first-party sources.",
-            "zh": "官方仓库快照包含 20 条已合并 submission；厂商记录只填写一手来源明确披露的配置。",
+            "en": f"The repository snapshot contains {len(tb21_rows)} merged submissions. Vendor rows include only settings explicitly disclosed by first-party sources.",
+            "zh": f"官方仓库快照包含 {len(tb21_rows)} 条已合并 submission；厂商记录只填写一手来源明确披露的配置。",
         },
         results=tb21_rows + by_benchmark["terminal-bench-2.1"],
     )
@@ -277,8 +320,8 @@ def build_payload(source: Path) -> dict[str, Any]:
         },
         score_note=shared_score_note,
         protocol_note={
-            "en": "This is a 2026-08-29 Harbor Hub snapshot, not a live mirror. All 12 rows returned by the official public leaderboard were marked for display.",
-            "zh": "这是 2026-08-29 的 Harbor Hub 快照，并非实时镜像；官方公开榜单返回的 12 条记录均标记为展示。",
+            "en": f"This is a {tb30_meta['snapshot_updated_at'][:10]} Harbor Hub snapshot, not a live mirror. All {len(tb30_rows)} rows returned by the official public leaderboard were marked for display.",
+            "zh": f"这是 {tb30_meta['snapshot_updated_at'][:10]} 的 Harbor Hub 快照，并非实时镜像；官方公开榜单返回的 {len(tb30_rows)} 条记录均标记为展示。",
         },
         results=tb30_rows + by_benchmark["terminal-bench-3.0"],
     )

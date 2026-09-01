@@ -9,6 +9,7 @@ const translations = {
     benchmarkSwitcher: "Benchmark selector",
     siteControls: "Site controls",
     language: "Language",
+    followSystem: "Follow system",
     theme: "Theme: {mode}",
     system: "system",
     light: "light",
@@ -101,6 +102,7 @@ const translations = {
     benchmarkSwitcher: "Benchmark 切换",
     siteControls: "网站控制",
     language: "语言",
+    followSystem: "跟随系统",
     theme: "主题：{mode}",
     system: "跟随系统",
     light: "浅色",
@@ -258,6 +260,7 @@ function applyTranslations() {
   document.querySelectorAll("[data-i18n-aria]").forEach((node) => {
     node.setAttribute("aria-label", t(node.dataset.i18nAria));
   });
+  elements.localeSelect.querySelector('option[value="system"]').textContent = t("followSystem");
   updateThemeLabel();
 }
 
@@ -786,7 +789,10 @@ function initialBenchmark(payload) {
 }
 
 async function init() {
-  elements.localeSelect.value = state.locale;
+  const localePreference = document.documentElement.dataset.localePref || "system";
+  elements.localeSelect.value = ["system", "en", "zh"].includes(localePreference)
+    ? localePreference
+    : state.locale;
   elements.localeSelect.addEventListener("change", (event) => setLocale(event.target.value));
   elements.themeToggle.addEventListener("click", cycleTheme);
   elements.sourceFilter.addEventListener("change", (event) => {

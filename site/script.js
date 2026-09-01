@@ -50,6 +50,32 @@ const translations = {
     notReported: "Not reported",
     noResults: "No results match these filters.",
     officialSource: "Official source",
+    details: "Details",
+    resultDetails: "Result details",
+    closeDetails: "Close details",
+    openOfficialDetail: "Open official detail",
+    done: "Done",
+    officialRank: "Official rank",
+    configuration: "Configuration",
+    scoreMetrics: "Score metrics",
+    usageMetrics: "Usage metrics",
+    sourceLinks: "Source links",
+    harnessOrganization: "Harness organization",
+    modelOrganization: "Model organization",
+    trials: "Trials",
+    successes: "Successes",
+    confidenceInterval: "95% confidence interval",
+    standardError: "Standard error",
+    totalTokens: "Total tokens",
+    uncachedInputTokens: "Uncached input",
+    cachedInputTokens: "Cached input",
+    outputTokens: "Output tokens",
+    totalCost: "Total cost",
+    averageTrialDuration: "Average trial duration",
+    rewardHacks: "Reward hacks",
+    submission: "Submission",
+    benchmarkSnapshot: "Benchmark snapshot",
+    officialRow: "Official result row",
     sorting: "Sort by {column}",
     dataError: "Official results could not be loaded. Start a local web server and refresh.",
   },
@@ -100,6 +126,32 @@ const translations = {
     notReported: "未披露",
     noResults: "没有符合当前筛选条件的结果。",
     officialSource: "官方来源",
+    details: "详情",
+    resultDetails: "结果详情",
+    closeDetails: "关闭详情",
+    openOfficialDetail: "打开官方详情",
+    done: "完成",
+    officialRank: "官方排名",
+    configuration: "评测配置",
+    scoreMetrics: "成绩指标",
+    usageMetrics: "用量指标",
+    sourceLinks: "来源链接",
+    harnessOrganization: "Harness 组织",
+    modelOrganization: "模型组织",
+    trials: "试验数",
+    successes: "成功数",
+    confidenceInterval: "95% 置信区间",
+    standardError: "标准误差",
+    totalTokens: "Token 总量",
+    uncachedInputTokens: "非缓存输入",
+    cachedInputTokens: "缓存输入",
+    outputTokens: "输出 Token",
+    totalCost: "总成本",
+    averageTrialDuration: "平均试验时长",
+    rewardHacks: "Reward hack",
+    submission: "提交记录",
+    benchmarkSnapshot: "Benchmark 官方快照",
+    officialRow: "官方结果详情",
     sorting: "按{column}排序",
     dataError: "无法加载官方结果，请启动本地 Web 服务后刷新。",
   },
@@ -123,7 +175,16 @@ const elements = {
   resultCount: document.querySelector(".result-count"),
   resultsHead: document.querySelector(".results-head"),
   resultsBody: document.querySelector(".results-body"),
+  resultDialog: document.querySelector(".result-dialog"),
+  dialogTitle: document.querySelector("#result-dialog-title"),
+  dialogSubtitle: document.querySelector(".dialog-subtitle"),
+  dialogBody: document.querySelector(".dialog-body"),
+  dialogOfficialLink: document.querySelector(".official-detail-link"),
+  dialogClose: document.querySelector(".dialog-close"),
+  dialogDone: document.querySelector(".dialog-done"),
 };
+
+let dialogTrigger = null;
 
 function t(key, values = {}) {
   const template = translations[state.locale]?.[key] ?? translations.en[key] ?? key;
@@ -194,7 +255,7 @@ function setTheme(mode) {
   document.documentElement.dataset.themeMode = mode;
   document.documentElement.dataset.theme = theme;
   document.querySelector('meta[name="theme-color"]').content =
-    theme === "dark" ? "#07090c" : "#f5f7f8";
+    theme === "dark" ? "#000000" : "#ffffff";
   localStorage.setItem(THEME_KEY, mode);
   updateThemeLabel();
 }
@@ -243,6 +304,39 @@ function formatTokens(value) {
 
 function formatCost(value) {
   return value == null ? t("notReported") : `$${(value / 1_000).toFixed(1)}k`;
+}
+
+function formatNumber(value) {
+  if (value == null) return null;
+  return new Intl.NumberFormat(state.locale === "zh" ? "zh-CN" : "en-US").format(value);
+}
+
+function formatExactCost(value) {
+  if (value == null) return null;
+  return new Intl.NumberFormat("en-US", {
+    style: "currency",
+    currency: "USD",
+    minimumFractionDigits: 2,
+    maximumFractionDigits: 2,
+  }).format(value);
+}
+
+function formatPercent(value, digits = 2) {
+  return value == null ? null : `${Number(value).toFixed(digits)}%`;
+}
+
+function formatPassRate(value) {
+  return value == null ? null : formatPercent(Number(value) * 100);
+}
+
+function formatDuration(value) {
+  if (value == null) return null;
+  const seconds = Math.round(Number(value));
+  if (seconds < 60) return `${seconds}s`;
+  const hours = Math.floor(seconds / 3600);
+  const minutes = Math.floor((seconds % 3600) / 60);
+  if (hours) return `${hours}h ${minutes}m`;
+  return `${minutes}m ${seconds % 60}s`;
 }
 
 function linkedName(item, org) {
@@ -376,6 +470,11 @@ function renderTableHead() {
     cell.append(button);
     row.append(cell);
   });
+  const detailsCell = document.createElement("th");
+  detailsCell.scope = "col";
+  detailsCell.className = "column-details";
+  detailsCell.textContent = t("details");
+  row.append(detailsCell);
   elements.resultsHead.replaceChildren(row);
 }
 
@@ -408,7 +507,7 @@ function renderTable() {
   });
 
   if (!rows.length) {
-    elements.resultsBody.innerHTML = `<tr><td class="empty-cell" colspan="7">${escapeHtml(t("noResults"))}</td></tr>`;
+    elements.resultsBody.innerHTML = `<tr><td class="empty-cell" colspan="8">${escapeHtml(t("noResults"))}</td></tr>`;
     return;
   }
 
@@ -418,7 +517,7 @@ function renderTable() {
       : `<span class="effort-pill muted">${escapeHtml(t("notReported"))}</span>`;
     return `
       <tr>
-        <td class="rank-cell"><span>${row.rank}</span></td>
+        <td class="rank-cell"><span class="rank-badge${row.rank <= 3 ? ` rank-${row.rank}` : ""}">${row.rank}</span></td>
         <td class="entity-cell harness-cell">${linkedName(row.harness, row.harness_org)}</td>
         <td class="entity-cell model-cell">
           ${linkedName(row.model, row.model_org)}
@@ -428,8 +527,91 @@ function renderTable() {
         <td class="date-cell">${escapeHtml(formatDate(row.release_date))}</td>
         <td class="number-cell">${escapeHtml(formatTokens(row.total_tokens))}</td>
         <td class="number-cell">${escapeHtml(formatCost(row.total_cost_usd))}</td>
+        <td class="details-cell"><button class="details-button" type="button" data-result-id="${escapeHtml(row.id)}">${escapeHtml(t("details"))}<span aria-hidden="true">→</span></button></td>
       </tr>`;
   }).join("");
+}
+
+function detailLink(item, fallbackLabel) {
+  const href = safeUrl(item?.url);
+  const label = item?.label || fallbackLabel;
+  if (!href || !label) return null;
+  return `<a href="${escapeHtml(href)}" target="_blank" rel="noreferrer">${escapeHtml(label)} ↗</a>`;
+}
+
+function detailItem(label, value) {
+  if (value == null || value === "") return "";
+  return `<div class="detail-item"><dt>${escapeHtml(label)}</dt><dd>${value}</dd></div>`;
+}
+
+function detailGroup(title, items) {
+  const content = items.filter(Boolean).join("");
+  if (!content) return "";
+  return `<section class="detail-group"><h3>${escapeHtml(title)}</h3><dl class="detail-list">${content}</dl></section>`;
+}
+
+function openDetails(row, trigger) {
+  dialogTrigger = trigger;
+  elements.dialogTitle.textContent = `${row.model.label} × ${row.harness.label}`;
+  elements.dialogSubtitle.textContent = `${state.benchmark.name} · ${row.thinking_level || t("notReported")}`;
+
+  const confidence = row.accuracy_ci95_half_width == null
+    ? null
+    : `± ${formatPercent(row.accuracy_ci95_half_width)}`;
+  const summary = `
+    <div class="detail-summary">
+      <div><strong>${escapeHtml(formatPercent(row.accuracy, 1))}</strong><span>${escapeHtml(t("resolutionRate"))}</span></div>
+      <div><strong>${escapeHtml(String(row.rank))}</strong><span>${escapeHtml(t("officialRank"))}</span></div>
+      <div><strong>${escapeHtml(formatDate(row.release_date))}</strong><span>${escapeHtml(t("releaseDate"))}</span></div>
+    </div>`;
+
+  const configuration = detailGroup(t("configuration"), [
+    detailItem(t("harness"), detailLink(row.harness, row.harness?.label) || escapeHtml(row.harness?.label)),
+    detailItem(t("harnessOrganization"), detailLink(row.harness_org, row.harness_org?.label) || escapeHtml(row.harness_org?.label)),
+    detailItem(t("model"), detailLink(row.model, row.model?.label) || escapeHtml(row.model?.label)),
+    detailItem(t("modelOrganization"), detailLink(row.model_org, row.model_org?.label) || escapeHtml(row.model_org?.label)),
+    detailItem(t("thinkingLevel"), row.thinking_level ? escapeHtml(row.thinking_level) : null),
+  ]);
+
+  const scores = detailGroup(t("scoreMetrics"), [
+    detailItem(t("resolutionRate"), escapeHtml(formatPercent(row.accuracy, 2))),
+    detailItem(t("confidenceInterval"), confidence ? escapeHtml(confidence) : null),
+    detailItem(t("standardError"), row.accuracy_stderr == null ? null : escapeHtml(formatPercent(row.accuracy_stderr))),
+    detailItem(t("trials"), row.trial_count == null ? null : escapeHtml(formatNumber(row.trial_count))),
+    detailItem(t("successes"), row.successes == null ? null : escapeHtml(formatNumber(row.successes))),
+    detailItem("pass@2", row.pass_at_2 == null ? null : escapeHtml(formatPassRate(row.pass_at_2))),
+    detailItem("pass@3", row.pass_at_3 == null ? null : escapeHtml(formatPassRate(row.pass_at_3))),
+    detailItem("pass@4", row.pass_at_4 == null ? null : escapeHtml(formatPassRate(row.pass_at_4))),
+    detailItem("pass@5", row.pass_at_5 == null ? null : escapeHtml(formatPassRate(row.pass_at_5))),
+    detailItem(t("rewardHacks"), detailLink(row.display_reward_hacks, row.display_reward_hacks?.label)
+      || (row.reward_hacks == null ? null : escapeHtml(formatNumber(row.reward_hacks)))),
+  ]);
+
+  const usage = detailGroup(t("usageMetrics"), [
+    detailItem(t("totalTokens"), row.total_tokens == null ? null : escapeHtml(formatNumber(row.total_tokens))),
+    detailItem(t("uncachedInputTokens"), row.uncached_input_tokens == null ? null : escapeHtml(formatNumber(row.uncached_input_tokens))),
+    detailItem(t("cachedInputTokens"), row.cached_input_tokens == null ? null : escapeHtml(formatNumber(row.cached_input_tokens))),
+    detailItem(t("outputTokens"), row.output_tokens == null ? null : escapeHtml(formatNumber(row.output_tokens))),
+    detailItem(t("totalCost"), row.total_cost_usd == null ? null : escapeHtml(formatExactCost(row.total_cost_usd))),
+    detailItem(t("averageTrialDuration"), row.average_trial_duration_seconds == null ? null : escapeHtml(formatDuration(row.average_trial_duration_seconds))),
+  ]);
+
+  const officialRow = safeUrl(row.official_detail_url);
+  const sourceLinks = detailGroup(t("sourceLinks"), [
+    detailItem(t("officialRow"), officialRow
+      ? `<a href="${escapeHtml(officialRow)}" target="_blank" rel="noreferrer">Harbor ↗</a>`
+      : null),
+    detailItem(t("submission"), detailLink(row.submission, row.submission?.label)),
+    detailItem(t("benchmarkSnapshot"), `<a href="${escapeHtml(safeUrl(state.benchmark.official_url))}" target="_blank" rel="noreferrer">tbench.ai ↗</a>`),
+  ]);
+
+  elements.dialogBody.innerHTML = `${summary}<div class="detail-groups">${configuration}${scores}${usage}${sourceLinks}</div>`;
+  elements.dialogOfficialLink.href = officialRow || state.benchmark.official_url;
+  elements.resultDialog.showModal();
+}
+
+function closeDetails() {
+  if (elements.resultDialog.open) elements.resultDialog.close();
 }
 
 function renderBenchmark() {
@@ -497,6 +679,21 @@ async function init() {
     state.filters.thinking = event.target.value;
     renderTable();
   });
+  elements.resultsBody.addEventListener("click", (event) => {
+    const button = event.target.closest(".details-button");
+    if (!button) return;
+    const row = state.benchmark.results.find((item) => item.id === button.dataset.resultId);
+    if (row) openDetails(row, button);
+  });
+  elements.dialogClose.addEventListener("click", closeDetails);
+  elements.dialogDone.addEventListener("click", closeDetails);
+  elements.resultDialog.addEventListener("click", (event) => {
+    if (event.target === elements.resultDialog) closeDetails();
+  });
+  elements.resultDialog.addEventListener("close", () => {
+    dialogTrigger?.focus();
+    dialogTrigger = null;
+  });
 
   matchMedia("(prefers-color-scheme: dark)").addEventListener("change", () => {
     if (document.documentElement.dataset.themeMode === "system") setTheme("system");
@@ -510,7 +707,7 @@ async function init() {
     selectBenchmark(initialBenchmark(state.payload).id, false);
   } catch (error) {
     console.error(error);
-    elements.resultsBody.innerHTML = `<tr><td class="empty-cell" colspan="7">${escapeHtml(t("dataError"))}</td></tr>`;
+    elements.resultsBody.innerHTML = `<tr><td class="empty-cell" colspan="8">${escapeHtml(t("dataError"))}</td></tr>`;
     elements.resultCount.textContent = t("dataError");
   }
 }

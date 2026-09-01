@@ -81,23 +81,45 @@ def verify_benchmark(bench: dict[str, Any]) -> None:
         assert 0 <= row["accuracy"] <= 100, row_id
         ci95 = row["accuracy_ci95_half_width"]
         assert ci95 is None or 0 <= ci95 <= 100, row_id
+        stderr = row["accuracy_stderr"]
+        assert stderr is None or 0 <= stderr <= 100, row_id
         assert valid_date(row["release_date"]), row_id
         assert row["display_release_date"], row_id
         assert row["total_tokens"] is None or row["total_tokens"] >= 0, row_id
         assert row["total_cost_usd"] is None or row["total_cost_usd"] >= 0, row_id
         assert row["trial_count"] is None or row["trial_count"] > 0, row_id
+        for field in ("pass_at_2", "pass_at_3", "pass_at_4", "pass_at_5"):
+            value = row[field]
+            assert value is None or 0 <= value <= 1, f"{row_id}: invalid {field}"
+        assert row["successes"] is None or row["successes"] >= 0, row_id
+        for field in ("uncached_input_tokens", "cached_input_tokens", "output_tokens"):
+            value = row[field]
+            assert value is None or value >= 0, f"{row_id}: invalid {field}"
+        duration = row["average_trial_duration_seconds"]
+        assert duration is None or duration >= 0, row_id
+        assert row["reward_hacks"] is None or row["reward_hacks"] >= 0, row_id
         assert row["thinking_level"] is None or isinstance(row["thinking_level"], str), row_id
         verify_link(row["harness"], "harness", row_id)
         verify_link(row["harness_org"], "harness_org", row_id)
         verify_link(row["model"], "model", row_id)
         verify_link(row["model_org"], "model_org", row_id)
+        if row["display_reward_hacks"] is not None:
+            verify_link(row["display_reward_hacks"], "display_reward_hacks", row_id)
+        if row["submission"] is not None:
+            verify_link(row["submission"], "submission", row_id)
+        detail_url = row["official_detail_url"]
+        expected_suffix = f"/leaderboards/{bench['source_api']['leaderboard']}/rows/{row_id}"
+        assert detail_url.startswith("https://hub.harborframework.com/datasets/"), row_id
+        assert detail_url.endswith(expected_suffix), row_id
 
 
 def verify_frontend_contract() -> None:
     html = (ROOT / "site" / "index.html").read_text(encoding="utf-8")
     script = (ROOT / "site" / "script.js").read_text(encoding="utf-8")
-    assert "<dialog" not in html, "The removed details dialog is still present"
-    assert "details-dialog" not in script, "The removed details logic is still present"
+    css = (ROOT / "site" / "styles.css").read_text(encoding="utf-8")
+    assert 'class="result-dialog"' in html, "Result details dialog missing"
+    assert "showModal()" in script, "Result details dialog is not wired up"
+    assert "official_detail_url" in script, "Official result detail link is missing"
     assert 'class="bench-switcher"' in html, "Top navigation benchmark switcher missing"
     assert 'class="locale-control"' in html, "Language control missing"
     assert "accuracy_ci95_half_width" in script, "Confidence-interval comparison is missing"
@@ -113,6 +135,9 @@ def verify_frontend_contract() -> None:
     positions = [script.find(column) for column in column_contract]
     assert all(position >= 0 for position in positions), "A required table column is missing"
     assert positions == sorted(positions), "The table column order changed"
+    assert 'detailsCell.textContent = t("details")' in script, "Details column missing"
+    assert ".column-total-tokens .sort-button" in css, "Token header alignment missing"
+    assert ".number-cell" in css and "text-align: right" in css, "Numeric alignment missing"
 
 
 def main() -> None:

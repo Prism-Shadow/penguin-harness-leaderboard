@@ -20,18 +20,21 @@ BENCHMARKS = (
         "version": "2.1",
         "package": "terminal-bench/terminal-bench-2-1",
         "leaderboard": "main",
+        "dataset_version": "latest",
     },
     {
         "id": "terminal-bench-3.0",
         "version": "3.0",
         "package": "terminal-bench/terminal-bench",
         "leaderboard": "3-0-0",
+        "dataset_version": "1",
     },
     {
         "id": "terminal-bench-4.0",
         "version": "4.0",
         "package": "terminal-bench/terminal-bench",
         "leaderboard": "4-0-0",
+        "dataset_version": "4",
     },
 )
 
@@ -63,7 +66,7 @@ def linked(value: Any) -> dict[str, str | None]:
     }
 
 
-def normalize_row(raw: dict[str, Any], benchmark_id: str) -> dict[str, Any]:
+def normalize_row(raw: dict[str, Any], config: dict[str, str]) -> dict[str, Any]:
     metadata = raw.get("metadata") or {}
     metrics = raw.get("metrics") or {}
     ci95 = metrics.get("accuracy_ci95_half_width")
@@ -72,9 +75,15 @@ def normalize_row(raw: dict[str, Any], benchmark_id: str) -> dict[str, Any]:
         ci95 = float(stderr) * 1.96
 
     release_date = metadata.get("release_date") or metadata.get("date")
+    package_org, package_name = config["package"].split("/", maxsplit=1)
+    official_detail_url = (
+        "https://hub.harborframework.com/datasets/"
+        f"{package_org}/{package_name}/{config['dataset_version']}/leaderboards/"
+        f"{config['leaderboard']}/rows/{raw['id']}"
+    )
     return {
         "id": str(raw["id"]),
-        "benchmark_id": benchmark_id,
+        "benchmark_id": config["id"],
         "rank": int(raw["rank"]),
         "harness": linked(metadata.get("agent_display")),
         "harness_org": linked(metadata.get("agent_org")),
@@ -82,6 +91,7 @@ def normalize_row(raw: dict[str, Any], benchmark_id: str) -> dict[str, Any]:
         "model_org": linked(metadata.get("model_org")),
         "thinking_level": metadata.get("reasoning_effort"),
         "accuracy": float(metrics["accuracy"]),
+        "accuracy_stderr": metrics.get("accuracy_stderr"),
         "accuracy_ci95_half_width": round(float(ci95), 2) if ci95 is not None else None,
         "display_accuracy": metrics.get("display_accuracy"),
         "release_date": release_date,
@@ -98,13 +108,30 @@ def normalize_row(raw: dict[str, Any], benchmark_id: str) -> dict[str, Any]:
             or metrics.get("display_total_cost_usd")
         ),
         "trial_count": raw.get("n_trials") or metrics.get("n_trials"),
+        "pass_at_2": metrics.get("pass_at_2"),
+        "pass_at_3": metrics.get("pass_at_3"),
+        "pass_at_4": metrics.get("pass_at_4"),
+        "pass_at_5": metrics.get("pass_at_5"),
+        "successes": metrics.get("successes"),
+        "uncached_input_tokens": metrics.get("uncached_input_tokens"),
+        "cached_input_tokens": metrics.get("cached_input_tokens"),
+        "output_tokens": metrics.get("output_tokens"),
+        "average_trial_duration_seconds": metrics.get("avg_trial_duration_sec"),
+        "reward_hacks": metrics.get("reward_hacks"),
+        "display_reward_hacks": (
+            linked(metrics.get("display_reward_hacks"))
+            if metrics.get("display_reward_hacks")
+            else None
+        ),
+        "submission": linked(metadata.get("pr_url")) if metadata.get("pr_url") else None,
+        "official_detail_url": official_detail_url,
     }
 
 
 def normalize_benchmark(config: dict[str, str], raw: dict[str, Any]) -> dict[str, Any]:
     leaderboard = raw.get("leaderboard") or {}
     visible_rows = [row for row in raw.get("rows", []) if row.get("status") == "display"]
-    rows = [normalize_row(row, config["id"]) for row in visible_rows]
+    rows = [normalize_row(row, config) for row in visible_rows]
     rows.sort(key=lambda row: (row["rank"], -row["accuracy"], row["model"]["label"]))
 
     expected_total = (raw.get("pagination") or {}).get("total")
@@ -123,6 +150,7 @@ def normalize_benchmark(config: dict[str, str], raw: dict[str, Any]) -> dict[str
         "source_api": {
             "package": config["package"],
             "leaderboard": config["leaderboard"],
+            "dataset_version": config["dataset_version"],
         },
         "snapshot_updated_at": leaderboard.get("updated_at"),
         "result_count": len(rows),

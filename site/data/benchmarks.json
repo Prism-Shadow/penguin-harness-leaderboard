@@ -10,7 +10,8 @@
       "official_url": "https://www.tbench.ai/?version=2.1",
       "source_api": {
         "package": "terminal-bench/terminal-bench-2-1",
-        "leaderboard": "main"
+        "leaderboard": "main",
+        "dataset_version": "latest"
       },
       "snapshot_updated_at": "2026-08-29T00:04:08.213344+00:00",
       "result_count": 17,
@@ -44,6 +45,7 @@
           },
           "thinking_level": "xhigh",
           "accuracy": 83.82,
+          "accuracy_stderr": 1.16,
           "accuracy_ci95_half_width": 2.27,
           "display_accuracy": "**83.8%** ± 2.3%",
           "release_date": "2026-06-09",
@@ -52,7 +54,26 @@
           "display_total_tokens": "204.5M",
           "total_cost_usd": 552.67,
           "display_cost": "$552.67",
-          "trial_count": 445
+          "trial_count": 445,
+          "pass_at_2": 0.8978,
+          "pass_at_3": 0.918,
+          "pass_at_4": 0.9281,
+          "pass_at_5": 0.9326,
+          "successes": null,
+          "uncached_input_tokens": 20480925,
+          "cached_input_tokens": 174066133,
+          "output_tokens": 9954945,
+          "average_trial_duration_seconds": 579.7,
+          "reward_hacks": 0.22,
+          "display_reward_hacks": {
+            "label": "-0.2%",
+            "url": "https://github.com/harbor-framework/terminal-bench-2-1/pull/75#issuecomment-4920314071"
+          },
+          "submission": {
+            "label": "#75",
+            "url": "https://github.com/harbor-framework/terminal-bench-2-1/pull/75"
+          },
+          "official_detail_url": "https://hub.harborframework.com/datasets/terminal-bench/terminal-bench-2-1/latest/leaderboards/main/rows/40dbe33d-e8af-475b-8eba-7d5d8f70054c"
         },
         {
           "id": "6d091468-3fda-4cbf-ba1c-645b0f522e97",
@@ -76,6 +97,7 @@
           },
           "thinking_level": "xhigh",
           "accuracy": 83.15,
+          "accuracy_stderr": 1.13,
           "accuracy_ci95_half_width": 2.21,
           "display_accuracy": "**83.2%** ± 2.2%",
           "release_date": "2026-04-23",
@@ -84,7 +106,26 @@
           "display_total_tokens": "735.2M",
           "total_cost_usd": 2059.19,
           "display_cost": "$2,059.19",
-          "trial_count": 445
+          "trial_count": 445,
+          "pass_at_2": 0.8888,
+          "pass_at_3": 0.9135,
+          "pass_at_4": 0.9303,
+          "pass_at_5": 0.9438,
+          "successes": null,
+          "uncached_input_tokens": 336797311,
+          "cached_input_tokens": 392433664,
+          "output_tokens": 5966373,
+          "average_trial_duration_seconds": 482.6,
+          "reward_hacks": 0.22,
+          "display_reward_hacks": {
+            "label": "-0.2%",
+            "url": "https://github.com/harbor-framework/terminal-bench-2-1/pull/45#issuecomment-4918390916"
+          },
+          "submission": {
+            "label": "#45",
+            "url": "https://github.com/harbor-framework/terminal-bench-2-1/pull/45"
+          },
+          "official_detail_url": "https://hub.harborframework.com/datasets/terminal-bench/terminal-bench-2-1/latest/leaderboards/main/rows/6d091468-3fda-4cbf-ba1c-645b0f522e97"
         },
         {
           "id": "ce0677b9-0fea-46ce-b8de-893c4d68e77a",
@@ -108,6 +149,7 @@
           },
           "thinking_level": "high",
           "accuracy": 80.45,
+          "accuracy_stderr": 1.16,
           "accuracy_ci95_half_width": 2.27,
           "display_accuracy": "**80.5%** ± 2.3%",
           "release_date": "2026-06-09",
@@ -116,7 +158,26 @@
           "display_total_tokens": "71.4M",
           "total_cost_usd": 438.64,
           "display_cost": "$438.64",
-          "trial_count": 445
+          "trial_count": 445,
+          "pass_at_2": 0.864,
+          "pass_at_3": 0.891,
+          "pass_at_4": 0.9079,
+          "pass_at_5": 0.9213,
+          "successes": null,
+          "uncached_input_tokens": 7874199,
+          "cached_input_tokens": 56146091,
+          "output_tokens": 7412519,
+          "average_trial_duration_seconds": 697.1,
+          "reward_hacks": 0,
+          "display_reward_hacks": {
+            "label": "-0.0%",
+            "url": "https://github.com/harbor-framework/terminal-bench-2-1/pull/78#issuecomment-4920307053"
+          },
+          "submission": {
+            "label": "#78",
+            "url": "https://github.com/harbor-framework/terminal-bench-2-1/pull/78"
+          },
+          "official_detail_url": "https://hub.harborframework.com/datasets/terminal-bench/terminal-bench-2-1/latest/leaderboards/main/rows/ce0677b9-0fea-46ce-b8de-893c4d68e77a"
         },
         {
           "id": "1fe87c62-99ed-477b-9f6c-23ffbabc49f6",
@@ -140,6 +201,7 @@
           },
           "thinking_level": "high",
           "accuracy": 79.33,
+          "accuracy_stderr": 1.46,
           "accuracy_ci95_half_width": 2.86,
           "display_accuracy": "**79.3%** ± 2.9%",
           "release_date": "2026-07-08",
@@ -148,7 +210,26 @@
           "display_total_tokens": "178.4M",
           "total_cost_usd": 134.09,
           "display_cost": "$134.09",
-          "trial_count": 445
+          "trial_count": 445,
+          "pass_at_2": 0.8888,
+          "pass_at_3": 0.9236,
+          "pass_at_4": 0.9416,
+          "pass_at_5": 0.9551,
+          "successes": null,
+          "uncached_input_tokens": 12570445,
+          "cached_input_tokens": 161079936,
+          "output_tokens": 4734062,
+          "average_trial_duration_seconds": 443,
+          "reward_hacks": 8.99,
+          "display_reward_hacks": {
+            "label": "-9.0%",
+            "url": "https://github.com/harbor-framework/terminal-bench-2-1/pull/86#issuecomment-4922002821"
+          },
+          "submission": {
+            "label": "#86",
+            "url": "https://github.com/harbor-framework/terminal-bench-2-1/pull/86"
+          },
+          "official_detail_url": "https://hub.harborframework.com/datasets/terminal-bench/terminal-bench-2-1/latest/leaderboards/main/rows/1fe87c62-99ed-477b-9f6c-23ffbabc49f6"
         },
         {
           "id": "dcd48d03-9df9-46ab-bc4c-ade6dc35b8da",
@@ -172,6 +253,7 @@
           },
           "thinking_level": "high",
           "accuracy": 78.88,
+          "accuracy_stderr": 1.31,
           "accuracy_ci95_half_width": 2.57,
           "display_accuracy": "**78.9%** ± 2.6%",
           "release_date": "2026-05-28",
@@ -180,7 +262,26 @@
           "display_total_tokens": "182.9M",
           "total_cost_usd": 286.94,
           "display_cost": "$286.94",
-          "trial_count": 445
+          "trial_count": 445,
+          "pass_at_2": 0.8652,
+          "pass_at_3": 0.9011,
+          "pass_at_4": 0.9258,
+          "pass_at_5": 0.9438,
+          "successes": null,
+          "uncached_input_tokens": 12873472,
+          "cached_input_tokens": 161931526,
+          "output_tokens": 8089069,
+          "average_trial_duration_seconds": 551.4,
+          "reward_hacks": 0,
+          "display_reward_hacks": {
+            "label": "-0.0%",
+            "url": "https://github.com/harbor-framework/terminal-bench-2-1/pull/92#issuecomment-4927161895"
+          },
+          "submission": {
+            "label": "#92",
+            "url": "https://github.com/harbor-framework/terminal-bench-2-1/pull/92"
+          },
+          "official_detail_url": "https://hub.harborframework.com/datasets/terminal-bench/terminal-bench-2-1/latest/leaderboards/main/rows/dcd48d03-9df9-46ab-bc4c-ade6dc35b8da"
         },
         {
           "id": "23ab6a14-4b2d-461d-9171-f8109f5692f1",
@@ -204,6 +305,7 @@
           },
           "thinking_level": "max",
           "accuracy": 78.43,
+          "accuracy_stderr": 1.25,
           "accuracy_ci95_half_width": 2.45,
           "display_accuracy": "**78.4%** ± 2.5%",
           "release_date": "2026-06-26",
@@ -212,7 +314,26 @@
           "display_total_tokens": "902.6M",
           "total_cost_usd": 421.15,
           "display_cost": "$421.15",
-          "trial_count": 445
+          "trial_count": 445,
+          "pass_at_2": 0.8539,
+          "pass_at_3": 0.8753,
+          "pass_at_4": 0.8876,
+          "pass_at_5": 0.8989,
+          "successes": null,
+          "uncached_input_tokens": 29803660,
+          "cached_input_tokens": 864130644,
+          "output_tokens": 8707506,
+          "average_trial_duration_seconds": 432.8,
+          "reward_hacks": 0.22,
+          "display_reward_hacks": {
+            "label": "-0.2%",
+            "url": "https://github.com/harbor-framework/terminal-bench-2-1/pull/115#issuecomment-4949810903"
+          },
+          "submission": {
+            "label": "#115",
+            "url": "https://github.com/harbor-framework/terminal-bench-2-1/pull/115"
+          },
+          "official_detail_url": "https://hub.harborframework.com/datasets/terminal-bench/terminal-bench-2-1/latest/leaderboards/main/rows/23ab6a14-4b2d-461d-9171-f8109f5692f1"
         },
         {
           "id": "db1f499b-d948-43d2-9aaf-27cfe97f6caf",
@@ -236,6 +357,7 @@
           },
           "thinking_level": "xhigh",
           "accuracy": 77.98,
+          "accuracy_stderr": 1.22,
           "accuracy_ci95_half_width": 2.39,
           "display_accuracy": "**78.0%** ± 2.4%",
           "release_date": "2026-04-23",
@@ -244,7 +366,26 @@
           "display_total_tokens": "92.2M",
           "total_cost_usd": 493.85,
           "display_cost": "$493.85",
-          "trial_count": 445
+          "trial_count": 445,
+          "pass_at_2": 0.8461,
+          "pass_at_3": 0.864,
+          "pass_at_4": 0.8719,
+          "pass_at_5": 0.8764,
+          "successes": null,
+          "uncached_input_tokens": 81469069,
+          "cached_input_tokens": 0,
+          "output_tokens": 10768129,
+          "average_trial_duration_seconds": 726.7,
+          "reward_hacks": 0.22,
+          "display_reward_hacks": {
+            "label": "-0.2%",
+            "url": "https://github.com/harbor-framework/terminal-bench-2-1/pull/47#issuecomment-4918386361"
+          },
+          "submission": {
+            "label": "#47",
+            "url": "https://github.com/harbor-framework/terminal-bench-2-1/pull/47"
+          },
+          "official_detail_url": "https://hub.harborframework.com/datasets/terminal-bench/terminal-bench-2-1/latest/leaderboards/main/rows/db1f499b-d948-43d2-9aaf-27cfe97f6caf"
         },
         {
           "id": "64890377-54de-4cc2-bcd7-e76610983482",
@@ -268,6 +409,7 @@
           },
           "thinking_level": "xhigh",
           "accuracy": 76.18,
+          "accuracy_stderr": 1.23,
           "accuracy_ci95_half_width": 2.41,
           "display_accuracy": "**76.2%** ± 2.4%",
           "release_date": "2026-07-09",
@@ -276,7 +418,26 @@
           "display_total_tokens": "946.0M",
           "total_cost_usd": 198.05,
           "display_cost": "$198.05",
-          "trial_count": 445
+          "trial_count": 445,
+          "pass_at_2": 0.8292,
+          "pass_at_3": 0.8697,
+          "pass_at_4": 0.8966,
+          "pass_at_5": 0.9101,
+          "successes": null,
+          "uncached_input_tokens": 60996,
+          "cached_input_tokens": 932239373,
+          "output_tokens": 13679953,
+          "average_trial_duration_seconds": 687,
+          "reward_hacks": 0,
+          "display_reward_hacks": {
+            "label": "-0.0%",
+            "url": "https://github.com/harbor-framework/terminal-bench-2-1/pull/94#issuecomment-4928238218"
+          },
+          "submission": {
+            "label": "#94",
+            "url": "https://github.com/harbor-framework/terminal-bench-2-1/pull/94"
+          },
+          "official_detail_url": "https://hub.harborframework.com/datasets/terminal-bench/terminal-bench-2-1/latest/leaderboards/main/rows/64890377-54de-4cc2-bcd7-e76610983482"
         },
         {
           "id": "e5f3feda-4629-46ba-963f-300dcf7c2a4c",
@@ -300,6 +461,7 @@
           },
           "thinking_level": "max",
           "accuracy": 75.73,
+          "accuracy_stderr": 1.32,
           "accuracy_ci95_half_width": 2.59,
           "display_accuracy": "**75.7%** ± 2.6%",
           "release_date": "2026-06-26",
@@ -308,7 +470,26 @@
           "display_total_tokens": "1.4B",
           "total_cost_usd": 241.45,
           "display_cost": "$241.45",
-          "trial_count": 445
+          "trial_count": 445,
+          "pass_at_2": 0.8348,
+          "pass_at_3": 0.864,
+          "pass_at_4": 0.8787,
+          "pass_at_5": 0.8876,
+          "successes": null,
+          "uncached_input_tokens": 40023670,
+          "cached_input_tokens": 1376567117,
+          "output_tokens": 10628905,
+          "average_trial_duration_seconds": 457.3,
+          "reward_hacks": 0.9,
+          "display_reward_hacks": {
+            "label": "-0.9%",
+            "url": "https://github.com/harbor-framework/terminal-bench-2-1/pull/112#issuecomment-4948932571"
+          },
+          "submission": {
+            "label": "#112",
+            "url": "https://github.com/harbor-framework/terminal-bench-2-1/pull/112"
+          },
+          "official_detail_url": "https://hub.harborframework.com/datasets/terminal-bench/terminal-bench-2-1/latest/leaderboards/main/rows/e5f3feda-4629-46ba-963f-300dcf7c2a4c"
         },
         {
           "id": "d7540f21-67af-4b3a-ad31-b81b85fef895",
@@ -332,6 +513,7 @@
           },
           "thinking_level": "high",
           "accuracy": 74.61,
+          "accuracy_stderr": 1.64,
           "accuracy_ci95_half_width": 3.21,
           "display_accuracy": "**74.6%** ± 3.2%",
           "release_date": "2026-06-30",
@@ -340,7 +522,26 @@
           "display_total_tokens": "558.6M",
           "total_cost_usd": 288.18,
           "display_cost": "$288.18",
-          "trial_count": 445
+          "trial_count": 445,
+          "pass_at_2": 0.8652,
+          "pass_at_3": 0.8955,
+          "pass_at_4": 0.9101,
+          "pass_at_5": 0.9213,
+          "successes": null,
+          "uncached_input_tokens": 20137729,
+          "cached_input_tokens": 527220403,
+          "output_tokens": 11216322,
+          "average_trial_duration_seconds": 629.6,
+          "reward_hacks": 0.67,
+          "display_reward_hacks": {
+            "label": "-0.7%",
+            "url": "https://github.com/harbor-framework/terminal-bench-2-1/pull/98#issuecomment-4929504188"
+          },
+          "submission": {
+            "label": "#98",
+            "url": "https://github.com/harbor-framework/terminal-bench-2-1/pull/98"
+          },
+          "official_detail_url": "https://hub.harborframework.com/datasets/terminal-bench/terminal-bench-2-1/latest/leaderboards/main/rows/d7540f21-67af-4b3a-ad31-b81b85fef895"
         },
         {
           "id": "b03a8a69-fea8-42dd-a4fb-96a6a39e6857",
@@ -364,6 +565,7 @@
           },
           "thinking_level": "high",
           "accuracy": 73.93,
+          "accuracy_stderr": 1.29,
           "accuracy_ci95_half_width": 2.53,
           "display_accuracy": "**73.9%** ± 2.5%",
           "release_date": "2025-11-18",
@@ -372,7 +574,26 @@
           "display_total_tokens": "128.5M",
           "total_cost_usd": 224.44,
           "display_cost": "$224.44",
-          "trial_count": 445
+          "trial_count": 445,
+          "pass_at_2": 0.8135,
+          "pass_at_3": 0.8472,
+          "pass_at_4": 0.8652,
+          "pass_at_5": 0.8764,
+          "successes": null,
+          "uncached_input_tokens": 26094316,
+          "cached_input_tokens": 89495525,
+          "output_tokens": 12862730,
+          "average_trial_duration_seconds": 547.8,
+          "reward_hacks": 0.45,
+          "display_reward_hacks": {
+            "label": "-0.5%",
+            "url": "https://github.com/harbor-framework/terminal-bench-2-1/pull/48#issuecomment-4918384699"
+          },
+          "submission": {
+            "label": "#48",
+            "url": "https://github.com/harbor-framework/terminal-bench-2-1/pull/48"
+          },
+          "official_detail_url": "https://hub.harborframework.com/datasets/terminal-bench/terminal-bench-2-1/latest/leaderboards/main/rows/b03a8a69-fea8-42dd-a4fb-96a6a39e6857"
         },
         {
           "id": "fdb8393b-5b29-4645-b784-84f52cf31722",
@@ -396,6 +617,7 @@
           },
           "thinking_level": "max",
           "accuracy": 68.9,
+          "accuracy_stderr": 1.41,
           "accuracy_ci95_half_width": 2.76,
           "display_accuracy": "**68.9%** ± 2.8%",
           "release_date": "2026-04-16",
@@ -404,7 +626,26 @@
           "display_total_tokens": "853.4M",
           "total_cost_usd": 599.52,
           "display_cost": "$599.52",
-          "trial_count": 445
+          "trial_count": 445,
+          "pass_at_2": 0.7801,
+          "pass_at_3": 0.8124,
+          "pass_at_4": 0.83,
+          "pass_at_5": 0.8408,
+          "successes": null,
+          "uncached_input_tokens": 31873388,
+          "cached_input_tokens": 806584422,
+          "output_tokens": 14896548,
+          "average_trial_duration_seconds": 799.6,
+          "reward_hacks": 0.45,
+          "display_reward_hacks": {
+            "label": "-0.5%",
+            "url": "https://github.com/harbor-framework/terminal-bench-2-1/pull/44#issuecomment-4911408552"
+          },
+          "submission": {
+            "label": "#44",
+            "url": "https://github.com/harbor-framework/terminal-bench-2-1/pull/44"
+          },
+          "official_detail_url": "https://hub.harborframework.com/datasets/terminal-bench/terminal-bench-2-1/latest/leaderboards/main/rows/fdb8393b-5b29-4645-b784-84f52cf31722"
         },
         {
           "id": "f867b631-36c8-476e-aa2f-96007ae70da0",
@@ -428,6 +669,7 @@
           },
           "thinking_level": "max",
           "accuracy": 66.07,
+          "accuracy_stderr": 1.37,
           "accuracy_ci95_half_width": 2.69,
           "display_accuracy": "**66.1%** ± 2.7%",
           "release_date": "2026-04-16",
@@ -436,7 +678,26 @@
           "display_total_tokens": "365.3M",
           "total_cost_usd": 582.26,
           "display_cost": "$582.26",
-          "trial_count": 445
+          "trial_count": 445,
+          "pass_at_2": 0.7438,
+          "pass_at_3": 0.782,
+          "pass_at_4": 0.809,
+          "pass_at_5": 0.8315,
+          "successes": null,
+          "uncached_input_tokens": 16646631,
+          "cached_input_tokens": 336161721,
+          "output_tokens": 12451178,
+          "average_trial_duration_seconds": 1042.7,
+          "reward_hacks": 0,
+          "display_reward_hacks": {
+            "label": "-0.0%",
+            "url": "https://github.com/harbor-framework/terminal-bench-2-1/pull/46#issuecomment-4918387185"
+          },
+          "submission": {
+            "label": "#46",
+            "url": "https://github.com/harbor-framework/terminal-bench-2-1/pull/46"
+          },
+          "official_detail_url": "https://hub.harborframework.com/datasets/terminal-bench/terminal-bench-2-1/latest/leaderboards/main/rows/f867b631-36c8-476e-aa2f-96007ae70da0"
         },
         {
           "id": "660c330f-9cd8-4ce7-8890-3ce573d038a0",
@@ -460,6 +721,7 @@
           },
           "thinking_level": "high",
           "accuracy": 65.84,
+          "accuracy_stderr": 1.38,
           "accuracy_ci95_half_width": 2.7,
           "display_accuracy": "**65.8%** ± 2.7%",
           "release_date": "2025-11-18",
@@ -468,7 +730,26 @@
           "display_total_tokens": "384.0M",
           "total_cost_usd": 247.76,
           "display_cost": "$247.76",
-          "trial_count": 445
+          "trial_count": 445,
+          "pass_at_2": 0.7427,
+          "pass_at_3": 0.7831,
+          "pass_at_4": 0.8067,
+          "pass_at_5": 0.8202,
+          "successes": null,
+          "uncached_input_tokens": 47653156,
+          "cached_input_tokens": 329123284,
+          "output_tokens": 7219388,
+          "average_trial_duration_seconds": 436.6,
+          "reward_hacks": 0.45,
+          "display_reward_hacks": {
+            "label": "-0.5%",
+            "url": "https://github.com/harbor-framework/terminal-bench-2-1/pull/66#issuecomment-4919518737"
+          },
+          "submission": {
+            "label": "#66",
+            "url": "https://github.com/harbor-framework/terminal-bench-2-1/pull/66"
+          },
+          "official_detail_url": "https://hub.harborframework.com/datasets/terminal-bench/terminal-bench-2-1/latest/leaderboards/main/rows/660c330f-9cd8-4ce7-8890-3ce573d038a0"
         },
         {
           "id": "1095d399-9d66-44f4-8adc-e11fbb407a68",
@@ -492,6 +773,7 @@
           },
           "thinking_level": "high",
           "accuracy": 65.84,
+          "accuracy_stderr": 1.67,
           "accuracy_ci95_half_width": 3.27,
           "display_accuracy": "**65.8%** ± 3.3%",
           "release_date": "2026-02-19",
@@ -500,7 +782,26 @@
           "display_total_tokens": "417.6M",
           "total_cost_usd": 236.49,
           "display_cost": "$236.49",
-          "trial_count": 445
+          "trial_count": 445,
+          "pass_at_2": 0.782,
+          "pass_at_3": 0.8315,
+          "pass_at_4": 0.8584,
+          "pass_at_5": 0.8764,
+          "successes": null,
+          "uncached_input_tokens": 44843158,
+          "cached_input_tokens": 366583353,
+          "output_tokens": 6123596,
+          "average_trial_duration_seconds": 652.9,
+          "reward_hacks": 0.22,
+          "display_reward_hacks": {
+            "label": "-0.2%",
+            "url": "https://github.com/harbor-framework/terminal-bench-2-1/pull/68#issuecomment-4919526326"
+          },
+          "submission": {
+            "label": "#68",
+            "url": "https://github.com/harbor-framework/terminal-bench-2-1/pull/68"
+          },
+          "official_detail_url": "https://hub.harborframework.com/datasets/terminal-bench/terminal-bench-2-1/latest/leaderboards/main/rows/1095d399-9d66-44f4-8adc-e11fbb407a68"
         },
         {
           "id": "360942d9-d27b-4f7e-bcf6-e0ea9cdcdee8",
@@ -524,6 +825,7 @@
           },
           "thinking_level": "high",
           "accuracy": 65.62,
+          "accuracy_stderr": 1.65,
           "accuracy_ci95_half_width": 3.23,
           "display_accuracy": "**65.6%** ± 3.2%",
           "release_date": "2026-02-19",
@@ -532,7 +834,26 @@
           "display_total_tokens": "136.7M",
           "total_cost_usd": 229.99,
           "display_cost": "$229.99",
-          "trial_count": 445
+          "trial_count": 445,
+          "pass_at_2": 0.7775,
+          "pass_at_3": 0.8225,
+          "pass_at_4": 0.8472,
+          "pass_at_5": 0.8652,
+          "successes": null,
+          "uncached_input_tokens": 27525560,
+          "cached_input_tokens": 96199940,
+          "output_tokens": 12935831,
+          "average_trial_duration_seconds": 672.8,
+          "reward_hacks": 0.45,
+          "display_reward_hacks": {
+            "label": "-0.5%",
+            "url": "https://github.com/harbor-framework/terminal-bench-2-1/pull/69#issuecomment-4919517886"
+          },
+          "submission": {
+            "label": "#69",
+            "url": "https://github.com/harbor-framework/terminal-bench-2-1/pull/69"
+          },
+          "official_detail_url": "https://hub.harborframework.com/datasets/terminal-bench/terminal-bench-2-1/latest/leaderboards/main/rows/360942d9-d27b-4f7e-bcf6-e0ea9cdcdee8"
         },
         {
           "id": "ef2b00eb-f360-41e6-8c97-23c4d762d06b",
@@ -556,6 +877,7 @@
           },
           "thinking_level": "max",
           "accuracy": 58.65,
+          "accuracy_stderr": 1.24,
           "accuracy_ci95_half_width": 2.43,
           "display_accuracy": "**58.6%** ± 2.4%",
           "release_date": "2026-03-27",
@@ -564,7 +886,26 @@
           "display_total_tokens": "398.8M",
           "total_cost_usd": 277.14,
           "display_cost": "$277.14",
-          "trial_count": 445
+          "trial_count": 445,
+          "pass_at_2": 0.6551,
+          "pass_at_3": 0.6899,
+          "pass_at_4": 0.7146,
+          "pass_at_5": 0.7303,
+          "successes": null,
+          "uncached_input_tokens": 13570352,
+          "cached_input_tokens": 374577728,
+          "output_tokens": 10635681,
+          "average_trial_duration_seconds": 944.6,
+          "reward_hacks": 0,
+          "display_reward_hacks": {
+            "label": "-0.0%",
+            "url": "https://github.com/harbor-framework/terminal-bench-2-1/pull/67#issuecomment-4919593365"
+          },
+          "submission": {
+            "label": "#67",
+            "url": "https://github.com/harbor-framework/terminal-bench-2-1/pull/67"
+          },
+          "official_detail_url": "https://hub.harborframework.com/datasets/terminal-bench/terminal-bench-2-1/latest/leaderboards/main/rows/ef2b00eb-f360-41e6-8c97-23c4d762d06b"
         }
       ]
     },
@@ -575,7 +916,8 @@
       "official_url": "https://www.tbench.ai/?version=3.0",
       "source_api": {
         "package": "terminal-bench/terminal-bench",
-        "leaderboard": "3-0-0"
+        "leaderboard": "3-0-0",
+        "dataset_version": "1"
       },
       "snapshot_updated_at": "2026-08-29T00:04:10.421509+00:00",
       "result_count": 12,
@@ -609,6 +951,7 @@
           },
           "thinking_level": "max",
           "accuracy": 42.7,
+          "accuracy_stderr": 1.58,
           "accuracy_ci95_half_width": 3.1,
           "display_accuracy": "**42.7%** ± 3.1%",
           "release_date": "2026-07-24",
@@ -617,7 +960,20 @@
           "display_total_tokens": "7.3B",
           "total_cost_usd": 5818.2,
           "display_cost": "$5.8k",
-          "trial_count": 370
+          "trial_count": 370,
+          "pass_at_2": null,
+          "pass_at_3": null,
+          "pass_at_4": null,
+          "pass_at_5": null,
+          "successes": null,
+          "uncached_input_tokens": null,
+          "cached_input_tokens": null,
+          "output_tokens": null,
+          "average_trial_duration_seconds": null,
+          "reward_hacks": null,
+          "display_reward_hacks": null,
+          "submission": null,
+          "official_detail_url": "https://hub.harborframework.com/datasets/terminal-bench/terminal-bench/1/leaderboards/3-0-0/rows/b26434fb-f08b-4f95-bcc5-ce0c7310e047"
         },
         {
           "id": "b8d9ccae-23a2-485e-b9f1-a7654c79c560",
@@ -641,6 +997,7 @@
           },
           "thinking_level": "max",
           "accuracy": 34.59,
+          "accuracy_stderr": 1.58,
           "accuracy_ci95_half_width": 3.1,
           "display_accuracy": "**34.6%** ± 3.1%",
           "release_date": "2026-07-09",
@@ -649,7 +1006,20 @@
           "display_total_tokens": "5.8B",
           "total_cost_usd": 3950.9,
           "display_cost": "$4.0k",
-          "trial_count": 370
+          "trial_count": 370,
+          "pass_at_2": null,
+          "pass_at_3": null,
+          "pass_at_4": null,
+          "pass_at_5": null,
+          "successes": null,
+          "uncached_input_tokens": null,
+          "cached_input_tokens": null,
+          "output_tokens": null,
+          "average_trial_duration_seconds": null,
+          "reward_hacks": null,
+          "display_reward_hacks": null,
+          "submission": null,
+          "official_detail_url": "https://hub.harborframework.com/datasets/terminal-bench/terminal-bench/1/leaderboards/3-0-0/rows/b8d9ccae-23a2-485e-b9f1-a7654c79c560"
         },
         {
           "id": "b8ed61a2-838a-495f-8d24-3ebffb9be16b",
@@ -673,6 +1043,7 @@
           },
           "thinking_level": "max",
           "accuracy": 34.05,
+          "accuracy_stderr": 1.71,
           "accuracy_ci95_half_width": 3.35,
           "display_accuracy": "**34.0%** ± 3.4%",
           "release_date": "2026-06-09",
@@ -681,7 +1052,20 @@
           "display_total_tokens": "3.6B",
           "total_cost_usd": 6480.94,
           "display_cost": "$6.5k",
-          "trial_count": 370
+          "trial_count": 370,
+          "pass_at_2": null,
+          "pass_at_3": null,
+          "pass_at_4": null,
+          "pass_at_5": null,
+          "successes": null,
+          "uncached_input_tokens": null,
+          "cached_input_tokens": null,
+          "output_tokens": null,
+          "average_trial_duration_seconds": null,
+          "reward_hacks": null,
+          "display_reward_hacks": null,
+          "submission": null,
+          "official_detail_url": "https://hub.harborframework.com/datasets/terminal-bench/terminal-bench/1/leaderboards/3-0-0/rows/b8ed61a2-838a-495f-8d24-3ebffb9be16b"
         },
         {
           "id": "d5152814-6bf2-473f-be57-b1908ed480a9",
@@ -705,6 +1089,7 @@
           },
           "thinking_level": "max",
           "accuracy": 32.43,
+          "accuracy_stderr": 1.46,
           "accuracy_ci95_half_width": 2.86,
           "display_accuracy": "**32.4%** ± 2.9%",
           "release_date": "2026-08-14",
@@ -713,7 +1098,20 @@
           "display_total_tokens": "5.6B",
           "total_cost_usd": 1771.02,
           "display_cost": "$1.8k",
-          "trial_count": 370
+          "trial_count": 370,
+          "pass_at_2": null,
+          "pass_at_3": null,
+          "pass_at_4": null,
+          "pass_at_5": null,
+          "successes": null,
+          "uncached_input_tokens": null,
+          "cached_input_tokens": null,
+          "output_tokens": null,
+          "average_trial_duration_seconds": null,
+          "reward_hacks": null,
+          "display_reward_hacks": null,
+          "submission": null,
+          "official_detail_url": "https://hub.harborframework.com/datasets/terminal-bench/terminal-bench/1/leaderboards/3-0-0/rows/d5152814-6bf2-473f-be57-b1908ed480a9"
         },
         {
           "id": "61adb66e-1cf1-4194-b68d-703554d21193",
@@ -737,6 +1135,7 @@
           },
           "thinking_level": "high",
           "accuracy": 26.49,
+          "accuracy_stderr": 1.49,
           "accuracy_ci95_half_width": 2.92,
           "display_accuracy": "**26.5%** ± 2.9%",
           "release_date": "2026-08-12",
@@ -745,7 +1144,20 @@
           "display_total_tokens": "2.9B",
           "total_cost_usd": 2095.44,
           "display_cost": "$2.1k",
-          "trial_count": 370
+          "trial_count": 370,
+          "pass_at_2": null,
+          "pass_at_3": null,
+          "pass_at_4": null,
+          "pass_at_5": null,
+          "successes": null,
+          "uncached_input_tokens": null,
+          "cached_input_tokens": null,
+          "output_tokens": null,
+          "average_trial_duration_seconds": null,
+          "reward_hacks": null,
+          "display_reward_hacks": null,
+          "submission": null,
+          "official_detail_url": "https://hub.harborframework.com/datasets/terminal-bench/terminal-bench/1/leaderboards/3-0-0/rows/61adb66e-1cf1-4194-b68d-703554d21193"
         },
         {
           "id": "e728cc33-0f2b-4eda-9749-a46be31c01bb",
@@ -769,6 +1181,7 @@
           },
           "thinking_level": "max",
           "accuracy": 21.08,
+          "accuracy_stderr": 1.55,
           "accuracy_ci95_half_width": 3.04,
           "display_accuracy": "**21.1%** ± 3.0%",
           "release_date": "2026-05-28",
@@ -777,7 +1190,20 @@
           "display_total_tokens": "5.2B",
           "total_cost_usd": 5214.05,
           "display_cost": "$5.2k",
-          "trial_count": 370
+          "trial_count": 370,
+          "pass_at_2": null,
+          "pass_at_3": null,
+          "pass_at_4": null,
+          "pass_at_5": null,
+          "successes": null,
+          "uncached_input_tokens": null,
+          "cached_input_tokens": null,
+          "output_tokens": null,
+          "average_trial_duration_seconds": null,
+          "reward_hacks": null,
+          "display_reward_hacks": null,
+          "submission": null,
+          "official_detail_url": "https://hub.harborframework.com/datasets/terminal-bench/terminal-bench/1/leaderboards/3-0-0/rows/e728cc33-0f2b-4eda-9749-a46be31c01bb"
         },
         {
           "id": "9e11b624-6922-4ac8-a26f-c38146b957d9",
@@ -801,6 +1227,7 @@
           },
           "thinking_level": "max",
           "accuracy": 20.81,
+          "accuracy_stderr": 1.4,
           "accuracy_ci95_half_width": 2.74,
           "display_accuracy": "**20.8%** ± 2.7%",
           "release_date": "2026-07-09",
@@ -809,7 +1236,20 @@
           "display_total_tokens": "7.0B",
           "total_cost_usd": 2484.52,
           "display_cost": "$2.5k",
-          "trial_count": 370
+          "trial_count": 370,
+          "pass_at_2": null,
+          "pass_at_3": null,
+          "pass_at_4": null,
+          "pass_at_5": null,
+          "successes": null,
+          "uncached_input_tokens": null,
+          "cached_input_tokens": null,
+          "output_tokens": null,
+          "average_trial_duration_seconds": null,
+          "reward_hacks": null,
+          "display_reward_hacks": null,
+          "submission": null,
+          "official_detail_url": "https://hub.harborframework.com/datasets/terminal-bench/terminal-bench/1/leaderboards/3-0-0/rows/9e11b624-6922-4ac8-a26f-c38146b957d9"
         },
         {
           "id": "7ebd2bd7-9a4c-4c62-bccd-843908653c16",
@@ -833,6 +1273,7 @@
           },
           "thinking_level": null,
           "accuracy": 18.65,
+          "accuracy_stderr": 1.52,
           "accuracy_ci95_half_width": 2.98,
           "display_accuracy": "**18.6%** ± 3.0%",
           "release_date": "2026-07-08",
@@ -841,7 +1282,20 @@
           "display_total_tokens": "3.6B",
           "total_cost_usd": 7214.89,
           "display_cost": "$7.2k",
-          "trial_count": 370
+          "trial_count": 370,
+          "pass_at_2": null,
+          "pass_at_3": null,
+          "pass_at_4": null,
+          "pass_at_5": null,
+          "successes": null,
+          "uncached_input_tokens": null,
+          "cached_input_tokens": null,
+          "output_tokens": null,
+          "average_trial_duration_seconds": null,
+          "reward_hacks": null,
+          "display_reward_hacks": null,
+          "submission": null,
+          "official_detail_url": "https://hub.harborframework.com/datasets/terminal-bench/terminal-bench/1/leaderboards/3-0-0/rows/7ebd2bd7-9a4c-4c62-bccd-843908653c16"
         },
         {
           "id": "e660765d-7b96-48f7-97ed-3c2abe17dbb5",
@@ -865,6 +1319,7 @@
           },
           "thinking_level": "xhigh",
           "accuracy": 15.68,
+          "accuracy_stderr": 1.47,
           "accuracy_ci95_half_width": 2.88,
           "display_accuracy": "**15.7%** ± 2.9%",
           "release_date": "2026-07-08",
@@ -873,7 +1328,20 @@
           "display_total_tokens": "1.2B",
           "total_cost_usd": 766.02,
           "display_cost": "$766.02",
-          "trial_count": 370
+          "trial_count": 370,
+          "pass_at_2": null,
+          "pass_at_3": null,
+          "pass_at_4": null,
+          "pass_at_5": null,
+          "successes": null,
+          "uncached_input_tokens": null,
+          "cached_input_tokens": null,
+          "output_tokens": null,
+          "average_trial_duration_seconds": null,
+          "reward_hacks": null,
+          "display_reward_hacks": null,
+          "submission": null,
+          "official_detail_url": "https://hub.harborframework.com/datasets/terminal-bench/terminal-bench/1/leaderboards/3-0-0/rows/e660765d-7b96-48f7-97ed-3c2abe17dbb5"
         },
         {
           "id": "a945badd-d54b-4c45-965d-aa35a042c27e",
@@ -897,6 +1365,7 @@
           },
           "thinking_level": "max",
           "accuracy": 14.59,
+          "accuracy_stderr": 1.5,
           "accuracy_ci95_half_width": 2.94,
           "display_accuracy": "**14.6%** ± 2.9%",
           "release_date": "2026-06-30",
@@ -905,7 +1374,20 @@
           "display_total_tokens": "17.9B",
           "total_cost_usd": 6890.54,
           "display_cost": "$6.9k",
-          "trial_count": 370
+          "trial_count": 370,
+          "pass_at_2": null,
+          "pass_at_3": null,
+          "pass_at_4": null,
+          "pass_at_5": null,
+          "successes": null,
+          "uncached_input_tokens": null,
+          "cached_input_tokens": null,
+          "output_tokens": null,
+          "average_trial_duration_seconds": null,
+          "reward_hacks": null,
+          "display_reward_hacks": null,
+          "submission": null,
+          "official_detail_url": "https://hub.harborframework.com/datasets/terminal-bench/terminal-bench/1/leaderboards/3-0-0/rows/a945badd-d54b-4c45-965d-aa35a042c27e"
         },
         {
           "id": "5b10f961-312a-48ae-83d9-d5ce4de60a0e",
@@ -929,6 +1411,7 @@
           },
           "thinking_level": "max",
           "accuracy": 14.32,
+          "accuracy_stderr": 1.25,
           "accuracy_ci95_half_width": 2.45,
           "display_accuracy": "**14.3%** ± 2.5%",
           "release_date": "2026-07-09",
@@ -937,7 +1420,20 @@
           "display_total_tokens": "11.9B",
           "total_cost_usd": 1597.5,
           "display_cost": "$1.6k",
-          "trial_count": 370
+          "trial_count": 370,
+          "pass_at_2": null,
+          "pass_at_3": null,
+          "pass_at_4": null,
+          "pass_at_5": null,
+          "successes": null,
+          "uncached_input_tokens": null,
+          "cached_input_tokens": null,
+          "output_tokens": null,
+          "average_trial_duration_seconds": null,
+          "reward_hacks": null,
+          "display_reward_hacks": null,
+          "submission": null,
+          "official_detail_url": "https://hub.harborframework.com/datasets/terminal-bench/terminal-bench/1/leaderboards/3-0-0/rows/5b10f961-312a-48ae-83d9-d5ce4de60a0e"
         },
         {
           "id": "b3c7db0e-0289-4fa5-ac3a-da600b15a72a",
@@ -961,6 +1457,7 @@
           },
           "thinking_level": "max",
           "accuracy": 4.59,
+          "accuracy_stderr": 0.97,
           "accuracy_ci95_half_width": 1.9,
           "display_accuracy": "**4.6%** ± 1.9%",
           "release_date": "2026-06-13",
@@ -969,7 +1466,20 @@
           "display_total_tokens": "3.3B",
           "total_cost_usd": 3401.76,
           "display_cost": "$3.4k",
-          "trial_count": 370
+          "trial_count": 370,
+          "pass_at_2": null,
+          "pass_at_3": null,
+          "pass_at_4": null,
+          "pass_at_5": null,
+          "successes": null,
+          "uncached_input_tokens": null,
+          "cached_input_tokens": null,
+          "output_tokens": null,
+          "average_trial_duration_seconds": null,
+          "reward_hacks": null,
+          "display_reward_hacks": null,
+          "submission": null,
+          "official_detail_url": "https://hub.harborframework.com/datasets/terminal-bench/terminal-bench/1/leaderboards/3-0-0/rows/b3c7db0e-0289-4fa5-ac3a-da600b15a72a"
         }
       ]
     },
@@ -980,7 +1490,8 @@
       "official_url": "https://www.tbench.ai/?version=4.0",
       "source_api": {
         "package": "terminal-bench/terminal-bench",
-        "leaderboard": "4-0-0"
+        "leaderboard": "4-0-0",
+        "dataset_version": "4"
       },
       "snapshot_updated_at": "2026-08-29T01:40:34.831678+00:00",
       "result_count": 10,
@@ -1014,6 +1525,7 @@
           },
           "thinking_level": "max",
           "accuracy": 51.82,
+          "accuracy_stderr": null,
           "accuracy_ci95_half_width": 3.39,
           "display_accuracy": "**51.8%** ± 3.4%",
           "release_date": "2026-07-24",
@@ -1022,7 +1534,20 @@
           "display_total_tokens": "6.5B",
           "total_cost_usd": 5969.11,
           "display_cost": "$6.0k",
-          "trial_count": 330
+          "trial_count": 330,
+          "pass_at_2": 0.6167,
+          "pass_at_3": 0.6576,
+          "pass_at_4": 0.6818,
+          "pass_at_5": 0.697,
+          "successes": 171,
+          "uncached_input_tokens": 6461135481,
+          "cached_input_tokens": 6271909956,
+          "output_tokens": 66012156,
+          "average_trial_duration_seconds": 4792.8,
+          "reward_hacks": null,
+          "display_reward_hacks": null,
+          "submission": null,
+          "official_detail_url": "https://hub.harborframework.com/datasets/terminal-bench/terminal-bench/4/leaderboards/4-0-0/rows/d71ac3d0-da36-49cb-89d9-323136e77111"
         },
         {
           "id": "36c077e0-4879-4444-b315-8532d66401d6",
@@ -1046,6 +1571,7 @@
           },
           "thinking_level": "max",
           "accuracy": 44.55,
+          "accuracy_stderr": null,
           "accuracy_ci95_half_width": 3.85,
           "display_accuracy": "**44.5%** ± 3.8%",
           "release_date": "2026-06-09",
@@ -1054,7 +1580,20 @@
           "display_total_tokens": "3.8B",
           "total_cost_usd": 7265.01,
           "display_cost": "$7.3k",
-          "trial_count": 330
+          "trial_count": 330,
+          "pass_at_2": 0.5727,
+          "pass_at_3": 0.6318,
+          "pass_at_4": 0.6636,
+          "pass_at_5": 0.6818,
+          "successes": 147,
+          "uncached_input_tokens": 3726600464,
+          "cached_input_tokens": 3564065093,
+          "output_tokens": 58619905,
+          "average_trial_duration_seconds": 4202.8,
+          "reward_hacks": null,
+          "display_reward_hacks": null,
+          "submission": null,
+          "official_detail_url": "https://hub.harborframework.com/datasets/terminal-bench/terminal-bench/4/leaderboards/4-0-0/rows/36c077e0-4879-4444-b315-8532d66401d6"
         },
         {
           "id": "d72e8775-f4f1-4313-99e7-35b1cb499f24",
@@ -1078,6 +1617,7 @@
           },
           "thinking_level": "max",
           "accuracy": 41.82,
+          "accuracy_stderr": null,
           "accuracy_ci95_half_width": 3.23,
           "display_accuracy": "**41.8%** ± 3.2%",
           "release_date": "2026-08-14",
@@ -1086,7 +1626,20 @@
           "display_total_tokens": "8.7B",
           "total_cost_usd": 2727.63,
           "display_cost": "$2.7k",
-          "trial_count": 330
+          "trial_count": 330,
+          "pass_at_2": 0.5076,
+          "pass_at_3": 0.547,
+          "pass_at_4": 0.5667,
+          "pass_at_5": 0.5758,
+          "successes": 138,
+          "uncached_input_tokens": 8608379326,
+          "cached_input_tokens": 8444041600,
+          "output_tokens": 68660047,
+          "average_trial_duration_seconds": 5831,
+          "reward_hacks": null,
+          "display_reward_hacks": null,
+          "submission": null,
+          "official_detail_url": "https://hub.harborframework.com/datasets/terminal-bench/terminal-bench/4/leaderboards/4-0-0/rows/d72e8775-f4f1-4313-99e7-35b1cb499f24"
         },
         {
           "id": "0e349bde-b264-494d-a853-fada9c696192",
@@ -1110,6 +1663,7 @@
           },
           "thinking_level": "max",
           "accuracy": 37.27,
+          "accuracy_stderr": null,
           "accuracy_ci95_half_width": 3.78,
           "display_accuracy": "**37.3%** ± 3.8%",
           "release_date": "2026-06-26",
@@ -1118,7 +1672,20 @@
           "display_total_tokens": "4.4B",
           "total_cost_usd": 2541.7,
           "display_cost": "$2.5k",
-          "trial_count": 330
+          "trial_count": 330,
+          "pass_at_2": 0.4955,
+          "pass_at_3": 0.55,
+          "pass_at_4": 0.5818,
+          "pass_at_5": 0.6061,
+          "successes": 123,
+          "uncached_input_tokens": 4386497554,
+          "cached_input_tokens": 4316454466,
+          "output_tokens": 23451415,
+          "average_trial_duration_seconds": 2388.4,
+          "reward_hacks": null,
+          "display_reward_hacks": null,
+          "submission": null,
+          "official_detail_url": "https://hub.harborframework.com/datasets/terminal-bench/terminal-bench/4/leaderboards/4-0-0/rows/0e349bde-b264-494d-a853-fada9c696192"
         },
         {
           "id": "952b4217-421f-4d14-849b-9968fcb2063b",
@@ -1142,6 +1709,7 @@
           },
           "thinking_level": "max",
           "accuracy": 23.64,
+          "accuracy_stderr": null,
           "accuracy_ci95_half_width": 3.56,
           "display_accuracy": "**23.6%** ± 3.6%",
           "release_date": "2026-05-28",
@@ -1150,7 +1718,20 @@
           "display_total_tokens": "6.4B",
           "total_cost_usd": 6481.26,
           "display_cost": "$6.5k",
-          "trial_count": 330
+          "trial_count": 330,
+          "pass_at_2": 0.3455,
+          "pass_at_3": 0.4045,
+          "pass_at_4": 0.4424,
+          "pass_at_5": 0.4697,
+          "successes": 78,
+          "uncached_input_tokens": 6327009817,
+          "cached_input_tokens": 6136275149,
+          "output_tokens": 88813309,
+          "average_trial_duration_seconds": 5163,
+          "reward_hacks": null,
+          "display_reward_hacks": null,
+          "submission": null,
+          "official_detail_url": "https://hub.harborframework.com/datasets/terminal-bench/terminal-bench/4/leaderboards/4-0-0/rows/952b4217-421f-4d14-849b-9968fcb2063b"
         },
         {
           "id": "e53da412-5e92-408c-b369-c767924c7c1c",
@@ -1174,6 +1755,7 @@
           },
           "thinking_level": "max",
           "accuracy": 21.52,
+          "accuracy_stderr": null,
           "accuracy_ci95_half_width": 3.25,
           "display_accuracy": "**21.5%** ± 3.3%",
           "release_date": "2026-06-26",
@@ -1182,7 +1764,20 @@
           "display_total_tokens": "5.7B",
           "total_cost_usd": 1733.52,
           "display_cost": "$1.7k",
-          "trial_count": 330
+          "trial_count": 330,
+          "pass_at_2": 0.3061,
+          "pass_at_3": 0.3636,
+          "pass_at_4": 0.4061,
+          "pass_at_5": 0.4394,
+          "successes": 71,
+          "uncached_input_tokens": 5650580965,
+          "cached_input_tokens": 5560907776,
+          "output_tokens": 33224833,
+          "average_trial_duration_seconds": 2514.6,
+          "reward_hacks": null,
+          "display_reward_hacks": null,
+          "submission": null,
+          "official_detail_url": "https://hub.harborframework.com/datasets/terminal-bench/terminal-bench/4/leaderboards/4-0-0/rows/e53da412-5e92-408c-b369-c767924c7c1c"
         },
         {
           "id": "26354542-edc0-40cd-8f8d-9fe6fbe92ac3",
@@ -1206,6 +1801,7 @@
           },
           "thinking_level": "high",
           "accuracy": 20.3,
+          "accuracy_stderr": null,
           "accuracy_ci95_half_width": 3.09,
           "display_accuracy": "**20.3%** ± 3.1%",
           "release_date": "2026-08-12",
@@ -1214,7 +1810,20 @@
           "display_total_tokens": "4.0B",
           "total_cost_usd": 3591.58,
           "display_cost": "$3.6k",
-          "trial_count": 330
+          "trial_count": 330,
+          "pass_at_2": 0.2848,
+          "pass_at_3": 0.3303,
+          "pass_at_4": 0.3636,
+          "pass_at_5": 0.3939,
+          "successes": 67,
+          "uncached_input_tokens": 3969305207,
+          "cached_input_tokens": 3877638528,
+          "output_tokens": 32618221,
+          "average_trial_duration_seconds": 2351.5,
+          "reward_hacks": null,
+          "display_reward_hacks": null,
+          "submission": null,
+          "official_detail_url": "https://hub.harborframework.com/datasets/terminal-bench/terminal-bench/4/leaderboards/4-0-0/rows/26354542-edc0-40cd-8f8d-9fe6fbe92ac3"
         },
         {
           "id": "51c6d76e-5baa-48c1-97b3-88656c620eef",
@@ -1238,6 +1847,7 @@
           },
           "thinking_level": "max",
           "accuracy": 17.27,
+          "accuracy_stderr": null,
           "accuracy_ci95_half_width": 2.85,
           "display_accuracy": "**17.3%** ± 2.8%",
           "release_date": "2026-06-26",
@@ -1246,7 +1856,20 @@
           "display_total_tokens": "11.6B",
           "total_cost_usd": 346.67,
           "display_cost": "$346.67",
-          "trial_count": 330
+          "trial_count": 330,
+          "pass_at_2": 0.2424,
+          "pass_at_3": 0.2848,
+          "pass_at_4": 0.3121,
+          "pass_at_5": 0.3333,
+          "successes": 57,
+          "uncached_input_tokens": 11496180968,
+          "cached_input_tokens": 11305212851,
+          "output_tokens": 61282672,
+          "average_trial_duration_seconds": 4088.3,
+          "reward_hacks": null,
+          "display_reward_hacks": null,
+          "submission": null,
+          "official_detail_url": "https://hub.harborframework.com/datasets/terminal-bench/terminal-bench/4/leaderboards/4-0-0/rows/51c6d76e-5baa-48c1-97b3-88656c620eef"
         },
         {
           "id": "0eed5a0d-96b6-491b-aeb7-cd5e4700c2d7",
@@ -1270,6 +1893,7 @@
           },
           "thinking_level": "high",
           "accuracy": 12.42,
+          "accuracy_stderr": null,
           "accuracy_ci95_half_width": 2.62,
           "display_accuracy": "**12.4%** ± 2.6%",
           "release_date": "2026-07-16",
@@ -1278,7 +1902,20 @@
           "display_total_tokens": "3.4B",
           "total_cost_usd": 2094.11,
           "display_cost": "$2.1k",
-          "trial_count": 330
+          "trial_count": 330,
+          "pass_at_2": 0.1833,
+          "pass_at_3": 0.2227,
+          "pass_at_4": 0.2515,
+          "pass_at_5": 0.2727,
+          "successes": 41,
+          "uncached_input_tokens": 3370147151,
+          "cached_input_tokens": 3248613376,
+          "output_tokens": 32389328,
+          "average_trial_duration_seconds": 3162.1,
+          "reward_hacks": null,
+          "display_reward_hacks": null,
+          "submission": null,
+          "official_detail_url": "https://hub.harborframework.com/datasets/terminal-bench/terminal-bench/4/leaderboards/4-0-0/rows/0eed5a0d-96b6-491b-aeb7-cd5e4700c2d7"
         },
         {
           "id": "8180b9e4-4990-43d0-b906-cd8b43adaaa2",
@@ -1302,6 +1939,7 @@
           },
           "thinking_level": "max",
           "accuracy": 12.42,
+          "accuracy_stderr": null,
           "accuracy_ci95_half_width": 3.06,
           "display_accuracy": "**12.4%** ± 3.1%",
           "release_date": "2026-06-30",
@@ -1310,7 +1948,20 @@
           "display_total_tokens": "21.6B",
           "total_cost_usd": 9603.86,
           "display_cost": "$9.6k",
-          "trial_count": 330
+          "trial_count": 330,
+          "pass_at_2": 0.2045,
+          "pass_at_3": 0.2621,
+          "pass_at_4": 0.3091,
+          "pass_at_5": 0.3485,
+          "successes": 41,
+          "uncached_input_tokens": 21445581876,
+          "cached_input_tokens": 21027162464,
+          "output_tokens": 116598866,
+          "average_trial_duration_seconds": 6510.3,
+          "reward_hacks": null,
+          "display_reward_hacks": null,
+          "submission": null,
+          "official_detail_url": "https://hub.harborframework.com/datasets/terminal-bench/terminal-bench/4/leaderboards/4-0-0/rows/8180b9e4-4990-43d0-b906-cd8b43adaaa2"
         }
       ]
     }

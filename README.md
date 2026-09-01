@@ -7,9 +7,11 @@ not only the model. The current demo mirrors the official Terminal-Bench 2.1,
 The main table intentionally follows the official comparison surface, with one
 requested change: Harness appears before Model. It shows official rank,
 Harness, Model and reasoning effort, Resolution Rate with a 95% confidence
-interval, Release Date, total Tokens, and total Cost. The page has no
-secondary Details dialog because these are the metrics currently exposed by the
-official leaderboard.
+interval, Release Date, total Tokens, and total Cost. The main comparison
+surface remains compact, while each row opens a Details dialog with additional
+fields actually disclosed by the official API, such as trial count, pass@k,
+token breakdown, average duration, and source links. The dialog links to the
+corresponding Harbor result page for a full official record.
 
 ## Data source
 
@@ -69,6 +71,8 @@ before a push to `main` is deployed.
   `status=display` by tbench.ai.
 - Rank is the official rank; the page never recomputes a different public rank.
 - Missing reasoning effort or metrics remain undisclosed rather than guessed.
+- Details only render fields present in the official API; missing fields are
+  omitted instead of being filled with inferred values.
 - Benchmark versions never share scores or ranks.
 - Dates retain the official Release Date semantics: TB 3.0 uses its
   `release_date`; other views use the official `date` field. These are model

@@ -76,24 +76,24 @@ def load_submissions(source: Path) -> list[dict[str, Any]]:
             "id": source_file.stem,
             "date": metadata["date"],
             "harness": display_label(metadata["agent_display"]),
-            "harness_id": source_filter["agent"],
             "harness_version": source_filter.get("agent_version") or "",
             "harness_org": display_label(metadata["agent_org"]),
-            "harness_url": display_url(metadata["agent_display"]),
             "model": display_label(metadata["model_display"]),
             "model_id": source_filter["model_name"],
             "model_org": display_label(metadata["model_org"]),
-            "model_url": display_url(metadata["model_display"]),
             # Official leaderboard display metadata is canonical. One historical
             # Grok row has a null source_filter value but metadata says "high".
             "thinking_level": metadata.get("reasoning_effort") or "none",
+            # The official submission schema does not expose a sandbox field.
+            # Keep it nullable so future benchmark/self-run records can report it
+            # without inventing a value for historical official submissions.
+            "sandbox": None,
             "accuracy": float(metrics["accuracy"]),
             "accuracy_stderr": float(metrics["accuracy_stderr"]),
             "pass_at_2": percent(metrics.get("pass_at_2")),
             "pass_at_3": percent(metrics.get("pass_at_3")),
             "pass_at_4": percent(metrics.get("pass_at_4")),
             "pass_at_5": percent(metrics.get("pass_at_5")),
-            "task_count": 89,
             "minimum_trials_per_task": 5,
             "trial_count": int(metrics["n_trials"]),
             "disqualified_trials": len(raw.get("disqualified_trials") or []),
@@ -110,7 +110,6 @@ def load_submissions(source: Path) -> list[dict[str, Any]]:
             "average_trial_duration_seconds": float(
                 metrics["avg_trial_duration_sec"]
             ),
-            "source_tier": "official",
             "source_pr": display_url(metadata["pr_url"]),
             "source_jobs": [
                 f"https://hub.harborframework.com/jobs/{job_id}"
@@ -169,10 +168,8 @@ def build_payload(source: Path) -> dict[str, Any]:
                 "task_count": 89,
                 "submission_count": len(results),
                 "model_count": len({row["model"] for row in results}),
-                "harness_count": len({row["harness"] for row in results}),
                 "best_accuracy": best["accuracy"],
                 "best_result_label": f"{best['harness']} · {best['model']}",
-                "score_label": "Accuracy",
                 "score_note": {
                     "en": (
                         "Accuracy is successful trials divided by all trials. "
@@ -195,10 +192,6 @@ def build_payload(source: Path) -> dict[str, Any]:
                 },
                 "repository_url": (
                     "https://github.com/harbor-framework/terminal-bench-2-1"
-                ),
-                "dataset_url": (
-                    "https://hub.harborframework.com/datasets/"
-                    "terminal-bench/terminal-bench-2-1/latest"
                 ),
                 "snapshot_commit": commit,
                 "results": results,

@@ -74,18 +74,19 @@ def main() -> None:
     ranks = [row["accuracy_rank"] for row in results]
     assert ranks == expected_ranks, "Ranks do not use official score order with ties"
     assert len({row["id"] for row in results}) == len(results), "Duplicate IDs"
-    assert all(row["source_tier"] == "official" for row in results)
+    assert all("sandbox" in row for row in results)
+    assert all(row["sandbox"] is None for row in results)
     assert all(row["source_pr"].startswith("https://github.com/") for row in results)
     assert bench["submission_count"] == len(results)
     assert bench["model_count"] == len({row["model"] for row in results})
-    assert bench["harness_count"] == len({row["harness"] for row in results})
     assert bench["best_accuracy"] == max(row["accuracy"] for row in results)
 
+    harness_count = len({row["harness"] for row in results})
     print(
         "Verified "
         f"{bench['submission_count']} official submissions, "
         f"{bench['model_count']} models, "
-        f"{bench['harness_count']} harnesses, "
+        f"{harness_count} harnesses, "
         f"best Accuracy {bench['best_accuracy']:.2f}%."
     )
 

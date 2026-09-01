@@ -24,6 +24,7 @@ independently.
 - Best-configuration-per-model view
 - Accuracy, standard error, pass@2 through pass@5, cost, token, duration, and
   reward-hack review details
+- Nullable sandbox field reserved in the result schema and shown in Details
 - Links from every row to the merged official pull request and Harbor jobs
 - English and Chinese UI, light and dark themes, and responsive mobile layout
 - GitHub Actions deployment to GitHub Pages
@@ -31,6 +32,8 @@ independently.
 The current snapshot contains 89 tasks, 20 merged submissions, 13 models, and
 6 harnesses. Accuracy already includes official reward-hack disqualifications;
 pass@k is shown separately and must not be compared as if it were Accuracy.
+The official submission schema does not report sandbox configuration, so the
+current rows explicitly show it as not reported instead of guessing a value.
 
 ## Repository layout
 

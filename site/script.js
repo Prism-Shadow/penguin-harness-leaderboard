@@ -20,10 +20,7 @@ const page = {
   tableBody: document.querySelector(".results-body"),
   scoreNote: document.querySelector(".score-note"),
   submissionNote: document.querySelector(".submission-note"),
-  localeToggle: document.querySelector(".locale-toggle"),
-  localeLabel: document.querySelector(".locale-label"),
-  localeMenu: document.querySelector(".locale-menu"),
-  localeSystemLabel: document.querySelector(".locale-system-label"),
+  localeSelect: document.querySelector(".locale-select"),
   themeToggle: document.querySelector(".theme-toggle"),
   themeIcon: document.querySelector(".theme-icon"),
   dialog: document.querySelector(".details-dialog"),
@@ -79,17 +76,20 @@ const copy = {
     runConfig: "Run config",
     source: "Source",
     details: "Details",
-    version: "version",
     official: "Official",
     trials: "trials",
-    minRuns: "minimum runs per task",
     rewardHacks: "reward hacks",
     disqualified: "disqualified",
     submissionDate: "Submission date",
+    configuration: "Configuration",
     scoreAndTrials: "Score and trials",
     resources: "Resources",
     reviewAndEvidence: "Review and evidence",
     standardError: "Standard error",
+    harnessVersion: "Harness version",
+    modelId: "Model ID",
+    sandbox: "Sandbox",
+    notReportedOfficial: "Not reported by official submission",
     minimumTrials: "Minimum trials / task",
     totalTrials: "Total trials",
     totalTokens: "Total tokens",
@@ -157,17 +157,20 @@ const copy = {
     runConfig: "运行配置",
     source: "来源",
     details: "详情",
-    version: "版本",
     official: "官方",
     trials: "次 trials",
-    minRuns: "每任务最少运行次数",
     rewardHacks: "reward hacks",
     disqualified: "次取消资格",
     submissionDate: "提交日期",
+    configuration: "配置",
     scoreAndTrials: "分数与 Trials",
     resources: "资源消耗",
     reviewAndEvidence: "审核与来源证据",
     standardError: "标准误",
+    harnessVersion: "Harness 版本",
+    modelId: "模型 ID",
+    sandbox: "Sandbox",
+    notReportedOfficial: "官方 submission 未报告",
     minimumTrials: "每任务最少 Trials",
     totalTrials: "总 Trials",
     totalTokens: "总 Tokens",
@@ -263,11 +266,9 @@ function applyTranslations() {
     element.placeholder = t(element.dataset.i18nPlaceholder);
   });
 
-  page.localeSystemLabel.textContent = t("followSystem");
   const preference = document.documentElement.dataset.localePref || "system";
-  page.localeLabel.textContent = preference === "system"
-    ? t("followSystem")
-    : (preference === "zh" ? "中文" : "English");
+  page.localeSelect.options[0].textContent = t("followSystem");
+  page.localeSelect.value = preference;
   page.dialogClose.setAttribute("aria-label", t("close"));
 }
 
@@ -277,11 +278,9 @@ function renderBenchmarkTabs() {
     const active = bench.id === state.benchmarkId;
     const label = available ? (bench.short_name || bench.name) : bench.name;
     return [
-      '<button type="button" role="tab"',
-      ' class="bench-tab',
-      active ? " is-active" : "",
-      '" data-benchmark="', escapeHtml(bench.id), '"',
-      ' aria-selected="', active ? "true" : "false", '"',
+      '<button type="button" class="bench-tab" data-benchmark="',
+      escapeHtml(bench.id), '"',
+      ' aria-pressed="', active ? "true" : "false", '"',
       available ? "" : " disabled",
       ">",
       escapeHtml(label),
@@ -345,8 +344,7 @@ const columns = [
   { key: "model", label: "model", className: "model-column" },
   { key: "thinking_level", label: "thinkingLevel", className: "thinking-column" },
   { key: "accuracy", label: "accuracy", className: "accuracy-column", numeric: true },
-  { key: "trial_count", label: "runConfig", className: "config-column" },
-  { key: "source_tier", label: "source", className: "source-column" }
+  { key: "trial_count", label: "runConfig", className: "config-column" }
 ];
 
 function renderTableHead() {
@@ -364,7 +362,9 @@ function renderTableHead() {
       "<span>", escapeHtml(t(column.label)), '</span><span class="sort-arrow" aria-hidden="true">',
       arrow, "</span></button></th>"
     ].join("");
-  }).join("") + '<th scope="col">' + escapeHtml(t("details")) + "</th></tr>";
+  }).join("") +
+    '<th scope="col" class="source-column">' + escapeHtml(t("source")) + "</th>" +
+    '<th scope="col">' + escapeHtml(t("details")) + "</th></tr>";
 
   page.tableHead.querySelectorAll("[data-sort]").forEach(function (button) {
     button.addEventListener("click", function () {
@@ -483,13 +483,21 @@ function detailItem(label, value) {
   return "<div><dt>" + escapeHtml(label) + "</dt><dd>" + escapeHtml(value) + "</dd></div>";
 }
 
-function detailGroup(title, items, wide) {
-  return '<section class="detail-group' + (wide ? " wide" : "") + '"><h3>' +
+function detailGroup(title, items) {
+  return '<section class="detail-group"><h3>' +
     escapeHtml(title) + '</h3><dl class="detail-list">' + items.join("") + "</dl></section>";
 }
 
 function openDetails(row, bench) {
   page.dialogTitle.textContent = row.model + " × " + row.harness;
+  const configurationItems = [
+    detailItem(t("harnessTitle"), row.harness),
+    detailItem(t("harnessVersion"), row.harness_version || "—"),
+    detailItem(t("modelId"), row.model_id),
+    detailItem(t("thinkingLevel"), row.thinking_level || "none"),
+    detailItem(t("sandbox"), row.sandbox || t("notReportedOfficial")),
+    detailItem(t("submissionDate"), row.date)
+  ];
   const passItems = [
     detailItem(t("accuracy"), row.accuracy.toFixed(2) + "%"),
     detailItem(t("standardError"), "± " + row.accuracy_stderr.toFixed(2) + "%"),
@@ -509,7 +517,6 @@ function openDetails(row, bench) {
     detailItem(t("averageDuration"), formatDuration(row.average_trial_duration_seconds))
   ];
   const reviewItems = [
-    detailItem(t("submissionDate"), row.date),
     detailItem(t("rewardHacks"), row.reward_hacks.toFixed(2) + "%"),
     detailItem(t("disqualifiedTrials"), formatNumber(row.disqualified_trials)),
     detailItem(t("sourceFile"), row.source_file),
@@ -529,9 +536,10 @@ function openDetails(row, bench) {
     " · ", escapeHtml(row.model_id), " · ", escapeHtml(t("thinkingLevel")), ": ",
     escapeHtml(row.thinking_level || "none"), "</p>",
     '<div class="detail-grid">',
-    detailGroup(t("scoreAndTrials"), passItems, false),
-    detailGroup(t("resources"), resourceItems, false),
-    detailGroup(t("reviewAndEvidence"), reviewItems, true),
+    detailGroup(t("configuration"), configurationItems),
+    detailGroup(t("scoreAndTrials"), passItems),
+    detailGroup(t("resources"), resourceItems),
+    detailGroup(t("reviewAndEvidence"), reviewItems),
     '<section class="detail-group wide"><h3>', escapeHtml(t("source")),
     '</h3><div class="detail-links">', links.join(""), "</div></section></div>"
   ].join("");
@@ -542,7 +550,6 @@ function render() {
   const bench = activeBenchmark();
   applyTranslations();
   renderBenchmarkTabs();
-  updateLocaleMenu();
   updateThemeButton();
   if (!bench) return;
   renderSummary(bench);
@@ -554,19 +561,10 @@ function resolveSystemLocale() {
   return navigator.language.toLowerCase().startsWith("zh") ? "zh" : "en";
 }
 
-function updateLocaleMenu() {
-  const preference = document.documentElement.dataset.localePref || "system";
-  page.localeMenu.querySelectorAll("[data-locale-pref]").forEach(function (button) {
-    button.setAttribute("aria-checked", String(button.dataset.localePref === preference));
-  });
-}
-
 function setLocalePreference(preference) {
   localStorage.setItem("penguin-leaderboard.locale", preference);
   document.documentElement.dataset.localePref = preference;
   state.locale = preference === "system" ? resolveSystemLocale() : preference;
-  page.localeMenu.hidden = true;
-  page.localeToggle.setAttribute("aria-expanded", "false");
   render();
 }
 
@@ -610,21 +608,8 @@ page.bestOnly.addEventListener("change", function () {
   renderTable();
 });
 
-page.localeToggle.addEventListener("click", function () {
-  const willOpen = page.localeMenu.hidden;
-  page.localeMenu.hidden = !willOpen;
-  page.localeToggle.setAttribute("aria-expanded", String(willOpen));
-});
-page.localeMenu.querySelectorAll("[data-locale-pref]").forEach(function (button) {
-  button.addEventListener("click", function () {
-    setLocalePreference(button.dataset.localePref);
-  });
-});
-document.addEventListener("click", function (event) {
-  if (!event.target.closest(".locale-control")) {
-    page.localeMenu.hidden = true;
-    page.localeToggle.setAttribute("aria-expanded", "false");
-  }
+page.localeSelect.addEventListener("change", function () {
+  setLocalePreference(page.localeSelect.value);
 });
 
 page.themeToggle.addEventListener("click", cycleTheme);

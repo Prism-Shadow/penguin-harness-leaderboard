@@ -58,34 +58,16 @@
         </a>
         <nav class="nav-actions" aria-label="Site controls">
           <div class="locale-control">
-            <button
-              class="locale-toggle"
-              type="button"
-              title="Language"
-              aria-label="Language"
-              aria-haspopup="menu"
-              aria-expanded="false"
-            >
-              <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
-                <circle cx="12" cy="12" r="10"></circle>
-                <path d="M2 12h20M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10Z"></path>
-              </svg>
-              <span class="locale-label">Follow system</span>
-              <svg class="chevron-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
-                <path d="m6 9 6 6 6-6"></path>
-              </svg>
-            </button>
-            <div class="locale-menu" role="menu" hidden>
-              <button type="button" role="menuitemradio" data-locale-pref="en" aria-checked="false">
-                <span>English</span><span class="check-mark">✓</span>
-              </button>
-              <button type="button" role="menuitemradio" data-locale-pref="zh" aria-checked="false">
-                <span>中文</span><span class="check-mark">✓</span>
-              </button>
-              <button type="button" role="menuitemradio" data-locale-pref="system" aria-checked="true">
-                <span class="locale-system-label">Follow system</span><span class="check-mark">✓</span>
-              </button>
-            </div>
+            <svg class="nav-icon locale-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+              <circle cx="12" cy="12" r="10"></circle>
+              <path d="M2 12h20M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10Z"></path>
+            </svg>
+            <label class="sr-only" for="locale-select">Language</label>
+            <select id="locale-select" class="locale-select">
+              <option value="system">Follow system</option>
+              <option value="en">English</option>
+              <option value="zh">中文</option>
+            </select>
           </div>
           <button class="theme-toggle" type="button" title="Theme" aria-label="Theme">
             <span class="theme-icon" aria-hidden="true"></span>
@@ -109,7 +91,7 @@
         <div class="hero-inner">
           <div class="bench-switch-block">
             <span class="bench-switch-label" data-i18n="selectBenchmark">Select benchmark</span>
-            <div class="bench-switcher" role="tablist" aria-label="Benchmark"></div>
+            <div class="bench-switcher" aria-label="Benchmark"></div>
           </div>
 
           <div class="hero-brand">

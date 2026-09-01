@@ -1,0 +1,266 @@
+<!doctype html>
+<html lang="en" data-theme="dark" data-theme-mode="system" data-locale="en" data-locale-pref="system">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#000000" />
+    <meta
+      name="description"
+      content="Penguin Harness Leaderboard compares model and harness configurations across agent benchmarks."
+    />
+    <meta property="og:title" content="Penguin Harness Leaderboard" />
+    <meta
+      property="og:description"
+      content="Auditable benchmark results with harness, model, thinking level, and configuration details."
+    />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://leaderboard.penguin.ooo/" />
+    <link rel="canonical" href="https://leaderboard.penguin.ooo/" />
+    <link rel="icon" href="favicon.svg" />
+    <title>Penguin Harness Leaderboard</title>
+    <script>
+      try {
+        const savedTheme = localStorage.getItem("penguin-leaderboard.theme");
+        const themeMode = ["light", "dark", "system"].includes(savedTheme) ? savedTheme : "system";
+        const theme = themeMode === "system"
+          ? (matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light")
+          : themeMode;
+        document.documentElement.dataset.themeMode = themeMode;
+        document.documentElement.dataset.theme = theme;
+
+        const savedLocale = localStorage.getItem("penguin-leaderboard.locale");
+        const localePref = ["en", "zh", "system"].includes(savedLocale) ? savedLocale : "system";
+        const locale = localePref === "system"
+          ? (navigator.language.toLowerCase().startsWith("zh") ? "zh" : "en")
+          : localePref;
+        document.documentElement.dataset.localePref = localePref;
+        document.documentElement.dataset.locale = locale;
+        document.documentElement.lang = locale === "zh" ? "zh-CN" : "en";
+      } catch {}
+    </script>
+    <link rel="stylesheet" href="styles.css?v=20260901-1" />
+    <script src="script.js?v=20260901-1" defer></script>
+  </head>
+  <body>
+    <a class="skip-link" href="#results" data-i18n="skipToResults">Skip to results</a>
+
+    <div class="neon-bg" aria-hidden="true">
+      <div class="neon-blob neon-blob-a"></div>
+      <div class="neon-blob neon-blob-b"></div>
+      <div class="neon-blob neon-blob-c"></div>
+    </div>
+
+    <header class="site-header">
+      <div class="nav-shell">
+        <a class="brand" href="#top" aria-label="Penguin Harness Leaderboard home">
+          <img src="favicon.svg" alt="" />
+          <span>Penguin Harness Leaderboard</span>
+        </a>
+        <nav class="nav-actions" aria-label="Site controls">
+          <div class="locale-control">
+            <button
+              class="locale-toggle"
+              type="button"
+              title="Language"
+              aria-label="Language"
+              aria-haspopup="menu"
+              aria-expanded="false"
+            >
+              <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                <circle cx="12" cy="12" r="10"></circle>
+                <path d="M2 12h20M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10Z"></path>
+              </svg>
+              <span class="locale-label">Follow system</span>
+              <svg class="chevron-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                <path d="m6 9 6 6 6-6"></path>
+              </svg>
+            </button>
+            <div class="locale-menu" role="menu" hidden>
+              <button type="button" role="menuitemradio" data-locale-pref="en" aria-checked="false">
+                <span>English</span><span class="check-mark">✓</span>
+              </button>
+              <button type="button" role="menuitemradio" data-locale-pref="zh" aria-checked="false">
+                <span>中文</span><span class="check-mark">✓</span>
+              </button>
+              <button type="button" role="menuitemradio" data-locale-pref="system" aria-checked="true">
+                <span class="locale-system-label">Follow system</span><span class="check-mark">✓</span>
+              </button>
+            </div>
+          </div>
+          <button class="theme-toggle" type="button" title="Theme" aria-label="Theme">
+            <span class="theme-icon" aria-hidden="true"></span>
+          </button>
+          <a
+            class="github-link"
+            href="https://github.com/Prism-Shadow/penguin-harness-leaderboard"
+            aria-label="GitHub"
+          >
+            <svg class="nav-icon" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+              <path d="M12 .5C5.65.5.5 5.65.5 12c0 5.08 3.29 9.39 7.86 10.91.58.11.79-.25.79-.56 0-.28-.01-1.02-.02-2-3.2.7-3.88-1.54-3.88-1.54-.52-1.33-1.28-1.68-1.28-1.68-1.04-.71.08-.7.08-.7 1.15.08 1.76 1.18 1.76 1.18 1.03 1.76 2.7 1.25 3.36.96.1-.75.4-1.25.72-1.54-2.55-.29-5.24-1.28-5.24-5.68 0-1.26.45-2.28 1.18-3.09-.12-.29-.51-1.46.11-3.05 0 0 .96-.31 3.15 1.18a10.9 10.9 0 0 1 5.74 0c2.18-1.49 3.14-1.18 3.14-1.18.63 1.59.24 2.76.12 3.05.74.81 1.18 1.83 1.18 3.09 0 4.41-2.69 5.38-5.25 5.67.41.35.78 1.05.78 2.12 0 1.53-.02 2.76-.02 3.14 0 .3.21.67.8.55A11.51 11.51 0 0 0 23.5 12C23.5 5.65 18.35.5 12 .5Z"></path>
+            </svg>
+          </a>
+        </nav>
+      </div>
+    </header>
+
+    <main id="top">
+      <section class="hero">
+        <div class="hero-dots" aria-hidden="true"></div>
+        <div class="hero-inner">
+          <div class="bench-switch-block">
+            <span class="bench-switch-label" data-i18n="selectBenchmark">Select benchmark</span>
+            <div class="bench-switcher" role="tablist" aria-label="Benchmark"></div>
+          </div>
+
+          <div class="hero-brand">
+            <img src="favicon.svg" alt="" />
+            <span>Penguin Harness Leaderboard</span>
+          </div>
+          <h1 data-i18n-html="heroTitle">Compare the whole setup,<br /><span>not just the model.</span></h1>
+          <p class="hero-copy current-bench-description">
+            Loading benchmark metadata…
+          </p>
+          <div class="hero-actions">
+            <a class="button button-primary" href="#results">
+              <span data-i18n="viewResults">View results</span>
+              <span aria-hidden="true">→</span>
+            </a>
+            <a
+              class="button button-secondary benchmark-source-link"
+              href="https://github.com/harbor-framework/terminal-bench-2-1"
+            >
+              <span data-i18n="viewSource">View source</span>
+            </a>
+          </div>
+          <dl class="hero-stats" aria-label="Benchmark summary">
+            <div>
+              <dd class="stat-tasks">—</dd>
+              <dt data-i18n="tasks">Tasks</dt>
+              <dd class="metric-desc" data-i18n="tasksDescription">Tasks in the selected benchmark.</dd>
+            </div>
+            <div>
+              <dd class="stat-submissions">—</dd>
+              <dt data-i18n="submissions">Submissions</dt>
+              <dd class="metric-desc" data-i18n="submissionsDescription">Merged, auditable result configurations.</dd>
+            </div>
+            <div>
+              <dd class="stat-models">—</dd>
+              <dt data-i18n="models">Models</dt>
+              <dd class="metric-desc" data-i18n="modelsDescription">Unique model names in published results.</dd>
+            </div>
+            <div class="accent">
+              <dd class="stat-best">—</dd>
+              <dt data-i18n="bestAccuracy">Best Accuracy</dt>
+              <dd class="metric-desc stat-best-label">Loading…</dd>
+            </div>
+          </dl>
+        </div>
+      </section>
+
+      <section id="results" class="section section-anchor">
+        <div class="section-shell">
+          <header class="section-heading">
+            <p class="eyebrow" data-i18n="resultsEyebrow">Official results</p>
+            <h2 class="results-title">Leaderboard</h2>
+            <p class="results-description">Loading published results…</p>
+          </header>
+
+          <div class="result-controls">
+            <label class="search-control">
+              <span class="sr-only" data-i18n="searchLabel">Search results</span>
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                <circle cx="11" cy="11" r="8"></circle><path d="m21 21-4.35-4.35"></path>
+              </svg>
+              <input class="result-search" type="search" data-i18n-placeholder="searchPlaceholder" placeholder="Search harness or model…" />
+            </label>
+            <select class="filter-select harness-filter" aria-label="Harness">
+              <option value="">All harnesses</option>
+            </select>
+            <select class="filter-select thinking-filter" aria-label="Thinking Level">
+              <option value="">All thinking levels</option>
+            </select>
+            <label class="best-only-control">
+              <input class="best-only-filter" type="checkbox" />
+              <span data-i18n="bestOnly">Best per model</span>
+            </label>
+          </div>
+
+          <div class="result-meta">
+            <span class="result-count">Loading…</span>
+            <span data-i18n="tableHelp">Sort with column headers · open Details for the full configuration</span>
+          </div>
+          <p class="table-hint" aria-hidden="true" data-i18n="tableHint">Swipe to view the full table →</p>
+          <div class="table-wrap" aria-label="Benchmark result table">
+            <table>
+              <thead class="results-head"></thead>
+              <tbody class="results-body">
+                <tr><td class="loading-cell" colspan="8" data-i18n="loadingResults">Loading published results…</td></tr>
+              </tbody>
+            </table>
+          </div>
+
+          <aside class="protocol-note">
+            <div>
+              <strong data-i18n="scoreProtocol">Score protocol</strong>
+              <p class="score-note"></p>
+            </div>
+            <div>
+              <strong data-i18n="submissionProtocol">Submission protocol</strong>
+              <p class="submission-note"></p>
+            </div>
+          </aside>
+        </div>
+      </section>
+
+      <section id="methodology" class="section section-anchor methodology-section">
+        <div class="section-shell">
+          <header class="section-heading">
+            <p class="eyebrow" data-i18n="methodologyEyebrow">How to read the table</p>
+            <h2 data-i18n="methodologyTitle">Configuration is part of the result.</h2>
+            <p data-i18n="methodologyDescription">
+              Harness, model, thinking level, and run policy can all change the score.
+            </p>
+          </header>
+          <div class="methodology-grid">
+            <article>
+              <span>01</span>
+              <h3 data-i18n="harnessTitle">Harness</h3>
+              <p data-i18n="harnessDescription">The agent runtime and exact version that operated the terminal.</p>
+            </article>
+            <article>
+              <span>02</span>
+              <h3 data-i18n="thinkingTitle">Thinking Level</h3>
+              <p data-i18n="thinkingDescription">Reasoning effort such as high, xhigh, or max is shown explicitly.</p>
+            </article>
+            <article>
+              <span>03</span>
+              <h3 data-i18n="detailsTitle">Run details</h3>
+              <p data-i18n="detailsDescription">Trials, pass@k, cost, tokens, duration, review adjustments, and source evidence.</p>
+            </article>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer class="footer">
+      <div class="section-shell footer-inner">
+        <span>© 2026 Prism Shadow</span>
+        <span data-i18n="footerText">Auditable model × harness benchmark results</span>
+        <a href="https://github.com/Prism-Shadow/penguin-harness-leaderboard">GitHub ↗</a>
+      </div>
+    </footer>
+
+    <dialog class="details-dialog" aria-labelledby="details-dialog-title">
+      <div class="dialog-shell">
+        <header class="dialog-header">
+          <div>
+            <p class="eyebrow" data-i18n="configurationEyebrow">Submission configuration</p>
+            <h2 id="details-dialog-title">Details</h2>
+          </div>
+          <button class="dialog-close" type="button" aria-label="Close">×</button>
+        </header>
+        <div class="dialog-body"></div>
+      </div>
+    </dialog>
+  </body>
+</html>

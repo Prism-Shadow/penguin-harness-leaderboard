@@ -1,5 +1,6 @@
 :root {
   color-scheme: light;
+  --header-height: 64px;
   --bg: #ffffff;
   --surface: #ffffff;
   --surface-raised: #ffffff;
@@ -44,7 +45,7 @@
 
 html {
   scroll-behavior: smooth;
-  scroll-padding-top: 76px;
+  scroll-padding-top: calc(var(--header-height) + 16px);
 }
 
 body {
@@ -124,7 +125,7 @@ select:focus-visible {
 }
 
 .section-anchor {
-  scroll-margin-top: 5rem;
+  scroll-margin-top: 0;
 }
 
 .neon-bg {
@@ -202,7 +203,7 @@ main,
   display: grid;
   grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
   align-items: center;
-  min-height: 64px;
+  min-height: var(--header-height);
   gap: 16px;
 }
 
@@ -519,7 +520,8 @@ main,
 }
 
 .custom-select-option:hover,
-.custom-select-option:focus-visible {
+.custom-select-option:focus-visible,
+.custom-select-option[data-active="true"] {
   color: var(--text);
   background: var(--surface-soft);
   outline: 0;
@@ -550,6 +552,14 @@ main,
 
 .filter-custom-select .custom-select-trigger {
   height: 44px;
+  padding: 0 8px;
+  font-size: 15px;
+  font-weight: 400;
+}
+
+.filter-custom-select .custom-select-option {
+  font-size: 15px;
+  font-weight: 400;
 }
 
 .locale-custom-select {
@@ -614,7 +624,12 @@ main,
 
 .hero {
   position: relative;
+  display: grid;
+  min-height: calc(100vh - var(--header-height));
+  min-height: calc(100svh - var(--header-height));
   overflow: hidden;
+  align-items: center;
+  border-bottom: 1px solid var(--line-soft);
 }
 
 .hero-dots {
@@ -635,7 +650,7 @@ main,
   position: relative;
   width: min(1152px, calc(100% - 32px));
   margin-inline: auto;
-  padding: 96px 0 80px;
+  padding: clamp(80px, 9vh, 112px) 0;
   text-align: center;
 }
 
@@ -883,8 +898,8 @@ main,
 
 .filter-field > label {
   color: var(--muted);
-  font-size: 15px;
-  font-weight: 650;
+  font-size: 14px;
+  font-weight: 400;
   letter-spacing: 0.06em;
   text-transform: uppercase;
 }
@@ -892,13 +907,13 @@ main,
 .filter-select {
   min-width: 180px;
   height: 44px;
-  padding: 0 36px 0 12px;
+  padding: 0 32px 0 8px;
   color: var(--text);
   background: var(--surface);
   border: 1px solid var(--line);
   border-radius: 8px;
   cursor: pointer;
-  font-size: 18px;
+  font-size: 15px;
   font-weight: 400;
   text-transform: none;
 }
@@ -934,7 +949,7 @@ table {
   min-width: 1380px;
   border-collapse: collapse;
   table-layout: fixed;
-  font-size: 14px;
+  font-size: 15px;
 }
 
 th,
@@ -948,8 +963,8 @@ td {
 th {
   height: 50px;
   color: var(--muted);
-  font-size: 13px;
-  font-weight: 650;
+  font-size: 15px;
+  font-weight: 400;
 }
 
 tbody tr:last-child td {
@@ -1065,14 +1080,14 @@ th.is-active .sort-button {
 
 .rank-cell {
   color: var(--muted);
-  font-size: 14px;
+  font-size: 15px;
   font-variant-numeric: tabular-nums;
   text-align: center;
 }
 
 .rank-badge {
   color: var(--muted);
-  font-weight: 700;
+  font-weight: 400;
 }
 
 .rank-1,
@@ -1087,8 +1102,8 @@ th.is-active .sort-button {
   max-width: max-content;
   gap: 5px;
   color: var(--text);
-  font-size: 14px;
-  font-weight: 750;
+  font-size: 15px;
+  font-weight: 400;
 }
 
 .model-primary {
@@ -1107,8 +1122,8 @@ th.is-active .sort-button {
   border: 1px solid color-mix(in srgb, var(--accent) 22%, var(--line));
   border-radius: 99px;
   background: var(--accent-soft);
-  font-size: 11px;
-  font-weight: 650;
+  font-size: 12px;
+  font-weight: 400;
   line-height: 1.2;
 }
 
@@ -1126,7 +1141,7 @@ th.is-active .sort-button {
 .rate-cell strong {
   color: var(--text);
   font-size: 15px;
-  font-weight: 800;
+  font-weight: 400;
 }
 
 .rate-copy {
@@ -1191,8 +1206,8 @@ th.is-active .sort-button {
   border: 1px solid var(--line);
   border-radius: 99px;
   background: var(--surface-soft);
-  font-size: 11px;
-  font-weight: 700;
+  font-size: 12px;
+  font-weight: 400;
   white-space: nowrap;
 }
 
@@ -1211,19 +1226,19 @@ th.is-active .sort-button {
 .date-cell,
 .number-cell {
   color: var(--text);
-  font-size: 14px;
+  font-size: 15px;
   font-variant-numeric: tabular-nums;
   white-space: nowrap;
 }
 
 .number-cell {
   text-align: right;
-  font-weight: 750;
+  font-weight: 400;
 }
 
 .missing-value {
   color: var(--muted);
-  font-weight: 500;
+  font-weight: 400;
 }
 
 .details-cell {
@@ -1241,8 +1256,8 @@ th.is-active .sort-button {
   border: 1px solid var(--line);
   border-radius: 7px;
   cursor: pointer;
-  font-size: 12px;
-  font-weight: 650;
+  font-size: 13px;
+  font-weight: 400;
 }
 
 .details-button:hover {
@@ -1416,6 +1431,7 @@ th.is-active .sort-button {
 .detail-groups {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
+  align-items: start;
   gap: 12px;
 }
 
@@ -1514,7 +1530,8 @@ th.is-active .sort-button {
 
 @media (max-width: 760px) {
   .nav-shell {
-    gap: 7px;
+    grid-template-columns: 36px minmax(0, 1fr) 76px;
+    gap: 6px;
   }
 
   .brand img {
@@ -1522,8 +1539,14 @@ th.is-active .sort-button {
     height: 26px;
   }
 
+  .bench-switcher {
+    width: 100%;
+    max-width: 238px;
+    grid-template-columns: repeat(var(--bench-count), minmax(0, 1fr));
+  }
+
   .bench-tab {
-    min-width: 55px;
+    min-width: 0;
     min-height: 36px;
     padding: 6px 8px;
     gap: 3px;
@@ -1564,6 +1587,11 @@ th.is-active .sort-button {
     opacity: 0;
   }
 
+  .locale-control:has(.custom-select-trigger:focus-visible) {
+    outline: 3px solid rgb(107 114 128 / 0.4);
+    outline-offset: 2px;
+  }
+
   .locale-custom-select .custom-select-menu {
     top: calc(100% + 6px);
     right: 0;
@@ -1576,7 +1604,7 @@ th.is-active .sort-button {
   }
 
   .hero-inner {
-    padding: 72px 0 64px;
+    padding: 72px 0;
   }
 
   .hero-brand {
@@ -1653,6 +1681,10 @@ th.is-active .sort-button {
     width: calc(100% - 20px);
   }
 
+  #results .section-shell {
+    width: calc(100% - 20px);
+  }
+
   .bench-tab {
     min-width: 49px;
     padding-inline: 5px;
@@ -1693,10 +1725,16 @@ th.is-active .sort-button {
 
 @media (max-width: 360px) {
   .brand {
-    visibility: hidden;
+    display: none;
+  }
+
+  .nav-shell {
+    grid-template-columns: minmax(0, 1fr) 134px minmax(0, 1fr);
   }
 
   .bench-switcher {
+    width: 134px;
+    grid-column: 2;
     padding: 2px;
     border-radius: 11px;
   }
@@ -1716,11 +1754,33 @@ th.is-active .sort-button {
   }
 
   .bench-tab-prefix {
-    font-size: 8px;
+    display: none;
   }
 
   .bench-tab-version {
     font-size: 12px;
+  }
+
+  .nav-actions {
+    grid-column: 3;
+  }
+}
+
+@media (min-width: 1440px) {
+  .table-wrap {
+    overflow: visible;
+  }
+
+  .results-head th {
+    position: sticky;
+    top: calc(var(--header-height) + 1px);
+    z-index: 6;
+    background: var(--surface);
+    box-shadow: inset 0 -1px 0 var(--line);
+  }
+
+  .results-head th.is-active {
+    background: color-mix(in srgb, var(--accent-soft) 72%, var(--surface));
   }
 }
 

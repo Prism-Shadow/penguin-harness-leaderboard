@@ -254,6 +254,10 @@ function closeCustomSelect(widget, restoreFocus = false) {
   widget.menu.hidden = true;
   widget.wrapper.classList.remove("is-open");
   widget.trigger.setAttribute("aria-expanded", "false");
+  widget.trigger.removeAttribute("aria-activedescendant");
+  widget.activeIndex = -1;
+  widget.typeaheadBuffer = "";
+  clearTimeout(widget.typeaheadTimer);
   if (restoreFocus) widget.trigger.focus();
 }
 
@@ -263,20 +267,33 @@ function closeCustomSelects(except = null) {
   });
 }
 
-function customOptionButtons(widget) {
+function customOptions(widget) {
   return [...widget.menu.querySelectorAll(".custom-select-option:not(:disabled)")];
 }
 
-function focusCustomOption(widget, position = "selected") {
-  const options = customOptionButtons(widget);
+function setCustomActiveOption(widget, position = "selected") {
+  const options = customOptions(widget);
   if (!options.length) return;
-  let target = options.find((option) => option.getAttribute("aria-selected") === "true");
-  if (position === "first") target = options[0];
-  if (position === "last") target = options.at(-1);
-  (target || options[0]).focus();
+  let index = options.findIndex((option) => option.getAttribute("aria-selected") === "true");
+  if (typeof position === "number") index = (position + options.length) % options.length;
+  if (position === "first") index = 0;
+  if (position === "last") index = options.length - 1;
+  if (index < 0) index = 0;
+  widget.activeIndex = index;
+  options.forEach((option, optionIndex) => {
+    option.dataset.active = String(optionIndex === index);
+  });
+  const activeOption = options[index];
+  widget.trigger.setAttribute("aria-activedescendant", activeOption.id);
+  const optionTop = activeOption.offsetTop;
+  const optionBottom = optionTop + activeOption.offsetHeight;
+  if (optionTop < widget.menu.scrollTop) widget.menu.scrollTop = optionTop;
+  if (optionBottom > widget.menu.scrollTop + widget.menu.clientHeight) {
+    widget.menu.scrollTop = optionBottom - widget.menu.clientHeight;
+  }
 }
 
-function setCustomSelectOpen(widget, open, focusPosition = "selected") {
+function setCustomSelectOpen(widget, open, activePosition = "selected") {
   if (!open) {
     closeCustomSelect(widget);
     return;
@@ -285,21 +302,37 @@ function setCustomSelectOpen(widget, open, focusPosition = "selected") {
   widget.menu.hidden = false;
   widget.wrapper.classList.add("is-open");
   widget.trigger.setAttribute("aria-expanded", "true");
-  requestAnimationFrame(() => focusCustomOption(widget, focusPosition));
+  setCustomActiveOption(widget, activePosition);
+}
+
+function selectCustomOption(widget, option) {
+  if (!option || option.disabled) return;
+  if (widget.select.value !== option.dataset.value) {
+    widget.select.value = option.dataset.value;
+    widget.select.dispatchEvent(new Event("change", { bubbles: true }));
+  }
+  closeCustomSelect(widget, true);
+  refreshCustomSelect(widget);
 }
 
 function refreshCustomSelect(widget) {
   if (!widget) return;
   const { select, trigger, value, menu } = widget;
+  const wasOpen = !menu.hidden;
   const selected = select.selectedOptions[0] || select.options[0];
   value.textContent = selected?.textContent || "";
-  trigger.setAttribute("aria-label", select.getAttribute("aria-label") || value.textContent);
+  if (!trigger.hasAttribute("aria-labelledby")) {
+    const label = select.getAttribute("aria-label") || "";
+    trigger.setAttribute("aria-label", [label, value.textContent].filter(Boolean).join(": "));
+  }
   menu.replaceChildren();
 
-  [...select.options].forEach((sourceOption) => {
+  [...select.options].forEach((sourceOption, index) => {
     const option = document.createElement("button");
     option.type = "button";
     option.className = "custom-select-option";
+    option.id = `${select.id}-option-${index}`;
+    option.tabIndex = -1;
     option.dataset.value = sourceOption.value;
     option.disabled = sourceOption.disabled;
     option.setAttribute("role", "option");
@@ -308,15 +341,11 @@ function refreshCustomSelect(widget) {
     optionLabel.textContent = sourceOption.textContent;
     option.append(optionLabel);
     option.addEventListener("click", () => {
-      if (select.value !== sourceOption.value) {
-        select.value = sourceOption.value;
-        select.dispatchEvent(new Event("change", { bubbles: true }));
-      }
-      closeCustomSelect(widget, true);
-      refreshCustomSelect(widget);
+      selectCustomOption(widget, option);
     });
     menu.append(option);
   });
+  if (wasOpen) setCustomActiveOption(widget, "selected");
 }
 
 function enhanceCustomSelect(select) {
@@ -329,15 +358,19 @@ function enhanceCustomSelect(select) {
   trigger.type = "button";
   trigger.className = "custom-select-trigger";
   trigger.id = `${select.id}-trigger`;
+  trigger.setAttribute("role", "combobox");
   trigger.setAttribute("aria-haspopup", "listbox");
   trigger.setAttribute("aria-expanded", "false");
+  trigger.setAttribute("aria-autocomplete", "none");
   const value = document.createElement("span");
   value.className = "custom-select-value";
+  value.id = `${select.id}-value`;
   trigger.append(value);
   const menu = document.createElement("div");
   menu.id = `${select.id}-menu`;
   menu.className = "custom-select-menu";
   menu.setAttribute("role", "listbox");
+  menu.tabIndex = -1;
   menu.hidden = true;
   trigger.setAttribute("aria-controls", menu.id);
 
@@ -349,9 +382,25 @@ function enhanceCustomSelect(select) {
 
   const associatedLabel = [...document.querySelectorAll("label")]
     .find((label) => label.htmlFor === select.id);
-  if (associatedLabel) associatedLabel.htmlFor = trigger.id;
+  if (associatedLabel) {
+    associatedLabel.id ||= `${select.id}-label`;
+    associatedLabel.htmlFor = trigger.id;
+    trigger.setAttribute("aria-labelledby", `${associatedLabel.id} ${value.id}`);
+    menu.setAttribute("aria-labelledby", associatedLabel.id);
+  } else {
+    menu.setAttribute("aria-label", select.getAttribute("aria-label") || value.textContent);
+  }
 
-  const widget = { select, wrapper, trigger, value, menu };
+  const widget = {
+    select,
+    wrapper,
+    trigger,
+    value,
+    menu,
+    activeIndex: -1,
+    typeaheadBuffer: "",
+    typeaheadTimer: null,
+  };
   customSelects.set(select, widget);
   refreshCustomSelect(widget);
 
@@ -359,30 +408,52 @@ function enhanceCustomSelect(select) {
     setCustomSelectOpen(widget, menu.hidden);
   });
   trigger.addEventListener("keydown", (event) => {
-    if (event.key !== "ArrowDown" && event.key !== "ArrowUp") return;
-    event.preventDefault();
-    setCustomSelectOpen(widget, true, event.key === "ArrowUp" ? "last" : "selected");
-  });
-  menu.addEventListener("keydown", (event) => {
-    const options = customOptionButtons(widget);
-    const current = options.indexOf(document.activeElement);
-    if (event.key === "Escape") {
-      event.preventDefault();
-      closeCustomSelect(widget, true);
-      return;
-    }
+    const options = customOptions(widget);
+    const isOpen = !menu.hidden;
     if (event.key === "Tab") {
       closeCustomSelect(widget);
       return;
     }
-    if (!["ArrowDown", "ArrowUp", "Home", "End"].includes(event.key)) return;
-    event.preventDefault();
-    let next = current;
-    if (event.key === "Home") next = 0;
-    if (event.key === "End") next = options.length - 1;
-    if (event.key === "ArrowDown") next = (current + 1 + options.length) % options.length;
-    if (event.key === "ArrowUp") next = (current - 1 + options.length) % options.length;
-    options[next]?.focus();
+    if (event.key === "Escape") {
+      if (isOpen) {
+        event.preventDefault();
+        closeCustomSelect(widget);
+      }
+      return;
+    }
+    if (event.key === "Enter" || event.key === " ") {
+      event.preventDefault();
+      if (!isOpen) setCustomSelectOpen(widget, true);
+      else selectCustomOption(widget, options[widget.activeIndex]);
+      return;
+    }
+    if (["ArrowDown", "ArrowUp", "Home", "End"].includes(event.key)) {
+      event.preventDefault();
+      if (!isOpen) {
+        setCustomSelectOpen(widget, true, event.key === "ArrowUp" ? "last" : "selected");
+        return;
+      }
+      if (event.key === "Home") setCustomActiveOption(widget, "first");
+      if (event.key === "End") setCustomActiveOption(widget, "last");
+      if (event.key === "ArrowDown") setCustomActiveOption(widget, widget.activeIndex + 1);
+      if (event.key === "ArrowUp") setCustomActiveOption(widget, widget.activeIndex - 1);
+      return;
+    }
+    if (event.key.length === 1 && !event.ctrlKey && !event.metaKey && !event.altKey) {
+      const query = `${widget.typeaheadBuffer}${event.key}`.toLocaleLowerCase();
+      const matchIndex = options.findIndex((option) => (
+        option.textContent.trim().toLocaleLowerCase().startsWith(query)
+      ));
+      if (matchIndex < 0) return;
+      event.preventDefault();
+      if (!isOpen) setCustomSelectOpen(widget, true);
+      widget.typeaheadBuffer = query;
+      clearTimeout(widget.typeaheadTimer);
+      widget.typeaheadTimer = setTimeout(() => {
+        widget.typeaheadBuffer = "";
+      }, 600);
+      setCustomActiveOption(widget, matchIndex);
+    }
   });
   select.addEventListener("change", () => refreshCustomSelect(widget));
   new MutationObserver(() => refreshCustomSelect(widget)).observe(select, {
@@ -830,6 +901,11 @@ function detailGroup(title, items) {
   return `<section class="detail-group"><h3>${escapeHtml(title)}</h3><dl class="detail-list">${content}</dl></section>`;
 }
 
+function detailSummaryItem(value, label) {
+  if (value == null || value === "") return "";
+  return `<div><strong>${escapeHtml(value)}</strong><span>${escapeHtml(label)}</span></div>`;
+}
+
 function openDetails(row, trigger) {
   dialogTrigger = trigger;
   elements.dialogTitle.textContent = `${row.model.label} × ${row.harness.label}`;
@@ -838,11 +914,18 @@ function openDetails(row, trigger) {
   const confidence = row.accuracy_ci95_half_width == null
     ? null
     : `± ${formatPercent(row.accuracy_ci95_half_width)}`;
+  const provenanceValue = sourceTypeLabel(row.source_type);
+  const provenanceDate = row.rank != null
+    ? detailSummaryItem(`#${row.rank}`, t("officialRank"))
+    : detailSummaryItem(
+      row.verified_at ? formatDate(row.verified_at) : null,
+      t("verifiedOn"),
+    );
   const summary = `
     <div class="detail-summary">
-      <div><strong>${escapeHtml(formatPercent(row.accuracy, 1))}</strong><span>${escapeHtml(t("resolutionRate"))}</span></div>
-      <div><strong>${row.rank == null ? "—" : escapeHtml(String(row.rank))}</strong><span>${escapeHtml(row.rank == null ? t("notOfficiallyRanked") : t("officialRank"))}</span></div>
-      <div><strong>${escapeHtml(formatDate(row.release_date))}</strong><span>${escapeHtml(t("releaseDate"))}</span></div>
+      ${detailSummaryItem(formatPercent(row.accuracy, 1), t("resolutionRate"))}
+      ${detailSummaryItem(provenanceValue, t("sourceType"))}
+      ${provenanceDate}
     </div>`;
 
   const configuration = detailGroup(t("configuration"), [
@@ -883,13 +966,13 @@ function openDetails(row, trigger) {
     ? row.protocol_note[state.locale] || row.protocol_note.en
     : row.protocol_note;
   const sourceLinks = detailGroup(t("sourceLinks"), [
-    detailItem(t("sourceType"), escapeHtml(sourceTypeLabel(row.source_type))),
-    detailItem(t("publisher"), row.source_publisher ? escapeHtml(row.source_publisher) : null),
     detailItem(t("sourcePage"), evidenceUrl
       ? `<a href="${escapeHtml(evidenceUrl)}" target="_blank" rel="noreferrer">${escapeHtml(row.source_title || row.source_publisher || t("source"))} ↗</a>`
       : null),
-    detailItem(t("sourcePublished"), row.published_at ? escapeHtml(formatDate(row.published_at)) : null),
+    detailItem(t("publisher"), row.source_publisher ? escapeHtml(row.source_publisher) : null),
+    detailItem(t("sourceType"), escapeHtml(sourceTypeLabel(row.source_type))),
     detailItem(t("verifiedOn"), row.verified_at ? escapeHtml(formatDate(row.verified_at)) : null),
+    detailItem(t("sourcePublished"), row.published_at ? escapeHtml(formatDate(row.published_at)) : null),
     detailItem(t("protocolNote"), protocolNote ? escapeHtml(protocolNote) : null),
     detailItem(t("officialRow"), officialRow
       ? `<a href="${escapeHtml(officialRow)}" target="_blank" rel="noreferrer">Harbor ↗</a>`
@@ -898,7 +981,7 @@ function openDetails(row, trigger) {
     detailItem(t("benchmarkSnapshot"), `<a href="${escapeHtml(safeUrl(state.benchmark.official_url))}" target="_blank" rel="noreferrer">tbench.ai ↗</a>`),
   ]);
 
-  elements.dialogBody.innerHTML = `${summary}<div class="detail-groups">${configuration}${scores}${usage}${sourceLinks}</div>`;
+  elements.dialogBody.innerHTML = `${summary}<div class="detail-groups">${sourceLinks}${configuration}${scores}${usage}</div>`;
   elements.dialogOfficialLink.href = officialRow || evidenceUrl || state.benchmark.official_url;
   elements.dialogOfficialLinkLabel.textContent = officialRow ? t("openOfficialDetail") : t("openSource");
   elements.resultDialog.showModal();

@@ -16,7 +16,7 @@ const translations = {
     dark: "dark",
     heroTitle: "Compare the whole setup,<br /><span>not just the model.</span>",
     viewResults: "View results",
-    viewOfficial: "Open official leaderboard",
+    viewGithub: "View GitHub",
     publicResults: "Public results",
     models: "Models",
     harnesses: "Harnesses",
@@ -109,7 +109,7 @@ const translations = {
     dark: "深色",
     heroTitle: "对比完整配置，<br /><span>而不只是模型。</span>",
     viewResults: "查看榜单",
-    viewOfficial: "打开官方榜单",
+    viewGithub: "查看Github",
     publicResults: "公开结果",
     models: "模型",
     harnesses: "Harness",
@@ -221,6 +221,7 @@ const elements = {
 };
 
 let dialogTrigger = null;
+const customSelects = new Map();
 
 function t(key, values = {}) {
   const template = translations[state.locale]?.[key] ?? translations.en[key] ?? key;
@@ -248,6 +249,163 @@ function safeUrl(value) {
   }
 }
 
+function closeCustomSelect(widget, restoreFocus = false) {
+  if (!widget || widget.menu.hidden) return;
+  widget.menu.hidden = true;
+  widget.wrapper.classList.remove("is-open");
+  widget.trigger.setAttribute("aria-expanded", "false");
+  if (restoreFocus) widget.trigger.focus();
+}
+
+function closeCustomSelects(except = null) {
+  customSelects.forEach((widget) => {
+    if (widget !== except) closeCustomSelect(widget);
+  });
+}
+
+function customOptionButtons(widget) {
+  return [...widget.menu.querySelectorAll(".custom-select-option:not(:disabled)")];
+}
+
+function focusCustomOption(widget, position = "selected") {
+  const options = customOptionButtons(widget);
+  if (!options.length) return;
+  let target = options.find((option) => option.getAttribute("aria-selected") === "true");
+  if (position === "first") target = options[0];
+  if (position === "last") target = options.at(-1);
+  (target || options[0]).focus();
+}
+
+function setCustomSelectOpen(widget, open, focusPosition = "selected") {
+  if (!open) {
+    closeCustomSelect(widget);
+    return;
+  }
+  closeCustomSelects(widget);
+  widget.menu.hidden = false;
+  widget.wrapper.classList.add("is-open");
+  widget.trigger.setAttribute("aria-expanded", "true");
+  requestAnimationFrame(() => focusCustomOption(widget, focusPosition));
+}
+
+function refreshCustomSelect(widget) {
+  if (!widget) return;
+  const { select, trigger, value, menu } = widget;
+  const selected = select.selectedOptions[0] || select.options[0];
+  value.textContent = selected?.textContent || "";
+  trigger.setAttribute("aria-label", select.getAttribute("aria-label") || value.textContent);
+  menu.replaceChildren();
+
+  [...select.options].forEach((sourceOption) => {
+    const option = document.createElement("button");
+    option.type = "button";
+    option.className = "custom-select-option";
+    option.dataset.value = sourceOption.value;
+    option.disabled = sourceOption.disabled;
+    option.setAttribute("role", "option");
+    option.setAttribute("aria-selected", String(sourceOption.value === select.value));
+    const optionLabel = document.createElement("span");
+    optionLabel.textContent = sourceOption.textContent;
+    option.append(optionLabel);
+    option.addEventListener("click", () => {
+      if (select.value !== sourceOption.value) {
+        select.value = sourceOption.value;
+        select.dispatchEvent(new Event("change", { bubbles: true }));
+      }
+      closeCustomSelect(widget, true);
+      refreshCustomSelect(widget);
+    });
+    menu.append(option);
+  });
+}
+
+function enhanceCustomSelect(select) {
+  if (customSelects.has(select)) return;
+  const wrapper = document.createElement("div");
+  wrapper.className = select.classList.contains("locale-select")
+    ? "custom-select locale-custom-select"
+    : "custom-select filter-custom-select";
+  const trigger = document.createElement("button");
+  trigger.type = "button";
+  trigger.className = "custom-select-trigger";
+  trigger.id = `${select.id}-trigger`;
+  trigger.setAttribute("aria-haspopup", "listbox");
+  trigger.setAttribute("aria-expanded", "false");
+  const value = document.createElement("span");
+  value.className = "custom-select-value";
+  trigger.append(value);
+  const menu = document.createElement("div");
+  menu.id = `${select.id}-menu`;
+  menu.className = "custom-select-menu";
+  menu.setAttribute("role", "listbox");
+  menu.hidden = true;
+  trigger.setAttribute("aria-controls", menu.id);
+
+  select.before(wrapper);
+  select.classList.add("custom-select-native");
+  select.setAttribute("aria-hidden", "true");
+  select.tabIndex = -1;
+  wrapper.append(select, trigger, menu);
+
+  const associatedLabel = [...document.querySelectorAll("label")]
+    .find((label) => label.htmlFor === select.id);
+  if (associatedLabel) associatedLabel.htmlFor = trigger.id;
+
+  const widget = { select, wrapper, trigger, value, menu };
+  customSelects.set(select, widget);
+  refreshCustomSelect(widget);
+
+  trigger.addEventListener("click", () => {
+    setCustomSelectOpen(widget, menu.hidden);
+  });
+  trigger.addEventListener("keydown", (event) => {
+    if (event.key !== "ArrowDown" && event.key !== "ArrowUp") return;
+    event.preventDefault();
+    setCustomSelectOpen(widget, true, event.key === "ArrowUp" ? "last" : "selected");
+  });
+  menu.addEventListener("keydown", (event) => {
+    const options = customOptionButtons(widget);
+    const current = options.indexOf(document.activeElement);
+    if (event.key === "Escape") {
+      event.preventDefault();
+      closeCustomSelect(widget, true);
+      return;
+    }
+    if (event.key === "Tab") {
+      closeCustomSelect(widget);
+      return;
+    }
+    if (!["ArrowDown", "ArrowUp", "Home", "End"].includes(event.key)) return;
+    event.preventDefault();
+    let next = current;
+    if (event.key === "Home") next = 0;
+    if (event.key === "End") next = options.length - 1;
+    if (event.key === "ArrowDown") next = (current + 1 + options.length) % options.length;
+    if (event.key === "ArrowUp") next = (current - 1 + options.length) % options.length;
+    options[next]?.focus();
+  });
+  select.addEventListener("change", () => refreshCustomSelect(widget));
+  new MutationObserver(() => refreshCustomSelect(widget)).observe(select, {
+    childList: true,
+    subtree: true,
+    characterData: true,
+  });
+}
+
+function enhanceCustomSelects() {
+  [
+    elements.localeSelect,
+    elements.sourceFilter,
+    elements.harnessFilter,
+    elements.modelFilter,
+    elements.thinkingFilter,
+  ].forEach(enhanceCustomSelect);
+  document.addEventListener("pointerdown", (event) => {
+    const active = [...customSelects.values()].find((widget) => !widget.menu.hidden);
+    if (active && !active.wrapper.contains(event.target)) closeCustomSelect(active);
+  });
+}
+
 function applyTranslations() {
   document.documentElement.lang = state.locale === "zh" ? "zh-CN" : "en";
   document.documentElement.dataset.locale = state.locale;
@@ -261,6 +419,7 @@ function applyTranslations() {
     node.setAttribute("aria-label", t(node.dataset.i18nAria));
   });
   elements.localeSelect.querySelector('option[value="system"]').textContent = t("followSystem");
+  customSelects.forEach(refreshCustomSelect);
   updateThemeLabel();
 }
 
@@ -375,26 +534,40 @@ function formatDuration(value) {
   return `${minutes}m ${seconds % 60}s`;
 }
 
-function linkedName(item) {
-  const label = escapeHtml(item.label);
-  const href = safeUrl(item.url);
-  return href
-    ? `<a class="entity-link" href="${escapeHtml(href)}">${label}<span aria-hidden="true">↗</span></a>`
-    : `<span class="entity-name">${label}</span>`;
+function entityName(item) {
+  return `<span class="entity-name">${escapeHtml(item.label)}</span>`;
 }
 
 function renderBenchSwitcher() {
-  elements.benchSwitcher.replaceChildren();
-  state.payload.benchmarks.forEach((bench) => {
-    const button = document.createElement("button");
-    button.type = "button";
-    button.className = "bench-tab";
-    button.textContent = `TB ${bench.version}`;
-    button.dataset.benchmark = bench.id;
-    button.setAttribute("aria-pressed", String(bench.id === state.benchmark.id));
-    button.addEventListener("click", () => selectBenchmark(bench.id));
-    elements.benchSwitcher.append(button);
+  const benchmarks = state.payload.benchmarks;
+  const activeIndex = Math.max(0, benchmarks.findIndex((bench) => bench.id === state.benchmark.id));
+  elements.benchSwitcher.style.setProperty("--bench-count", benchmarks.length);
+
+  let buttons = [...elements.benchSwitcher.querySelectorAll(".bench-tab")];
+  if (!elements.benchSwitcher.querySelector(".bench-glider") || buttons.length !== benchmarks.length) {
+    elements.benchSwitcher.replaceChildren();
+
+    const glider = document.createElement("span");
+    glider.className = "bench-glider";
+    glider.setAttribute("aria-hidden", "true");
+    elements.benchSwitcher.append(glider);
+
+    benchmarks.forEach((bench) => {
+      const button = document.createElement("button");
+      button.type = "button";
+      button.className = "bench-tab";
+      button.innerHTML = `<span class="bench-tab-prefix">TB</span><span class="bench-tab-version">${escapeHtml(bench.version)}</span>`;
+      button.dataset.benchmark = bench.id;
+      button.addEventListener("click", () => selectBenchmark(bench.id));
+      elements.benchSwitcher.append(button);
+    });
+    buttons = [...elements.benchSwitcher.querySelectorAll(".bench-tab")];
+  }
+
+  buttons.forEach((button, index) => {
+    button.setAttribute("aria-pressed", String(index === activeIndex));
   });
+  elements.benchSwitcher.style.setProperty("--bench-index", activeIndex);
 }
 
 function updateSelect(select, values, current, emptyLabel) {
@@ -544,7 +717,7 @@ function renderTableHead() {
   columns.forEach(([key, labelKey]) => {
     const cell = document.createElement("th");
     cell.scope = "col";
-    cell.className = `column-${key.replaceAll("_", "-")}`;
+    cell.className = `column-${key.replaceAll("_", "-")}${state.sort.key === key ? " is-active" : ""}`;
     const button = document.createElement("button");
     button.type = "button";
     button.className = "sort-button";
@@ -592,12 +765,8 @@ function accuracyCell(row) {
 }
 
 function sourceBadge(row) {
-  const href = safeUrl(row.source_url);
   const label = escapeHtml(sourceTypeLabel(row.source_type));
-  const content = `<span class="source-badge source-${escapeHtml(row.source_type)}">${label}</span>`;
-  return href
-    ? `<a class="source-link" href="${escapeHtml(href)}" target="_blank" rel="noreferrer">${content}<span aria-hidden="true">↗</span></a>`
-    : content;
+  return `<span class="source-badge source-${escapeHtml(row.source_type)}">${label}</span>`;
 }
 
 function missingValue() {
@@ -621,23 +790,24 @@ function renderTable() {
 
   elements.resultsBody.innerHTML = rows.map((row) => {
     const comparisonRank = ranks.get(row.id);
+    const active = (key) => state.sort.key === key ? " is-active" : "";
     const effort = row.thinking_level
       ? `<span class="effort-pill">${escapeHtml(row.thinking_level)}</span>`
       : `<span class="effort-pill muted">${escapeHtml(t("notReported"))}</span>`;
     return `
       <tr>
-        <td class="rank-cell"><span class="rank-badge${comparisonRank <= 3 ? ` rank-${comparisonRank}` : ""}">${comparisonRank}</span></td>
-        <td class="entity-cell harness-cell">${linkedName(row.harness)}</td>
-        <td class="entity-cell model-cell">
-          <div class="model-primary">${linkedName(row.model)}${effort}</div>
+        <td class="rank-cell${active("rank")}"><span class="rank-badge${comparisonRank <= 3 ? ` rank-${comparisonRank}` : ""}">${comparisonRank}</span></td>
+        <td class="entity-cell harness-cell${active("harness")}">${entityName(row.harness)}</td>
+        <td class="entity-cell model-cell${active("model")}">
+          <div class="model-primary">${entityName(row.model)}${effort}</div>
         </td>
-        <td>${accuracyCell(row)}</td>
-        <td class="number-cell">${row.average_trial_duration_seconds == null ? missingValue() : escapeHtml(formatDuration(row.average_trial_duration_seconds))}</td>
-        <td class="date-cell">${escapeHtml(formatDate(row.release_date))}</td>
-        <td class="number-cell">${row.total_tokens == null ? missingValue() : escapeHtml(formatTokens(row.total_tokens))}</td>
-        <td class="number-cell">${row.total_cost_usd == null ? missingValue() : escapeHtml(formatCost(row.total_cost_usd))}</td>
-        <td class="source-cell">${sourceBadge(row)}</td>
-        <td class="details-cell"><button class="details-button" type="button" data-result-id="${escapeHtml(row.id)}">${escapeHtml(t("details"))}<span aria-hidden="true">→</span></button></td>
+        <td class="${active("accuracy").trim()}">${accuracyCell(row)}</td>
+        <td class="number-cell${active("average_trial_duration_seconds")}">${row.average_trial_duration_seconds == null ? missingValue() : escapeHtml(formatDuration(row.average_trial_duration_seconds))}</td>
+        <td class="date-cell${active("release_date")}">${escapeHtml(formatDate(row.release_date))}</td>
+        <td class="number-cell${active("total_tokens")}">${row.total_tokens == null ? missingValue() : escapeHtml(formatTokens(row.total_tokens))}</td>
+        <td class="number-cell${active("total_cost_usd")}">${row.total_cost_usd == null ? missingValue() : escapeHtml(formatCost(row.total_cost_usd))}</td>
+        <td class="source-cell${active("source_type")}">${sourceBadge(row)}</td>
+        <td class="details-cell"><button class="details-button" type="button" data-result-id="${escapeHtml(row.id)}">${escapeHtml(t("details"))}</button></td>
       </tr>`;
   }).join("");
 }
@@ -793,6 +963,7 @@ async function init() {
   elements.localeSelect.value = ["system", "en", "zh"].includes(localePreference)
     ? localePreference
     : state.locale;
+  enhanceCustomSelects();
   elements.localeSelect.addEventListener("change", (event) => setLocale(event.target.value));
   elements.themeToggle.addEventListener("click", cycleTheme);
   elements.sourceFilter.addEventListener("change", (event) => {

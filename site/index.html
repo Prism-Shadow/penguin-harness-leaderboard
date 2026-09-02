@@ -40,8 +40,8 @@
         document.documentElement.lang = locale === "zh" ? "zh-CN" : "en";
       } catch {}
     </script>
-    <link rel="stylesheet" href="styles.css?v=20260901-17" />
-    <script src="script.js?v=20260901-14" defer></script>
+    <link rel="stylesheet" href="styles.css?v=20260902-04" />
+    <script src="script.js?v=20260902-04" defer></script>
   </head>
   <body>
     <a class="skip-link" href="#results" data-i18n="skipToResults">Skip to results</a>
@@ -69,9 +69,9 @@
             </svg>
             <label class="sr-only" for="locale-select" data-i18n="language">Language</label>
             <select id="locale-select" class="locale-select">
-              <option value="system">Follow system</option>
               <option value="en">English</option>
               <option value="zh">中文</option>
+              <option value="system">Follow system</option>
             </select>
           </div>
           <button class="theme-toggle" type="button" title="Theme" aria-label="Theme">
@@ -106,9 +106,8 @@
               <span data-i18n="viewResults">View results</span>
               <span aria-hidden="true">↓</span>
             </a>
-            <a class="button button-secondary benchmark-source-link" href="https://www.tbench.ai">
-              <span data-i18n="viewOfficial">Open official leaderboard</span>
-              <span aria-hidden="true">↗</span>
+            <a class="button button-secondary" href="https://github.com/Prism-Shadow/penguin-harness-leaderboard">
+              <span data-i18n="viewGithub">View GitHub</span>
             </a>
           </div>
 
@@ -144,36 +143,35 @@
             <a class="snapshot-link benchmark-source-link" href="https://www.tbench.ai">
               <span class="snapshot-status" aria-hidden="true"></span>
               <span class="snapshot-label">tbench.ai</span>
-              <span aria-hidden="true">↗</span>
             </a>
           </header>
 
           <div class="result-toolbar">
             <div class="result-controls">
-              <label>
-                <span data-i18n="source">Source</span>
-                <select class="filter-select source-filter" data-i18n-aria="sourceFilter" aria-label="Filter by source">
+              <div class="filter-field">
+                <label for="source-filter" data-i18n="source">Source</label>
+                <select id="source-filter" class="filter-select source-filter" data-i18n-aria="sourceFilter" aria-label="Filter by source">
                   <option value="">All sources</option>
                 </select>
-              </label>
-              <label>
-                <span data-i18n="harness">Harness</span>
-                <select class="filter-select harness-filter" data-i18n-aria="harnessFilter" aria-label="Filter by harness">
+              </div>
+              <div class="filter-field">
+                <label for="harness-filter" data-i18n="harness">Harness</label>
+                <select id="harness-filter" class="filter-select harness-filter" data-i18n-aria="harnessFilter" aria-label="Filter by harness">
                   <option value="">All harnesses</option>
                 </select>
-              </label>
-              <label>
-                <span data-i18n="model">Model</span>
-                <select class="filter-select model-filter" data-i18n-aria="modelFilter" aria-label="Filter by model">
+              </div>
+              <div class="filter-field">
+                <label for="model-filter" data-i18n="model">Model</label>
+                <select id="model-filter" class="filter-select model-filter" data-i18n-aria="modelFilter" aria-label="Filter by model">
                   <option value="">All models</option>
                 </select>
-              </label>
-              <label>
-                <span data-i18n="thinkingLevel">Thinking level</span>
-                <select class="filter-select thinking-filter" data-i18n-aria="thinkingFilter" aria-label="Filter by thinking level">
+              </div>
+              <div class="filter-field">
+                <label for="thinking-filter" data-i18n="thinkingLevel">Thinking level</label>
+                <select id="thinking-filter" class="filter-select thinking-filter" data-i18n-aria="thinkingFilter" aria-label="Filter by thinking level">
                   <option value="">All levels</option>
                 </select>
-              </label>
+              </div>
             </div>
             <span class="result-count" aria-live="polite">Loading…</span>
           </div>

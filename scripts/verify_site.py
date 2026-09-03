@@ -29,6 +29,7 @@ VENDOR_SOURCE_PREFIXES = {
     "Z.ai": ("https://huggingface.co/zai-org/",),
     "Qwen": ("https://huggingface.co/Qwen/",),
     "Moonshot AI": ("https://huggingface.co/moonshotai/", "https://www.kimi.com/"),
+    "Anthropic": ("https://www.anthropic.com/",),
 }
 PENGUIN_SOURCE_PREFIX = "https://github.com/hw3150cu/TB2.1_penguin_dsv4_flash"
 
@@ -52,9 +53,15 @@ def valid_date(value: Any) -> bool:
     return True
 
 
-def verify_link(value: Any, field: str, row_id: str) -> None:
+def verify_link(
+    value: Any,
+    field: str,
+    row_id: str,
+    *,
+    allow_empty: bool = False,
+) -> None:
     assert isinstance(value, dict), f"{row_id}: {field} must be an object"
-    assert value.get("label"), f"{row_id}: {field} label is empty"
+    assert allow_empty or value.get("label"), f"{row_id}: {field} label is empty"
     url = value.get("url")
     assert url is None or url.startswith("https://"), f"{row_id}: invalid {field} URL"
 
@@ -69,6 +76,11 @@ def expected_competition_ranks(rows: list[dict[str, Any]]) -> list[int]:
             previous = row["accuracy"]
         result.append(rank)
     return result
+
+
+def canonical_model_label(value: str) -> str:
+    """Compare model labels without punctuation-only display differences."""
+    return "".join(character.lower() for character in value if character.isalnum())
 
 
 def verify_benchmark(bench: dict[str, Any]) -> None:
@@ -86,10 +98,25 @@ def verify_benchmark(bench: dict[str, Any]) -> None:
         row["source_type"] == "penguin_run" for row in rows
     )
     assert bench["model_count"] == len({row["model"]["label"] for row in rows})
-    assert bench["harness_count"] == len({row["harness"]["label"] for row in rows})
+    assert bench["harness_count"] == len(
+        {row["harness"]["label"] for row in rows if row["harness"]["label"]}
+    )
     assert bench["best_accuracy"] == max(row["accuracy"] for row in rows)
     assert bench["official_best_accuracy"] == max(
         row["accuracy"] for row in official_rows
+    )
+    official_model_labels = {
+        canonical_model_label(row["model"]["label"]) for row in official_rows
+    }
+    duplicate_vendor_models = sorted(
+        row["model"]["label"]
+        for row in rows
+        if row["source_type"] == "vendor_reported"
+        and canonical_model_label(row["model"]["label"]) in official_model_labels
+    )
+    assert not duplicate_vendor_models, (
+        f"{bench['id']}: vendor rows duplicate official models: "
+        f"{', '.join(duplicate_vendor_models)}"
     )
 
     official_rows_by_rank = sorted(official_rows, key=lambda row: row["rank"])
@@ -127,8 +154,19 @@ def verify_benchmark(bench: dict[str, Any]) -> None:
         assert duration is None or duration >= 0, row_id
         assert row["reward_hacks"] is None or row["reward_hacks"] >= 0, row_id
         assert row["thinking_level"] is None or isinstance(row["thinking_level"], str), row_id
-        verify_link(row["harness"], "harness", row_id)
-        verify_link(row["harness_org"], "harness_org", row_id)
+        allow_missing_harness = row["source_type"] != "benchmark_official"
+        verify_link(
+            row["harness"],
+            "harness",
+            row_id,
+            allow_empty=allow_missing_harness,
+        )
+        verify_link(
+            row["harness_org"],
+            "harness_org",
+            row_id,
+            allow_empty=allow_missing_harness,
+        )
         verify_link(row["model"], "model", row_id)
         verify_link(row["model_org"], "model_org", row_id)
         if row["display_reward_hacks"] is not None:
@@ -202,6 +240,7 @@ def verify_frontend_contract() -> None:
     assert "ranks.get(row.id)" in script, "Filtered rows do not use comparison ranks"
     assert 'row.rank ?? "—"' not in script, "Unranked rows still render a dash in the main table"
     assert 'row.protocol_note !== null' in script, "Official Details null guard is missing"
+    assert "missingValue(true)" in script, "Compact missing metrics are not rendered safely"
     assert "linkedName(row.harness, row.harness_org)" not in script, (
         "Harness organization is still repeated in the main table"
     )

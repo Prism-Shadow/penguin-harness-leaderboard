@@ -14,7 +14,7 @@ const translations = {
     system: "system",
     light: "light",
     dark: "dark",
-    heroTitle: "Compare the whole setup,<br /><span>not just the model.</span>",
+    heroTitle: "The model isn't everything.<br /><span>The whole setup matters.</span>",
     viewResults: "View results",
     viewGithub: "View GitHub",
     publicResults: "Public results",
@@ -42,14 +42,17 @@ const translations = {
     tableHint: "Swipe to view the full table →",
     loadingResults: "Loading public results…",
     confidenceNote: "Every result has a score bar. Confidence whiskers appear only when the source reports a 95% interval; results without interval data show the bar alone.",
-    readMetrics: "Read the metrics",
-    metricsTitle: "The comparable result, at a glance.",
+    dataCoverage: "Data coverage",
+    coverageTitle: "From public baselines to Penguin runs.",
+    coverageDescription: "See how official baselines, vendor reports, and Penguin runs are represented across every benchmark.",
+    officialSnapshot: "Official snapshot",
+    viewOfficialBenchmark: "View official benchmark",
+    verifiedPenguinRun: "Verified Penguin run",
+    viewFullReport: "View full report",
+    successSummary: "{successes} successes / {trials} valid trials",
     resolutionRate: "Resolution rate",
-    resolutionDescription: "Pass rate with the reported 95% confidence interval shown on the same 0–100 scale.",
     tokens: "Tokens",
-    tokensDescription: "Total reported token usage across the evaluated trials.",
     cost: "Cost",
-    costDescription: "Total reported API cost for the published evaluation.",
     footerText: "Terminal-Bench official baselines · vendor reports · Penguin runs",
     rank: "Rank",
     releaseDate: "Release date",
@@ -107,7 +110,7 @@ const translations = {
     system: "跟随系统",
     light: "浅色",
     dark: "深色",
-    heroTitle: "对比完整配置，<br /><span>而不只是模型。</span>",
+    heroTitle: "模型不是全部，<br /><span>整套配置同样重要。</span>",
     viewResults: "查看榜单",
     viewGithub: "查看Github",
     publicResults: "公开结果",
@@ -135,14 +138,17 @@ const translations = {
     tableHint: "横向滑动查看完整表格 →",
     loadingResults: "正在加载公开结果…",
     confidenceNote: "所有结果都显示分数条；仅当来源披露 95% 置信区间时才显示误差线，未披露区间的数据只显示分数条。",
-    readMetrics: "指标说明",
-    metricsTitle: "一眼看懂可比结果。",
+    dataCoverage: "数据覆盖",
+    coverageTitle: "从公开基线，到 Penguin 实测。",
+    coverageDescription: "清楚展示每个 Benchmark 收录的官方基线、厂商自报与 Penguin 实测。",
+    officialSnapshot: "官方快照",
+    viewOfficialBenchmark: "查看官方榜单",
+    verifiedPenguinRun: "已验证的 Penguin 实测",
+    viewFullReport: "查看完整报告",
+    successSummary: "{successes} 次成功 / {trials} 次有效尝试",
     resolutionRate: "解决率",
-    resolutionDescription: "通过率与来源披露的 95% 置信区间在同一条 0–100 刻度上展示。",
     tokens: "Token",
-    tokensDescription: "本次公开评测全部 trials 的 Token 总用量。",
     cost: "成本",
-    costDescription: "本次公开评测报告的 API 总成本。",
     footerText: "Terminal-Bench 官方基线 · 厂商自报 · Penguin 实测",
     rank: "排名",
     releaseDate: "发布日期",
@@ -218,6 +224,8 @@ const elements = {
   dialogOfficialLinkLabel: document.querySelector(".official-detail-link-label"),
   dialogClose: document.querySelector(".dialog-close"),
   dialogDone: document.querySelector(".dialog-done"),
+  coverageGrid: document.querySelector(".coverage-grid"),
+  penguinSpotlight: document.querySelector(".penguin-spotlight"),
 };
 
 let dialogTrigger = null;
@@ -606,7 +614,9 @@ function formatDuration(value) {
 }
 
 function entityName(item) {
-  return `<span class="entity-name">${escapeHtml(item.label)}</span>`;
+  return item?.label
+    ? `<span class="entity-name">${escapeHtml(item.label)}</span>`
+    : missingValue();
 }
 
 function renderBenchSwitcher() {
@@ -685,42 +695,62 @@ function updateSourceSelect(rows) {
     : "";
 }
 
+function rowsMatchingFilters(rows, filters) {
+  return rows.filter((row) => (
+    (!filters.source || row.source_type === filters.source)
+    && (!filters.harness || row.harness.label === filters.harness)
+    && (!filters.model || row.model.label === filters.model)
+    && (!filters.thinking || row.thinking_level === filters.thinking)
+  ));
+}
+
 function renderFilters() {
   const rows = state.benchmark.results;
-  const unique = (project) => [...new Set(rows.map(project).filter(Boolean))]
+  const unique = (availableRows, project) => [...new Set(availableRows.map(project).filter(Boolean))]
     .sort((a, b) => a.localeCompare(b));
+
   updateSourceSelect(rows);
+  state.filters.source = elements.sourceFilter.value;
+
+  const harnessRows = rowsMatchingFilters(rows, {
+    source: state.filters.source,
+  });
   updateSelect(
     elements.harnessFilter,
-    unique((row) => row.harness.label),
+    unique(harnessRows, (row) => row.harness.label),
     state.filters.harness,
     t("allHarnesses"),
   );
+  state.filters.harness = elements.harnessFilter.value;
+
+  const modelRows = rowsMatchingFilters(rows, {
+    source: state.filters.source,
+    harness: state.filters.harness,
+  });
   updateSelect(
     elements.modelFilter,
-    unique((row) => row.model.label),
+    unique(modelRows, (row) => row.model.label),
     state.filters.model,
     t("allModels"),
   );
+  state.filters.model = elements.modelFilter.value;
+
+  const thinkingRows = rowsMatchingFilters(rows, {
+    source: state.filters.source,
+    harness: state.filters.harness,
+    model: state.filters.model,
+  });
   updateSelect(
     elements.thinkingFilter,
-    unique((row) => row.thinking_level),
+    unique(thinkingRows, (row) => row.thinking_level),
     state.filters.thinking,
     t("allLevels"),
   );
-  state.filters.source = elements.sourceFilter.value;
-  state.filters.harness = elements.harnessFilter.value;
-  state.filters.model = elements.modelFilter.value;
   state.filters.thinking = elements.thinkingFilter.value;
 }
 
 function filteredRows() {
-  return state.benchmark.results.filter((row) => (
-    (!state.filters.source || row.source_type === state.filters.source)
-    && (!state.filters.harness || row.harness.label === state.filters.harness)
-    && (!state.filters.model || row.model.label === state.filters.model)
-    && (!state.filters.thinking || row.thinking_level === state.filters.thinking)
-  ));
+  return rowsMatchingFilters(state.benchmark.results, state.filters);
 }
 
 function comparisonRanks(rows) {
@@ -840,8 +870,11 @@ function sourceBadge(row) {
   return `<span class="source-badge source-${escapeHtml(row.source_type)}">${label}</span>`;
 }
 
-function missingValue() {
-  return `<span class="missing-value">${escapeHtml(t("notReported"))}</span>`;
+function missingValue(compact = false) {
+  const label = escapeHtml(t("notReported"));
+  return compact
+    ? `<span class="missing-value" aria-label="${label}" title="${label}">—</span>`
+    : `<span class="missing-value">${label}</span>`;
 }
 
 function renderTable() {
@@ -873,10 +906,10 @@ function renderTable() {
           <div class="model-primary">${entityName(row.model)}${effort}</div>
         </td>
         <td class="${active("accuracy").trim()}">${accuracyCell(row)}</td>
-        <td class="number-cell${active("average_trial_duration_seconds")}">${row.average_trial_duration_seconds == null ? missingValue() : escapeHtml(formatDuration(row.average_trial_duration_seconds))}</td>
+        <td class="number-cell${active("average_trial_duration_seconds")}">${row.average_trial_duration_seconds == null ? missingValue(true) : escapeHtml(formatDuration(row.average_trial_duration_seconds))}</td>
         <td class="date-cell${active("release_date")}">${escapeHtml(formatDate(row.release_date))}</td>
-        <td class="number-cell${active("total_tokens")}">${row.total_tokens == null ? missingValue() : escapeHtml(formatTokens(row.total_tokens))}</td>
-        <td class="number-cell${active("total_cost_usd")}">${row.total_cost_usd == null ? missingValue() : escapeHtml(formatCost(row.total_cost_usd))}</td>
+        <td class="number-cell${active("total_tokens")}">${row.total_tokens == null ? missingValue(true) : escapeHtml(formatTokens(row.total_tokens))}</td>
+        <td class="number-cell${active("total_cost_usd")}">${row.total_cost_usd == null ? missingValue(true) : escapeHtml(formatCost(row.total_cost_usd))}</td>
         <td class="source-cell${active("source_type")}">${sourceBadge(row)}</td>
         <td class="details-cell"><button class="details-button" type="button" data-result-id="${escapeHtml(row.id)}">${escapeHtml(t("details"))}</button></td>
       </tr>`;
@@ -908,7 +941,7 @@ function detailSummaryItem(value, label) {
 
 function openDetails(row, trigger) {
   dialogTrigger = trigger;
-  elements.dialogTitle.textContent = `${row.model.label} × ${row.harness.label}`;
+  elements.dialogTitle.textContent = `${row.model.label} × ${row.harness.label || t("notReported")}`;
   elements.dialogSubtitle.textContent = `${state.benchmark.name} · ${row.thinking_level || t("notReported")}`;
 
   const confidence = row.accuracy_ci95_half_width == null
@@ -991,13 +1024,107 @@ function closeDetails() {
   if (elements.resultDialog.open) elements.resultDialog.close();
 }
 
+function renderCoverage() {
+  const benchmarks = state.payload?.benchmarks || [];
+  elements.coverageGrid.innerHTML = benchmarks.map((bench) => {
+    const isCurrent = bench.id === state.benchmark.id;
+    const officialUrl = safeUrl(bench.official_url);
+    const officialLink = officialUrl
+      ? `<a class="coverage-source-link" href="${escapeHtml(officialUrl)}" target="_blank" rel="noreferrer">${escapeHtml(t("viewOfficialBenchmark"))}</a>`
+      : "";
+    return `
+      <article class="coverage-card${isCurrent ? " is-current" : ""}"${isCurrent ? ' aria-current="true"' : ""}>
+        <header class="coverage-card-header">
+          <div>
+            <span class="coverage-version">TB ${escapeHtml(bench.version)}</span>
+            <h3>${escapeHtml(bench.name)}</h3>
+          </div>
+          ${officialLink}
+        </header>
+        <div class="coverage-total">
+          <strong>${escapeHtml(formatNumber(bench.result_count) ?? "0")}</strong>
+          <span>${escapeHtml(t("publicResults"))}</span>
+        </div>
+        <dl class="coverage-source-grid">
+          <div><dt>${escapeHtml(t("benchmarkOfficial"))}</dt><dd>${escapeHtml(formatNumber(bench.official_result_count ?? 0))}</dd></div>
+          <div><dt>${escapeHtml(t("vendorReported"))}</dt><dd>${escapeHtml(formatNumber(bench.vendor_result_count ?? 0))}</dd></div>
+          <div><dt>${escapeHtml(t("penguinRun"))}</dt><dd>${escapeHtml(formatNumber(bench.penguin_result_count ?? 0))}</dd></div>
+        </dl>
+        <footer class="coverage-card-footer">
+          <span>${escapeHtml(formatNumber(bench.model_count) ?? "0")} ${escapeHtml(t("models"))}</span>
+          <span>${escapeHtml(formatNumber(bench.harness_count) ?? "0")} ${escapeHtml(t("harnesses"))}</span>
+          <span>${escapeHtml(t("officialSnapshot"))} · ${escapeHtml(formatSnapshot(bench.snapshot_updated_at))}</span>
+        </footer>
+      </article>
+    `;
+  }).join("");
+
+  const penguinRuns = benchmarks.flatMap((bench) => bench.results
+    .filter((row) => row.source_type === "penguin_run")
+    .map((row) => ({ bench, row })));
+  penguinRuns.sort((left, right) => {
+    const leftDate = Date.parse(left.row.verified_at || left.row.published_at || "") || 0;
+    const rightDate = Date.parse(right.row.verified_at || right.row.published_at || "") || 0;
+    return rightDate - leftDate;
+  });
+
+  const latest = penguinRuns[0];
+  if (!latest) {
+    elements.penguinSpotlight.hidden = true;
+    elements.penguinSpotlight.replaceChildren();
+    return;
+  }
+
+  const { bench, row } = latest;
+  const protocolNote = row.protocol_note !== null && typeof row.protocol_note === "object"
+    ? row.protocol_note[state.locale] || row.protocol_note.en
+    : row.protocol_note;
+  const evidenceUrl = safeUrl(row.source_url || row.official_detail_url);
+  const reportLink = evidenceUrl
+    ? `<a class="button button-primary penguin-report-link" href="${escapeHtml(evidenceUrl)}" target="_blank" rel="noreferrer">${escapeHtml(t("viewFullReport"))}</a>`
+    : "";
+  const harnessName = row.harness_version
+    ? `${row.harness.label} ${row.harness_version}`
+    : row.harness.label;
+  const successSummary = row.successes != null && row.trial_count != null
+    ? t("successSummary", {
+      successes: formatNumber(row.successes),
+      trials: formatNumber(row.trial_count),
+    })
+    : "";
+
+  elements.penguinSpotlight.hidden = false;
+  elements.penguinSpotlight.innerHTML = `
+    <div class="penguin-spotlight-copy">
+      <div class="penguin-spotlight-label">
+        <img src="favicon.svg" alt="" />
+        <span>${escapeHtml(t("verifiedPenguinRun"))}</span>
+      </div>
+      <span class="penguin-benchmark-pill">${escapeHtml(bench.name)}</span>
+      <h3>${escapeHtml(harnessName)} <span>×</span> ${escapeHtml(row.model.label)}</h3>
+      ${protocolNote ? `<p>${escapeHtml(protocolNote)}</p>` : ""}
+    </div>
+    <div class="penguin-spotlight-result">
+      <div class="penguin-score">
+        <strong>${escapeHtml(formatPercent(row.accuracy, 1))}</strong>
+        <span>${escapeHtml(t("resolutionRate"))}</span>
+        ${successSummary ? `<small>${escapeHtml(successSummary)}</small>` : ""}
+      </div>
+      <dl class="penguin-run-facts">
+        <div><dt>${escapeHtml(t("thinkingLevel"))}</dt><dd>${escapeHtml(row.thinking_level || t("notReported"))}</dd></div>
+        <div><dt>${escapeHtml(t("verifiedOn"))}</dt><dd>${escapeHtml(formatDate(row.verified_at))}</dd></div>
+      </dl>
+      ${reportLink}
+    </div>
+  `;
+}
+
 function renderBenchmark() {
   applyTranslations();
   renderBenchSwitcher();
   renderFilters();
 
   const bench = state.benchmark;
-  document.title = `${bench.name} · Penguin Harness Leaderboard`;
   document.querySelector(".current-bench-name").textContent = bench.name;
   document.querySelector(".current-bench-description").textContent = bench.description[state.locale];
   document.querySelector(".results-title").textContent = bench.name;
@@ -1015,6 +1142,7 @@ function renderBenchmark() {
   });
   document.querySelector(".snapshot-label").textContent = `tbench.ai · ${bench.version}`;
   renderTable();
+  renderCoverage();
 }
 
 function selectBenchmark(id, updateUrl = true) {
@@ -1051,18 +1179,22 @@ async function init() {
   elements.themeToggle.addEventListener("click", cycleTheme);
   elements.sourceFilter.addEventListener("change", (event) => {
     state.filters.source = event.target.value;
+    renderFilters();
     renderTable();
   });
   elements.harnessFilter.addEventListener("change", (event) => {
     state.filters.harness = event.target.value;
+    renderFilters();
     renderTable();
   });
   elements.modelFilter.addEventListener("change", (event) => {
     state.filters.model = event.target.value;
+    renderFilters();
     renderTable();
   });
   elements.thinkingFilter.addEventListener("change", (event) => {
     state.filters.thinking = event.target.value;
+    renderFilters();
     renderTable();
   });
   elements.resultsBody.addEventListener("click", (event) => {

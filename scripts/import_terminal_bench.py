@@ -246,7 +246,9 @@ def normalize_benchmark(
         "vendor_result_count": sum(row["source_type"] == "vendor_reported" for row in rows),
         "penguin_result_count": sum(row["source_type"] == "penguin_run" for row in rows),
         "model_count": len({row["model"]["label"] for row in rows}),
-        "harness_count": len({row["harness"]["label"] for row in rows}),
+        "harness_count": len(
+            {row["harness"]["label"] for row in rows if row["harness"]["label"]}
+        ),
         "best_accuracy": max(row["accuracy"] for row in rows),
         "official_best_accuracy": max(row["accuracy"] for row in official_rows),
         "description": {

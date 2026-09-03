@@ -2,7 +2,7 @@
   "schema_version": 4,
   "default_benchmark": "terminal-bench-2.1",
   "official_api": "https://ofhuhcpkvzjlejydnvyd.supabase.co/functions/v1/leaderboard-read",
-  "curated_verified_at": "2026-09-01",
+  "curated_verified_at": "2026-09-03",
   "benchmarks": [
     {
       "id": "terminal-bench-2.1",
@@ -78,7 +78,7 @@
           "source_title": "Kimi K3 model card",
           "source_publisher": "Moonshot AI",
           "published_at": "2026-08-20",
-          "verified_at": "2026-09-01",
+          "verified_at": "2026-09-03",
           "harness_version": null,
           "protocol_note": {
             "en": "Kimi Code harness; max reasoning effort; temperature=1.0 and top_p=1.0 for agentic tasks.",
@@ -135,7 +135,7 @@
           "source_title": "GLM-5.3 model card",
           "source_publisher": "Z.ai",
           "published_at": null,
-          "verified_at": "2026-09-01",
+          "verified_at": "2026-09-03",
           "harness_version": "2.1.207",
           "protocol_note": {
             "en": "Claude Code 2.1.207; temperature=1.0, top_p=1, max_new_tokens=65,536, 6-hour timeout. The TB 2.1 note does not state the effort level.",
@@ -192,7 +192,7 @@
           "source_title": "DeepSeek-V4-Pro-0813 model card",
           "source_publisher": "DeepSeek",
           "published_at": "2026-08-13",
-          "verified_at": "2026-09-01",
+          "verified_at": "2026-09-03",
           "harness_version": "minimal mode",
           "protocol_note": {
             "en": "DeepSeek Harness minimal mode; max reasoning effort; temperature=1.0, top_p=0.95.",
@@ -249,7 +249,7 @@
           "source_title": "Qwen3.8-Max model card",
           "source_publisher": "Qwen",
           "published_at": null,
-          "verified_at": "2026-09-01",
+          "verified_at": "2026-09-03",
           "harness_version": null,
           "protocol_note": {
             "en": "Claude Code; avg@10; 5-hour timeout; max_tokens=131,072. The effort level is not disclosed.",
@@ -306,7 +306,7 @@
           "source_title": "GLM-5.3-Flash model card",
           "source_publisher": "Z.ai",
           "published_at": null,
-          "verified_at": "2026-09-01",
+          "verified_at": "2026-09-03",
           "harness_version": "2.1.207",
           "protocol_note": {
             "en": "Claude Code 2.1.207; temperature=1.0, top_p=1, max_new_tokens=65,536, 6-hour timeout. The effort level is not disclosed.",
@@ -483,7 +483,7 @@
           "source_title": "DeepSeek API change log — V4 Flash update",
           "source_publisher": "DeepSeek",
           "published_at": "2026-07-31",
-          "verified_at": "2026-09-01",
+          "verified_at": "2026-09-03",
           "harness_version": "minimal mode",
           "protocol_note": {
             "en": "DeepSeek Harness minimal mode; max reasoning effort; temperature=1.0, top_p=0.95.",
@@ -540,7 +540,7 @@
           "source_title": "GLM-5.2 model card",
           "source_publisher": "Z.ai",
           "published_at": "2026-07-02",
-          "verified_at": "2026-09-01",
+          "verified_at": "2026-09-03",
           "harness_version": "2.1.167",
           "protocol_note": {
             "en": "Claude Code 2.1.167; temperature=1.0, top_p=0.95, max_new_tokens=131,072; no wall-clock limit; average of five runs.",
@@ -597,7 +597,7 @@
           "source_title": "GLM-5.2 model card",
           "source_publisher": "Z.ai",
           "published_at": "2026-07-02",
-          "verified_at": "2026-09-01",
+          "verified_at": "2026-09-03",
           "harness_version": null,
           "protocol_note": {
             "en": "Terminus 2; JSON parser; 4-hour timeout; temperature=1.0, top_p=1.0, max_new_tokens=48K, max_episodes=500, 256K context; 4 CPUs and 8 GB RAM.",
@@ -1074,7 +1074,7 @@
           "source_title": "Terminal-Bench 2.1 Report — DeepSeek-V4-Flash One DGX Spark",
           "source_publisher": "Penguin run report",
           "published_at": null,
-          "verified_at": "2026-09-01",
+          "verified_at": "2026-09-03",
           "harness_version": "0.2.2",
           "protocol_note": {
             "en": "Penguin 0.2.2 with Harbor 0.21.0; two scoreable attempts for each of 89 tasks; NVIDIA GB10; timeout multiplier 3.172; 128K context; max tokens 256K; skills and memory disabled.",
@@ -1251,7 +1251,7 @@
           "source_title": "Qwen3.8-27B model card",
           "source_publisher": "Qwen",
           "published_at": null,
-          "verified_at": "2026-09-01",
+          "verified_at": "2026-09-03",
           "harness_version": null,
           "protocol_note": {
             "en": "The model card names the harness as Terminus and does not disclose the effort level or further TB 2.1 configuration.",
@@ -1630,12 +1630,12 @@
         "leaderboard": "3-0-0",
         "dataset_version": "1"
       },
-      "snapshot_updated_at": "2026-08-29T00:04:10.421509+00:00",
-      "result_count": 13,
+      "snapshot_updated_at": "2026-09-03T00:07:57.08561+00:00",
+      "result_count": 12,
       "official_result_count": 12,
-      "vendor_result_count": 1,
+      "vendor_result_count": 0,
       "penguin_result_count": 0,
-      "model_count": 13,
+      "model_count": 12,
       "harness_count": 6,
       "best_accuracy": 42.7,
       "official_best_accuracy": 42.7,
@@ -1859,63 +1859,6 @@
           "verified_at": null,
           "harness_version": null,
           "protocol_note": null
-        },
-        {
-          "id": "vendor-glm-5-3-tb30-claude-code",
-          "benchmark_id": "terminal-bench-3.0",
-          "rank": null,
-          "harness": {
-            "label": "Claude Code",
-            "url": "https://claude.com/claude-code"
-          },
-          "harness_org": {
-            "label": "Anthropic",
-            "url": "https://www.anthropic.com"
-          },
-          "model": {
-            "label": "GLM-5.3",
-            "url": "https://huggingface.co/zai-org/GLM-5.3"
-          },
-          "model_org": {
-            "label": "Z.ai",
-            "url": "https://z.ai"
-          },
-          "thinking_level": "max",
-          "accuracy": 28.3,
-          "accuracy_stderr": null,
-          "accuracy_ci95_half_width": null,
-          "display_accuracy": null,
-          "release_date": null,
-          "display_release_date": null,
-          "total_tokens": null,
-          "display_total_tokens": null,
-          "total_cost_usd": null,
-          "display_cost": null,
-          "trial_count": null,
-          "pass_at_2": null,
-          "pass_at_3": null,
-          "pass_at_4": null,
-          "pass_at_5": null,
-          "successes": null,
-          "uncached_input_tokens": null,
-          "cached_input_tokens": null,
-          "output_tokens": null,
-          "average_trial_duration_seconds": null,
-          "reward_hacks": null,
-          "display_reward_hacks": null,
-          "submission": null,
-          "official_detail_url": null,
-          "source_type": "vendor_reported",
-          "source_url": "https://huggingface.co/zai-org/GLM-5.3",
-          "source_title": "GLM-5.3 model card",
-          "source_publisher": "Z.ai",
-          "published_at": null,
-          "verified_at": "2026-09-01",
-          "harness_version": "2.1.207",
-          "protocol_note": {
-            "en": "Claude Code 2.1.207; max effort; 400K context; 128K max output; avg@3; isolated official task containers; 600-turn cap; 10-hour timeout; Tool Search disabled; official verifiers.",
-            "zh": "Claude Code 2.1.207；max 思考等级；400K 上下文；128K 最大输出；avg@3；官方任务隔离容器；最多 600 turns；10 小时超时；关闭 Tool Search；官方 verifier。"
-          }
         },
         {
           "id": "61adb66e-1cf1-4194-b68d-703554d21193",
@@ -2361,24 +2304,135 @@
         "leaderboard": "4-0-0",
         "dataset_version": "4"
       },
-      "snapshot_updated_at": "2026-08-29T01:40:34.831678+00:00",
-      "result_count": 10,
-      "official_result_count": 10,
-      "vendor_result_count": 0,
+      "snapshot_updated_at": "2026-09-03T02:56:12.472078+00:00",
+      "result_count": 14,
+      "official_result_count": 13,
+      "vendor_result_count": 1,
       "penguin_result_count": 0,
-      "model_count": 10,
-      "harness_count": 3,
-      "best_accuracy": 51.82,
-      "official_best_accuracy": 51.82,
+      "model_count": 14,
+      "harness_count": 4,
+      "best_accuracy": 60.9,
+      "official_best_accuracy": 57.88,
       "description": {
         "en": "Public Terminal-Bench 4.0 results, with official ranks kept separate from reported runs.",
         "zh": "Terminal-Bench 4.0 公开结果；官方排名与厂商、Penguin 报告结果严格区分。"
       },
       "results": [
         {
-          "id": "d71ac3d0-da36-49cb-89d9-323136e77111",
+          "id": "vendor-mythos-5-1-tb40",
+          "benchmark_id": "terminal-bench-4.0",
+          "rank": null,
+          "harness": {
+            "label": "",
+            "url": null
+          },
+          "harness_org": {
+            "label": "",
+            "url": null
+          },
+          "model": {
+            "label": "Mythos 5.1",
+            "url": "https://www.anthropic.com/claude-fable-and-mythos-5-1"
+          },
+          "model_org": {
+            "label": "Anthropic",
+            "url": "https://www.anthropic.com"
+          },
+          "thinking_level": "max",
+          "accuracy": 60.9,
+          "accuracy_stderr": null,
+          "accuracy_ci95_half_width": null,
+          "display_accuracy": null,
+          "release_date": null,
+          "display_release_date": null,
+          "total_tokens": null,
+          "display_total_tokens": null,
+          "total_cost_usd": null,
+          "display_cost": null,
+          "trial_count": null,
+          "pass_at_2": null,
+          "pass_at_3": null,
+          "pass_at_4": null,
+          "pass_at_5": null,
+          "successes": null,
+          "uncached_input_tokens": null,
+          "cached_input_tokens": null,
+          "output_tokens": null,
+          "average_trial_duration_seconds": null,
+          "reward_hacks": null,
+          "display_reward_hacks": null,
+          "submission": null,
+          "official_detail_url": null,
+          "source_type": "vendor_reported",
+          "source_url": "https://www.anthropic.com/claude-fable-and-mythos-5-1",
+          "source_title": "Introducing Claude Fable 5.1 and Claude Mythos 5.1",
+          "source_publisher": "Anthropic",
+          "published_at": "2026-09-01",
+          "verified_at": "2026-09-03",
+          "harness_version": null,
+          "protocol_note": {
+            "en": "Anthropic's Terminal-Bench 4.0 accuracy-versus-cost chart reports 60.9% for Mythos 5.1 at max effort. The page does not disclose the harness, trial count, confidence interval, or total evaluation cost.",
+            "zh": "Anthropic 的 Terminal-Bench 4.0 准确率—成本图报告 Mythos 5.1 在 max 思考等级下为 60.9%。页面未披露 Harness、实验数、置信区间或整次评测总成本。"
+          }
+        },
+        {
+          "id": "c741608e-c94e-417d-b7a8-e67111a0c887",
           "benchmark_id": "terminal-bench-4.0",
           "rank": 1,
+          "harness": {
+            "label": "Claude Code",
+            "url": "https://claude.com/product/claude-code"
+          },
+          "harness_org": {
+            "label": "Anthropic",
+            "url": "https://www.anthropic.com"
+          },
+          "model": {
+            "label": "Fable 5.1",
+            "url": "https://docs.anthropic.com/en/docs/about-claude/models/all-models"
+          },
+          "model_org": {
+            "label": "Anthropic",
+            "url": "https://www.anthropic.com"
+          },
+          "thinking_level": "max",
+          "accuracy": 57.88,
+          "accuracy_stderr": null,
+          "accuracy_ci95_half_width": 3.76,
+          "display_accuracy": "**57.9%** ± 3.8%",
+          "release_date": "2026-09-01",
+          "display_release_date": "Sep 1, 2026",
+          "total_tokens": 2746221560,
+          "display_total_tokens": "2.7B",
+          "total_cost_usd": 6243.5,
+          "display_cost": "$6.2k",
+          "trial_count": 330,
+          "pass_at_2": 0.7,
+          "pass_at_3": 0.747,
+          "pass_at_4": 0.7727,
+          "pass_at_5": 0.7879,
+          "successes": 191,
+          "uncached_input_tokens": 2683099992,
+          "cached_input_tokens": 2467056906,
+          "output_tokens": 63121568,
+          "average_trial_duration_seconds": 3893.5,
+          "reward_hacks": null,
+          "display_reward_hacks": null,
+          "submission": null,
+          "official_detail_url": "https://hub.harborframework.com/datasets/terminal-bench/terminal-bench/4/leaderboards/4-0-0/rows/c741608e-c94e-417d-b7a8-e67111a0c887",
+          "source_type": "benchmark_official",
+          "source_url": "https://hub.harborframework.com/datasets/terminal-bench/terminal-bench/4/leaderboards/4-0-0/rows/c741608e-c94e-417d-b7a8-e67111a0c887",
+          "source_title": "Harbor result detail",
+          "source_publisher": "Terminal-Bench / Harbor",
+          "published_at": null,
+          "verified_at": null,
+          "harness_version": null,
+          "protocol_note": null
+        },
+        {
+          "id": "d71ac3d0-da36-49cb-89d9-323136e77111",
+          "benchmark_id": "terminal-bench-4.0",
+          "rank": 2,
           "harness": {
             "label": "Claude Code",
             "url": "https://claude.com/product/claude-code"
@@ -2432,7 +2486,7 @@
         {
           "id": "36c077e0-4879-4444-b315-8532d66401d6",
           "benchmark_id": "terminal-bench-4.0",
-          "rank": 2,
+          "rank": 3,
           "harness": {
             "label": "Claude Code",
             "url": "https://claude.com/product/claude-code"
@@ -2486,7 +2540,7 @@
         {
           "id": "d72e8775-f4f1-4313-99e7-35b1cb499f24",
           "benchmark_id": "terminal-bench-4.0",
-          "rank": 3,
+          "rank": 4,
           "harness": {
             "label": "Claude Code",
             "url": "https://claude.com/product/claude-code"
@@ -2540,7 +2594,7 @@
         {
           "id": "0e349bde-b264-494d-a853-fada9c696192",
           "benchmark_id": "terminal-bench-4.0",
-          "rank": 4,
+          "rank": 5,
           "harness": {
             "label": "Codex",
             "url": "https://openai.com/codex/"
@@ -2594,7 +2648,7 @@
         {
           "id": "952b4217-421f-4d14-849b-9968fcb2063b",
           "benchmark_id": "terminal-bench-4.0",
-          "rank": 5,
+          "rank": 6,
           "harness": {
             "label": "Claude Code",
             "url": "https://claude.com/product/claude-code"
@@ -2648,7 +2702,7 @@
         {
           "id": "e53da412-5e92-408c-b369-c767924c7c1c",
           "benchmark_id": "terminal-bench-4.0",
-          "rank": 6,
+          "rank": 7,
           "harness": {
             "label": "Codex",
             "url": "https://openai.com/codex/"
@@ -2702,7 +2756,7 @@
         {
           "id": "26354542-edc0-40cd-8f8d-9fe6fbe92ac3",
           "benchmark_id": "terminal-bench-4.0",
-          "rank": 7,
+          "rank": 8,
           "harness": {
             "label": "Grok Build",
             "url": "https://x.ai/build"
@@ -2754,9 +2808,63 @@
           "protocol_note": null
         },
         {
+          "id": "06850434-507d-4dbd-b74a-09d52519ee35",
+          "benchmark_id": "terminal-bench-4.0",
+          "rank": 9,
+          "harness": {
+            "label": "mini-SWE-agent",
+            "url": "https://github.com/SWE-agent/mini-swe-agent"
+          },
+          "harness_org": {
+            "label": "SWE-agent",
+            "url": "https://github.com/SWE-agent"
+          },
+          "model": {
+            "label": "Gemini 3.8 Flash",
+            "url": "https://ai.google.dev/gemini-api/docs/models/gemini-3.8-flash"
+          },
+          "model_org": {
+            "label": "Google",
+            "url": "https://google.com"
+          },
+          "thinking_level": "high",
+          "accuracy": 19.09,
+          "accuracy_stderr": null,
+          "accuracy_ci95_half_width": 3.36,
+          "display_accuracy": "**19.1%** ± 3.4%",
+          "release_date": "2026-09-02",
+          "display_release_date": "Sep 2, 2026",
+          "total_tokens": 17189729495,
+          "display_total_tokens": "17.2B",
+          "total_cost_usd": 0,
+          "display_cost": "$0.00",
+          "trial_count": 330,
+          "pass_at_2": 0.2879,
+          "pass_at_3": 0.353,
+          "pass_at_4": 0.4,
+          "pass_at_5": 0.4394,
+          "successes": 63,
+          "uncached_input_tokens": 17121673011,
+          "cached_input_tokens": 16692887408,
+          "output_tokens": 68056484,
+          "average_trial_duration_seconds": 1995.1,
+          "reward_hacks": null,
+          "display_reward_hacks": null,
+          "submission": null,
+          "official_detail_url": "https://hub.harborframework.com/datasets/terminal-bench/terminal-bench/4/leaderboards/4-0-0/rows/06850434-507d-4dbd-b74a-09d52519ee35",
+          "source_type": "benchmark_official",
+          "source_url": "https://hub.harborframework.com/datasets/terminal-bench/terminal-bench/4/leaderboards/4-0-0/rows/06850434-507d-4dbd-b74a-09d52519ee35",
+          "source_title": "Harbor result detail",
+          "source_publisher": "Terminal-Bench / Harbor",
+          "published_at": null,
+          "verified_at": null,
+          "harness_version": null,
+          "protocol_note": null
+        },
+        {
           "id": "51c6d76e-5baa-48c1-97b3-88656c620eef",
           "benchmark_id": "terminal-bench-4.0",
-          "rank": 8,
+          "rank": 10,
           "harness": {
             "label": "Codex",
             "url": "https://openai.com/codex/"
@@ -2810,7 +2918,7 @@
         {
           "id": "0eed5a0d-96b6-491b-aeb7-cd5e4700c2d7",
           "benchmark_id": "terminal-bench-4.0",
-          "rank": 9,
+          "rank": 11,
           "harness": {
             "label": "Grok Build",
             "url": "https://x.ai/build"
@@ -2864,7 +2972,7 @@
         {
           "id": "8180b9e4-4990-43d0-b906-cd8b43adaaa2",
           "benchmark_id": "terminal-bench-4.0",
-          "rank": 9,
+          "rank": 11,
           "harness": {
             "label": "Claude Code",
             "url": "https://claude.com/product/claude-code"
@@ -2908,6 +3016,60 @@
           "official_detail_url": "https://hub.harborframework.com/datasets/terminal-bench/terminal-bench/4/leaderboards/4-0-0/rows/8180b9e4-4990-43d0-b906-cd8b43adaaa2",
           "source_type": "benchmark_official",
           "source_url": "https://hub.harborframework.com/datasets/terminal-bench/terminal-bench/4/leaderboards/4-0-0/rows/8180b9e4-4990-43d0-b906-cd8b43adaaa2",
+          "source_title": "Harbor result detail",
+          "source_publisher": "Terminal-Bench / Harbor",
+          "published_at": null,
+          "verified_at": null,
+          "harness_version": null,
+          "protocol_note": null
+        },
+        {
+          "id": "14f4da14-b86a-4dca-92d7-11178d4fe064",
+          "benchmark_id": "terminal-bench-4.0",
+          "rank": 13,
+          "harness": {
+            "label": "mini-SWE-agent",
+            "url": "https://github.com/SWE-agent/mini-swe-agent"
+          },
+          "harness_org": {
+            "label": "SWE-agent",
+            "url": "https://github.com/SWE-agent"
+          },
+          "model": {
+            "label": "Gemini 3.7 Flash",
+            "url": "https://ai.google.dev/gemini-api/docs/models/gemini-3.7-flash"
+          },
+          "model_org": {
+            "label": "Google",
+            "url": "https://google.com"
+          },
+          "thinking_level": "high",
+          "accuracy": 11.21,
+          "accuracy_stderr": null,
+          "accuracy_ci95_half_width": 2.45,
+          "display_accuracy": "**11.2%** ± 2.4%",
+          "release_date": "2026-08-13",
+          "display_release_date": "Aug 13, 2026",
+          "total_tokens": 11137189802,
+          "display_total_tokens": "11.1B",
+          "total_cost_usd": 1261.87,
+          "display_cost": "$1.3k",
+          "trial_count": 330,
+          "pass_at_2": 0.1636,
+          "pass_at_3": 0.2,
+          "pass_at_4": 0.2303,
+          "pass_at_5": 0.2576,
+          "successes": 37,
+          "uncached_input_tokens": 11085055801,
+          "cached_input_tokens": 10736925351,
+          "output_tokens": 52134001,
+          "average_trial_duration_seconds": 1688.9,
+          "reward_hacks": null,
+          "display_reward_hacks": null,
+          "submission": null,
+          "official_detail_url": "https://hub.harborframework.com/datasets/terminal-bench/terminal-bench/4/leaderboards/4-0-0/rows/14f4da14-b86a-4dca-92d7-11178d4fe064",
+          "source_type": "benchmark_official",
+          "source_url": "https://hub.harborframework.com/datasets/terminal-bench/terminal-bench/4/leaderboards/4-0-0/rows/14f4da14-b86a-4dca-92d7-11178d4fe064",
           "source_title": "Harbor result detail",
           "source_publisher": "Terminal-Bench / Harbor",
           "published_at": null,

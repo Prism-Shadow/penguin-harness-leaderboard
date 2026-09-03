@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "verified_at": "2026-09-01",
+  "verified_at": "2026-09-03",
   "results": [
     {
       "id": "vendor-kimi-k3-tb21-kimi-code",
@@ -206,23 +206,23 @@
       }
     },
     {
-      "id": "vendor-glm-5-3-tb30-claude-code",
-      "benchmark_id": "terminal-bench-3.0",
+      "id": "vendor-mythos-5-1-tb40",
+      "benchmark_id": "terminal-bench-4.0",
       "source_type": "vendor_reported",
-      "source_url": "https://huggingface.co/zai-org/GLM-5.3",
-      "source_title": "GLM-5.3 model card",
-      "source_publisher": "Z.ai",
-      "published_at": null,
-      "harness": {"label": "Claude Code", "url": "https://claude.com/claude-code"},
-      "harness_org": {"label": "Anthropic", "url": "https://www.anthropic.com"},
-      "harness_version": "2.1.207",
-      "model": {"label": "GLM-5.3", "url": "https://huggingface.co/zai-org/GLM-5.3"},
-      "model_org": {"label": "Z.ai", "url": "https://z.ai"},
+      "source_url": "https://www.anthropic.com/claude-fable-and-mythos-5-1",
+      "source_title": "Introducing Claude Fable 5.1 and Claude Mythos 5.1",
+      "source_publisher": "Anthropic",
+      "published_at": "2026-09-01",
+      "harness": null,
+      "harness_org": null,
+      "harness_version": null,
+      "model": {"label": "Mythos 5.1", "url": "https://www.anthropic.com/claude-fable-and-mythos-5-1"},
+      "model_org": {"label": "Anthropic", "url": "https://www.anthropic.com"},
       "thinking_level": "max",
-      "accuracy": 28.3,
+      "accuracy": 60.9,
       "protocol_note": {
-        "en": "Claude Code 2.1.207; max effort; 400K context; 128K max output; avg@3; isolated official task containers; 600-turn cap; 10-hour timeout; Tool Search disabled; official verifiers.",
-        "zh": "Claude Code 2.1.207；max 思考等级；400K 上下文；128K 最大输出；avg@3；官方任务隔离容器；最多 600 turns；10 小时超时；关闭 Tool Search；官方 verifier。"
+        "en": "Anthropic's Terminal-Bench 4.0 accuracy-versus-cost chart reports 60.9% for Mythos 5.1 at max effort. The page does not disclose the harness, trial count, confidence interval, or total evaluation cost.",
+        "zh": "Anthropic 的 Terminal-Bench 4.0 准确率—成本图报告 Mythos 5.1 在 max 思考等级下为 60.9%。页面未披露 Harness、实验数、置信区间或整次评测总成本。"
       }
     }
   ]

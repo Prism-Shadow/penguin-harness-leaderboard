@@ -16,7 +16,9 @@
     <meta property="og:type" content="website" />
     <meta property="og:url" content="https://leaderboard.penguin.ooo/" />
     <link rel="canonical" href="https://leaderboard.penguin.ooo/" />
-    <link rel="icon" href="favicon.svg" />
+    <link rel="icon" type="image/svg+xml" href="favicon.svg?v=20260902" />
+    <link rel="icon" type="image/png" sizes="32x32" href="favicon-32.png?v=20260902" />
+    <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png?v=20260902" />
     <title>Penguin Harness Leaderboard</title>
     <script>
       try {
@@ -40,8 +42,8 @@
         document.documentElement.lang = locale === "zh" ? "zh-CN" : "en";
       } catch {}
     </script>
-    <link rel="stylesheet" href="styles.css?v=20260902-06" />
-    <script src="script.js?v=20260902-05" defer></script>
+    <link rel="stylesheet" href="styles.css?v=20260902-11" />
+    <script src="script.js?v=20260902-11" defer></script>
   </head>
   <body>
     <a class="skip-link" href="#results" data-i18n="skipToResults">Skip to results</a>
@@ -99,7 +101,7 @@
             <span>Penguin Harness Leaderboard</span>
           </div>
           <p class="eyebrow current-bench-name">Terminal-Bench</p>
-          <h1 data-i18n-html="heroTitle">Compare the whole setup,<br /><span>not just the model.</span></h1>
+          <h1 data-i18n-html="heroTitle">The model isn't everything.<br /><span>The whole setup matters.</span></h1>
           <p class="hero-copy current-bench-description">Loading public benchmark metadata…</p>
           <div class="hero-actions">
             <a class="button button-primary" href="#results">
@@ -192,31 +194,18 @@
         </div>
       </section>
 
-      <section class="section metrics-section">
+      <section id="coverage" class="section coverage-section">
         <div class="section-shell">
-          <header class="section-heading">
-            <p class="eyebrow" data-i18n="readMetrics">Read the metrics</p>
-            <h2 data-i18n="metricsTitle">The comparable result, at a glance.</h2>
+          <header class="section-heading coverage-heading">
+            <p class="eyebrow" data-i18n="dataCoverage">Data coverage</p>
+            <h2 data-i18n="coverageTitle">From public baselines to Penguin runs.</h2>
+            <p data-i18n="coverageDescription">See how official baselines, vendor reports, and Penguin runs are represented across every benchmark.</p>
           </header>
-          <div class="metrics-grid">
-            <article>
-              <span>01</span>
-              <h3 data-i18n="resolutionRate">Resolution rate</h3>
-              <p data-i18n="resolutionDescription">Pass rate with the reported 95% confidence interval shown on the same 0–100 scale.</p>
-            </article>
-            <article>
-              <span>02</span>
-              <h3 data-i18n="tokens">Tokens</h3>
-              <p data-i18n="tokensDescription">Total reported token usage across the evaluated trials.</p>
-            </article>
-            <article>
-              <span>03</span>
-              <h3 data-i18n="cost">Cost</h3>
-              <p data-i18n="costDescription">Total reported API cost for the published evaluation.</p>
-            </article>
-          </div>
+          <div class="coverage-grid" aria-live="polite"></div>
+          <article class="penguin-spotlight" hidden></article>
         </div>
       </section>
+
     </main>
 
     <footer class="footer">

@@ -80,7 +80,10 @@ before a push to `main` is deployed.
   Penguin rows, without presenting that number as an official rank.
 - Vendor rows require a primary page controlled by the model vendor. Secondary
   articles and aggregation sites are not accepted as evidence.
-- Missing reasoning effort or metrics remain undisclosed rather than guessed.
+- When the same model already has a result on the official leaderboard for that
+  Benchmark version, the official row takes precedence and the vendor-reported
+  duplicate is omitted from the public data.
+- Missing Harness, reasoning effort, or metrics remain undisclosed rather than guessed.
 - Detailed metric groups only render fields present in the selected source;
   the fixed summary explicitly labels missing effort or release date as
   undisclosed. No missing value is filled with an inference.

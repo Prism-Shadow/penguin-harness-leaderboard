@@ -1149,7 +1149,10 @@ function selectBenchmark(id, updateUrl = true) {
   const bench = state.payload.benchmarks.find((item) => item.id === id);
   if (!bench) return;
   state.benchmark = bench;
-  state.filters = { source: "", harness: "", model: "", thinking: "" };
+  const defaultSource = bench.results.some((row) => row.source_type === "benchmark_official")
+    ? "benchmark_official"
+    : "";
+  state.filters = { source: defaultSource, harness: "", model: "", thinking: "" };
   state.sort = { key: "accuracy", direction: "desc" };
   if (updateUrl) {
     const url = new URL(window.location.href);

@@ -1,0 +1,229 @@
+{
+  "schema_version": 1,
+  "verified_at": "2026-09-03",
+  "results": [
+    {
+      "id": "vendor-kimi-k3-tb21-kimi-code",
+      "benchmark_id": "terminal-bench-2.1",
+      "source_type": "vendor_reported",
+      "source_url": "https://huggingface.co/moonshotai/Kimi-K3",
+      "source_title": "Kimi K3 model card",
+      "source_publisher": "Moonshot AI",
+      "published_at": "2026-08-20",
+      "harness": {"label": "Kimi Code", "url": null},
+      "harness_org": {"label": "Moonshot AI", "url": "https://www.kimi.com"},
+      "harness_version": null,
+      "model": {"label": "Kimi K3", "url": "https://huggingface.co/moonshotai/Kimi-K3"},
+      "model_org": {"label": "Moonshot AI", "url": "https://www.kimi.com"},
+      "thinking_level": "max",
+      "accuracy": 88.3,
+      "protocol_note": {
+        "en": "Kimi Code harness; max reasoning effort; temperature=1.0 and top_p=1.0 for agentic tasks.",
+        "zh": "Kimi Code Harness；max 思考等级；Agent 任务使用 temperature=1.0、top_p=1.0。"
+      }
+    },
+    {
+      "id": "vendor-glm-5-3-tb21-claude-code",
+      "benchmark_id": "terminal-bench-2.1",
+      "source_type": "vendor_reported",
+      "source_url": "https://huggingface.co/zai-org/GLM-5.3",
+      "source_title": "GLM-5.3 model card",
+      "source_publisher": "Z.ai",
+      "published_at": null,
+      "harness": {"label": "Claude Code", "url": "https://claude.com/claude-code"},
+      "harness_org": {"label": "Anthropic", "url": "https://www.anthropic.com"},
+      "harness_version": "2.1.207",
+      "model": {"label": "GLM-5.3", "url": "https://huggingface.co/zai-org/GLM-5.3"},
+      "model_org": {"label": "Z.ai", "url": "https://z.ai"},
+      "thinking_level": null,
+      "accuracy": 88.2,
+      "protocol_note": {
+        "en": "Claude Code 2.1.207; temperature=1.0, top_p=1, max_new_tokens=65,536, 6-hour timeout. The TB 2.1 note does not state the effort level.",
+        "zh": "Claude Code 2.1.207；temperature=1.0、top_p=1、max_new_tokens=65,536、6 小时超时；TB 2.1 注释未明确思考等级。"
+      }
+    },
+    {
+      "id": "vendor-deepseek-v4-pro-0813-tb21",
+      "benchmark_id": "terminal-bench-2.1",
+      "source_type": "vendor_reported",
+      "source_url": "https://huggingface.co/deepseek-ai/DeepSeek-V4-Pro-0813",
+      "source_title": "DeepSeek-V4-Pro-0813 model card",
+      "source_publisher": "DeepSeek",
+      "published_at": "2026-08-13",
+      "harness": {"label": "DeepSeek Harness", "url": null},
+      "harness_org": {"label": "DeepSeek", "url": "https://www.deepseek.com"},
+      "harness_version": "minimal mode",
+      "model": {"label": "DeepSeek-V4-Pro-0813", "url": "https://huggingface.co/deepseek-ai/DeepSeek-V4-Pro-0813"},
+      "model_org": {"label": "DeepSeek", "url": "https://www.deepseek.com"},
+      "thinking_level": "max",
+      "accuracy": 87.9,
+      "protocol_note": {
+        "en": "DeepSeek Harness minimal mode; max reasoning effort; temperature=1.0, top_p=0.95.",
+        "zh": "DeepSeek Harness minimal mode；max 思考等级；temperature=1.0、top_p=0.95。"
+      }
+    },
+    {
+      "id": "vendor-qwen3-8-max-tb21-claude-code",
+      "benchmark_id": "terminal-bench-2.1",
+      "source_type": "vendor_reported",
+      "source_url": "https://huggingface.co/Qwen/Qwen3.8-2.4T-A95B",
+      "source_title": "Qwen3.8-Max model card",
+      "source_publisher": "Qwen",
+      "published_at": null,
+      "harness": {"label": "Claude Code", "url": "https://claude.com/claude-code"},
+      "harness_org": {"label": "Anthropic", "url": "https://www.anthropic.com"},
+      "harness_version": null,
+      "model": {"label": "Qwen3.8-Max", "url": "https://huggingface.co/Qwen/Qwen3.8-2.4T-A95B"},
+      "model_org": {"label": "Qwen", "url": "https://qwen.ai"},
+      "thinking_level": null,
+      "accuracy": 86.6,
+      "protocol_note": {
+        "en": "Claude Code; avg@10; 5-hour timeout; max_tokens=131,072. The effort level is not disclosed.",
+        "zh": "Claude Code；avg@10；5 小时超时；max_tokens=131,072；未披露思考等级。"
+      }
+    },
+    {
+      "id": "vendor-glm-5-3-flash-tb21-claude-code",
+      "benchmark_id": "terminal-bench-2.1",
+      "source_type": "vendor_reported",
+      "source_url": "https://huggingface.co/zai-org/GLM-5.3-Flash",
+      "source_title": "GLM-5.3-Flash model card",
+      "source_publisher": "Z.ai",
+      "published_at": null,
+      "harness": {"label": "Claude Code", "url": "https://claude.com/claude-code"},
+      "harness_org": {"label": "Anthropic", "url": "https://www.anthropic.com"},
+      "harness_version": "2.1.207",
+      "model": {"label": "GLM-5.3-Flash", "url": "https://huggingface.co/zai-org/GLM-5.3-Flash"},
+      "model_org": {"label": "Z.ai", "url": "https://z.ai"},
+      "thinking_level": null,
+      "accuracy": 84.3,
+      "protocol_note": {
+        "en": "Claude Code 2.1.207; temperature=1.0, top_p=1, max_new_tokens=65,536, 6-hour timeout. The effort level is not disclosed.",
+        "zh": "Claude Code 2.1.207；temperature=1.0、top_p=1、max_new_tokens=65,536、6 小时超时；未披露思考等级。"
+      }
+    },
+    {
+      "id": "vendor-glm-5-2-tb21-claude-code",
+      "benchmark_id": "terminal-bench-2.1",
+      "source_type": "vendor_reported",
+      "source_url": "https://huggingface.co/zai-org/GLM-5.2",
+      "source_title": "GLM-5.2 model card",
+      "source_publisher": "Z.ai",
+      "published_at": "2026-07-02",
+      "harness": {"label": "Claude Code", "url": "https://claude.com/claude-code"},
+      "harness_org": {"label": "Anthropic", "url": "https://www.anthropic.com"},
+      "harness_version": "2.1.167",
+      "model": {"label": "GLM-5.2", "url": "https://huggingface.co/zai-org/GLM-5.2"},
+      "model_org": {"label": "Z.ai", "url": "https://z.ai"},
+      "thinking_level": null,
+      "accuracy": 82.7,
+      "protocol_note": {
+        "en": "Claude Code 2.1.167; temperature=1.0, top_p=0.95, max_new_tokens=131,072; no wall-clock limit; average of five runs.",
+        "zh": "Claude Code 2.1.167；temperature=1.0、top_p=0.95、max_new_tokens=131,072；无 wall-clock 限制；5 次运行平均。"
+      }
+    },
+    {
+      "id": "vendor-deepseek-v4-flash-0731-tb21",
+      "benchmark_id": "terminal-bench-2.1",
+      "source_type": "vendor_reported",
+      "source_url": "https://api-docs.deepseek.com/updates/",
+      "source_title": "DeepSeek API change log — V4 Flash update",
+      "source_publisher": "DeepSeek",
+      "published_at": "2026-07-31",
+      "harness": {"label": "DeepSeek Harness", "url": null},
+      "harness_org": {"label": "DeepSeek", "url": "https://www.deepseek.com"},
+      "harness_version": "minimal mode",
+      "model": {"label": "DeepSeek-V4-Flash-0731", "url": "https://api-docs.deepseek.com/updates/"},
+      "model_org": {"label": "DeepSeek", "url": "https://www.deepseek.com"},
+      "thinking_level": "max",
+      "accuracy": 82.7,
+      "protocol_note": {
+        "en": "DeepSeek Harness minimal mode; max reasoning effort; temperature=1.0, top_p=0.95.",
+        "zh": "DeepSeek Harness minimal mode；max 思考等级；temperature=1.0、top_p=0.95。"
+      }
+    },
+    {
+      "id": "vendor-glm-5-2-tb21-terminus-2",
+      "benchmark_id": "terminal-bench-2.1",
+      "source_type": "vendor_reported",
+      "source_url": "https://huggingface.co/zai-org/GLM-5.2",
+      "source_title": "GLM-5.2 model card",
+      "source_publisher": "Z.ai",
+      "published_at": "2026-07-02",
+      "harness": {"label": "Terminus 2", "url": "https://github.com/harbor-framework/terminal-bench"},
+      "harness_org": {"label": "Terminal-Bench", "url": "https://github.com/harbor-framework"},
+      "harness_version": null,
+      "model": {"label": "GLM-5.2", "url": "https://huggingface.co/zai-org/GLM-5.2"},
+      "model_org": {"label": "Z.ai", "url": "https://z.ai"},
+      "thinking_level": null,
+      "accuracy": 81.0,
+      "protocol_note": {
+        "en": "Terminus 2; JSON parser; 4-hour timeout; temperature=1.0, top_p=1.0, max_new_tokens=48K, max_episodes=500, 256K context; 4 CPUs and 8 GB RAM.",
+        "zh": "Terminus 2；JSON parser；4 小时超时；temperature=1.0、top_p=1.0、max_new_tokens=48K、max_episodes=500、256K 上下文；4 CPU、8 GB RAM。"
+      }
+    },
+    {
+      "id": "penguin-deepseek-v4-flash-0731-tb21-k2",
+      "benchmark_id": "terminal-bench-2.1",
+      "source_type": "penguin_run",
+      "source_url": "https://github.com/hw3150cu/TB2.1_penguin_dsv4_flash/blob/main/REPORT.md",
+      "source_title": "Terminal-Bench 2.1 Report — DeepSeek-V4-Flash One DGX Spark",
+      "source_publisher": "Penguin run report",
+      "published_at": null,
+      "harness": {"label": "Penguin", "url": "https://github.com/hw3150cu/TB2.1_penguin_dsv4_flash"},
+      "harness_org": {"label": "Penguin", "url": null},
+      "harness_version": "0.2.2",
+      "model": {"label": "DeepSeek-V4-Flash-0731", "url": "https://github.com/hw3150cu/TB2.1_penguin_dsv4_flash"},
+      "model_org": {"label": "DeepSeek", "url": "https://www.deepseek.com"},
+      "thinking_level": "xhigh",
+      "accuracy": 75.2809,
+      "trial_count": 178,
+      "successes": 134,
+      "pass_at_2": 0.7978,
+      "protocol_note": {
+        "en": "Penguin 0.2.2 with Harbor 0.21.0; two scoreable attempts for each of 89 tasks; NVIDIA GB10; timeout multiplier 3.172; 128K context; max tokens 256K; skills and memory disabled.",
+        "zh": "Penguin 0.2.2 + Harbor 0.21.0；89 个任务各 2 次有效尝试；NVIDIA GB10；timeout multiplier 3.172；128K 上下文；max tokens 256K；关闭 skills 和 memory。"
+      }
+    },
+    {
+      "id": "vendor-qwen3-8-27b-tb21-terminus",
+      "benchmark_id": "terminal-bench-2.1",
+      "source_type": "vendor_reported",
+      "source_url": "https://huggingface.co/Qwen/Qwen3.8-27B",
+      "source_title": "Qwen3.8-27B model card",
+      "source_publisher": "Qwen",
+      "published_at": null,
+      "harness": {"label": "Terminus", "url": "https://github.com/harbor-framework/terminal-bench"},
+      "harness_org": {"label": "Terminal-Bench", "url": "https://github.com/harbor-framework"},
+      "harness_version": null,
+      "model": {"label": "Qwen3.8-27B", "url": "https://huggingface.co/Qwen/Qwen3.8-27B"},
+      "model_org": {"label": "Qwen", "url": "https://qwen.ai"},
+      "thinking_level": null,
+      "accuracy": 73.0,
+      "protocol_note": {
+        "en": "The model card names the harness as Terminus and does not disclose the effort level or further TB 2.1 configuration.",
+        "zh": "Model Card 将 Harness 标为 Terminus，未披露思考等级和更多 TB 2.1 配置。"
+      }
+    },
+    {
+      "id": "vendor-mythos-5-1-tb40",
+      "benchmark_id": "terminal-bench-4.0",
+      "source_type": "vendor_reported",
+      "source_url": "https://www.anthropic.com/claude-fable-and-mythos-5-1",
+      "source_title": "Introducing Claude Fable 5.1 and Claude Mythos 5.1",
+      "source_publisher": "Anthropic",
+      "published_at": "2026-09-01",
+      "harness": null,
+      "harness_org": null,
+      "harness_version": null,
+      "model": {"label": "Mythos 5.1", "url": "https://www.anthropic.com/claude-fable-and-mythos-5-1"},
+      "model_org": {"label": "Anthropic", "url": "https://www.anthropic.com"},
+      "thinking_level": "max",
+      "accuracy": 60.9,
+      "protocol_note": {
+        "en": "Anthropic's Terminal-Bench 4.0 accuracy-versus-cost chart reports 60.9% for Mythos 5.1 at max effort. The page does not disclose the harness, trial count, confidence interval, or total evaluation cost.",
+        "zh": "Anthropic 的 Terminal-Bench 4.0 准确率—成本图报告 Mythos 5.1 在 max 思考等级下为 60.9%。页面未披露 Harness、实验数、置信区间或整次评测总成本。"
+      }
+    }
+  ]
+}

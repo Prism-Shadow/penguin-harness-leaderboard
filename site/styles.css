@@ -113,7 +113,7 @@ select:focus-visible {
 }
 
 .nav-shell {
-  width: min(1420px, calc(100% - 16px));
+  width: min(1392px, calc(100% - 48px));
   margin-inline: auto;
 }
 
@@ -123,7 +123,7 @@ select:focus-visible {
 }
 
 #results .section-shell {
-  width: min(1440px, calc(100% - 32px));
+  width: min(1376px, calc(100% - 64px));
 }
 
 .section-anchor {

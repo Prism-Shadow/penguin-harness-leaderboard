@@ -123,7 +123,7 @@ select:focus-visible {
 }
 
 #results .section-shell {
-  width: min(1376px, calc(100% - 64px));
+  width: min(1280px, calc(100% - 64px));
 }
 
 .section-anchor {
@@ -949,7 +949,7 @@ main,
 
 table {
   width: 100%;
-  min-width: 1380px;
+  min-width: 1278px;
   border-collapse: collapse;
   table-layout: fixed;
   font-size: 15px;
@@ -993,15 +993,15 @@ th.is-active .sort-button {
 }
 
 .column-harness {
-  width: 135px;
+  width: 130px;
 }
 
 .column-model {
-  width: 205px;
+  width: 190px;
 }
 
 .column-accuracy {
-  width: 350px;
+  width: 272px;
 }
 
 .column-average-trial-duration-seconds {
@@ -1010,7 +1010,7 @@ th.is-active .sort-button {
 }
 
 .column-release-date {
-  width: 115px;
+  width: 126px;
 }
 
 .column-total-tokens {
@@ -1028,7 +1028,7 @@ th.is-active .sort-button {
 }
 
 .column-details {
-  width: 100px;
+  width: 93px;
   text-align: center;
 }
 

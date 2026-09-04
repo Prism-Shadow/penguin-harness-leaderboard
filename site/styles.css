@@ -15,8 +15,7 @@
   --accent: #1a73e8;
   --accent-strong: #1769cf;
   --accent-soft: #f8fbff;
-  --ci-line: #0f4fa8;
-  --ci-halo: #ffffff;
+  --ci-line: #6f9fe7;
   --sans: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "PingFang SC", "Microsoft YaHei", sans-serif;
   --mono: "SFMono-Regular", "Cascadia Code", "Roboto Mono", Consolas, monospace;
 }
@@ -37,8 +36,7 @@
   --accent: #8ab4f8;
   --accent-strong: #a9c8fa;
   --accent-soft: rgba(4, 30, 73, 0.4);
-  --ci-line: #4f7fc7;
-  --ci-halo: #0d0d0d;
+  --ci-line: #bfd7ff;
 }
 
 * {
@@ -122,8 +120,9 @@ select:focus-visible {
   margin-inline: auto;
 }
 
-#results .section-shell {
-  width: min(1280px, calc(100% - 64px));
+#results .section-shell,
+#coverage .section-shell {
+  width: min(1240px, calc(100% - 64px));
 }
 
 .section-anchor {
@@ -949,7 +948,7 @@ main,
 
 table {
   width: 100%;
-  min-width: 1278px;
+  min-width: 1238px;
   border-collapse: collapse;
   table-layout: fixed;
   font-size: 15px;
@@ -970,6 +969,10 @@ th {
   font-weight: 400;
 }
 
+.results-head th:last-child {
+  border-right: 1px solid var(--line);
+}
+
 tbody tr:last-child td {
   border-bottom: 0;
 }
@@ -988,20 +991,20 @@ th.is-active .sort-button {
 }
 
 .column-rank {
-  width: 52px;
+  width: 48px;
   text-align: center;
 }
 
 .column-harness {
-  width: 130px;
+  width: 126px;
 }
 
 .column-model {
-  width: 190px;
+  width: 184px;
 }
 
 .column-accuracy {
-  width: 272px;
+  width: 256px;
 }
 
 .column-average-trial-duration-seconds {
@@ -1014,21 +1017,21 @@ th.is-active .sort-button {
 }
 
 .column-total-tokens {
-  width: 90px;
+  width: 88px;
   text-align: right;
 }
 
 .column-total-cost-usd {
-  width: 85px;
+  width: 83px;
   text-align: right;
 }
 
 .column-source-type {
-  width: 135px;
+  width: 133px;
 }
 
 .column-details {
-  width: 93px;
+  width: 89px;
   text-align: center;
 }
 
@@ -1183,10 +1186,9 @@ th.is-active .sort-button {
   position: absolute;
   z-index: 2;
   top: 50%;
-  height: 2px;
+  height: 1.5px;
   border-radius: 99px;
   background: var(--ci-line);
-  box-shadow: 0 0 0 0.5px var(--ci-halo);
   transform: translateY(-50%);
 }
 
@@ -1194,11 +1196,10 @@ th.is-active .sort-button {
   position: absolute;
   z-index: 2;
   top: 50%;
-  width: 2px;
-  height: 10px;
+  width: 1px;
+  height: 8px;
   border-radius: 99px;
   background: var(--ci-line);
-  box-shadow: 0 0 0 0.5px var(--ci-halo);
   transform: translate(-50%, -50%);
 }
 
@@ -1326,12 +1327,12 @@ th.is-active .sort-button {
   border: 1px solid var(--line);
   border-radius: 14px;
   background: color-mix(in srgb, var(--surface) 94%, transparent);
-  box-shadow: 0 12px 34px rgb(15 23 42 / 0.04);
+  box-shadow: none;
 }
 
 .coverage-card.is-current {
   border-color: color-mix(in srgb, var(--accent) 45%, var(--line));
-  box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent) 8%, transparent), 0 16px 40px rgb(15 23 42 / 0.06);
+  box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--accent) 16%, transparent);
 }
 
 .coverage-card-header {
@@ -1927,7 +1928,8 @@ th.is-active .sort-button {
     width: calc(100% - 20px);
   }
 
-  #results .section-shell {
+  #results .section-shell,
+  #coverage .section-shell {
     width: calc(100% - 20px);
   }
 

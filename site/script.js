@@ -29,6 +29,9 @@ const translations = {
     benchmarkOfficial: "Benchmark official",
     vendorReported: "Vendor-reported",
     penguinRun: "Penguin run",
+    benchmarkOfficialShort: "Official",
+    vendorReportedShort: "Vendor",
+    penguinRunShort: "Penguin",
     harness: "Harness",
     model: "Model",
     thinkingLevel: "Thinking level",
@@ -39,6 +42,7 @@ const translations = {
     allModels: "All models",
     allLevels: "All levels",
     showingResults: "Showing {shown} of {total} public results",
+    harnessDetailsHint: "Select a Harness name to view full configuration and sources.",
     tableHint: "Swipe to view the full table →",
     loadingResults: "Loading public results…",
     confidenceNote: "Every result has a score bar. Confidence whiskers appear only when the source reports a 95% interval; results without interval data show the bar alone.",
@@ -59,7 +63,7 @@ const translations = {
     notReported: "Not reported",
     noResults: "No results match these filters.",
     officialSource: "Official source",
-    details: "Details",
+    viewHarnessDetails: "View result details for {harness} with {model}",
     resultDetails: "Result details",
     closeDetails: "Close details",
     openOfficialDetail: "Open official detail",
@@ -125,6 +129,9 @@ const translations = {
     benchmarkOfficial: "Benchmark 官方",
     vendorReported: "厂商自报",
     penguinRun: "Penguin 实测",
+    benchmarkOfficialShort: "官方",
+    vendorReportedShort: "厂商自报",
+    penguinRunShort: "Penguin",
     harness: "Harness",
     model: "模型",
     thinkingLevel: "思考等级",
@@ -135,6 +142,7 @@ const translations = {
     allModels: "全部模型",
     allLevels: "全部等级",
     showingResults: "显示 {shown} / {total} 条公开结果",
+    harnessDetailsHint: "点击 Harness 名称查看完整配置与来源。",
     tableHint: "横向滑动查看完整表格 →",
     loadingResults: "正在加载公开结果…",
     confidenceNote: "所有结果都显示分数条；仅当来源披露 95% 置信区间时才显示误差线，未披露区间的数据只显示分数条。",
@@ -155,7 +163,7 @@ const translations = {
     notReported: "未披露",
     noResults: "没有符合当前筛选条件的结果。",
     officialSource: "官方来源",
-    details: "详情",
+    viewHarnessDetails: "查看 {harness} 与 {model} 的结果详情",
     resultDetails: "结果详情",
     closeDetails: "关闭详情",
     openOfficialDetail: "打开官方详情",
@@ -615,7 +623,7 @@ function formatDuration(value) {
 
 function entityName(item) {
   return item?.label
-    ? `<span class="entity-name">${escapeHtml(item.label)}</span>`
+    ? `<span class="entity-name" title="${escapeHtml(item.label)}">${escapeHtml(item.label)}</span>`
     : missingValue();
 }
 
@@ -671,6 +679,15 @@ function sourceTypeLabel(sourceType) {
     benchmark_official: t("benchmarkOfficial"),
     vendor_reported: t("vendorReported"),
     penguin_run: t("penguinRun"),
+  };
+  return labels[sourceType] || sourceType;
+}
+
+function sourceBadgeLabel(sourceType) {
+  const labels = {
+    benchmark_official: t("benchmarkOfficialShort"),
+    vendor_reported: t("vendorReportedShort"),
+    penguin_run: t("penguinRunShort"),
   };
   return labels[sourceType] || sourceType;
 }
@@ -835,11 +852,6 @@ function renderTableHead() {
     cell.append(button);
     row.append(cell);
   });
-  const detailsCell = document.createElement("th");
-  detailsCell.scope = "col";
-  detailsCell.className = "column-details";
-  detailsCell.textContent = t("details");
-  row.append(detailsCell);
   elements.resultsHead.replaceChildren(row);
 }
 
@@ -866,8 +878,16 @@ function accuracyCell(row) {
 }
 
 function sourceBadge(row) {
-  const label = escapeHtml(sourceTypeLabel(row.source_type));
-  return `<span class="source-badge source-${escapeHtml(row.source_type)}">${label}</span>`;
+  const fullLabel = escapeHtml(sourceTypeLabel(row.source_type));
+  const shortLabel = escapeHtml(sourceBadgeLabel(row.source_type));
+  return `<span class="source-badge source-${escapeHtml(row.source_type)}" aria-label="${fullLabel}" title="${fullLabel}">${shortLabel}</span>`;
+}
+
+function harnessDetailsButton(row) {
+  const harness = row.harness?.label || t("notReported");
+  const model = row.model?.label || t("notReported");
+  const label = escapeHtml(t("viewHarnessDetails", { harness, model }));
+  return `<button class="harness-details-button" type="button" data-result-id="${escapeHtml(row.id)}" aria-haspopup="dialog" aria-label="${label}">${entityName(row.harness)}</button>`;
 }
 
 function missingValue(compact = false) {
@@ -888,7 +908,7 @@ function renderTable() {
   });
 
   if (!rows.length) {
-    elements.resultsBody.innerHTML = `<tr><td class="empty-cell" colspan="10">${escapeHtml(t("noResults"))}</td></tr>`;
+    elements.resultsBody.innerHTML = `<tr><td class="empty-cell" colspan="9">${escapeHtml(t("noResults"))}</td></tr>`;
     return;
   }
 
@@ -901,7 +921,7 @@ function renderTable() {
     return `
       <tr>
         <td class="rank-cell${active("rank")}"><span class="rank-badge${comparisonRank <= 3 ? ` rank-${comparisonRank}` : ""}">${comparisonRank}</span></td>
-        <td class="entity-cell harness-cell${active("harness")}">${entityName(row.harness)}</td>
+        <td class="entity-cell harness-cell${active("harness")}">${harnessDetailsButton(row)}</td>
         <td class="entity-cell model-cell${active("model")}">
           <div class="model-primary">${entityName(row.model)}${effort}</div>
         </td>
@@ -911,7 +931,6 @@ function renderTable() {
         <td class="number-cell${active("total_tokens")}">${row.total_tokens == null ? missingValue(true) : escapeHtml(formatTokens(row.total_tokens))}</td>
         <td class="number-cell${active("total_cost_usd")}">${row.total_cost_usd == null ? missingValue(true) : escapeHtml(formatCost(row.total_cost_usd))}</td>
         <td class="source-cell${active("source_type")}">${sourceBadge(row)}</td>
-        <td class="details-cell"><button class="details-button" type="button" data-result-id="${escapeHtml(row.id)}">${escapeHtml(t("details"))}</button></td>
       </tr>`;
   }).join("");
 }
@@ -1201,7 +1220,7 @@ async function init() {
     renderTable();
   });
   elements.resultsBody.addEventListener("click", (event) => {
-    const button = event.target.closest(".details-button");
+    const button = event.target.closest(".harness-details-button");
     if (!button) return;
     const row = state.benchmark.results.find((item) => item.id === button.dataset.resultId);
     if (row) openDetails(row, button);
@@ -1228,7 +1247,7 @@ async function init() {
     selectBenchmark(initialBenchmark(state.payload).id, false);
   } catch (error) {
     console.error(error);
-    elements.resultsBody.innerHTML = `<tr><td class="empty-cell" colspan="10">${escapeHtml(t("dataError"))}</td></tr>`;
+    elements.resultsBody.innerHTML = `<tr><td class="empty-cell" colspan="9">${escapeHtml(t("dataError"))}</td></tr>`;
     elements.resultCount.textContent = t("dataError");
   }
 }

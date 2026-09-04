@@ -227,7 +227,21 @@ def verify_frontend_contract() -> None:
     positions = [script.find(column) for column in column_contract]
     assert all(position >= 0 for position in positions), "A required table column is missing"
     assert positions == sorted(positions), "The table column order changed"
-    assert 'detailsCell.textContent = t("details")' in script, "Details column missing"
+    assert 'detailsCell.textContent = t("details")' not in script, (
+        "Removed Details column is still rendered"
+    )
+    assert 'class="details-cell"' not in script, "Removed Details cell is still rendered"
+    assert 'class="harness-details-button"' in script, "Harness detail trigger is missing"
+    assert 'class="harness-detail-hint"' in html, "Harness detail hint is missing"
+    assert "harnessDetailsHint" in script, "Harness detail hint is not translated"
+    assert 'event.target.closest(".harness-details-button")' in script, (
+        "Harness detail trigger is not wired up"
+    )
+    assert 'aria-haspopup="dialog"' in script, "Harness detail trigger lacks dialog semantics"
+    assert 'colspan="9"' in html, "Loading row does not span the nine table columns"
+    assert script.count('colspan="9"') == 2, (
+        "Empty and error rows do not span the nine table columns"
+    )
     for removed_selector in ("ci-whisker", "rate-track", "rate-fill"):
         assert removed_selector not in script, f"Removed {removed_selector} markup is still rendered"
         assert removed_selector not in css, f"Removed {removed_selector} styling is still present"

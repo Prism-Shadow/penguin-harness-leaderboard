@@ -928,10 +928,24 @@ main,
   border-color: var(--line-strong);
 }
 
+.result-summary {
+  display: grid;
+  min-width: 0;
+  justify-items: end;
+  padding-bottom: 7px;
+  gap: 2px;
+}
+
 .result-count {
-  padding-bottom: 11px;
   color: var(--muted);
   font-size: 17px;
+  white-space: nowrap;
+}
+
+.harness-detail-hint {
+  max-width: 100%;
+  color: var(--faint);
+  font-size: 13px;
   white-space: nowrap;
 }
 
@@ -1004,7 +1018,7 @@ th.is-active .sort-button {
 }
 
 .column-accuracy {
-  width: 256px;
+  width: 373px;
 }
 
 .column-average-trial-duration-seconds {
@@ -1027,12 +1041,7 @@ th.is-active .sort-button {
 }
 
 .column-source-type {
-  width: 133px;
-}
-
-.column-details {
-  width: 89px;
-  text-align: center;
+  width: 105px;
 }
 
 .column-average-trial-duration-seconds .sort-button,
@@ -1049,16 +1058,6 @@ th.is-active .sort-button {
 .column-source-type .sort-button {
   width: 100%;
   justify-content: center;
-  transform: translateX(5px);
-}
-
-:root[data-locale="zh"] .column-source-type .sort-button {
-  transform: translateX(-11px);
-}
-
-:root[data-locale="zh"] .column-details {
-  padding-right: 3px;
-  padding-left: 21px;
 }
 
 .sort-button {
@@ -1115,8 +1114,17 @@ th.is-active .sort-button {
 .model-primary {
   display: flex;
   align-items: center;
-  flex-wrap: wrap;
+  min-width: 0;
+  flex-wrap: nowrap;
   gap: 7px;
+}
+
+.model-primary .entity-name {
+  min-width: 0;
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .effort-pill {
@@ -1131,6 +1139,7 @@ th.is-active .sort-button {
   font-size: 12px;
   font-weight: 400;
   line-height: 1.2;
+  flex: 0 0 auto;
 }
 
 .effort-pill.muted {
@@ -1217,6 +1226,12 @@ th.is-active .sort-button {
   white-space: nowrap;
 }
 
+.source-cell {
+  padding-right: 8px;
+  padding-left: 8px;
+  text-align: center;
+}
+
 .source-vendor_reported {
   color: var(--muted-strong);
   border-color: var(--line-strong);
@@ -1247,29 +1262,35 @@ th.is-active .sort-button {
   font-weight: 400;
 }
 
-.details-cell {
-  text-align: right;
-}
-
-.details-button {
+.harness-details-button {
   display: inline-flex;
   align-items: center;
-  min-height: 30px;
-  padding: 0 8px;
-  gap: 5px;
-  color: var(--muted-strong);
+  max-width: 100%;
+  padding: 0;
+  color: var(--text);
   background: transparent;
-  border: 1px solid var(--line);
-  border-radius: 7px;
+  border: 0;
   cursor: pointer;
-  font-size: 13px;
-  font-weight: 400;
+  font: inherit;
+  text-align: left;
+  transition: color 160ms ease;
 }
 
-.details-button:hover {
+.harness-details-button:hover {
   color: var(--accent);
-  border-color: color-mix(in srgb, var(--accent) 45%, var(--line));
-  background: var(--accent-soft);
+}
+
+.harness-details-button .entity-name {
+  color: inherit;
+  text-decoration: none;
+}
+
+.harness-details-button:hover .entity-name,
+.harness-details-button:focus-visible .entity-name {
+  text-decoration: underline;
+  text-decoration-color: currentColor;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 3px;
 }
 
 .loading-cell,
@@ -1751,6 +1772,15 @@ th.is-active .sort-button {
 
   .result-count {
     padding: 0;
+  }
+
+  .result-summary {
+    justify-items: start;
+    padding: 0;
+  }
+
+  .harness-detail-hint {
+    white-space: normal;
   }
 
   .table-hint {

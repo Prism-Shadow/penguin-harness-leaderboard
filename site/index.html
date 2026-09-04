@@ -42,8 +42,8 @@
         document.documentElement.lang = locale === "zh" ? "zh-CN" : "en";
       } catch {}
     </script>
-    <link rel="stylesheet" href="styles.css?v=20260904-08" />
-    <script src="script.js?v=20260902-11" defer></script>
+    <link rel="stylesheet" href="styles.css?v=20260904-13" />
+    <script src="script.js?v=20260904-02" defer></script>
   </head>
   <body>
     <a class="skip-link" href="#results" data-i18n="skipToResults">Skip to results</a>
@@ -175,7 +175,10 @@
                 </select>
               </div>
             </div>
-            <span class="result-count" aria-live="polite">Loading…</span>
+            <div class="result-summary">
+              <span class="result-count" aria-live="polite">Loading…</span>
+              <span class="harness-detail-hint" data-i18n="harnessDetailsHint">Select a Harness name to view full configuration and sources.</span>
+            </div>
           </div>
 
           <p class="table-hint" aria-hidden="true" data-i18n="tableHint">Swipe to view the full table →</p>
@@ -184,7 +187,7 @@
               <caption class="sr-only table-caption">Public Terminal-Bench results</caption>
               <thead class="results-head"></thead>
               <tbody class="results-body">
-                <tr><td class="loading-cell" colspan="10" data-i18n="loadingResults">Loading public results…</td></tr>
+                <tr><td class="loading-cell" colspan="9" data-i18n="loadingResults">Loading public results…</td></tr>
               </tbody>
             </table>
           </div>

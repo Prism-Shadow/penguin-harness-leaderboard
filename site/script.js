@@ -1,6 +1,30 @@
 const DATA_URL = "data/benchmarks.json";
 const THEME_KEY = "penguin-leaderboard.theme";
 const LOCALE_KEY = "penguin-leaderboard.locale";
+const CI_STUDY_ENABLED = new URLSearchParams(window.location.search).get("ci-study") === "1";
+const CI_STUDY_ROWS = [
+  "40dbe33d-e8af-475b-8eba-7d5d8f70054c",
+  "6d091468-3fda-4cbf-ba1c-645b0f522e97",
+  "ce0677b9-0fea-46ce-b8de-893c4d68e77a",
+  "1fe87c62-99ed-477b-9f6c-23ffbabc49f6",
+  "dcd48d03-9df9-46ab-bc4c-ade6dc35b8da",
+  "23ab6a14-4b2d-461d-9171-f8109f5692f1",
+  "db1f499b-d948-43d2-9aaf-27cfe97f6caf",
+  "64890377-54de-4cc2-bcd7-e76610983482",
+  "e5f3feda-4629-46ba-963f-300dcf7c2a4c",
+  "d7540f21-67af-4b3a-ad31-b81b85fef895",
+  "b03a8a69-fea8-42dd-a4fb-96a6a39e6857",
+  "fdb8393b-5b29-4645-b784-84f52cf31722",
+  "f867b631-36c8-476e-aa2f-96007ae70da0",
+  "660c330f-9cd8-4ce7-8890-3ce573d038a0",
+  "1095d399-9d66-44f4-8adc-e11fbb407a68",
+  "360942d9-d27b-4f7e-bcf6-e0ea9cdcdee8",
+  "ef2b00eb-f360-41e6-8c97-23c4d762d06b",
+];
+const CI_STUDY_BY_ID = new Map(CI_STUDY_ROWS.map((id, index) => [
+  id,
+  index < 10 ? `c${index + 1}` : `s${index - 9}`,
+]));
 
 const translations = {
   en: {
@@ -43,6 +67,7 @@ const translations = {
     allLevels: "All levels",
     showingResults: "Showing {shown} of {total} public results",
     harnessDetailsHint: "Select a Harness name to view full configuration and sources.",
+    ciStudyNote: "CI style study: row 1 is the light-blue baseline, rows 2–10 compare other colors, and the final 7 compare light-blue brightness and weight. Styles carry no data meaning.",
     tableHint: "Swipe to view the full table →",
     loadingResults: "Loading public results…",
     confidenceNote: "Every result has a score bar. Confidence whiskers appear only when the source reports a 95% interval; results without interval data show the bar alone.",
@@ -143,6 +168,7 @@ const translations = {
     allLevels: "全部等级",
     showingResults: "显示 {shown} / {total} 条公开结果",
     harnessDetailsHint: "点击 Harness 名称查看完整配置与来源。",
+    ciStudyNote: "CI 样式实验：第 1 条为浅蓝基准，第 2–10 条比较其他颜色，后 7 条比较浅蓝误差线的明暗与粗细；样式不代表任何数据含义。",
     tableHint: "横向滑动查看完整表格 →",
     loadingResults: "正在加载公开结果…",
     confidenceNote: "所有结果都显示分数条；仅当来源披露 95% 置信区间时才显示误差线，未披露区间的数据只显示分数条。",
@@ -222,6 +248,7 @@ const elements = {
   modelFilter: document.querySelector(".model-filter"),
   thinkingFilter: document.querySelector(".thinking-filter"),
   resultCount: document.querySelector(".result-count"),
+  ciStudyNote: document.querySelector(".ci-study-note"),
   resultsHead: document.querySelector(".results-head"),
   resultsBody: document.querySelector(".results-body"),
   resultDialog: document.querySelector(".result-dialog"),
@@ -855,6 +882,15 @@ function renderTableHead() {
   elements.resultsHead.replaceChildren(row);
 }
 
+function ciStudyAttribute(row) {
+  if (!CI_STUDY_ENABLED
+      || state.benchmark?.version !== "2.1"
+      || row.source_type !== "benchmark_official") return "";
+  const candidate = CI_STUDY_BY_ID.get(row.id);
+  if (!candidate) return "";
+  return ` data-ci-study="${candidate}"`;
+}
+
 function accuracyCell(row) {
   const ci = row.accuracy_ci95_half_width;
   const lower = Math.max(0, row.accuracy - (ci ?? 0));
@@ -866,7 +902,7 @@ function accuracyCell(row) {
         <strong>${row.accuracy.toFixed(1)}%</strong>
         <span>${escapeHtml(interval)}</span>
       </div>
-      <span class="accuracy-track" aria-hidden="true">
+      <span class="accuracy-track"${ciStudyAttribute(row)} aria-hidden="true">
         <i class="accuracy-fill" style="width:${Math.min(100, Math.max(0, row.accuracy))}%"></i>
         ${ci == null ? "" : `
           <i class="accuracy-ci" style="left:${lower}%;width:${upper - lower}%"></i>
@@ -906,6 +942,9 @@ function renderTable() {
     shown: rows.length,
     total: state.benchmark.result_count,
   });
+  elements.ciStudyNote.hidden = !(CI_STUDY_ENABLED
+    && state.benchmark.version === "2.1"
+    && rows.some((row) => row.source_type === "benchmark_official"));
 
   if (!rows.length) {
     elements.resultsBody.innerHTML = `<tr><td class="empty-cell" colspan="9">${escapeHtml(t("noResults"))}</td></tr>`;

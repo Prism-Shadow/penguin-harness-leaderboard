@@ -949,6 +949,15 @@ main,
   white-space: nowrap;
 }
 
+.ci-study-note {
+  max-width: 520px;
+  color: var(--muted-strong);
+  font-size: 13px;
+  line-height: 1.45;
+  text-align: right;
+  white-space: normal;
+}
+
 .table-hint {
   display: none;
 }
@@ -1211,6 +1220,63 @@ th.is-active .sort-button {
   background: var(--ci-line);
   transform: translate(-50%, -50%);
 }
+
+/* Temporary visual study enabled only by ?ci-study=1. */
+.accuracy-track[data-ci-study] .accuracy-ci,
+.accuracy-track[data-ci-study] .accuracy-cap {
+  background: var(--ci-study-line);
+}
+
+.accuracy-track[data-ci-study="c1"] { --ci-study-line: #6f9fe7; }
+.accuracy-track[data-ci-study="c2"] { --ci-study-line: #1e293b; }
+.accuracy-track[data-ci-study="c3"] { --ci-study-line: #7c2d12; }
+.accuracy-track[data-ci-study="c4"] { --ci-study-line: #831843; }
+.accuracy-track[data-ci-study="c5"] { --ci-study-line: #134e4a; }
+.accuracy-track[data-ci-study="c6"] { --ci-study-line: #312e81; }
+.accuracy-track[data-ci-study="c7"] { --ci-study-line: #164e63; }
+.accuracy-track[data-ci-study="c8"] { --ci-study-line: #713f12; }
+.accuracy-track[data-ci-study="c9"] { --ci-study-line: #14532d; }
+.accuracy-track[data-ci-study="c10"] { --ci-study-line: #7f1d1d; }
+.accuracy-track[data-ci-study="s1"] { --ci-study-line: #6f9fe7; }
+.accuracy-track[data-ci-study="s2"] { --ci-study-line: #8ab1ed; }
+.accuracy-track[data-ci-study="s3"] { --ci-study-line: #5688d5; }
+.accuracy-track[data-ci-study="s4"] { --ci-study-line: #9bbcf0; }
+.accuracy-track[data-ci-study="s5"] { --ci-study-line: #477ac5; }
+.accuracy-track[data-ci-study="s6"] { --ci-study-line: #78a5e8; }
+.accuracy-track[data-ci-study="s7"] { --ci-study-line: #628fda; }
+
+:root[data-theme="dark"] .accuracy-track[data-ci-study="c1"] { --ci-study-line: #bfd7ff; }
+:root[data-theme="dark"] .accuracy-track[data-ci-study="c2"] { --ci-study-line: #f1f5f9; }
+:root[data-theme="dark"] .accuracy-track[data-ci-study="c3"] { --ci-study-line: #fed7aa; }
+:root[data-theme="dark"] .accuracy-track[data-ci-study="c4"] { --ci-study-line: #fbcfe8; }
+:root[data-theme="dark"] .accuracy-track[data-ci-study="c5"] { --ci-study-line: #99f6e4; }
+:root[data-theme="dark"] .accuracy-track[data-ci-study="c6"] { --ci-study-line: #e0e7ff; }
+:root[data-theme="dark"] .accuracy-track[data-ci-study="c7"] { --ci-study-line: #cffafe; }
+:root[data-theme="dark"] .accuracy-track[data-ci-study="c8"] { --ci-study-line: #fde68a; }
+:root[data-theme="dark"] .accuracy-track[data-ci-study="c9"] { --ci-study-line: #bbf7d0; }
+:root[data-theme="dark"] .accuracy-track[data-ci-study="c10"] { --ci-study-line: #fecaca; }
+:root[data-theme="dark"] .accuracy-track[data-ci-study="s1"] { --ci-study-line: #bfd7ff; }
+:root[data-theme="dark"] .accuracy-track[data-ci-study="s2"] { --ci-study-line: #d1e3ff; }
+:root[data-theme="dark"] .accuracy-track[data-ci-study="s3"] { --ci-study-line: #a9c9fb; }
+:root[data-theme="dark"] .accuracy-track[data-ci-study="s4"] { --ci-study-line: #deebff; }
+:root[data-theme="dark"] .accuracy-track[data-ci-study="s5"] { --ci-study-line: #96bbf4; }
+:root[data-theme="dark"] .accuracy-track[data-ci-study="s6"] { --ci-study-line: #c7dcff; }
+:root[data-theme="dark"] .accuracy-track[data-ci-study="s7"] { --ci-study-line: #b2cffb; }
+
+.accuracy-track[data-ci-study="s1"] .accuracy-ci { height: 1.5px; }
+.accuracy-track[data-ci-study="s1"] .accuracy-cap { width: 1px; height: 8px; }
+.accuracy-track[data-ci-study="s2"] .accuracy-ci { height: 1px; }
+.accuracy-track[data-ci-study="s2"] .accuracy-cap { width: 1px; height: 8px; }
+.accuracy-track[data-ci-study="s3"] .accuracy-ci { height: 2px; }
+.accuracy-track[data-ci-study="s3"] .accuracy-cap { width: 1px; height: 8px; }
+.accuracy-track[data-ci-study="s4"] .accuracy-ci { height: 1.5px; }
+.accuracy-track[data-ci-study="s4"] .accuracy-cap { width: 1px; height: 10px; }
+.accuracy-track[data-ci-study="s5"] .accuracy-ci { height: 2px; }
+.accuracy-track[data-ci-study="s5"] .accuracy-cap { width: 2px; height: 8px; }
+.accuracy-track[data-ci-study="s6"] .accuracy-ci { height: 1.5px; }
+.accuracy-track[data-ci-study="s6"] .accuracy-cap { width: 2px; height: 8px; }
+.accuracy-track[data-ci-study="s7"] .accuracy-ci { height: 2px; }
+.accuracy-track[data-ci-study="s7"] .accuracy-cap { width: 1px; height: 10px; }
 
 .source-badge {
   display: inline-flex;
@@ -1781,6 +1847,10 @@ th.is-active .sort-button {
 
   .harness-detail-hint {
     white-space: normal;
+  }
+
+  .ci-study-note {
+    text-align: left;
   }
 
   .table-hint {

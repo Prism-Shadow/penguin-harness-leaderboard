@@ -215,6 +215,8 @@ const state = {
 
 const elements = {
   benchSwitcher: document.querySelector(".bench-switcher"),
+  benchRail: document.querySelector(".results-bench-rail"),
+  resultsSection: document.querySelector("#results"),
   localeSelect: document.querySelector(".locale-select"),
   themeToggle: document.querySelector(".theme-toggle"),
   sourceFilter: document.querySelector(".source-filter"),
@@ -238,6 +240,18 @@ const elements = {
 
 let dialogTrigger = null;
 const customSelects = new Map();
+
+function updateBenchRailState() {
+  const headerHeight = Number.parseFloat(
+    getComputedStyle(document.documentElement).getPropertyValue("--header-height"),
+  ) || 64;
+  const railBounds = elements.benchRail.getBoundingClientRect();
+  const resultsBounds = elements.resultsSection.getBoundingClientRect();
+  const isStuck = Math.abs(railBounds.top - headerHeight) <= 1
+    && resultsBounds.top < headerHeight
+    && resultsBounds.bottom > headerHeight + railBounds.height;
+  elements.benchRail.classList.toggle("is-stuck", isStuck);
+}
 
 function t(key, values = {}) {
   const template = translations[state.locale]?.[key] ?? translations.en[key] ?? key;
@@ -627,19 +641,37 @@ function entityName(item) {
     : missingValue();
 }
 
+const HARNESS_LOGOS = Object.freeze({
+  "Claude Code": ["assets/harnesses/anthropic.svg", true],
+  Codex: ["assets/harnesses/openai.svg", true],
+  "Cursor CLI": ["assets/harnesses/cursor.svg", true],
+  "DeepSeek Harness": ["assets/harnesses/deepseek.svg", true],
+  "Gemini CLI": ["assets/harnesses/google-gemini.svg", true],
+  "Kimi Code": ["assets/harnesses/moonshot-ai.svg", true],
+  Penguin: ["favicon.svg", false],
+  Terminus: ["assets/harnesses/terminal-bench.svg", false],
+  "Terminus 2": ["assets/harnesses/terminal-bench.svg", false],
+  "mini-SWE-agent": ["assets/harnesses/mini-swe-agent.svg", false],
+  Devin: ["assets/harnesses/devin.svg", false],
+  "Grok Build": ["assets/harnesses/xai.svg", true],
+});
+
+function harnessLogo(label) {
+  const logo = HARNESS_LOGOS[label];
+  if (!logo) return "";
+  const [src, monochrome] = logo;
+  const className = monochrome ? "harness-logo harness-logo-monochrome" : "harness-logo";
+  return `<img class="${className}" src="${escapeHtml(src)}" alt="" decoding="async" />`;
+}
+
 function renderBenchSwitcher() {
   const benchmarks = state.payload.benchmarks;
   const activeIndex = Math.max(0, benchmarks.findIndex((bench) => bench.id === state.benchmark.id));
   elements.benchSwitcher.style.setProperty("--bench-count", benchmarks.length);
 
   let buttons = [...elements.benchSwitcher.querySelectorAll(".bench-tab")];
-  if (!elements.benchSwitcher.querySelector(".bench-glider") || buttons.length !== benchmarks.length) {
+  if (buttons.length !== benchmarks.length) {
     elements.benchSwitcher.replaceChildren();
-
-    const glider = document.createElement("span");
-    glider.className = "bench-glider";
-    glider.setAttribute("aria-hidden", "true");
-    elements.benchSwitcher.append(glider);
 
     benchmarks.forEach((bench) => {
       const button = document.createElement("button");
@@ -656,7 +688,6 @@ function renderBenchSwitcher() {
   buttons.forEach((button, index) => {
     button.setAttribute("aria-pressed", String(index === activeIndex));
   });
-  elements.benchSwitcher.style.setProperty("--bench-index", activeIndex);
 }
 
 function updateSelect(select, values, current, emptyLabel) {
@@ -887,7 +918,7 @@ function harnessDetailsButton(row) {
   const harness = row.harness?.label || t("notReported");
   const model = row.model?.label || t("notReported");
   const label = escapeHtml(t("viewHarnessDetails", { harness, model }));
-  return `<button class="harness-details-button" type="button" data-result-id="${escapeHtml(row.id)}" aria-haspopup="dialog" aria-label="${label}">${entityName(row.harness)}</button>`;
+  return `<button class="harness-details-button" type="button" data-result-id="${escapeHtml(row.id)}" aria-haspopup="dialog" aria-label="${label}">${harnessLogo(row.harness?.label)}${entityName(row.harness)}</button>`;
 }
 
 function missingValue(compact = false) {
@@ -933,6 +964,9 @@ function renderTable() {
         <td class="source-cell${active("source_type")}">${sourceBadge(row)}</td>
       </tr>`;
   }).join("");
+  elements.resultsBody.querySelectorAll(".harness-logo").forEach((image) => {
+    image.addEventListener("error", () => { image.hidden = true; }, { once: true });
+  });
 }
 
 function detailLink(item, fallbackLabel) {
@@ -1168,10 +1202,7 @@ function selectBenchmark(id, updateUrl = true) {
   const bench = state.payload.benchmarks.find((item) => item.id === id);
   if (!bench) return;
   state.benchmark = bench;
-  const defaultSource = bench.results.some((row) => row.source_type === "benchmark_official")
-    ? "benchmark_official"
-    : "";
-  state.filters = { source: defaultSource, harness: "", model: "", thinking: "" };
+  state.filters = { source: "", harness: "", model: "", thinking: "" };
   state.sort = { key: "accuracy", direction: "desc" };
   if (updateUrl) {
     const url = new URL(window.location.href);
@@ -1199,6 +1230,8 @@ async function init() {
   enhanceCustomSelects();
   elements.localeSelect.addEventListener("change", (event) => setLocale(event.target.value));
   elements.themeToggle.addEventListener("click", cycleTheme);
+  addEventListener("scroll", updateBenchRailState, { passive: true });
+  addEventListener("resize", updateBenchRailState);
   elements.sourceFilter.addEventListener("change", (event) => {
     state.filters.source = event.target.value;
     renderFilters();
@@ -1245,6 +1278,7 @@ async function init() {
     if (!response.ok) throw new Error(`HTTP ${response.status}`);
     state.payload = await response.json();
     selectBenchmark(initialBenchmark(state.payload).id, false);
+    updateBenchRailState();
   } catch (error) {
     console.error(error);
     elements.resultsBody.innerHTML = `<tr><td class="empty-cell" colspan="9">${escapeHtml(t("dataError"))}</td></tr>`;

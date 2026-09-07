@@ -21,6 +21,18 @@ EXPECTED_IDS = (
     "terminal-bench-4.0",
 )
 SOURCE_TYPES = {"benchmark_official", "vendor_reported", "penguin_run"}
+HARNESS_ICON_ASSETS = {
+    "anthropic.svg",
+    "cursor.svg",
+    "deepseek.svg",
+    "devin.svg",
+    "google-gemini.svg",
+    "mini-swe-agent.svg",
+    "moonshot-ai.svg",
+    "openai.svg",
+    "terminal-bench.svg",
+    "xai.svg",
+}
 VENDOR_SOURCE_PREFIXES = {
     "DeepSeek": (
         "https://api-docs.deepseek.com/",
@@ -207,7 +219,9 @@ def verify_frontend_contract() -> None:
     assert 'class="result-dialog"' in html, "Result details dialog missing"
     assert "showModal()" in script, "Result details dialog is not wired up"
     assert "official_detail_url" in script, "Official result detail link is missing"
-    assert 'class="bench-switcher"' in html, "Top navigation benchmark switcher missing"
+    assert 'class="results-bench-rail"' in html, "Results benchmark rail missing"
+    assert 'classList.toggle("is-stuck"' in script, "Sticky benchmark rail state missing"
+    assert 'class="bench-switcher"' in html, "Results benchmark switcher missing"
     assert 'class="locale-control"' in html, "Language control missing"
     assert '<option value="system">' in html, "Follow system language option is missing"
     assert 'option[value="system"]' in script, "Follow system option is not translated"
@@ -260,6 +274,13 @@ def verify_frontend_contract() -> None:
     )
     assert ".column-total-tokens .sort-button" in css, "Token header alignment missing"
     assert ".number-cell" in css and "text-align: right" in css, "Numeric alignment missing"
+    icon_dir = ROOT / "site" / "assets" / "harnesses"
+    actual_icons = {path.name for path in icon_dir.glob("*.svg")}
+    assert actual_icons == HARNESS_ICON_ASSETS, "Harness icon asset set changed"
+    for icon_name in HARNESS_ICON_ASSETS:
+        assert f'assets/harnesses/{icon_name}' in script, (
+            f"Harness icon is not referenced: {icon_name}"
+        )
 
 
 def main() -> None:

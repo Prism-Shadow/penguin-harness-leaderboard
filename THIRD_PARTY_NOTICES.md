@@ -28,3 +28,26 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
+
+## Harness icons
+
+Harness logos are stored locally under `site/assets/harnesses/` so the
+leaderboard does not depend on third-party image requests at runtime.
+
+- Anthropic, OpenAI, Cursor, DeepSeek, Google Gemini, and Moonshot AI marks
+  are sourced from [Simple Icons](https://simpleicons.org/) (CC0 1.0). The
+  Anthropic and OpenAI assets match the v14 icons used by the reference site;
+  the other Simple Icons assets are from v16.
+- The Terminus mark is mirrored from the
+  [Terminal-Bench website](https://www.tbench.ai/fav.png).
+- The mini-SWE-agent mark is the
+  [SWE-agent GitHub organization avatar](https://github.com/SWE-agent.png).
+- The Devin mark is the
+  [Cognition GitHub organization avatar](https://github.com/CognitionAI.png).
+- The Grok Build mark is mirrored from the
+  [xAI website favicon](https://x.ai/favicon.ico).
+- The Penguin mark is the existing local project logo described above.
+
+All product names, logos, and brands remain the property of their respective
+owners. Their use here identifies the evaluated harness and does not imply
+endorsement.

@@ -21,6 +21,18 @@ EXPECTED_IDS = (
     "terminal-bench-4.0",
 )
 SOURCE_TYPES = {"benchmark_official", "vendor_reported", "penguin_run"}
+HARNESS_ICON_ASSETS = {
+    "anthropic.svg",
+    "cursor.svg",
+    "deepseek.svg",
+    "devin.svg",
+    "google-gemini.svg",
+    "mini-swe-agent.svg",
+    "moonshot-ai.svg",
+    "openai.svg",
+    "terminal-bench.svg",
+    "xai.svg",
+}
 VENDOR_SOURCE_PREFIXES = {
     "DeepSeek": (
         "https://api-docs.deepseek.com/",
@@ -207,7 +219,14 @@ def verify_frontend_contract() -> None:
     assert 'class="result-dialog"' in html, "Result details dialog missing"
     assert "showModal()" in script, "Result details dialog is not wired up"
     assert "official_detail_url" in script, "Official result detail link is missing"
-    assert 'class="bench-switcher"' in html, "Top navigation benchmark switcher missing"
+    assert 'class="results-bench-rail"' in html, "Results benchmark rail missing"
+    assert 'classList.toggle("is-stuck"' in script, "Sticky benchmark rail state missing"
+    assert 'class="bench-switcher"' in html, "Results benchmark switcher missing"
+    assert 'data-i18n="resultsScopeNote"' in html, "All-efforts comparison note missing"
+    assert script.count("resultsScopeNote:") == 2, "Comparison note must be bilingual"
+    assert 'officialUrl.searchParams.set("efforts", "all")' in script, (
+        "Official comparison link must open the all-efforts view"
+    )
     assert 'class="locale-control"' in html, "Language control missing"
     assert '<option value="system">' in html, "Follow system language option is missing"
     assert 'option[value="system"]' in script, "Follow system option is not translated"
@@ -227,7 +246,21 @@ def verify_frontend_contract() -> None:
     positions = [script.find(column) for column in column_contract]
     assert all(position >= 0 for position in positions), "A required table column is missing"
     assert positions == sorted(positions), "The table column order changed"
-    assert 'detailsCell.textContent = t("details")' in script, "Details column missing"
+    assert 'detailsCell.textContent = t("details")' not in script, (
+        "Removed Details column is still rendered"
+    )
+    assert 'class="details-cell"' not in script, "Removed Details cell is still rendered"
+    assert 'class="harness-details-button"' in script, "Harness detail trigger is missing"
+    assert 'class="harness-detail-hint"' in html, "Harness detail hint is missing"
+    assert "harnessDetailsHint" in script, "Harness detail hint is not translated"
+    assert 'event.target.closest(".harness-details-button")' in script, (
+        "Harness detail trigger is not wired up"
+    )
+    assert 'aria-haspopup="dialog"' in script, "Harness detail trigger lacks dialog semantics"
+    assert 'colspan="9"' in html, "Loading row does not span the nine table columns"
+    assert script.count('colspan="9"') == 2, (
+        "Empty and error rows do not span the nine table columns"
+    )
     for removed_selector in ("ci-whisker", "rate-track", "rate-fill"):
         assert removed_selector not in script, f"Removed {removed_selector} markup is still rendered"
         assert removed_selector not in css, f"Removed {removed_selector} styling is still present"
@@ -246,6 +279,13 @@ def verify_frontend_contract() -> None:
     )
     assert ".column-total-tokens .sort-button" in css, "Token header alignment missing"
     assert ".number-cell" in css and "text-align: right" in css, "Numeric alignment missing"
+    icon_dir = ROOT / "site" / "assets" / "harnesses"
+    actual_icons = {path.name for path in icon_dir.glob("*.svg")}
+    assert actual_icons == HARNESS_ICON_ASSETS, "Harness icon asset set changed"
+    for icon_name in HARNESS_ICON_ASSETS:
+        assert f'assets/harnesses/{icon_name}' in script, (
+            f"Harness icon is not referenced: {icon_name}"
+        )
 
 
 def main() -> None:

@@ -23,12 +23,16 @@ const translations = {
     officialBest: "Official best",
     publicSnapshot: "Public results",
     snapshotUpdated: "Official snapshot updated {date}; curated sources verified {verified}.",
+    resultsScopeNote: "Includes all reported thinking levels; ranks follow current filters. The official default shows the best score per Model × Harness.",
     source: "Source",
     sourceFilter: "Filter by source",
     allSources: "All sources",
     benchmarkOfficial: "Benchmark official",
     vendorReported: "Vendor-reported",
     penguinRun: "Penguin run",
+    benchmarkOfficialShort: "Official",
+    vendorReportedShort: "Vendor",
+    penguinRunShort: "Penguin",
     harness: "Harness",
     model: "Model",
     thinkingLevel: "Thinking level",
@@ -39,16 +43,16 @@ const translations = {
     allModels: "All models",
     allLevels: "All levels",
     showingResults: "Showing {shown} of {total} public results",
-    tableHint: "Swipe to view the full table →",
+    harnessDetailsHint: "Select a Harness name to view full configuration and sources.",
+    tableHint: "Scroll horizontally to view all columns →",
     loadingResults: "Loading public results…",
     confidenceNote: "Every result has a score bar. Confidence whiskers appear only when the source reports a 95% interval; results without interval data show the bar alone.",
     dataCoverage: "Data coverage",
+    coverageOfficial: "Official",
     coverageTitle: "From public baselines to Penguin runs.",
     coverageDescription: "See how official baselines, vendor reports, and Penguin runs are represented across every benchmark.",
     officialSnapshot: "Official snapshot",
-    viewOfficialBenchmark: "View official benchmark",
     verifiedPenguinRun: "Verified Penguin run",
-    viewFullReport: "View full report",
     successSummary: "{successes} successes / {trials} valid trials",
     resolutionRate: "Resolution rate",
     tokens: "Tokens",
@@ -59,13 +63,13 @@ const translations = {
     notReported: "Not reported",
     noResults: "No results match these filters.",
     officialSource: "Official source",
-    details: "Details",
+    viewHarnessDetails: "View result details for {harness} with {model}",
     resultDetails: "Result details",
     closeDetails: "Close details",
     openOfficialDetail: "Open official detail",
     openSource: "Open source",
     done: "Done",
-    officialRank: "Official rank",
+    officialRank: "Official rank (all efforts)",
     notOfficiallyRanked: "Not officially ranked",
     configuration: "Configuration",
     scoreMetrics: "Score metrics",
@@ -119,12 +123,16 @@ const translations = {
     officialBest: "官方最高分",
     publicSnapshot: "公开结果",
     snapshotUpdated: "官方快照更新时间：{date}；人工来源核验于 {verified}。",
+    resultsScopeNote: "本表保留全部思考等级配置，按当前筛选结果排名；官网默认每组 Model × Harness 只显示最高分。",
     source: "来源",
     sourceFilter: "按来源筛选",
     allSources: "全部来源",
     benchmarkOfficial: "Benchmark 官方",
     vendorReported: "厂商自报",
     penguinRun: "Penguin 实测",
+    benchmarkOfficialShort: "官方",
+    vendorReportedShort: "厂商自报",
+    penguinRunShort: "Penguin",
     harness: "Harness",
     model: "模型",
     thinkingLevel: "思考等级",
@@ -135,16 +143,16 @@ const translations = {
     allModels: "全部模型",
     allLevels: "全部等级",
     showingResults: "显示 {shown} / {total} 条公开结果",
-    tableHint: "横向滑动查看完整表格 →",
+    harnessDetailsHint: "点击 Harness 名称查看完整配置与来源。",
+    tableHint: "横向滚动查看完整表格 →",
     loadingResults: "正在加载公开结果…",
     confidenceNote: "所有结果都显示分数条；仅当来源披露 95% 置信区间时才显示误差线，未披露区间的数据只显示分数条。",
     dataCoverage: "数据覆盖",
+    coverageOfficial: "官方榜单",
     coverageTitle: "从公开基线，到 Penguin 实测。",
     coverageDescription: "清楚展示每个 Benchmark 收录的官方基线、厂商自报与 Penguin 实测。",
     officialSnapshot: "官方快照",
-    viewOfficialBenchmark: "查看官方榜单",
     verifiedPenguinRun: "已验证的 Penguin 实测",
-    viewFullReport: "查看完整报告",
     successSummary: "{successes} 次成功 / {trials} 次有效尝试",
     resolutionRate: "解决率",
     tokens: "Token",
@@ -155,13 +163,13 @@ const translations = {
     notReported: "未披露",
     noResults: "没有符合当前筛选条件的结果。",
     officialSource: "官方来源",
-    details: "详情",
+    viewHarnessDetails: "查看 {harness} 与 {model} 的结果详情",
     resultDetails: "结果详情",
     closeDetails: "关闭详情",
     openOfficialDetail: "打开官方详情",
     openSource: "打开来源",
     done: "完成",
-    officialRank: "官方排名",
+    officialRank: "官方全配置排名",
     notOfficiallyRanked: "未参与官方排名",
     configuration: "评测配置",
     scoreMetrics: "成绩指标",
@@ -207,6 +215,8 @@ const state = {
 
 const elements = {
   benchSwitcher: document.querySelector(".bench-switcher"),
+  benchRail: document.querySelector(".results-bench-rail"),
+  resultsSection: document.querySelector("#results"),
   localeSelect: document.querySelector(".locale-select"),
   themeToggle: document.querySelector(".theme-toggle"),
   sourceFilter: document.querySelector(".source-filter"),
@@ -214,6 +224,8 @@ const elements = {
   modelFilter: document.querySelector(".model-filter"),
   thinkingFilter: document.querySelector(".thinking-filter"),
   resultCount: document.querySelector(".result-count"),
+  tableWrap: document.querySelector(".table-wrap"),
+  tableHint: document.querySelector(".table-hint"),
   resultsHead: document.querySelector(".results-head"),
   resultsBody: document.querySelector(".results-body"),
   resultDialog: document.querySelector(".result-dialog"),
@@ -230,6 +242,23 @@ const elements = {
 
 let dialogTrigger = null;
 const customSelects = new Map();
+
+function updateBenchRailState() {
+  const headerHeight = Number.parseFloat(
+    getComputedStyle(document.documentElement).getPropertyValue("--header-height"),
+  ) || 64;
+  const railBounds = elements.benchRail.getBoundingClientRect();
+  const resultsBounds = elements.resultsSection.getBoundingClientRect();
+  const isStuck = Math.abs(railBounds.top - headerHeight) <= 1
+    && resultsBounds.top < headerHeight
+    && resultsBounds.bottom > headerHeight + railBounds.height;
+  elements.benchRail.classList.toggle("is-stuck", isStuck);
+}
+
+function updateTableOverflow() {
+  const { tableWrap, tableHint } = elements;
+  tableHint.hidden = tableWrap.scrollWidth <= tableWrap.clientWidth + 1;
+}
 
 function t(key, values = {}) {
   const template = translations[state.locale]?.[key] ?? translations.en[key] ?? key;
@@ -615,8 +644,31 @@ function formatDuration(value) {
 
 function entityName(item) {
   return item?.label
-    ? `<span class="entity-name">${escapeHtml(item.label)}</span>`
+    ? `<span class="entity-name" title="${escapeHtml(item.label)}">${escapeHtml(item.label)}</span>`
     : missingValue();
+}
+
+const HARNESS_LOGOS = Object.freeze({
+  "Claude Code": ["assets/harnesses/anthropic.svg", true],
+  Codex: ["assets/harnesses/openai.svg", true],
+  "Cursor CLI": ["assets/harnesses/cursor.svg", true],
+  "DeepSeek Harness": ["assets/harnesses/deepseek.svg", true],
+  "Gemini CLI": ["assets/harnesses/google-gemini.svg", true],
+  "Kimi Code": ["assets/harnesses/moonshot-ai.svg", true],
+  Penguin: ["favicon.svg", false],
+  Terminus: ["assets/harnesses/terminal-bench.svg", false],
+  "Terminus 2": ["assets/harnesses/terminal-bench.svg", false],
+  "mini-SWE-agent": ["assets/harnesses/mini-swe-agent.svg", false],
+  Devin: ["assets/harnesses/devin.svg", false],
+  "Grok Build": ["assets/harnesses/xai.svg", true],
+});
+
+function harnessLogo(label) {
+  const logo = HARNESS_LOGOS[label];
+  if (!logo) return "";
+  const [src, monochrome] = logo;
+  const className = monochrome ? "harness-logo harness-logo-monochrome" : "harness-logo";
+  return `<img class="${className}" src="${escapeHtml(src)}" alt="" decoding="async" />`;
 }
 
 function renderBenchSwitcher() {
@@ -625,13 +677,8 @@ function renderBenchSwitcher() {
   elements.benchSwitcher.style.setProperty("--bench-count", benchmarks.length);
 
   let buttons = [...elements.benchSwitcher.querySelectorAll(".bench-tab")];
-  if (!elements.benchSwitcher.querySelector(".bench-glider") || buttons.length !== benchmarks.length) {
+  if (buttons.length !== benchmarks.length) {
     elements.benchSwitcher.replaceChildren();
-
-    const glider = document.createElement("span");
-    glider.className = "bench-glider";
-    glider.setAttribute("aria-hidden", "true");
-    elements.benchSwitcher.append(glider);
 
     benchmarks.forEach((bench) => {
       const button = document.createElement("button");
@@ -648,7 +695,6 @@ function renderBenchSwitcher() {
   buttons.forEach((button, index) => {
     button.setAttribute("aria-pressed", String(index === activeIndex));
   });
-  elements.benchSwitcher.style.setProperty("--bench-index", activeIndex);
 }
 
 function updateSelect(select, values, current, emptyLabel) {
@@ -671,6 +717,15 @@ function sourceTypeLabel(sourceType) {
     benchmark_official: t("benchmarkOfficial"),
     vendor_reported: t("vendorReported"),
     penguin_run: t("penguinRun"),
+  };
+  return labels[sourceType] || sourceType;
+}
+
+function sourceBadgeLabel(sourceType) {
+  const labels = {
+    benchmark_official: t("benchmarkOfficialShort"),
+    vendor_reported: t("vendorReportedShort"),
+    penguin_run: t("penguinRunShort"),
   };
   return labels[sourceType] || sourceType;
 }
@@ -835,11 +890,6 @@ function renderTableHead() {
     cell.append(button);
     row.append(cell);
   });
-  const detailsCell = document.createElement("th");
-  detailsCell.scope = "col";
-  detailsCell.className = "column-details";
-  detailsCell.textContent = t("details");
-  row.append(detailsCell);
   elements.resultsHead.replaceChildren(row);
 }
 
@@ -866,8 +916,16 @@ function accuracyCell(row) {
 }
 
 function sourceBadge(row) {
-  const label = escapeHtml(sourceTypeLabel(row.source_type));
-  return `<span class="source-badge source-${escapeHtml(row.source_type)}">${label}</span>`;
+  const fullLabel = escapeHtml(sourceTypeLabel(row.source_type));
+  const shortLabel = escapeHtml(sourceBadgeLabel(row.source_type));
+  return `<span class="source-badge source-${escapeHtml(row.source_type)}" aria-label="${fullLabel}" title="${fullLabel}">${shortLabel}</span>`;
+}
+
+function harnessDetailsButton(row) {
+  const harness = row.harness?.label || t("notReported");
+  const model = row.model?.label || t("notReported");
+  const label = escapeHtml(t("viewHarnessDetails", { harness, model }));
+  return `<button class="harness-details-button" type="button" data-result-id="${escapeHtml(row.id)}" aria-haspopup="dialog" aria-label="${label}">${harnessLogo(row.harness?.label)}${entityName(row.harness)}</button>`;
 }
 
 function missingValue(compact = false) {
@@ -888,7 +946,7 @@ function renderTable() {
   });
 
   if (!rows.length) {
-    elements.resultsBody.innerHTML = `<tr><td class="empty-cell" colspan="10">${escapeHtml(t("noResults"))}</td></tr>`;
+    elements.resultsBody.innerHTML = `<tr><td class="empty-cell" colspan="9">${escapeHtml(t("noResults"))}</td></tr>`;
     return;
   }
 
@@ -901,7 +959,7 @@ function renderTable() {
     return `
       <tr>
         <td class="rank-cell${active("rank")}"><span class="rank-badge${comparisonRank <= 3 ? ` rank-${comparisonRank}` : ""}">${comparisonRank}</span></td>
-        <td class="entity-cell harness-cell${active("harness")}">${entityName(row.harness)}</td>
+        <td class="entity-cell harness-cell${active("harness")}">${harnessDetailsButton(row)}</td>
         <td class="entity-cell model-cell${active("model")}">
           <div class="model-primary">${entityName(row.model)}${effort}</div>
         </td>
@@ -911,9 +969,11 @@ function renderTable() {
         <td class="number-cell${active("total_tokens")}">${row.total_tokens == null ? missingValue(true) : escapeHtml(formatTokens(row.total_tokens))}</td>
         <td class="number-cell${active("total_cost_usd")}">${row.total_cost_usd == null ? missingValue(true) : escapeHtml(formatCost(row.total_cost_usd))}</td>
         <td class="source-cell${active("source_type")}">${sourceBadge(row)}</td>
-        <td class="details-cell"><button class="details-button" type="button" data-result-id="${escapeHtml(row.id)}">${escapeHtml(t("details"))}</button></td>
       </tr>`;
   }).join("");
+  elements.resultsBody.querySelectorAll(".harness-logo").forEach((image) => {
+    image.addEventListener("error", () => { image.hidden = true; }, { once: true });
+  });
 }
 
 function detailLink(item, fallbackLabel) {
@@ -1028,26 +1088,16 @@ function renderCoverage() {
   const benchmarks = state.payload?.benchmarks || [];
   elements.coverageGrid.innerHTML = benchmarks.map((bench) => {
     const isCurrent = bench.id === state.benchmark.id;
-    const officialUrl = safeUrl(bench.official_url);
-    const officialLink = officialUrl
-      ? `<a class="coverage-source-link" href="${escapeHtml(officialUrl)}" target="_blank" rel="noreferrer">${escapeHtml(t("viewOfficialBenchmark"))}</a>`
-      : "";
     return `
       <article class="coverage-card${isCurrent ? " is-current" : ""}"${isCurrent ? ' aria-current="true"' : ""}>
-        <header class="coverage-card-header">
-          <div>
-            <span class="coverage-version">TB ${escapeHtml(bench.version)}</span>
-            <h3>${escapeHtml(bench.name)}</h3>
-          </div>
-          ${officialLink}
-        </header>
+        <h3>${escapeHtml(bench.name)}</h3>
         <div class="coverage-total">
           <strong>${escapeHtml(formatNumber(bench.result_count) ?? "0")}</strong>
           <span>${escapeHtml(t("publicResults"))}</span>
         </div>
         <dl class="coverage-source-grid">
-          <div><dt>${escapeHtml(t("benchmarkOfficial"))}</dt><dd>${escapeHtml(formatNumber(bench.official_result_count ?? 0))}</dd></div>
-          <div><dt>${escapeHtml(t("vendorReported"))}</dt><dd>${escapeHtml(formatNumber(bench.vendor_result_count ?? 0))}</dd></div>
+          <div><dt title="${escapeHtml(t("benchmarkOfficial"))}">${escapeHtml(t("coverageOfficial"))}</dt><dd>${escapeHtml(formatNumber(bench.official_result_count ?? 0))}</dd></div>
+          <div><dt title="${escapeHtml(t("vendorReported"))}">${escapeHtml(t("vendorReportedShort"))}</dt><dd>${escapeHtml(formatNumber(bench.vendor_result_count ?? 0))}</dd></div>
           <div><dt>${escapeHtml(t("penguinRun"))}</dt><dd>${escapeHtml(formatNumber(bench.penguin_result_count ?? 0))}</dd></div>
         </dl>
         <footer class="coverage-card-footer">
@@ -1079,10 +1129,6 @@ function renderCoverage() {
   const protocolNote = row.protocol_note !== null && typeof row.protocol_note === "object"
     ? row.protocol_note[state.locale] || row.protocol_note.en
     : row.protocol_note;
-  const evidenceUrl = safeUrl(row.source_url || row.official_detail_url);
-  const reportLink = evidenceUrl
-    ? `<a class="button button-primary penguin-report-link" href="${escapeHtml(evidenceUrl)}" target="_blank" rel="noreferrer">${escapeHtml(t("viewFullReport"))}</a>`
-    : "";
   const harnessName = row.harness_version
     ? `${row.harness.label} ${row.harness_version}`
     : row.harness.label;
@@ -1114,7 +1160,6 @@ function renderCoverage() {
         <div><dt>${escapeHtml(t("thinkingLevel"))}</dt><dd>${escapeHtml(row.thinking_level || t("notReported"))}</dd></div>
         <div><dt>${escapeHtml(t("verifiedOn"))}</dt><dd>${escapeHtml(formatDate(row.verified_at))}</dd></div>
       </dl>
-      ${reportLink}
     </div>
   `;
 }
@@ -1137,8 +1182,10 @@ function renderBenchmark() {
   document.querySelector(".stat-harnesses").textContent = bench.harness_count;
   document.querySelector(".stat-best").textContent = `${bench.official_best_accuracy.toFixed(1)}%`;
   document.querySelector(".table-caption").textContent = `${bench.name} public results`;
+  const officialUrl = new URL(bench.official_url);
+  officialUrl.searchParams.set("efforts", "all");
   document.querySelectorAll(".benchmark-source-link").forEach((link) => {
-    link.href = bench.official_url;
+    link.href = officialUrl.href;
   });
   document.querySelector(".snapshot-label").textContent = `tbench.ai · ${bench.version}`;
   renderTable();
@@ -1149,10 +1196,7 @@ function selectBenchmark(id, updateUrl = true) {
   const bench = state.payload.benchmarks.find((item) => item.id === id);
   if (!bench) return;
   state.benchmark = bench;
-  const defaultSource = bench.results.some((row) => row.source_type === "benchmark_official")
-    ? "benchmark_official"
-    : "";
-  state.filters = { source: defaultSource, harness: "", model: "", thinking: "" };
+  state.filters = { source: "", harness: "", model: "", thinking: "" };
   state.sort = { key: "accuracy", direction: "desc" };
   if (updateUrl) {
     const url = new URL(window.location.href);
@@ -1180,6 +1224,11 @@ async function init() {
   enhanceCustomSelects();
   elements.localeSelect.addEventListener("change", (event) => setLocale(event.target.value));
   elements.themeToggle.addEventListener("click", cycleTheme);
+  addEventListener("scroll", updateBenchRailState, { passive: true });
+  addEventListener("resize", updateBenchRailState);
+  const tableObserver = new ResizeObserver(updateTableOverflow);
+  tableObserver.observe(elements.tableWrap);
+  tableObserver.observe(elements.tableWrap.querySelector("table"));
   elements.sourceFilter.addEventListener("change", (event) => {
     state.filters.source = event.target.value;
     renderFilters();
@@ -1201,7 +1250,7 @@ async function init() {
     renderTable();
   });
   elements.resultsBody.addEventListener("click", (event) => {
-    const button = event.target.closest(".details-button");
+    const button = event.target.closest(".harness-details-button");
     if (!button) return;
     const row = state.benchmark.results.find((item) => item.id === button.dataset.resultId);
     if (row) openDetails(row, button);
@@ -1226,9 +1275,10 @@ async function init() {
     if (!response.ok) throw new Error(`HTTP ${response.status}`);
     state.payload = await response.json();
     selectBenchmark(initialBenchmark(state.payload).id, false);
+    updateBenchRailState();
   } catch (error) {
     console.error(error);
-    elements.resultsBody.innerHTML = `<tr><td class="empty-cell" colspan="10">${escapeHtml(t("dataError"))}</td></tr>`;
+    elements.resultsBody.innerHTML = `<tr><td class="empty-cell" colspan="9">${escapeHtml(t("dataError"))}</td></tr>`;
     elements.resultCount.textContent = t("dataError");
   }
 }

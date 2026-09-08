@@ -47,6 +47,7 @@ const translations = {
     loadingResults: "Loading public results…",
     confidenceNote: "Every result has a score bar. Confidence whiskers appear only when the source reports a 95% interval; results without interval data show the bar alone.",
     dataCoverage: "Data coverage",
+    coverageOfficial: "Official",
     coverageTitle: "From public baselines to Penguin runs.",
     coverageDescription: "See how official baselines, vendor reports, and Penguin runs are represented across every benchmark.",
     officialSnapshot: "Official snapshot",
@@ -147,6 +148,7 @@ const translations = {
     loadingResults: "正在加载公开结果…",
     confidenceNote: "所有结果都显示分数条；仅当来源披露 95% 置信区间时才显示误差线，未披露区间的数据只显示分数条。",
     dataCoverage: "数据覆盖",
+    coverageOfficial: "官方榜单",
     coverageTitle: "从公开基线，到 Penguin 实测。",
     coverageDescription: "清楚展示每个 Benchmark 收录的官方基线、厂商自报与 Penguin 实测。",
     officialSnapshot: "官方快照",
@@ -1090,17 +1092,17 @@ function renderCoverage() {
         <header class="coverage-card-header">
           <div>
             <span class="coverage-version">TB ${escapeHtml(bench.version)}</span>
-            <h3>${escapeHtml(bench.name)}</h3>
           </div>
           ${officialLink}
+          <h3>${escapeHtml(bench.name)}</h3>
         </header>
         <div class="coverage-total">
           <strong>${escapeHtml(formatNumber(bench.result_count) ?? "0")}</strong>
           <span>${escapeHtml(t("publicResults"))}</span>
         </div>
         <dl class="coverage-source-grid">
-          <div><dt>${escapeHtml(t("benchmarkOfficial"))}</dt><dd>${escapeHtml(formatNumber(bench.official_result_count ?? 0))}</dd></div>
-          <div><dt>${escapeHtml(t("vendorReported"))}</dt><dd>${escapeHtml(formatNumber(bench.vendor_result_count ?? 0))}</dd></div>
+          <div><dt title="${escapeHtml(t("benchmarkOfficial"))}">${escapeHtml(t("coverageOfficial"))}</dt><dd>${escapeHtml(formatNumber(bench.official_result_count ?? 0))}</dd></div>
+          <div><dt title="${escapeHtml(t("vendorReported"))}">${escapeHtml(t("vendorReportedShort"))}</dt><dd>${escapeHtml(formatNumber(bench.vendor_result_count ?? 0))}</dd></div>
           <div><dt>${escapeHtml(t("penguinRun"))}</dt><dd>${escapeHtml(formatNumber(bench.penguin_result_count ?? 0))}</dd></div>
         </dl>
         <footer class="coverage-card-footer">

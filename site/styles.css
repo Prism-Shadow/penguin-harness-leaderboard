@@ -1377,10 +1377,10 @@ th.is-active .sort-button {
 }
 
 .coverage-card-header {
-  display: flex;
-  align-items: flex-start;
-  justify-content: space-between;
-  gap: 14px;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: start;
+  column-gap: 14px;
 }
 
 .coverage-version {
@@ -1391,6 +1391,7 @@ th.is-active .sort-button {
 }
 
 .coverage-card h3 {
+  grid-column: 1 / -1;
   margin: 4px 0 0;
   font-size: 22px;
   line-height: 1.25;
@@ -1438,7 +1439,7 @@ th.is-active .sort-button {
 
 .coverage-source-grid > div {
   min-width: 0;
-  padding: 11px;
+  padding: 11px 8px;
   border: 1px solid var(--line-soft);
   border-radius: 9px;
   background: var(--surface-soft);
@@ -1446,8 +1447,8 @@ th.is-active .sort-button {
 
 .coverage-source-grid dt {
   min-height: 38px;
-  color: var(--muted);
-  font-size: 13px;
+  color: var(--text);
+  font-size: 14px;
   line-height: 1.45;
 }
 

@@ -844,6 +844,14 @@ main,
   gap: 0;
 }
 
+.results-heading p.results-scope-note {
+  max-width: 880px;
+  margin-top: 12px;
+  font-size: 13px;
+  line-height: 1.6;
+  text-wrap: balance;
+}
+
 @media (min-width: 1100px) {
   .hero-copy,
   .results-heading .results-description {

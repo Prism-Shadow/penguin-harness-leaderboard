@@ -14,15 +14,15 @@
         "leaderboard": "main",
         "dataset_version": "latest"
       },
-      "snapshot_updated_at": "2026-08-29T00:04:08.213344+00:00",
-      "result_count": 27,
-      "official_result_count": 17,
+      "snapshot_updated_at": "2026-09-03T20:54:37.791805+00:00",
+      "result_count": 32,
+      "official_result_count": 22,
       "vendor_result_count": 9,
       "penguin_result_count": 1,
-      "model_count": 20,
+      "model_count": 21,
       "harness_count": 10,
       "best_accuracy": 88.3,
-      "official_best_accuracy": 83.82,
+      "official_best_accuracy": 87.42,
       "description": {
         "en": "Public Terminal-Bench 2.1 results, with official ranks kept separate from reported runs.",
         "zh": "Terminal-Bench 2.1 公开结果；官方排名与厂商、Penguin 报告结果严格区分。"
@@ -200,6 +200,246 @@
           }
         },
         {
+          "id": "03ff7953-4955-4fc5-9ddd-911cab72d7f1",
+          "benchmark_id": "terminal-bench-2.1",
+          "rank": 1,
+          "harness": {
+            "label": "Codex",
+            "url": "https://openai.com/codex/"
+          },
+          "harness_org": {
+            "label": "OpenAI",
+            "url": "https://openai.com"
+          },
+          "model": {
+            "label": "GPT-6 Astra",
+            "url": "https://developers.openai.com/api/docs/models/gpt-6-astra"
+          },
+          "model_org": {
+            "label": "OpenAI",
+            "url": "https://openai.com"
+          },
+          "thinking_level": "high",
+          "accuracy": 87.42,
+          "accuracy_stderr": 0.91,
+          "accuracy_ci95_half_width": 1.79,
+          "display_accuracy": "**87.4%** ± 1.8%",
+          "release_date": "2026-09-03",
+          "display_release_date": "Sep 3, 2026",
+          "total_tokens": 368258713,
+          "display_total_tokens": "368.3M",
+          "total_cost_usd": 773.5,
+          "display_cost": "$773.50",
+          "trial_count": 445,
+          "pass_at_2": 0.9112,
+          "pass_at_3": 0.927,
+          "pass_at_4": 0.9371,
+          "pass_at_5": 0.9438,
+          "successes": null,
+          "uncached_input_tokens": 364037878,
+          "cached_input_tokens": 341991423,
+          "output_tokens": 4220835,
+          "average_trial_duration_seconds": 434.1,
+          "reward_hacks": 0,
+          "display_reward_hacks": {
+            "label": "0.0%",
+            "url": "https://hub.harborframework.com/jobs/17d1a7f6-3339-4670-8b70-3b145979f57f"
+          },
+          "submission": {
+            "label": "job",
+            "url": "https://hub.harborframework.com/jobs/17d1a7f6-3339-4670-8b70-3b145979f57f"
+          },
+          "official_detail_url": "https://hub.harborframework.com/datasets/terminal-bench/terminal-bench-2-1/latest/leaderboards/main/rows/03ff7953-4955-4fc5-9ddd-911cab72d7f1",
+          "source_type": "benchmark_official",
+          "source_url": "https://hub.harborframework.com/datasets/terminal-bench/terminal-bench-2-1/latest/leaderboards/main/rows/03ff7953-4955-4fc5-9ddd-911cab72d7f1",
+          "source_title": "Harbor result detail",
+          "source_publisher": "Terminal-Bench / Harbor",
+          "published_at": null,
+          "verified_at": null,
+          "harness_version": null,
+          "protocol_note": null
+        },
+        {
+          "id": "17be4c09-ab31-4202-9d56-31a2ccf37e1b",
+          "benchmark_id": "terminal-bench-2.1",
+          "rank": 2,
+          "harness": {
+            "label": "Codex",
+            "url": "https://openai.com/codex/"
+          },
+          "harness_org": {
+            "label": "OpenAI",
+            "url": "https://openai.com"
+          },
+          "model": {
+            "label": "GPT-6 Astra",
+            "url": "https://developers.openai.com/api/docs/models/gpt-6-astra"
+          },
+          "model_org": {
+            "label": "OpenAI",
+            "url": "https://openai.com"
+          },
+          "thinking_level": "medium",
+          "accuracy": 86.97,
+          "accuracy_stderr": 0.96,
+          "accuracy_ci95_half_width": 1.89,
+          "display_accuracy": "**87.0%** ± 1.9%",
+          "release_date": "2026-09-03",
+          "display_release_date": "Sep 3, 2026",
+          "total_tokens": 320800101,
+          "display_total_tokens": "320.8M",
+          "total_cost_usd": 619.07,
+          "display_cost": "$619.07",
+          "trial_count": 445,
+          "pass_at_2": 0.9112,
+          "pass_at_3": 0.927,
+          "pass_at_4": 0.9371,
+          "pass_at_5": 0.9438,
+          "successes": null,
+          "uncached_input_tokens": 317899993,
+          "cached_input_tokens": 300548240,
+          "output_tokens": 2900108,
+          "average_trial_duration_seconds": 390.4,
+          "reward_hacks": 0,
+          "display_reward_hacks": {
+            "label": "0.0%",
+            "url": "https://hub.harborframework.com/jobs/17d1a7f6-3339-4670-8b70-3b145979f57f"
+          },
+          "submission": {
+            "label": "job",
+            "url": "https://hub.harborframework.com/jobs/17d1a7f6-3339-4670-8b70-3b145979f57f"
+          },
+          "official_detail_url": "https://hub.harborframework.com/datasets/terminal-bench/terminal-bench-2-1/latest/leaderboards/main/rows/17be4c09-ab31-4202-9d56-31a2ccf37e1b",
+          "source_type": "benchmark_official",
+          "source_url": "https://hub.harborframework.com/datasets/terminal-bench/terminal-bench-2-1/latest/leaderboards/main/rows/17be4c09-ab31-4202-9d56-31a2ccf37e1b",
+          "source_title": "Harbor result detail",
+          "source_publisher": "Terminal-Bench / Harbor",
+          "published_at": null,
+          "verified_at": null,
+          "harness_version": null,
+          "protocol_note": null
+        },
+        {
+          "id": "93fc9e32-98c9-4e4a-a6a0-89dd3da598af",
+          "benchmark_id": "terminal-bench-2.1",
+          "rank": 3,
+          "harness": {
+            "label": "Codex",
+            "url": "https://openai.com/codex/"
+          },
+          "harness_org": {
+            "label": "OpenAI",
+            "url": "https://openai.com"
+          },
+          "model": {
+            "label": "GPT-6 Astra",
+            "url": "https://developers.openai.com/api/docs/models/gpt-6-astra"
+          },
+          "model_org": {
+            "label": "OpenAI",
+            "url": "https://openai.com"
+          },
+          "thinking_level": "low",
+          "accuracy": 86.74,
+          "accuracy_stderr": 0.93,
+          "accuracy_ci95_half_width": 1.82,
+          "display_accuracy": "**86.7%** ± 1.8%",
+          "release_date": "2026-09-03",
+          "display_release_date": "Sep 3, 2026",
+          "total_tokens": 239142284,
+          "display_total_tokens": "239.1M",
+          "total_cost_usd": 463.45,
+          "display_cost": "$463.45",
+          "trial_count": 445,
+          "pass_at_2": 0.9056,
+          "pass_at_3": 0.9191,
+          "pass_at_4": 0.9281,
+          "pass_at_5": 0.9326,
+          "successes": null,
+          "uncached_input_tokens": 237184412,
+          "cached_input_tokens": 222920585,
+          "output_tokens": 1957872,
+          "average_trial_duration_seconds": 348.9,
+          "reward_hacks": 0,
+          "display_reward_hacks": {
+            "label": "0.0%",
+            "url": "https://hub.harborframework.com/jobs/17d1a7f6-3339-4670-8b70-3b145979f57f"
+          },
+          "submission": {
+            "label": "job",
+            "url": "https://hub.harborframework.com/jobs/17d1a7f6-3339-4670-8b70-3b145979f57f"
+          },
+          "official_detail_url": "https://hub.harborframework.com/datasets/terminal-bench/terminal-bench-2-1/latest/leaderboards/main/rows/93fc9e32-98c9-4e4a-a6a0-89dd3da598af",
+          "source_type": "benchmark_official",
+          "source_url": "https://hub.harborframework.com/datasets/terminal-bench/terminal-bench-2-1/latest/leaderboards/main/rows/93fc9e32-98c9-4e4a-a6a0-89dd3da598af",
+          "source_title": "Harbor result detail",
+          "source_publisher": "Terminal-Bench / Harbor",
+          "published_at": null,
+          "verified_at": null,
+          "harness_version": null,
+          "protocol_note": null
+        },
+        {
+          "id": "f8d623c8-5f1b-4f9c-8deb-d110fa91e1d2",
+          "benchmark_id": "terminal-bench-2.1",
+          "rank": 3,
+          "harness": {
+            "label": "Codex",
+            "url": "https://openai.com/codex/"
+          },
+          "harness_org": {
+            "label": "OpenAI",
+            "url": "https://openai.com"
+          },
+          "model": {
+            "label": "GPT-6 Astra",
+            "url": "https://developers.openai.com/api/docs/models/gpt-6-astra"
+          },
+          "model_org": {
+            "label": "OpenAI",
+            "url": "https://openai.com"
+          },
+          "thinking_level": "max",
+          "accuracy": 86.74,
+          "accuracy_stderr": 0.69,
+          "accuracy_ci95_half_width": 1.36,
+          "display_accuracy": "**86.7%** ± 1.4%",
+          "release_date": "2026-09-03",
+          "display_release_date": "Sep 3, 2026",
+          "total_tokens": 429273930,
+          "display_total_tokens": "429.3M",
+          "total_cost_usd": 1069.75,
+          "display_cost": "$1,069.75",
+          "trial_count": 445,
+          "pass_at_2": 0.8888,
+          "pass_at_3": 0.8989,
+          "pass_at_4": 0.9056,
+          "pass_at_5": 0.9101,
+          "successes": null,
+          "uncached_input_tokens": 421696640,
+          "cached_input_tokens": 391786531,
+          "output_tokens": 7577290,
+          "average_trial_duration_seconds": 576,
+          "reward_hacks": 0,
+          "display_reward_hacks": {
+            "label": "0.0%",
+            "url": "https://hub.harborframework.com/jobs/17d1a7f6-3339-4670-8b70-3b145979f57f"
+          },
+          "submission": {
+            "label": "job",
+            "url": "https://hub.harborframework.com/jobs/17d1a7f6-3339-4670-8b70-3b145979f57f"
+          },
+          "official_detail_url": "https://hub.harborframework.com/datasets/terminal-bench/terminal-bench-2-1/latest/leaderboards/main/rows/f8d623c8-5f1b-4f9c-8deb-d110fa91e1d2",
+          "source_type": "benchmark_official",
+          "source_url": "https://hub.harborframework.com/datasets/terminal-bench/terminal-bench-2-1/latest/leaderboards/main/rows/f8d623c8-5f1b-4f9c-8deb-d110fa91e1d2",
+          "source_title": "Harbor result detail",
+          "source_publisher": "Terminal-Bench / Harbor",
+          "published_at": null,
+          "verified_at": null,
+          "harness_version": null,
+          "protocol_note": null
+        },
+        {
           "id": "vendor-qwen3-8-max-tb21-claude-code",
           "benchmark_id": "terminal-bench-2.1",
           "rank": null,
@@ -255,6 +495,66 @@
             "en": "Claude Code; avg@10; 5-hour timeout; max_tokens=131,072. The effort level is not disclosed.",
             "zh": "Claude Code；avg@10；5 小时超时；max_tokens=131,072；未披露思考等级。"
           }
+        },
+        {
+          "id": "3d9a7a70-ad72-4197-b895-c73698601637",
+          "benchmark_id": "terminal-bench-2.1",
+          "rank": 5,
+          "harness": {
+            "label": "Codex",
+            "url": "https://openai.com/codex/"
+          },
+          "harness_org": {
+            "label": "OpenAI",
+            "url": "https://openai.com"
+          },
+          "model": {
+            "label": "GPT-6 Astra",
+            "url": "https://developers.openai.com/api/docs/models/gpt-6-astra"
+          },
+          "model_org": {
+            "label": "OpenAI",
+            "url": "https://openai.com"
+          },
+          "thinking_level": "xhigh",
+          "accuracy": 85.84,
+          "accuracy_stderr": 0.73,
+          "accuracy_ci95_half_width": 1.43,
+          "display_accuracy": "**85.8%** ± 1.4%",
+          "release_date": "2026-09-03",
+          "display_release_date": "Sep 3, 2026",
+          "total_tokens": 404698440,
+          "display_total_tokens": "404.7M",
+          "total_cost_usd": 888.54,
+          "display_cost": "$888.54",
+          "trial_count": 445,
+          "pass_at_2": 0.882,
+          "pass_at_3": 0.8944,
+          "pass_at_4": 0.9034,
+          "pass_at_5": 0.9101,
+          "successes": null,
+          "uncached_input_tokens": 399411172,
+          "cached_input_tokens": 374437038,
+          "output_tokens": 5287268,
+          "average_trial_duration_seconds": 487.3,
+          "reward_hacks": 0,
+          "display_reward_hacks": {
+            "label": "0.0%",
+            "url": "https://hub.harborframework.com/jobs/17d1a7f6-3339-4670-8b70-3b145979f57f"
+          },
+          "submission": {
+            "label": "job",
+            "url": "https://hub.harborframework.com/jobs/17d1a7f6-3339-4670-8b70-3b145979f57f"
+          },
+          "official_detail_url": "https://hub.harborframework.com/datasets/terminal-bench/terminal-bench-2-1/latest/leaderboards/main/rows/3d9a7a70-ad72-4197-b895-c73698601637",
+          "source_type": "benchmark_official",
+          "source_url": "https://hub.harborframework.com/datasets/terminal-bench/terminal-bench-2-1/latest/leaderboards/main/rows/3d9a7a70-ad72-4197-b895-c73698601637",
+          "source_title": "Harbor result detail",
+          "source_publisher": "Terminal-Bench / Harbor",
+          "published_at": null,
+          "verified_at": null,
+          "harness_version": null,
+          "protocol_note": null
         },
         {
           "id": "vendor-glm-5-3-flash-tb21-claude-code",
@@ -316,7 +616,7 @@
         {
           "id": "40dbe33d-e8af-475b-8eba-7d5d8f70054c",
           "benchmark_id": "terminal-bench-2.1",
-          "rank": 1,
+          "rank": 6,
           "harness": {
             "label": "Claude Code",
             "url": "https://claude.com/claude-code"
@@ -376,7 +676,7 @@
         {
           "id": "6d091468-3fda-4cbf-ba1c-645b0f522e97",
           "benchmark_id": "terminal-bench-2.1",
-          "rank": 2,
+          "rank": 7,
           "harness": {
             "label": "Codex",
             "url": "https://openai.com/codex/"
@@ -607,7 +907,7 @@
         {
           "id": "ce0677b9-0fea-46ce-b8de-893c4d68e77a",
           "benchmark_id": "terminal-bench-2.1",
-          "rank": 3,
+          "rank": 8,
           "harness": {
             "label": "Terminus 2",
             "url": "https://www.tbench.ai/news/terminus"
@@ -667,7 +967,7 @@
         {
           "id": "1fe87c62-99ed-477b-9f6c-23ffbabc49f6",
           "benchmark_id": "terminal-bench-2.1",
-          "rank": 4,
+          "rank": 9,
           "harness": {
             "label": "Cursor CLI",
             "url": "https://cursor.com/docs/cli/overview"
@@ -727,7 +1027,7 @@
         {
           "id": "dcd48d03-9df9-46ab-bc4c-ade6dc35b8da",
           "benchmark_id": "terminal-bench-2.1",
-          "rank": 5,
+          "rank": 10,
           "harness": {
             "label": "Claude Code",
             "url": "https://claude.com/claude-code"
@@ -787,7 +1087,7 @@
         {
           "id": "23ab6a14-4b2d-461d-9171-f8109f5692f1",
           "benchmark_id": "terminal-bench-2.1",
-          "rank": 6,
+          "rank": 11,
           "harness": {
             "label": "Codex",
             "url": "https://openai.com/codex/"
@@ -847,7 +1147,7 @@
         {
           "id": "db1f499b-d948-43d2-9aaf-27cfe97f6caf",
           "benchmark_id": "terminal-bench-2.1",
-          "rank": 7,
+          "rank": 12,
           "harness": {
             "label": "Terminus 2",
             "url": "https://www.tbench.ai/news/terminus"
@@ -907,7 +1207,7 @@
         {
           "id": "64890377-54de-4cc2-bcd7-e76610983482",
           "benchmark_id": "terminal-bench-2.1",
-          "rank": 8,
+          "rank": 13,
           "harness": {
             "label": "mini-SWE-agent",
             "url": "https://github.com/SWE-agent/mini-swe-agent"
@@ -967,7 +1267,7 @@
         {
           "id": "e5f3feda-4629-46ba-963f-300dcf7c2a4c",
           "benchmark_id": "terminal-bench-2.1",
-          "rank": 9,
+          "rank": 14,
           "harness": {
             "label": "Codex",
             "url": "https://openai.com/codex/"
@@ -1084,7 +1384,7 @@
         {
           "id": "d7540f21-67af-4b3a-ad31-b81b85fef895",
           "benchmark_id": "terminal-bench-2.1",
-          "rank": 10,
+          "rank": 15,
           "harness": {
             "label": "Claude Code",
             "url": "https://claude.com/claude-code"
@@ -1144,7 +1444,7 @@
         {
           "id": "b03a8a69-fea8-42dd-a4fb-96a6a39e6857",
           "benchmark_id": "terminal-bench-2.1",
-          "rank": 11,
+          "rank": 16,
           "harness": {
             "label": "Terminus 2",
             "url": "https://www.tbench.ai/news/terminus"
@@ -1261,7 +1561,7 @@
         {
           "id": "fdb8393b-5b29-4645-b784-84f52cf31722",
           "benchmark_id": "terminal-bench-2.1",
-          "rank": 12,
+          "rank": 17,
           "harness": {
             "label": "Claude Code",
             "url": "https://claude.com/claude-code"
@@ -1321,7 +1621,7 @@
         {
           "id": "f867b631-36c8-476e-aa2f-96007ae70da0",
           "benchmark_id": "terminal-bench-2.1",
-          "rank": 13,
+          "rank": 18,
           "harness": {
             "label": "Terminus 2",
             "url": "https://www.tbench.ai/news/terminus"
@@ -1381,7 +1681,7 @@
         {
           "id": "660c330f-9cd8-4ce7-8890-3ce573d038a0",
           "benchmark_id": "terminal-bench-2.1",
-          "rank": 14,
+          "rank": 19,
           "harness": {
             "label": "Gemini CLI",
             "url": "https://github.com/google-gemini/gemini-cli"
@@ -1441,7 +1741,7 @@
         {
           "id": "1095d399-9d66-44f4-8adc-e11fbb407a68",
           "benchmark_id": "terminal-bench-2.1",
-          "rank": 14,
+          "rank": 19,
           "harness": {
             "label": "Gemini CLI",
             "url": "https://github.com/google-gemini/gemini-cli"
@@ -1501,7 +1801,7 @@
         {
           "id": "360942d9-d27b-4f7e-bcf6-e0ea9cdcdee8",
           "benchmark_id": "terminal-bench-2.1",
-          "rank": 16,
+          "rank": 21,
           "harness": {
             "label": "Terminus 2",
             "url": "https://www.tbench.ai/news/terminus"
@@ -1561,7 +1861,7 @@
         {
           "id": "ef2b00eb-f360-41e6-8c97-23c4d762d06b",
           "benchmark_id": "terminal-bench-2.1",
-          "rank": 17,
+          "rank": 22,
           "harness": {
             "label": "Claude Code",
             "url": "https://claude.com/claude-code"
@@ -2304,15 +2604,15 @@
         "leaderboard": "4-0-0",
         "dataset_version": "4"
       },
-      "snapshot_updated_at": "2026-09-03T02:56:12.472078+00:00",
-      "result_count": 14,
-      "official_result_count": 13,
+      "snapshot_updated_at": "2026-09-03T21:34:07.080891+00:00",
+      "result_count": 19,
+      "official_result_count": 18,
       "vendor_result_count": 1,
       "penguin_result_count": 0,
-      "model_count": 14,
+      "model_count": 15,
       "harness_count": 4,
       "best_accuracy": 60.9,
-      "official_best_accuracy": 57.88,
+      "official_best_accuracy": 58.18,
       "description": {
         "en": "Public Terminal-Bench 4.0 results, with official ranks kept separate from reported runs.",
         "zh": "Terminal-Bench 4.0 公开结果；官方排名与厂商、Penguin 报告结果严格区分。"
@@ -2376,9 +2676,63 @@
           }
         },
         {
-          "id": "c741608e-c94e-417d-b7a8-e67111a0c887",
+          "id": "5c537be4-7fc3-449b-8bfc-ceb9061c2535",
           "benchmark_id": "terminal-bench-4.0",
           "rank": 1,
+          "harness": {
+            "label": "Codex",
+            "url": "https://openai.com/codex/"
+          },
+          "harness_org": {
+            "label": "OpenAI",
+            "url": "https://openai.com"
+          },
+          "model": {
+            "label": "GPT-6 Astra",
+            "url": "https://developers.openai.com/api/docs/models/gpt-6-astra"
+          },
+          "model_org": {
+            "label": "OpenAI",
+            "url": "https://openai.com"
+          },
+          "thinking_level": "max",
+          "accuracy": 58.18,
+          "accuracy_stderr": null,
+          "accuracy_ci95_half_width": 2.79,
+          "display_accuracy": "**58.2%** ± 2.8%",
+          "release_date": "2026-09-03",
+          "display_release_date": "Sep 3, 2026",
+          "total_tokens": 1529778322,
+          "display_total_tokens": "1.5B",
+          "total_cost_usd": 3267.18,
+          "display_cost": "$3.3k",
+          "trial_count": 330,
+          "pass_at_2": 0.6485,
+          "pass_at_3": 0.6788,
+          "pass_at_4": 0.697,
+          "pass_at_5": 0.7121,
+          "successes": 192,
+          "uncached_input_tokens": 1505789330,
+          "cached_input_tokens": 1443351702,
+          "output_tokens": 23988992,
+          "average_trial_duration_seconds": 2796.3,
+          "reward_hacks": null,
+          "display_reward_hacks": null,
+          "submission": null,
+          "official_detail_url": "https://hub.harborframework.com/datasets/terminal-bench/terminal-bench/4/leaderboards/4-0-0/rows/5c537be4-7fc3-449b-8bfc-ceb9061c2535",
+          "source_type": "benchmark_official",
+          "source_url": "https://hub.harborframework.com/datasets/terminal-bench/terminal-bench/4/leaderboards/4-0-0/rows/5c537be4-7fc3-449b-8bfc-ceb9061c2535",
+          "source_title": "Harbor result detail",
+          "source_publisher": "Terminal-Bench / Harbor",
+          "published_at": null,
+          "verified_at": null,
+          "harness_version": null,
+          "protocol_note": null
+        },
+        {
+          "id": "c741608e-c94e-417d-b7a8-e67111a0c887",
+          "benchmark_id": "terminal-bench-4.0",
+          "rank": 2,
           "harness": {
             "label": "Claude Code",
             "url": "https://claude.com/product/claude-code"
@@ -2430,9 +2784,171 @@
           "protocol_note": null
         },
         {
-          "id": "d71ac3d0-da36-49cb-89d9-323136e77111",
+          "id": "16db8ad5-84aa-4588-b660-1ce68c0d45e2",
           "benchmark_id": "terminal-bench-4.0",
           "rank": 2,
+          "harness": {
+            "label": "Codex",
+            "url": "https://openai.com/codex/"
+          },
+          "harness_org": {
+            "label": "OpenAI",
+            "url": "https://openai.com"
+          },
+          "model": {
+            "label": "GPT-6 Astra",
+            "url": "https://developers.openai.com/api/docs/models/gpt-6-astra"
+          },
+          "model_org": {
+            "label": "OpenAI",
+            "url": "https://openai.com"
+          },
+          "thinking_level": "xhigh",
+          "accuracy": 57.88,
+          "accuracy_stderr": null,
+          "accuracy_ci95_half_width": 2.72,
+          "display_accuracy": "**57.9%** ± 2.7%",
+          "release_date": "2026-09-03",
+          "display_release_date": "Sep 3, 2026",
+          "total_tokens": 1201907334,
+          "display_total_tokens": "1.2B",
+          "total_cost_usd": 2350.51,
+          "display_cost": "$2.4k",
+          "trial_count": 330,
+          "pass_at_2": 0.6424,
+          "pass_at_3": 0.6697,
+          "pass_at_4": 0.6848,
+          "pass_at_5": 0.697,
+          "successes": 191,
+          "uncached_input_tokens": 1186957047,
+          "cached_input_tokens": 1140730194,
+          "output_tokens": 14950287,
+          "average_trial_duration_seconds": 2208.5,
+          "reward_hacks": null,
+          "display_reward_hacks": null,
+          "submission": null,
+          "official_detail_url": "https://hub.harborframework.com/datasets/terminal-bench/terminal-bench/4/leaderboards/4-0-0/rows/16db8ad5-84aa-4588-b660-1ce68c0d45e2",
+          "source_type": "benchmark_official",
+          "source_url": "https://hub.harborframework.com/datasets/terminal-bench/terminal-bench/4/leaderboards/4-0-0/rows/16db8ad5-84aa-4588-b660-1ce68c0d45e2",
+          "source_title": "Harbor result detail",
+          "source_publisher": "Terminal-Bench / Harbor",
+          "published_at": null,
+          "verified_at": null,
+          "harness_version": null,
+          "protocol_note": null
+        },
+        {
+          "id": "3475050c-bf5e-4261-a3f6-0af5350af13f",
+          "benchmark_id": "terminal-bench-4.0",
+          "rank": 2,
+          "harness": {
+            "label": "Codex",
+            "url": "https://openai.com/codex/"
+          },
+          "harness_org": {
+            "label": "OpenAI",
+            "url": "https://openai.com"
+          },
+          "model": {
+            "label": "GPT-6 Astra",
+            "url": "https://developers.openai.com/api/docs/models/gpt-6-astra"
+          },
+          "model_org": {
+            "label": "OpenAI",
+            "url": "https://openai.com"
+          },
+          "thinking_level": "high",
+          "accuracy": 57.88,
+          "accuracy_stderr": null,
+          "accuracy_ci95_half_width": 2.97,
+          "display_accuracy": "**57.9%** ± 3.0%",
+          "release_date": "2026-09-03",
+          "display_release_date": "Sep 3, 2026",
+          "total_tokens": 1208224034,
+          "display_total_tokens": "1.2B",
+          "total_cost_usd": 2269.42,
+          "display_cost": "$2.3k",
+          "trial_count": 330,
+          "pass_at_2": 0.6545,
+          "pass_at_3": 0.6864,
+          "pass_at_4": 0.703,
+          "pass_at_5": 0.7121,
+          "successes": 191,
+          "uncached_input_tokens": 1194520091,
+          "cached_input_tokens": 1151219647,
+          "output_tokens": 13703943,
+          "average_trial_duration_seconds": 2113.7,
+          "reward_hacks": null,
+          "display_reward_hacks": null,
+          "submission": null,
+          "official_detail_url": "https://hub.harborframework.com/datasets/terminal-bench/terminal-bench/4/leaderboards/4-0-0/rows/3475050c-bf5e-4261-a3f6-0af5350af13f",
+          "source_type": "benchmark_official",
+          "source_url": "https://hub.harborframework.com/datasets/terminal-bench/terminal-bench/4/leaderboards/4-0-0/rows/3475050c-bf5e-4261-a3f6-0af5350af13f",
+          "source_title": "Harbor result detail",
+          "source_publisher": "Terminal-Bench / Harbor",
+          "published_at": null,
+          "verified_at": null,
+          "harness_version": null,
+          "protocol_note": null
+        },
+        {
+          "id": "f3c3d5a6-6424-4acb-bfcc-615c3f79f6dd",
+          "benchmark_id": "terminal-bench-4.0",
+          "rank": 5,
+          "harness": {
+            "label": "Codex",
+            "url": "https://openai.com/codex/"
+          },
+          "harness_org": {
+            "label": "OpenAI",
+            "url": "https://openai.com"
+          },
+          "model": {
+            "label": "GPT-6 Astra",
+            "url": "https://developers.openai.com/api/docs/models/gpt-6-astra"
+          },
+          "model_org": {
+            "label": "OpenAI",
+            "url": "https://openai.com"
+          },
+          "thinking_level": "medium",
+          "accuracy": 54.24,
+          "accuracy_stderr": null,
+          "accuracy_ci95_half_width": 2.66,
+          "display_accuracy": "**54.2%** ± 2.7%",
+          "release_date": "2026-09-03",
+          "display_release_date": "Sep 3, 2026",
+          "total_tokens": 1051885207,
+          "display_total_tokens": "1.1B",
+          "total_cost_usd": 1914.8,
+          "display_cost": "$1.9k",
+          "trial_count": 330,
+          "pass_at_2": 0.603,
+          "pass_at_3": 0.6318,
+          "pass_at_4": 0.6515,
+          "pass_at_5": 0.6667,
+          "successes": 179,
+          "uncached_input_tokens": 1041114602,
+          "cached_input_tokens": 1003874758,
+          "output_tokens": 10770605,
+          "average_trial_duration_seconds": 1885.9,
+          "reward_hacks": null,
+          "display_reward_hacks": null,
+          "submission": null,
+          "official_detail_url": "https://hub.harborframework.com/datasets/terminal-bench/terminal-bench/4/leaderboards/4-0-0/rows/f3c3d5a6-6424-4acb-bfcc-615c3f79f6dd",
+          "source_type": "benchmark_official",
+          "source_url": "https://hub.harborframework.com/datasets/terminal-bench/terminal-bench/4/leaderboards/4-0-0/rows/f3c3d5a6-6424-4acb-bfcc-615c3f79f6dd",
+          "source_title": "Harbor result detail",
+          "source_publisher": "Terminal-Bench / Harbor",
+          "published_at": null,
+          "verified_at": null,
+          "harness_version": null,
+          "protocol_note": null
+        },
+        {
+          "id": "d71ac3d0-da36-49cb-89d9-323136e77111",
+          "benchmark_id": "terminal-bench-4.0",
+          "rank": 6,
           "harness": {
             "label": "Claude Code",
             "url": "https://claude.com/product/claude-code"
@@ -2484,9 +3000,63 @@
           "protocol_note": null
         },
         {
+          "id": "b3ad58f3-b311-4d4d-875b-3158cf0309d6",
+          "benchmark_id": "terminal-bench-4.0",
+          "rank": 7,
+          "harness": {
+            "label": "Codex",
+            "url": "https://openai.com/codex/"
+          },
+          "harness_org": {
+            "label": "OpenAI",
+            "url": "https://openai.com"
+          },
+          "model": {
+            "label": "GPT-6 Astra",
+            "url": "https://developers.openai.com/api/docs/models/gpt-6-astra"
+          },
+          "model_org": {
+            "label": "OpenAI",
+            "url": "https://openai.com"
+          },
+          "thinking_level": "low",
+          "accuracy": 50.61,
+          "accuracy_stderr": null,
+          "accuracy_ci95_half_width": 2.75,
+          "display_accuracy": "**50.6%** ± 2.8%",
+          "release_date": "2026-09-03",
+          "display_release_date": "Sep 3, 2026",
+          "total_tokens": 889780710,
+          "display_total_tokens": "889.8M",
+          "total_cost_usd": 1557.3,
+          "display_cost": "$1.6k",
+          "trial_count": 330,
+          "pass_at_2": 0.5712,
+          "pass_at_3": 0.6015,
+          "pass_at_4": 0.6212,
+          "pass_at_5": 0.6364,
+          "successes": 167,
+          "uncached_input_tokens": 881792373,
+          "cached_input_tokens": 851115630,
+          "output_tokens": 7988337,
+          "average_trial_duration_seconds": 1683.7,
+          "reward_hacks": null,
+          "display_reward_hacks": null,
+          "submission": null,
+          "official_detail_url": "https://hub.harborframework.com/datasets/terminal-bench/terminal-bench/4/leaderboards/4-0-0/rows/b3ad58f3-b311-4d4d-875b-3158cf0309d6",
+          "source_type": "benchmark_official",
+          "source_url": "https://hub.harborframework.com/datasets/terminal-bench/terminal-bench/4/leaderboards/4-0-0/rows/b3ad58f3-b311-4d4d-875b-3158cf0309d6",
+          "source_title": "Harbor result detail",
+          "source_publisher": "Terminal-Bench / Harbor",
+          "published_at": null,
+          "verified_at": null,
+          "harness_version": null,
+          "protocol_note": null
+        },
+        {
           "id": "36c077e0-4879-4444-b315-8532d66401d6",
           "benchmark_id": "terminal-bench-4.0",
-          "rank": 3,
+          "rank": 8,
           "harness": {
             "label": "Claude Code",
             "url": "https://claude.com/product/claude-code"
@@ -2540,7 +3110,7 @@
         {
           "id": "d72e8775-f4f1-4313-99e7-35b1cb499f24",
           "benchmark_id": "terminal-bench-4.0",
-          "rank": 4,
+          "rank": 9,
           "harness": {
             "label": "Claude Code",
             "url": "https://claude.com/product/claude-code"
@@ -2594,7 +3164,7 @@
         {
           "id": "0e349bde-b264-494d-a853-fada9c696192",
           "benchmark_id": "terminal-bench-4.0",
-          "rank": 5,
+          "rank": 10,
           "harness": {
             "label": "Codex",
             "url": "https://openai.com/codex/"
@@ -2648,7 +3218,7 @@
         {
           "id": "952b4217-421f-4d14-849b-9968fcb2063b",
           "benchmark_id": "terminal-bench-4.0",
-          "rank": 6,
+          "rank": 11,
           "harness": {
             "label": "Claude Code",
             "url": "https://claude.com/product/claude-code"
@@ -2702,7 +3272,7 @@
         {
           "id": "e53da412-5e92-408c-b369-c767924c7c1c",
           "benchmark_id": "terminal-bench-4.0",
-          "rank": 7,
+          "rank": 12,
           "harness": {
             "label": "Codex",
             "url": "https://openai.com/codex/"
@@ -2756,7 +3326,7 @@
         {
           "id": "26354542-edc0-40cd-8f8d-9fe6fbe92ac3",
           "benchmark_id": "terminal-bench-4.0",
-          "rank": 8,
+          "rank": 13,
           "harness": {
             "label": "Grok Build",
             "url": "https://x.ai/build"
@@ -2810,7 +3380,7 @@
         {
           "id": "06850434-507d-4dbd-b74a-09d52519ee35",
           "benchmark_id": "terminal-bench-4.0",
-          "rank": 9,
+          "rank": 14,
           "harness": {
             "label": "mini-SWE-agent",
             "url": "https://github.com/SWE-agent/mini-swe-agent"
@@ -2836,8 +3406,8 @@
           "display_release_date": "Sep 2, 2026",
           "total_tokens": 17189729495,
           "display_total_tokens": "17.2B",
-          "total_cost_usd": 0,
-          "display_cost": "$0.00",
+          "total_cost_usd": 1828.77,
+          "display_cost": "$1.8k",
           "trial_count": 330,
           "pass_at_2": 0.2879,
           "pass_at_3": 0.353,
@@ -2864,7 +3434,7 @@
         {
           "id": "51c6d76e-5baa-48c1-97b3-88656c620eef",
           "benchmark_id": "terminal-bench-4.0",
-          "rank": 10,
+          "rank": 15,
           "harness": {
             "label": "Codex",
             "url": "https://openai.com/codex/"
@@ -2918,7 +3488,7 @@
         {
           "id": "0eed5a0d-96b6-491b-aeb7-cd5e4700c2d7",
           "benchmark_id": "terminal-bench-4.0",
-          "rank": 11,
+          "rank": 16,
           "harness": {
             "label": "Grok Build",
             "url": "https://x.ai/build"
@@ -2972,7 +3542,7 @@
         {
           "id": "8180b9e4-4990-43d0-b906-cd8b43adaaa2",
           "benchmark_id": "terminal-bench-4.0",
-          "rank": 11,
+          "rank": 16,
           "harness": {
             "label": "Claude Code",
             "url": "https://claude.com/product/claude-code"
@@ -3026,7 +3596,7 @@
         {
           "id": "14f4da14-b86a-4dca-92d7-11178d4fe064",
           "benchmark_id": "terminal-bench-4.0",
-          "rank": 13,
+          "rank": 18,
           "harness": {
             "label": "mini-SWE-agent",
             "url": "https://github.com/SWE-agent/mini-swe-agent"

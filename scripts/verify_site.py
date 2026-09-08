@@ -222,6 +222,11 @@ def verify_frontend_contract() -> None:
     assert 'class="results-bench-rail"' in html, "Results benchmark rail missing"
     assert 'classList.toggle("is-stuck"' in script, "Sticky benchmark rail state missing"
     assert 'class="bench-switcher"' in html, "Results benchmark switcher missing"
+    assert 'data-i18n="resultsScopeNote"' in html, "All-efforts comparison note missing"
+    assert script.count("resultsScopeNote:") == 2, "Comparison note must be bilingual"
+    assert 'officialUrl.searchParams.set("efforts", "all")' in script, (
+        "Official comparison link must open the all-efforts view"
+    )
     assert 'class="locale-control"' in html, "Language control missing"
     assert '<option value="system">' in html, "Follow system language option is missing"
     assert 'option[value="system"]' in script, "Follow system option is not translated"

@@ -23,6 +23,7 @@ const translations = {
     officialBest: "Official best",
     publicSnapshot: "Public results",
     snapshotUpdated: "Official snapshot updated {date}; curated sources verified {verified}.",
+    resultsScopeNote: "Includes all reported thinking levels; ranks follow current filters. The official default shows the best score per Model × Harness.",
     source: "Source",
     sourceFilter: "Filter by source",
     allSources: "All sources",
@@ -68,7 +69,7 @@ const translations = {
     openOfficialDetail: "Open official detail",
     openSource: "Open source",
     done: "Done",
-    officialRank: "Official rank",
+    officialRank: "Official rank (all efforts)",
     notOfficiallyRanked: "Not officially ranked",
     configuration: "Configuration",
     scoreMetrics: "Score metrics",
@@ -122,6 +123,7 @@ const translations = {
     officialBest: "官方最高分",
     publicSnapshot: "公开结果",
     snapshotUpdated: "官方快照更新时间：{date}；人工来源核验于 {verified}。",
+    resultsScopeNote: "本表保留全部思考等级配置，按当前筛选结果排名；官网默认每组 Model × Harness 只显示最高分。",
     source: "来源",
     sourceFilter: "按来源筛选",
     allSources: "全部来源",
@@ -167,7 +169,7 @@ const translations = {
     openOfficialDetail: "打开官方详情",
     openSource: "打开来源",
     done: "完成",
-    officialRank: "官方排名",
+    officialRank: "官方全配置排名",
     notOfficiallyRanked: "未参与官方排名",
     configuration: "评测配置",
     scoreMetrics: "成绩指标",
@@ -1180,8 +1182,10 @@ function renderBenchmark() {
   document.querySelector(".stat-harnesses").textContent = bench.harness_count;
   document.querySelector(".stat-best").textContent = `${bench.official_best_accuracy.toFixed(1)}%`;
   document.querySelector(".table-caption").textContent = `${bench.name} public results`;
+  const officialUrl = new URL(bench.official_url);
+  officialUrl.searchParams.set("efforts", "all");
   document.querySelectorAll(".benchmark-source-link").forEach((link) => {
-    link.href = bench.official_url;
+    link.href = officialUrl.href;
   });
   document.querySelector(".snapshot-label").textContent = `tbench.ai · ${bench.version}`;
   renderTable();

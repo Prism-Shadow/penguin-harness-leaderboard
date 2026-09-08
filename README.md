@@ -5,13 +5,13 @@ not only the model. The current demo combines the official Terminal-Bench 2.1,
 3.0, and 4.0 baselines from [tbench.ai](https://www.tbench.ai/) with separately
 labelled vendor reports and one trace-backed Penguin run.
 
-The main table intentionally follows the official comparison surface, with one
-requested change: Harness appears before Model. It shows official rank,
+The main table follows the official comparison surface, with Harness before
+Model and all reported thinking-level configurations retained. It shows comparison rank,
 Harness, Model and reasoning effort, Resolution Rate with a 95% confidence
 interval when reported, average Trial duration, Release Date, total Tokens,
 total Cost, and source type. Trial count stays in Details for auditing instead
 of occupying a main comparison column. Harness and Model organization names stay in Details instead of being
-repeated under every result. Each row opens a Details dialog with additional
+repeated under every result. Clicking a Harness name opens a Details dialog with additional
 fields actually disclosed by its source, such as pass@k, token breakdown,
 protocol notes, and evidence links.
 
@@ -31,8 +31,25 @@ tbench.ai. Benchmark routing follows the open-source website configuration in
 `updated_at` timestamps. Evidence-backed manual rows live separately in
 `data/curated_results.json`, so refreshing the official API cannot overwrite
 them. `scripts/verify_site.py --check-live` fetches all three official
-leaderboards and requires an exact normalized match before merging the curated
-rows.
+leaderboards, combines their normalized results with the curated rows, and
+requires an exact match with the committed snapshot.
+
+### All configurations versus the official default view
+
+The official website defaults to `efforts=best`: for each Model × Harness pair,
+it keeps the highest-scoring thinking-level configuration and recalculates ranks.
+Its API also returns the other configurations. This site keeps them to support
+thinking-level comparisons, so its counts can exceed the official default view.
+The `tbench.ai` link above the table opens the matching `efforts=all` view:
+
+- [Terminal-Bench 2.1 — all configurations](https://www.tbench.ai/?version=2.1&efforts=all)
+- [Terminal-Bench 3.0 — all configurations](https://www.tbench.ai/?version=3.0&efforts=all)
+- [Terminal-Bench 4.0 — all configurations](https://www.tbench.ai/?version=4.0&efforts=all)
+
+The default source filter is **All sources**. Table ranks are comparison ranks
+for the current filters; Details separately labels the upstream API rank as
+**Official rank (all efforts)**. Neither is presented as the official default
+best-per-pair rank.
 
 ## Repository layout
 
@@ -75,7 +92,7 @@ before a push to `main` is deployed.
 - Source type is a strict enum: `benchmark_official`, `vendor_reported`, or
   `penguin_run`.
 - Official rows are returned with `status=display` by tbench.ai and retain
-  their official rank in the data and Details. The main table shows a dynamic
+  their all-efforts API rank in the data and Details. The main table shows a dynamic
   comparison rank across the current filtered view, including vendor and
   Penguin rows, without presenting that number as an official rank.
 - Vendor rows require a primary page controlled by the model vendor. Secondary

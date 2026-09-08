@@ -43,7 +43,7 @@ const translations = {
     allLevels: "All levels",
     showingResults: "Showing {shown} of {total} public results",
     harnessDetailsHint: "Select a Harness name to view full configuration and sources.",
-    tableHint: "Swipe to view the full table →",
+    tableHint: "Scroll horizontally to view all columns →",
     loadingResults: "Loading public results…",
     confidenceNote: "Every result has a score bar. Confidence whiskers appear only when the source reports a 95% interval; results without interval data show the bar alone.",
     dataCoverage: "Data coverage",
@@ -51,9 +51,7 @@ const translations = {
     coverageTitle: "From public baselines to Penguin runs.",
     coverageDescription: "See how official baselines, vendor reports, and Penguin runs are represented across every benchmark.",
     officialSnapshot: "Official snapshot",
-    viewOfficialBenchmark: "View official benchmark",
     verifiedPenguinRun: "Verified Penguin run",
-    viewFullReport: "View full report",
     successSummary: "{successes} successes / {trials} valid trials",
     resolutionRate: "Resolution rate",
     tokens: "Tokens",
@@ -144,7 +142,7 @@ const translations = {
     allLevels: "全部等级",
     showingResults: "显示 {shown} / {total} 条公开结果",
     harnessDetailsHint: "点击 Harness 名称查看完整配置与来源。",
-    tableHint: "横向滑动查看完整表格 →",
+    tableHint: "横向滚动查看完整表格 →",
     loadingResults: "正在加载公开结果…",
     confidenceNote: "所有结果都显示分数条；仅当来源披露 95% 置信区间时才显示误差线，未披露区间的数据只显示分数条。",
     dataCoverage: "数据覆盖",
@@ -152,9 +150,7 @@ const translations = {
     coverageTitle: "从公开基线，到 Penguin 实测。",
     coverageDescription: "清楚展示每个 Benchmark 收录的官方基线、厂商自报与 Penguin 实测。",
     officialSnapshot: "官方快照",
-    viewOfficialBenchmark: "查看官方榜单",
     verifiedPenguinRun: "已验证的 Penguin 实测",
-    viewFullReport: "查看完整报告",
     successSummary: "{successes} 次成功 / {trials} 次有效尝试",
     resolutionRate: "解决率",
     tokens: "Token",
@@ -226,6 +222,8 @@ const elements = {
   modelFilter: document.querySelector(".model-filter"),
   thinkingFilter: document.querySelector(".thinking-filter"),
   resultCount: document.querySelector(".result-count"),
+  tableWrap: document.querySelector(".table-wrap"),
+  tableHint: document.querySelector(".table-hint"),
   resultsHead: document.querySelector(".results-head"),
   resultsBody: document.querySelector(".results-body"),
   resultDialog: document.querySelector(".result-dialog"),
@@ -253,6 +251,11 @@ function updateBenchRailState() {
     && resultsBounds.top < headerHeight
     && resultsBounds.bottom > headerHeight + railBounds.height;
   elements.benchRail.classList.toggle("is-stuck", isStuck);
+}
+
+function updateTableOverflow() {
+  const { tableWrap, tableHint } = elements;
+  tableHint.hidden = tableWrap.scrollWidth <= tableWrap.clientWidth + 1;
 }
 
 function t(key, values = {}) {
@@ -1083,19 +1086,9 @@ function renderCoverage() {
   const benchmarks = state.payload?.benchmarks || [];
   elements.coverageGrid.innerHTML = benchmarks.map((bench) => {
     const isCurrent = bench.id === state.benchmark.id;
-    const officialUrl = safeUrl(bench.official_url);
-    const officialLink = officialUrl
-      ? `<a class="coverage-source-link" href="${escapeHtml(officialUrl)}" target="_blank" rel="noreferrer">${escapeHtml(t("viewOfficialBenchmark"))}</a>`
-      : "";
     return `
       <article class="coverage-card${isCurrent ? " is-current" : ""}"${isCurrent ? ' aria-current="true"' : ""}>
-        <header class="coverage-card-header">
-          <div>
-            <span class="coverage-version">TB ${escapeHtml(bench.version)}</span>
-          </div>
-          ${officialLink}
-          <h3>${escapeHtml(bench.name)}</h3>
-        </header>
+        <h3>${escapeHtml(bench.name)}</h3>
         <div class="coverage-total">
           <strong>${escapeHtml(formatNumber(bench.result_count) ?? "0")}</strong>
           <span>${escapeHtml(t("publicResults"))}</span>
@@ -1134,10 +1127,6 @@ function renderCoverage() {
   const protocolNote = row.protocol_note !== null && typeof row.protocol_note === "object"
     ? row.protocol_note[state.locale] || row.protocol_note.en
     : row.protocol_note;
-  const evidenceUrl = safeUrl(row.source_url || row.official_detail_url);
-  const reportLink = evidenceUrl
-    ? `<a class="button button-primary penguin-report-link" href="${escapeHtml(evidenceUrl)}" target="_blank" rel="noreferrer">${escapeHtml(t("viewFullReport"))}</a>`
-    : "";
   const harnessName = row.harness_version
     ? `${row.harness.label} ${row.harness_version}`
     : row.harness.label;
@@ -1169,7 +1158,6 @@ function renderCoverage() {
         <div><dt>${escapeHtml(t("thinkingLevel"))}</dt><dd>${escapeHtml(row.thinking_level || t("notReported"))}</dd></div>
         <div><dt>${escapeHtml(t("verifiedOn"))}</dt><dd>${escapeHtml(formatDate(row.verified_at))}</dd></div>
       </dl>
-      ${reportLink}
     </div>
   `;
 }
@@ -1234,6 +1222,9 @@ async function init() {
   elements.themeToggle.addEventListener("click", cycleTheme);
   addEventListener("scroll", updateBenchRailState, { passive: true });
   addEventListener("resize", updateBenchRailState);
+  const tableObserver = new ResizeObserver(updateTableOverflow);
+  tableObserver.observe(elements.tableWrap);
+  tableObserver.observe(elements.tableWrap.querySelector("table"));
   elements.sourceFilter.addEventListener("change", (event) => {
     state.filters.source = event.target.value;
     renderFilters();

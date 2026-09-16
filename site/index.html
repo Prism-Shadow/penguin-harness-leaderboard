@@ -42,8 +42,8 @@
         document.documentElement.lang = locale === "zh" ? "zh-CN" : "en";
       } catch {}
     </script>
-    <link rel="stylesheet" href="styles.css?v=20260908-08" />
-    <script src="script.js?v=20260908-08" defer></script>
+    <link rel="stylesheet" href="styles.css?v=20260916-penguin-labels" />
+    <script src="script.js?v=20260916-penguin-labels" defer></script>
   </head>
   <body>
     <a class="skip-link" href="#results" data-i18n="skipToResults">Skip to results</a>
@@ -189,13 +189,52 @@
               <caption class="sr-only table-caption">Public Terminal-Bench results</caption>
               <thead class="results-head"></thead>
               <tbody class="results-body">
-                <tr><td class="loading-cell" colspan="9" data-i18n="loadingResults">Loading public results…</td></tr>
+                <tr><td class="loading-cell" colspan="8" data-i18n="loadingResults">Loading public results…</td></tr>
               </tbody>
             </table>
           </div>
           <p class="confidence-note">
             <span data-i18n="confidenceNote">Every result has a score bar. Confidence whiskers appear only when the source reports a 95% interval; results without interval data show the bar alone.</span>
           </p>
+          <p class="experiment-table-note" data-i18n="experimentTableNote" hidden></p>
+        </div>
+      </section>
+
+      <section id="pareto" class="section section-anchor pareto-section">
+        <div class="section-shell">
+          <section class="pareto-panel" aria-labelledby="pareto-title">
+            <header class="pareto-heading">
+              <div>
+                <p class="eyebrow" data-i18n="paretoEyebrow">PARETO FRONTIER</p>
+                <h2 id="pareto-title" data-i18n="paretoTitle">Cost &amp; resolution rate</h2>
+              </div>
+              <a class="pareto-benchmark" href="#results" aria-label="Select benchmark">TB 2.1</a>
+            </header>
+            <div class="pareto-toolbar">
+              <div class="pareto-scope" role="group" data-i18n-aria="paretoScope" aria-label="Chart source">
+                <button type="button" data-pareto-scope="penguin_run" aria-pressed="true" data-i18n="paretoPenguin">Penguin experiments</button>
+                <button type="button" data-pareto-scope="benchmark_official" aria-pressed="false" data-i18n="paretoOfficial">Official reference</button>
+              </div>
+              <div class="pareto-chart-controls">
+                <button class="pareto-range-toggle" type="button" data-i18n="paretoZoom">Focus on differences</button>
+                <span class="pareto-range-label"></span>
+              </div>
+            </div>
+            <p class="pareto-subtitle"></p>
+            <div class="pareto-plot-shell">
+              <div class="pareto-chart-meta">
+                <div class="pareto-legend">
+                  <span class="pareto-legend-frontier" data-i18n="paretoLegend">Observed frontier</span>
+                  <span class="pareto-legend-other" data-i18n="paretoOther">Other configurations</span>
+                  <span class="pareto-legend-shade" data-i18n="paretoShade">Above / left of frontier</span>
+                </div>
+                <span class="pareto-count"></span>
+              </div>
+              <div class="pareto-chart"><div class="pareto-canvas"></div><div class="pareto-tooltip" hidden aria-hidden="true"></div></div>
+              <div class="pareto-footer"><span class="pareto-note"></span><span data-i18n="paretoInteraction">Hover for values · select for details</span></div>
+            </div>
+            <div class="pareto-readout sr-only" aria-live="polite"></div>
+          </section>
         </div>
       </section>
 

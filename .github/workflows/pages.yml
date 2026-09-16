@@ -33,6 +33,7 @@ jobs:
       - name: Verify official snapshot and frontend
         run: |
           python3 scripts/verify_site.py --check-live
+          python3 -m unittest discover -s scripts -p 'test_*.py'
           node --check site/script.js
 
   deploy:

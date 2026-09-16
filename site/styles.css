@@ -984,10 +984,10 @@ main,
 
 table {
   width: 100%;
-  min-width: 1238px;
+  min-width: 1188px;
   border-collapse: collapse;
   table-layout: fixed;
-  font-size: 15px;
+  font-size: 14px;
 }
 
 th,
@@ -1001,8 +1001,8 @@ td {
 th {
   height: 50px;
   color: var(--muted);
-  font-size: 15px;
-  font-weight: 400;
+  font-size: 13px;
+  font-weight: 500;
 }
 
 .results-head th:last-child {
@@ -1026,70 +1026,91 @@ th.is-active .sort-button {
   color: var(--accent);
 }
 
-.column-rank {
-  width: 56px;
+.column-row-number {
+  width: 50px;
   text-align: center;
+  white-space: nowrap;
+}
+
+.column-row-number,
+.row-number-cell {
+  padding-inline: 4px;
+}
+
+.row-number-cell {
+  color: var(--muted);
+  text-align: center;
+  font-variant-numeric: tabular-nums;
+  font-weight: 600;
+}
+
+tbody tr:nth-child(-n + 3) .row-number-cell {
+  color: var(--accent);
 }
 
 .column-harness {
-  width: 178px;
+  width: 180px;
 }
 
 .column-model {
   width: 264px;
 }
 
+.column-compression-trigger {
+  width: 126px;
+}
+
+.column-timeout-multiplier {
+  width: 108px;
+}
+
 .column-accuracy {
-  width: 263px;
-}
-
-.column-rank,
-.rank-cell {
-  padding-right: 4px;
-  padding-left: 4px;
-}
-
-.column-rank .sort-button {
-  white-space: nowrap;
-}
-
-.column-average-trial-duration-seconds {
-  width: 99px;
-  text-align: right;
-}
-
-.column-release-date {
-  width: 118px;
-}
-
-.column-total-tokens {
-  width: 84px;
-  text-align: right;
+  width: auto;
 }
 
 .column-total-cost-usd {
-  width: 79px;
+  width: 92px;
   text-align: right;
 }
 
 .column-source-type {
-  width: 97px;
-}
-
-.column-average-trial-duration-seconds .sort-button,
-.column-total-tokens .sort-button,
-.column-total-cost-usd .sort-button {
-  width: 100%;
-  justify-content: flex-end;
-}
-
-.column-total-cost-usd .sort-button {
-  transform: translateX(-5px);
+  width: 100px;
 }
 
 .column-source-type .sort-button {
   width: 100%;
   justify-content: center;
+}
+
+.source-cell {
+  padding-inline: 8px;
+  text-align: center;
+}
+
+.harness-meta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px;
+  margin: 6px 0 0 32px;
+  color: var(--muted-strong);
+  font-size: 11px;
+}
+
+.config-cell {
+  font-variant-numeric: tabular-nums;
+}
+
+.cell-context {
+  display: block;
+  margin-top: 4px;
+  font-size: 11px;
+  color: var(--muted-strong);
+}
+
+.column-total-cost-usd .sort-button {
+  width: 100%;
+  justify-content: flex-end;
 }
 
 .sort-button {
@@ -1115,32 +1136,14 @@ th.is-active .sort-button {
   text-align: center;
 }
 
-.rank-cell {
-  color: var(--muted);
-  font-size: 15px;
-  font-variant-numeric: tabular-nums;
-  text-align: center;
-}
-
-.rank-badge {
-  color: var(--muted);
-  font-weight: 400;
-}
-
-.rank-1,
-.rank-2,
-.rank-3 {
-  color: var(--accent);
-}
-
 .entity-name {
   display: flex;
   align-items: center;
   max-width: max-content;
   gap: 5px;
   color: var(--text);
-  font-size: 15px;
-  font-weight: 400;
+  font-size: 14px;
+  font-weight: 550;
 }
 
 .model-primary {
@@ -1168,7 +1171,7 @@ th.is-active .sort-button {
   border: 1px solid color-mix(in srgb, var(--accent) 22%, var(--line));
   border-radius: 99px;
   background: var(--accent-soft);
-  font-size: 12px;
+  font-size: 11px;
   font-weight: 400;
   line-height: 1.2;
   flex: 0 0 auto;
@@ -1176,6 +1179,9 @@ th.is-active .sort-button {
 
 .effort-pill.muted {
   color: var(--faint);
+  border-color: transparent;
+  background: transparent;
+  padding-inline: 0;
 }
 
 .rate-cell {
@@ -1187,8 +1193,8 @@ th.is-active .sort-button {
 
 .rate-cell strong {
   color: var(--text);
-  font-size: 15px;
-  font-weight: 400;
+  font-size: 14px;
+  font-weight: 600;
 }
 
 .rate-copy {
@@ -1253,15 +1259,9 @@ th.is-active .sort-button {
   border: 1px solid var(--line);
   border-radius: 99px;
   background: var(--surface-soft);
-  font-size: 12px;
+  font-size: 11px;
   font-weight: 400;
   white-space: nowrap;
-}
-
-.source-cell {
-  padding-right: 8px;
-  padding-left: 8px;
-  text-align: center;
 }
 
 .source-vendor_reported {
@@ -1276,10 +1276,9 @@ th.is-active .sort-button {
   background: var(--accent-soft);
 }
 
-.date-cell,
 .number-cell {
   color: var(--text);
-  font-size: 15px;
+  font-size: 14px;
   font-variant-numeric: tabular-nums;
   white-space: nowrap;
 }
@@ -1731,6 +1730,8 @@ th.is-active .sort-button {
 
 .detail-item dt {
   color: var(--muted);
+  min-width: 0;
+  overflow-wrap: anywhere;
 }
 
 .detail-item dd {
@@ -2063,7 +2064,7 @@ th.is-active .sort-button {
   }
 }
 
-@media (min-width: 1440px) {
+@media (min-width: 1280px) {
   .table-wrap {
     overflow: visible;
   }
@@ -2079,6 +2080,489 @@ th.is-active .sort-button {
   .results-head th.is-active {
     background: color-mix(in srgb, var(--accent) 8%, var(--surface));
   }
+}
+.experiment-table-note {
+  color: var(--muted-strong);
+  font-size: 12px;
+  line-height: 1.7;
+  margin: 12px 0 0;
+}
+
+.results-heading p.results-description {
+  white-space: normal;
+  overflow-wrap: anywhere;
+}
+
+/* Cost/score is the third section; the original hero layout stays independent. */
+.pareto-section {
+  min-height: calc(100svh - var(--header-height));
+  padding-block: 64px;
+  display: flex;
+  align-items: center;
+  border-top: 1px solid var(--line);
+}
+
+.pareto-panel {
+  min-width: 0;
+  width: 100%;
+  max-width: 1280px;
+  margin-inline: auto;
+  padding: 0;
+  text-align: left;
+  scroll-margin-top: 24px;
+}
+
+.pareto-heading,
+.pareto-toolbar,
+.pareto-chart-meta {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.pareto-heading .eyebrow {
+  font-size: 18px;
+  margin-bottom: 8px;
+}
+
+.pareto-heading h2 {
+  margin: 0;
+  font-size: clamp(34px, 4vw, 40px);
+  line-height: 1.35;
+  letter-spacing: -0.025em;
+}
+
+.pareto-benchmark {
+  flex-shrink: 0;
+  color: var(--muted-strong);
+  font-size: 16px;
+}
+
+.pareto-benchmark:hover {
+  color: var(--accent);
+  text-decoration: underline;
+}
+
+.pareto-toolbar {
+  margin-top: 20px;
+  flex-wrap: wrap;
+}
+
+.pareto-scope {
+  display: flex;
+  gap: 4px;
+  padding: 3px;
+  border-radius: 8px;
+  background: color-mix(in srgb, var(--accent) 6%, var(--surface));
+}
+
+.pareto-scope button {
+  padding: 8px 16px;
+  border: 0;
+  border-radius: 6px;
+  color: var(--muted-strong);
+  background: transparent;
+  font-size: 15px;
+  cursor: pointer;
+}
+
+.pareto-scope button[aria-pressed="true"] {
+  color: var(--accent);
+  background: var(--surface);
+  box-shadow: 0 1px 3px rgb(15 23 42 / 8%);
+}
+
+.pareto-scope button:disabled {
+  color: var(--faint);
+  cursor: not-allowed;
+}
+
+.pareto-count,
+.pareto-chart-meta,
+.pareto-legend,
+.pareto-note,
+.pareto-footer,
+.pareto-range-label {
+  color: var(--muted-strong);
+  font-size: 14px;
+  line-height: 1.6;
+}
+
+.pareto-subtitle {
+  margin: 12px 0 16px;
+  color: var(--muted-strong);
+  font-size: 16px;
+  line-height: 1.5;
+}
+
+.pareto-chart-meta {
+  padding: 14px 24px 0;
+  margin-bottom: 4px;
+}
+
+.pareto-plot-shell {
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  padding-inline: 8px;
+}
+
+.pareto-chart {
+  position: relative;
+  overflow-x: auto;
+}
+
+.pareto-svg {
+  display: block;
+  width: 100%;
+  min-width: 640px;
+}
+
+.pareto-plot-background {
+  fill: var(--surface);
+}
+
+.pareto-frontier-shade {
+  fill: color-mix(in srgb, var(--text) 5%, transparent);
+  stroke: none;
+  pointer-events: none;
+}
+
+.pareto-grid {
+  stroke: var(--line);
+  stroke-width: 1;
+}
+
+.pareto-grid-vertical {
+  opacity: 0.45;
+  stroke-dasharray: 3 5;
+}
+
+.pareto-tick,
+.pareto-axis-label {
+  fill: var(--muted-strong);
+  font-size: 15px;
+  font-variant-numeric: tabular-nums;
+}
+
+.pareto-frontier {
+  fill: none;
+  stroke: var(--accent);
+  stroke-width: 1.5;
+  stroke-linejoin: round;
+}
+
+.pareto-frontier.is-provisional {
+  stroke-dasharray: 4 4;
+}
+
+.pareto-axis {
+  fill: none;
+  stroke: var(--faint);
+  stroke-width: 1;
+}
+
+.pareto-point {
+  cursor: pointer;
+  outline: none;
+}
+
+.pareto-point-hit {
+  fill: transparent;
+  stroke: transparent;
+}
+
+.pareto-point-dot {
+  fill: var(--muted-strong);
+  stroke: var(--surface);
+  stroke-width: 1;
+  pointer-events: none;
+}
+
+.pareto-point.is-frontier .pareto-point-dot {
+  fill: var(--accent);
+}
+
+.pareto-point:focus-visible .pareto-point-hit {
+  fill: color-mix(in srgb, var(--accent) 12%, transparent);
+  stroke: var(--accent);
+  stroke-width: 1.5;
+}
+
+.pareto-point.is-selected .pareto-point-dot {
+  stroke: var(--text);
+}
+
+.pareto-interval {
+  stroke: var(--muted-strong);
+  stroke-width: 1;
+  fill: none;
+  opacity: 0.8;
+  pointer-events: none;
+}
+
+.pareto-point-label {
+  fill: var(--muted-strong);
+  font-size: 14px;
+  paint-order: stroke;
+  stroke: var(--surface);
+  stroke-width: 3px;
+  stroke-linejoin: round;
+  cursor: pointer;
+  pointer-events: bounding-box;
+}
+
+.pareto-label-leader {
+  stroke: var(--muted-strong);
+  stroke-width: 0.7;
+  opacity: 0.55;
+  pointer-events: none;
+}
+
+.pareto-chart.has-hover-point {
+  cursor: pointer;
+}
+
+.pareto-point-label.is-frontier {
+  fill: var(--text);
+  font-weight: 500;
+}
+
+.pareto-legend {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 6px 20px;
+}
+
+.pareto-count {
+  flex-shrink: 0;
+}
+
+.pareto-legend span {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.pareto-legend span::before {
+  content: "";
+  width: 8px;
+  height: 8px;
+  background: var(--accent);
+}
+
+.pareto-legend-frontier {
+  position: relative;
+}
+
+.pareto-legend .pareto-legend-frontier::before {
+  width: 24px;
+  height: 0;
+  border-top: 1.5px solid var(--accent);
+  background: none;
+}
+
+.pareto-legend-frontier::after {
+  content: "";
+  position: absolute;
+  left: 8px;
+  top: calc(50% - 4px);
+  width: 8px;
+  height: 8px;
+  background: var(--accent);
+}
+
+.pareto-legend .pareto-legend-other::before {
+  background: var(--muted-strong);
+}
+
+.pareto-legend .pareto-legend-shade::before {
+  width: 14px;
+  height: 10px;
+  background: color-mix(in srgb, var(--text) 5%, var(--surface));
+  border: 1px solid var(--line);
+}
+
+.pareto-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  flex-wrap: wrap;
+  gap: 8px 24px;
+  margin: 0 16px;
+  padding: 16px 0;
+  border-top: 1px solid var(--line);
+}
+
+.pareto-chart-controls {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.pareto-range-toggle {
+  padding: 8px 12px;
+  color: var(--muted-strong);
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  font-size: 14px;
+  cursor: pointer;
+}
+
+.pareto-range-toggle:hover,
+.pareto-range-toggle[data-zoomed="true"] {
+  color: var(--accent);
+  border-color: var(--accent);
+}
+
+.pareto-tooltip {
+  position: absolute;
+  z-index: 3;
+  width: 320px;
+  max-width: calc(100% - 16px);
+  padding: 16px;
+  color: var(--text);
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  box-shadow: 0 4px 16px rgb(0 0 0 / 10%);
+  pointer-events: none;
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+.pareto-tooltip > strong,
+.pareto-tooltip > span,
+.pareto-tooltip > small {
+  display: block;
+  overflow-wrap: anywhere;
+}
+
+.pareto-tooltip > span,
+.pareto-tooltip > small {
+  color: var(--muted-strong);
+  margin-top: 4px;
+}
+
+.pareto-tooltip-metrics {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  margin-block: 12px 8px;
+  padding-top: 12px;
+  border-top: 1px solid var(--line);
+  font-variant-numeric: tabular-nums;
+}
+
+.pareto-tooltip-metrics span,
+.pareto-tooltip-metrics small {
+  display: block;
+  color: var(--muted-strong);
+  font-size: 12px;
+}
+
+.pareto-tooltip-metrics b {
+  display: block;
+  margin-top: 2px;
+  font-size: 20px;
+  font-weight: 600;
+}
+
+/* Penguin's six-run comparison uses a lighter scatterplot treatment.
+   Keep the official reference chart's geometry and styling independent. */
+.is-penguin-view .pareto-plot-shell {
+  border-inline: 0;
+  border-bottom: 0;
+  border-radius: 0;
+  padding-inline: 0;
+}
+
+.is-penguin-view .pareto-chart-meta {
+  padding: 18px 16px 0;
+}
+
+.is-penguin-view .pareto-frontier-shade {
+  fill: color-mix(in srgb, var(--accent) 6%, transparent);
+}
+
+.is-penguin-view .pareto-grid {
+  stroke-dasharray: 2 6;
+  opacity: 0.6;
+}
+
+.is-penguin-view .pareto-grid-vertical {
+  opacity: 0;
+}
+
+.is-penguin-view .pareto-frontier {
+  stroke: var(--accent-strong);
+  stroke-width: 2;
+  stroke-dasharray: 1 7;
+  stroke-linecap: round;
+}
+
+.is-penguin-view .pareto-point-dot {
+  stroke-width: 2;
+}
+
+.is-penguin-view .pareto-point.is-selected .pareto-point-hit {
+  fill: color-mix(in srgb, var(--accent) 10%, transparent);
+}
+
+.is-penguin-view .pareto-point.is-selected .pareto-point-dot {
+  stroke: var(--surface);
+}
+
+.is-penguin-view .pareto-point-label {
+  fill: var(--text);
+  font-size: 15px;
+  font-weight: 500;
+  stroke-width: 4px;
+}
+
+.is-penguin-view .pareto-point-values {
+  fill: var(--muted-strong);
+  font-size: 13px;
+  font-weight: 400;
+  font-variant-numeric: tabular-nums;
+}
+
+.is-penguin-view .pareto-label-leader {
+  stroke-width: 1;
+  opacity: 0.5;
+}
+
+.is-penguin-view .pareto-legend .pareto-legend-frontier::before {
+  border-top: 2px dotted var(--accent-strong);
+}
+
+.is-penguin-view .pareto-legend-frontier::after,
+.is-penguin-view .pareto-legend-other::before {
+  border-radius: 50%;
+}
+
+.is-penguin-view .pareto-legend .pareto-legend-shade::before {
+  background: color-mix(in srgb, var(--accent) 6%, var(--surface));
+  border-color: color-mix(in srgb, var(--accent) 15%, var(--surface));
+}
+
+@media (max-width: 700px) {
+  .pareto-panel {
+    padding: 0;
+  }
+
+  .pareto-heading h2 {
+    font-size: 28px;
+  }
+
+  .pareto-chart-meta {
+    flex-wrap: wrap;
+    gap: 4px;
+  }
+
 }
 
 @media (prefers-reduced-motion: reduce) {

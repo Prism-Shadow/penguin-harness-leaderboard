@@ -2,7 +2,7 @@
   "schema_version": 4,
   "default_benchmark": "terminal-bench-2.1",
   "official_api": "https://ofhuhcpkvzjlejydnvyd.supabase.co/functions/v1/leaderboard-read",
-  "curated_verified_at": "2026-09-14",
+  "curated_verified_at": "2026-09-17",
   "benchmarks": [
     {
       "id": "terminal-bench-2.1",
@@ -15,19 +15,86 @@
         "dataset_version": "latest"
       },
       "snapshot_updated_at": "2026-09-03T20:54:37.791805+00:00",
-      "result_count": 37,
+      "result_count": 38,
       "official_result_count": 22,
-      "vendor_result_count": 9,
+      "vendor_result_count": 10,
       "penguin_result_count": 6,
-      "model_count": 21,
+      "model_count": 22,
       "harness_count": 10,
-      "best_accuracy": 88.3,
+      "best_accuracy": 90.6,
       "official_best_accuracy": 87.42,
       "description": {
         "en": "Public Terminal-Bench 2.1 results, with official ranks kept separate from reported runs.",
         "zh": "Terminal-Bench 2.1 公开结果；官方排名与厂商、Penguin 报告结果严格区分。"
       },
       "results": [
+        {
+          "id": "vendor-deepseek-v4-1-flash-tb21-dsh-minimal",
+          "benchmark_id": "terminal-bench-2.1",
+          "rank": null,
+          "harness": {
+            "label": "DeepSeek Harness",
+            "url": null
+          },
+          "harness_org": {
+            "label": "DeepSeek",
+            "url": "https://www.deepseek.com"
+          },
+          "model": {
+            "label": "DeepSeek-V4.1-Flash",
+            "url": "https://huggingface.co/deepseek-ai/DeepSeek-V4.1-Flash"
+          },
+          "model_org": {
+            "label": "DeepSeek",
+            "url": "https://www.deepseek.com"
+          },
+          "thinking_level": "max",
+          "accuracy": 90.6,
+          "accuracy_stderr": null,
+          "accuracy_ci95_half_width": null,
+          "display_accuracy": null,
+          "release_date": null,
+          "display_release_date": null,
+          "total_tokens": null,
+          "display_total_tokens": null,
+          "total_cost_usd": null,
+          "average_cost_per_task_usd": null,
+          "display_cost": null,
+          "trial_count": null,
+          "pass_at_2": null,
+          "pass_at_3": null,
+          "pass_at_4": null,
+          "pass_at_5": null,
+          "successes": null,
+          "uncached_input_tokens": null,
+          "cached_input_tokens": null,
+          "output_tokens": null,
+          "average_trial_duration_seconds": null,
+          "reward_hacks": null,
+          "display_reward_hacks": null,
+          "submission": null,
+          "official_detail_url": null,
+          "source_type": "vendor_reported",
+          "source_url": "https://huggingface.co/deepseek-ai/DeepSeek-V4.1-Flash",
+          "source_title": "DeepSeek-V4.1-Flash model card",
+          "source_publisher": "DeepSeek",
+          "published_at": null,
+          "verified_at": "2026-09-17",
+          "harness_version": null,
+          "protocol_note": {
+            "en": "DeepSeek Harness Minimal mode; maximum reasoning effort (reasoning_effort=100); 1M-token context window; temperature=1.0 and top_p=0.95. The model card reports 90.6% on Terminal-Bench 2.1 (Pass@1). Trial count, confidence interval, tokens, cost, compaction trigger and timeout multiplier are not reported.",
+            "zh": "DeepSeek Harness Minimal mode；最大思考强度（reasoning_effort=100）；1M Token 上下文窗口；temperature=1.0、top_p=0.95。Model Card 报告 Terminal-Bench 2.1（Pass@1）为 90.6%。未披露试验数、置信区间、Token、成本、压缩触发阈值和超时倍率。"
+          },
+          "run_config": null,
+          "cost_coverage": null,
+          "configuration_source_url": null,
+          "timeout_multiplier": null,
+          "timeout_note": null,
+          "timeout_hours": null,
+          "wall_clock_limit_removed": null,
+          "context_window_label": "1M",
+          "harness_mode": "minimal mode"
+        },
         {
           "id": "vendor-kimi-k3-tb21-kimi-code",
           "benchmark_id": "terminal-bench-2.1",
@@ -3513,12 +3580,12 @@
         "dataset_version": "1"
       },
       "snapshot_updated_at": "2026-09-03T00:07:57.08561+00:00",
-      "result_count": 12,
+      "result_count": 13,
       "official_result_count": 12,
-      "vendor_result_count": 0,
+      "vendor_result_count": 1,
       "penguin_result_count": 0,
-      "model_count": 12,
-      "harness_count": 6,
+      "model_count": 13,
+      "harness_count": 7,
       "best_accuracy": 42.7,
       "official_best_accuracy": 42.7,
       "description": {
@@ -3888,6 +3955,73 @@
               "source_url": "https://hub.harborframework.com/jobs/b945743b-0271-5235-a6c1-8f59997d99d0/trials/01296ce5-5c49-5b20-80b4-b1de75ff8941"
             }
           ]
+        },
+        {
+          "id": "vendor-deepseek-v4-1-flash-tb30-dsh-minimal",
+          "benchmark_id": "terminal-bench-3.0",
+          "rank": null,
+          "harness": {
+            "label": "DeepSeek Harness",
+            "url": null
+          },
+          "harness_org": {
+            "label": "DeepSeek",
+            "url": "https://www.deepseek.com"
+          },
+          "model": {
+            "label": "DeepSeek-V4.1-Flash",
+            "url": "https://huggingface.co/deepseek-ai/DeepSeek-V4.1-Flash"
+          },
+          "model_org": {
+            "label": "DeepSeek",
+            "url": "https://www.deepseek.com"
+          },
+          "thinking_level": "max",
+          "accuracy": 30.0,
+          "accuracy_stderr": null,
+          "accuracy_ci95_half_width": null,
+          "display_accuracy": null,
+          "release_date": null,
+          "display_release_date": null,
+          "total_tokens": null,
+          "display_total_tokens": null,
+          "total_cost_usd": null,
+          "average_cost_per_task_usd": null,
+          "display_cost": null,
+          "trial_count": null,
+          "pass_at_2": null,
+          "pass_at_3": null,
+          "pass_at_4": null,
+          "pass_at_5": null,
+          "successes": null,
+          "uncached_input_tokens": null,
+          "cached_input_tokens": null,
+          "output_tokens": null,
+          "average_trial_duration_seconds": null,
+          "reward_hacks": null,
+          "display_reward_hacks": null,
+          "submission": null,
+          "official_detail_url": null,
+          "source_type": "vendor_reported",
+          "source_url": "https://huggingface.co/deepseek-ai/DeepSeek-V4.1-Flash",
+          "source_title": "DeepSeek-V4.1-Flash model card",
+          "source_publisher": "DeepSeek",
+          "published_at": null,
+          "verified_at": "2026-09-17",
+          "harness_version": null,
+          "protocol_note": {
+            "en": "DeepSeek Harness Minimal mode; maximum reasoning effort (reasoning_effort=100); 1M-token context window; temperature=1.0 and top_p=0.95. The model card reports 30.0% on Terminal-Bench 3.0 (Pass@1). Trial count, confidence interval, tokens, cost, compaction trigger and timeout multiplier are not reported.",
+            "zh": "DeepSeek Harness Minimal mode；最大思考强度（reasoning_effort=100）；1M Token 上下文窗口；temperature=1.0、top_p=0.95。Model Card 报告 Terminal-Bench 3.0（Pass@1）为 30.0%。未披露试验数、置信区间、Token、成本、压缩触发阈值和超时倍率。"
+          },
+          "run_config": null,
+          "cost_coverage": null,
+          "configuration_source_url": null,
+          "timeout_multiplier": null,
+          "timeout_note": null,
+          "timeout_hours": null,
+          "wall_clock_limit_removed": null,
+          "context_window_label": "1M",
+          "harness_mode": "minimal mode"
         },
         {
           "id": "61adb66e-1cf1-4194-b68d-703554d21193",
@@ -4614,12 +4748,12 @@
         "dataset_version": "4"
       },
       "snapshot_updated_at": "2026-09-10T21:58:00.001022+00:00",
-      "result_count": 19,
+      "result_count": 20,
       "official_result_count": 18,
-      "vendor_result_count": 1,
+      "vendor_result_count": 2,
       "penguin_result_count": 0,
-      "model_count": 15,
-      "harness_count": 4,
+      "model_count": 16,
+      "harness_count": 5,
       "best_accuracy": 60.9,
       "official_best_accuracy": 58.18,
       "description": {
@@ -5618,6 +5752,73 @@
               "source_url": "https://hub.harborframework.com/jobs/5aebbab5-1f8f-4cdb-8073-c6ce785a930d/trials/00879e34-1e4c-47a9-b44b-4756b383a65a"
             }
           ]
+        },
+        {
+          "id": "vendor-deepseek-v4-1-flash-tb40-dsh-minimal",
+          "benchmark_id": "terminal-bench-4.0",
+          "rank": null,
+          "harness": {
+            "label": "DeepSeek Harness",
+            "url": null
+          },
+          "harness_org": {
+            "label": "DeepSeek",
+            "url": "https://www.deepseek.com"
+          },
+          "model": {
+            "label": "DeepSeek-V4.1-Flash",
+            "url": "https://huggingface.co/deepseek-ai/DeepSeek-V4.1-Flash"
+          },
+          "model_org": {
+            "label": "DeepSeek",
+            "url": "https://www.deepseek.com"
+          },
+          "thinking_level": "max",
+          "accuracy": 31.2,
+          "accuracy_stderr": null,
+          "accuracy_ci95_half_width": null,
+          "display_accuracy": null,
+          "release_date": null,
+          "display_release_date": null,
+          "total_tokens": null,
+          "display_total_tokens": null,
+          "total_cost_usd": null,
+          "average_cost_per_task_usd": null,
+          "display_cost": null,
+          "trial_count": null,
+          "pass_at_2": null,
+          "pass_at_3": null,
+          "pass_at_4": null,
+          "pass_at_5": null,
+          "successes": null,
+          "uncached_input_tokens": null,
+          "cached_input_tokens": null,
+          "output_tokens": null,
+          "average_trial_duration_seconds": null,
+          "reward_hacks": null,
+          "display_reward_hacks": null,
+          "submission": null,
+          "official_detail_url": null,
+          "source_type": "vendor_reported",
+          "source_url": "https://huggingface.co/deepseek-ai/DeepSeek-V4.1-Flash",
+          "source_title": "DeepSeek-V4.1-Flash model card",
+          "source_publisher": "DeepSeek",
+          "published_at": null,
+          "verified_at": "2026-09-17",
+          "harness_version": null,
+          "protocol_note": {
+            "en": "DeepSeek Harness Minimal mode; maximum reasoning effort (reasoning_effort=100); 1M-token context window; temperature=1.0 and top_p=0.95. The model card reports 31.2% on Terminal-Bench 4.0 (Pass@1). Trial count, confidence interval, tokens, cost, compaction trigger and timeout multiplier are not reported.",
+            "zh": "DeepSeek Harness Minimal mode；最大思考强度（reasoning_effort=100）；1M Token 上下文窗口；temperature=1.0、top_p=0.95。Model Card 报告 Terminal-Bench 4.0（Pass@1）为 31.2%。未披露试验数、置信区间、Token、成本、压缩触发阈值和超时倍率。"
+          },
+          "run_config": null,
+          "cost_coverage": null,
+          "configuration_source_url": null,
+          "timeout_multiplier": null,
+          "timeout_note": null,
+          "timeout_hours": null,
+          "wall_clock_limit_removed": null,
+          "context_window_label": "1M",
+          "harness_mode": "minimal mode"
         },
         {
           "id": "952b4217-421f-4d14-849b-9968fcb2063b",

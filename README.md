@@ -176,6 +176,16 @@ unconfirmed and is not filled from that recommendation. No new evaluation total
 cost was verified. The official snapshot was refreshed from the live API;
 its TB 4.0 update timestamp changed, while all result metrics stayed the same.
 
+The 2026-09-17 update adds three separate vendor-reported rows for
+[DeepSeek-V4.1-Flash](https://huggingface.co/deepseek-ai/DeepSeek-V4.1-Flash):
+90.6% on TB 2.1, 30.0% on TB 3.0, and 31.2% on TB 4.0. The Model Card
+explicitly describes DeepSeek Harness Minimal mode, maximum reasoning effort
+(`reasoning_effort=100`), and a 1M-token context window for these code-agent
+benchmarks. It does not report row-specific cost, token totals, confidence
+intervals, compaction triggers, timeout multipliers, or total trial counts;
+those fields remain undisclosed. These observations are vendor reports and do
+not receive official ranks.
+
 The 2026-09-10 follow-up also checked all 370 Devin config/lock records: no explicit effort
 was found, which does not mean "no reasoning." All 17 unknown-version official
 Terra/Cursor trials lacked a recorded Agent execution start. Penguin high has

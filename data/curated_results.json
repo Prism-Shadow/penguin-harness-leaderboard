@@ -1,9 +1,79 @@
 {
   "schema_version": 1,
-  "verified_at": "2026-09-03",
+  "verified_at": "2026-09-17",
   "results": [
     {
+      "id": "vendor-deepseek-v4-1-flash-tb21-dsh-minimal",
+      "benchmark_id": "terminal-bench-2.1",
+      "source_type": "vendor_reported",
+      "source_url": "https://huggingface.co/deepseek-ai/DeepSeek-V4.1-Flash",
+      "source_title": "DeepSeek-V4.1-Flash model card",
+      "source_publisher": "DeepSeek",
+      "published_at": null,
+      "verified_at": "2026-09-17",
+      "harness": {"label": "DeepSeek Harness", "url": null},
+      "harness_org": {"label": "DeepSeek", "url": "https://www.deepseek.com"},
+      "harness_version": null,
+      "harness_mode": "minimal mode",
+      "context_window_label": "1M",
+      "model": {"label": "DeepSeek-V4.1-Flash", "url": "https://huggingface.co/deepseek-ai/DeepSeek-V4.1-Flash"},
+      "model_org": {"label": "DeepSeek", "url": "https://www.deepseek.com"},
+      "thinking_level": "max",
+      "accuracy": 90.6,
+      "protocol_note": {
+        "en": "DeepSeek Harness Minimal mode; maximum reasoning effort (reasoning_effort=100); 1M-token context window; temperature=1.0 and top_p=0.95. The model card reports 90.6% on Terminal-Bench 2.1 (Pass@1). Trial count, confidence interval, tokens, cost, compaction trigger and timeout multiplier are not reported.",
+        "zh": "DeepSeek Harness Minimal mode；最大思考强度（reasoning_effort=100）；1M Token 上下文窗口；temperature=1.0、top_p=0.95。Model Card 报告 Terminal-Bench 2.1（Pass@1）为 90.6%。未披露试验数、置信区间、Token、成本、压缩触发阈值和超时倍率。"
+      }
+    },
+    {
+      "id": "vendor-deepseek-v4-1-flash-tb30-dsh-minimal",
+      "benchmark_id": "terminal-bench-3.0",
+      "source_type": "vendor_reported",
+      "source_url": "https://huggingface.co/deepseek-ai/DeepSeek-V4.1-Flash",
+      "source_title": "DeepSeek-V4.1-Flash model card",
+      "source_publisher": "DeepSeek",
+      "published_at": null,
+      "verified_at": "2026-09-17",
+      "harness": {"label": "DeepSeek Harness", "url": null},
+      "harness_org": {"label": "DeepSeek", "url": "https://www.deepseek.com"},
+      "harness_version": null,
+      "harness_mode": "minimal mode",
+      "context_window_label": "1M",
+      "model": {"label": "DeepSeek-V4.1-Flash", "url": "https://huggingface.co/deepseek-ai/DeepSeek-V4.1-Flash"},
+      "model_org": {"label": "DeepSeek", "url": "https://www.deepseek.com"},
+      "thinking_level": "max",
+      "accuracy": 30.0,
+      "protocol_note": {
+        "en": "DeepSeek Harness Minimal mode; maximum reasoning effort (reasoning_effort=100); 1M-token context window; temperature=1.0 and top_p=0.95. The model card reports 30.0% on Terminal-Bench 3.0 (Pass@1). Trial count, confidence interval, tokens, cost, compaction trigger and timeout multiplier are not reported.",
+        "zh": "DeepSeek Harness Minimal mode；最大思考强度（reasoning_effort=100）；1M Token 上下文窗口；temperature=1.0、top_p=0.95。Model Card 报告 Terminal-Bench 3.0（Pass@1）为 30.0%。未披露试验数、置信区间、Token、成本、压缩触发阈值和超时倍率。"
+      }
+    },
+    {
+      "id": "vendor-deepseek-v4-1-flash-tb40-dsh-minimal",
+      "benchmark_id": "terminal-bench-4.0",
+      "source_type": "vendor_reported",
+      "source_url": "https://huggingface.co/deepseek-ai/DeepSeek-V4.1-Flash",
+      "source_title": "DeepSeek-V4.1-Flash model card",
+      "source_publisher": "DeepSeek",
+      "published_at": null,
+      "verified_at": "2026-09-17",
+      "harness": {"label": "DeepSeek Harness", "url": null},
+      "harness_org": {"label": "DeepSeek", "url": "https://www.deepseek.com"},
+      "harness_version": null,
+      "harness_mode": "minimal mode",
+      "context_window_label": "1M",
+      "model": {"label": "DeepSeek-V4.1-Flash", "url": "https://huggingface.co/deepseek-ai/DeepSeek-V4.1-Flash"},
+      "model_org": {"label": "DeepSeek", "url": "https://www.deepseek.com"},
+      "thinking_level": "max",
+      "accuracy": 31.2,
+      "protocol_note": {
+        "en": "DeepSeek Harness Minimal mode; maximum reasoning effort (reasoning_effort=100); 1M-token context window; temperature=1.0 and top_p=0.95. The model card reports 31.2% on Terminal-Bench 4.0 (Pass@1). Trial count, confidence interval, tokens, cost, compaction trigger and timeout multiplier are not reported.",
+        "zh": "DeepSeek Harness Minimal mode；最大思考强度（reasoning_effort=100）；1M Token 上下文窗口；temperature=1.0、top_p=0.95。Model Card 报告 Terminal-Bench 4.0（Pass@1）为 31.2%。未披露试验数、置信区间、Token、成本、压缩触发阈值和超时倍率。"
+      }
+    },
+    {
       "id": "vendor-kimi-k3-tb21-kimi-code",
+      "verified_at": "2026-09-03",
       "benchmark_id": "terminal-bench-2.1",
       "source_type": "vendor_reported",
       "source_url": "https://huggingface.co/moonshotai/Kimi-K3",
@@ -187,6 +257,7 @@
     },
     {
       "id": "vendor-qwen3-8-27b-tb21-terminus",
+      "verified_at": "2026-09-03",
       "benchmark_id": "terminal-bench-2.1",
       "source_type": "vendor_reported",
       "source_url": "https://huggingface.co/Qwen/Qwen3.8-27B",

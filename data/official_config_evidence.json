@@ -1,0 +1,5270 @@
+{
+  "schema_version": 2,
+  "verified_at": "2026-09-10",
+  "method": "Complete anonymous public-RLS metadata audits of all row-linked trials, including resolved lock values and overrides; no trajectory or archive downloaded.",
+  "audit_query_templates": {
+    "query_1": {
+      "endpoint": "https://ofhuhcpkvzjlejydnvyd.supabase.co/rest/v1/leaderboard_row_trial",
+      "select": "trial_id,trial(id,job_id,agent(name,version),config_agent_name:config->agent->>name,config_model_name:config->agent->>model_name,config_kwargs:config->agent->kwargs,lock_kwargs:lock->agent->kwargs,config_timeout_multiplier:config->timeout_multiplier,lock_timeout_multiplier:lock->timeout_multiplier,agent_timeout_multiplier:config->agent_timeout_multiplier,verifier_timeout_multiplier:config->verifier_timeout_multiplier,agent_setup_timeout_multiplier:config->agent_setup_timeout_multiplier,environment_build_timeout_multiplier:config->environment_build_timeout_multiplier,config_agent_override_timeout_sec:config->agent->override_timeout_sec,lock_agent_override_timeout_sec:lock->agent->override_timeout_sec,config_agent_override_setup_timeout_sec:config->agent->override_setup_timeout_sec,lock_agent_override_setup_timeout_sec:lock->agent->override_setup_timeout_sec,config_agent_max_timeout_sec:config->agent->max_timeout_sec,lock_agent_max_timeout_sec:lock->agent->max_timeout_sec,config_agent_timeout_sec:config->agent->timeout_sec,lock_agent_timeout_sec:lock->agent->timeout_sec,config_verifier_override_timeout_sec:config->verifier->override_timeout_sec,lock_verifier_override_timeout_sec:lock->verifier->override_timeout_sec,config_verifier_max_timeout_sec:config->verifier->max_timeout_sec,lock_verifier_max_timeout_sec:lock->verifier->max_timeout_sec,config_verifier_timeout_sec:config->verifier->timeout_sec,lock_verifier_timeout_sec:lock->verifier->timeout_sec)"
+    },
+    "query_2": {
+      "endpoint": "https://ofhuhcpkvzjlejydnvyd.supabase.co/rest/v1/leaderboard_row_trial",
+      "select": "trial_id,trial(id,config_env:config->agent->env,lock_env:lock->agent->env,kwargs_config:config->agent->kwargs->config,lock_agent_timeout_multiplier:lock->agent_timeout_multiplier,lock_verifier_timeout_multiplier:lock->verifier_timeout_multiplier,lock_agent_setup_timeout_multiplier:lock->agent_setup_timeout_multiplier,lock_environment_build_timeout_multiplier:lock->environment_build_timeout_multiplier)"
+    },
+    "query_3": {
+      "endpoint": "https://ofhuhcpkvzjlejydnvyd.supabase.co/rest/v1/leaderboard_row_trial",
+      "select": "trial_id,trial(id,job_id,agent(name,version),config_agent:config->agent,lock_agent:lock->agent,config_verifier:config->verifier,lock_verifier:lock->verifier,config_timeout_multiplier:config->timeout_multiplier,lock_timeout_multiplier:lock->timeout_multiplier,agent_timeout_multiplier:config->agent_timeout_multiplier,lock_agent_timeout_multiplier:lock->agent_timeout_multiplier,verifier_timeout_multiplier:config->verifier_timeout_multiplier,lock_verifier_timeout_multiplier:lock->verifier_timeout_multiplier,agent_setup_timeout_multiplier:config->agent_setup_timeout_multiplier,lock_agent_setup_timeout_multiplier:lock->agent_setup_timeout_multiplier,environment_build_timeout_multiplier:config->environment_build_timeout_multiplier,lock_environment_build_timeout_multiplier:lock->environment_build_timeout_multiplier)"
+    }
+  },
+  "records": [
+    {
+      "row_id": "03ff7953-4955-4fc5-9ddd-911cab72d7f1",
+      "benchmark_id": "terminal-bench-2.1",
+      "match": {
+        "harness": "Codex",
+        "model": "GPT-6 Astra",
+        "thinking_level": "high",
+        "accuracy": 87.42,
+        "trial_count": 445
+      },
+      "harness_version": "0.151.0",
+      "harness_version_variants": [
+        {
+          "version": "0.151.0",
+          "count": 445,
+          "source_url": "https://hub.harborframework.com/jobs/17d1a7f6-3339-4670-8b70-3b145979f57f/trials/00b846f4-2d8a-44e2-aac3-c5614056e131"
+        }
+      ],
+      "timeout_multiplier": 1,
+      "source_url": "https://hub.harborframework.com/datasets/terminal-bench/terminal-bench-2-1/latest/leaderboards/main/rows/03ff7953-4955-4fc5-9ddd-911cab72d7f1",
+      "verification": {
+        "scope": "all_linked_trials",
+        "trial_count": 445,
+        "unique_trial_count": 445,
+        "inaccessible_trial_count": 0,
+        "job_urls": [
+          "https://hub.harborframework.com/jobs/17d1a7f6-3339-4670-8b70-3b145979f57f"
+        ],
+        "field_paths": {
+          "harness_version": "trial.agent.version",
+          "timeout_multiplier": "trial.lock.timeout_multiplier"
+        },
+        "timeout_multiplier_counts": [
+          {
+            "value": 1,
+            "count": 445
+          }
+        ],
+        "timeout_overrides_absent": true,
+        "api_requests": [
+          {
+            "template": "query_1",
+            "query": {
+              "row_id": "eq.03ff7953-4955-4fc5-9ddd-911cab72d7f1",
+              "order": "trial_id",
+              "limit": "50",
+              "offset": "0"
+            }
+          },
+          {
+            "template": "query_1",
+            "query": {
+              "row_id": "eq.03ff7953-4955-4fc5-9ddd-911cab72d7f1",
+              "order": "trial_id",
+              "limit": "50",
+              "offset": "50"
+            }
+          },
+          {
+            "template": "query_1",
+            "query": {
+              "row_id": "eq.03ff7953-4955-4fc5-9ddd-911cab72d7f1",
+              "order": "trial_id",
+              "limit": "50",
+              "offset": "100"
+            }
+          },
+          {
+            "template": "query_1",
+            "query": {
+              "row_id": "eq.03ff7953-4955-4fc5-9ddd-911cab72d7f1",
+              "order": "trial_id",
+              "limit": "50",
+              "offset": "150"
+            }
+          },
+          {
+            "template": "query_1",
+            "query": {
+              "row_id": "eq.03ff7953-4955-4fc5-9ddd-911cab72d7f1",
+              "order": "trial_id",
+              "limit": "50",
+              "offset": "200"
+            }
+          },
+          {
+            "template": "query_1",
+            "query": {
+              "row_id": "eq.03ff7953-4955-4fc5-9ddd-911cab72d7f1",
+              "order": "trial_id",
+              "limit": "50",
+              "offset": "250"
+            }
+          },
+          {
+            "template": "query_1",
+            "query": {
+              "row_id": "eq.03ff7953-4955-4fc5-9ddd-911cab72d7f1",
+              "order": "trial_id",
+              "limit": "50",
+              "offset": "300"
+            }
+          },
+          {
+            "template": "query_1",
+            "query": {
+              "row_id": "eq.03ff7953-4955-4fc5-9ddd-911cab72d7f1",
+              "order": "trial_id",
+              "limit": "50",
+              "offset": "350"
+            }
+          },
+          {
+            "template": "query_1",
+            "query": {
+              "row_id": "eq.03ff7953-4955-4fc5-9ddd-911cab72d7f1",
+              "order": "trial_id",
+              "limit": "50",
+              "offset": "400"
+            }
+          },
+          {
+            "template": "query_2",
+            "query": {
+              "row_id": "eq.03ff7953-4955-4fc5-9ddd-911cab72d7f1",
+              "order": "trial_id",
+              "limit": "1000"
+            }
+          }
+        ]
+      },
+      "version_note": null,
+      "raw_config": [],
+      "supplemental_sources": []
+    },
+    {
+      "row_id": "17be4c09-ab31-4202-9d56-31a2ccf37e1b",
+      "benchmark_id": "terminal-bench-2.1",
+      "match": {
+        "harness": "Codex",
+        "model": "GPT-6 Astra",
+        "thinking_level": "medium",
+        "accuracy": 86.97,
+        "trial_count": 445
+      },
+      "harness_version": "0.151.0",
+      "harness_version_variants": [
+        {
+          "version": "0.151.0",
+          "count": 445,
+          "source_url": "https://hub.harborframework.com/jobs/17d1a7f6-3339-4670-8b70-3b145979f57f/trials/01a59de3-75e4-44b2-813c-033c098d4523"
+        }
+      ],
+      "timeout_multiplier": 1,
+      "source_url": "https://hub.harborframework.com/datasets/terminal-bench/terminal-bench-2-1/latest/leaderboards/main/rows/17be4c09-ab31-4202-9d56-31a2ccf37e1b",
+      "verification": {
+        "scope": "all_linked_trials",
+        "trial_count": 445,
+        "unique_trial_count": 445,
+        "inaccessible_trial_count": 0,
+        "job_urls": [
+          "https://hub.harborframework.com/jobs/17d1a7f6-3339-4670-8b70-3b145979f57f"
+        ],
+        "field_paths": {
+          "harness_version": "trial.agent.version",
+          "timeout_multiplier": "trial.lock.timeout_multiplier"
+        },
+        "timeout_multiplier_counts": [
+          {
+            "value": 1,
+            "count": 445
+          }
+        ],
+        "timeout_overrides_absent": true,
+        "api_requests": [
+          {
+            "template": "query_3",
+            "query": {
+              "row_id": "eq.17be4c09-ab31-4202-9d56-31a2ccf37e1b",
+              "order": "trial_id",
+              "limit": "100"
+            }
+          },
+          {
+            "template": "query_3",
+            "query": {
+              "row_id": "eq.17be4c09-ab31-4202-9d56-31a2ccf37e1b",
+              "order": "trial_id",
+              "limit": "100",
+              "offset": "100"
+            }
+          },
+          {
+            "template": "query_3",
+            "query": {
+              "row_id": "eq.17be4c09-ab31-4202-9d56-31a2ccf37e1b",
+              "order": "trial_id",
+              "limit": "100",
+              "offset": "200"
+            }
+          },
+          {
+            "template": "query_3",
+            "query": {
+              "row_id": "eq.17be4c09-ab31-4202-9d56-31a2ccf37e1b",
+              "order": "trial_id",
+              "limit": "100",
+              "offset": "300"
+            }
+          },
+          {
+            "template": "query_3",
+            "query": {
+              "row_id": "eq.17be4c09-ab31-4202-9d56-31a2ccf37e1b",
+              "order": "trial_id",
+              "limit": "100",
+              "offset": "400"
+            }
+          },
+          {
+            "template": "query_2",
+            "query": {
+              "row_id": "eq.17be4c09-ab31-4202-9d56-31a2ccf37e1b",
+              "order": "trial_id",
+              "limit": "1000"
+            }
+          }
+        ]
+      },
+      "version_note": null,
+      "raw_config": [],
+      "supplemental_sources": []
+    },
+    {
+      "row_id": "93fc9e32-98c9-4e4a-a6a0-89dd3da598af",
+      "benchmark_id": "terminal-bench-2.1",
+      "match": {
+        "harness": "Codex",
+        "model": "GPT-6 Astra",
+        "thinking_level": "low",
+        "accuracy": 86.74,
+        "trial_count": 445
+      },
+      "harness_version": "0.151.0",
+      "harness_version_variants": [
+        {
+          "version": "0.151.0",
+          "count": 445,
+          "source_url": "https://hub.harborframework.com/jobs/17d1a7f6-3339-4670-8b70-3b145979f57f/trials/00083830-c92d-4434-998f-ff65fb502722"
+        }
+      ],
+      "timeout_multiplier": 1,
+      "source_url": "https://hub.harborframework.com/datasets/terminal-bench/terminal-bench-2-1/latest/leaderboards/main/rows/93fc9e32-98c9-4e4a-a6a0-89dd3da598af",
+      "verification": {
+        "scope": "all_linked_trials",
+        "trial_count": 445,
+        "unique_trial_count": 445,
+        "inaccessible_trial_count": 0,
+        "job_urls": [
+          "https://hub.harborframework.com/jobs/17d1a7f6-3339-4670-8b70-3b145979f57f"
+        ],
+        "field_paths": {
+          "harness_version": "trial.agent.version",
+          "timeout_multiplier": "trial.lock.timeout_multiplier"
+        },
+        "timeout_multiplier_counts": [
+          {
+            "value": 1,
+            "count": 445
+          }
+        ],
+        "timeout_overrides_absent": true,
+        "api_requests": [
+          {
+            "template": "query_3",
+            "query": {
+              "row_id": "eq.93fc9e32-98c9-4e4a-a6a0-89dd3da598af",
+              "order": "trial_id",
+              "limit": "100"
+            }
+          },
+          {
+            "template": "query_3",
+            "query": {
+              "row_id": "eq.93fc9e32-98c9-4e4a-a6a0-89dd3da598af",
+              "order": "trial_id",
+              "limit": "100",
+              "offset": "100"
+            }
+          },
+          {
+            "template": "query_3",
+            "query": {
+              "row_id": "eq.93fc9e32-98c9-4e4a-a6a0-89dd3da598af",
+              "order": "trial_id",
+              "limit": "100",
+              "offset": "200"
+            }
+          },
+          {
+            "template": "query_3",
+            "query": {
+              "row_id": "eq.93fc9e32-98c9-4e4a-a6a0-89dd3da598af",
+              "order": "trial_id",
+              "limit": "100",
+              "offset": "300"
+            }
+          },
+          {
+            "template": "query_3",
+            "query": {
+              "row_id": "eq.93fc9e32-98c9-4e4a-a6a0-89dd3da598af",
+              "order": "trial_id",
+              "limit": "100",
+              "offset": "400"
+            }
+          },
+          {
+            "template": "query_2",
+            "query": {
+              "row_id": "eq.93fc9e32-98c9-4e4a-a6a0-89dd3da598af",
+              "order": "trial_id",
+              "limit": "1000"
+            }
+          }
+        ]
+      },
+      "version_note": null,
+      "raw_config": [],
+      "supplemental_sources": []
+    },
+    {
+      "row_id": "f8d623c8-5f1b-4f9c-8deb-d110fa91e1d2",
+      "benchmark_id": "terminal-bench-2.1",
+      "match": {
+        "harness": "Codex",
+        "model": "GPT-6 Astra",
+        "thinking_level": "max",
+        "accuracy": 86.74,
+        "trial_count": 445
+      },
+      "harness_version": "0.151.0",
+      "harness_version_variants": [
+        {
+          "version": "0.151.0",
+          "count": 445,
+          "source_url": "https://hub.harborframework.com/jobs/17d1a7f6-3339-4670-8b70-3b145979f57f/trials/009e262c-a840-41ca-aa08-0b87876806e1"
+        }
+      ],
+      "timeout_multiplier": 1,
+      "source_url": "https://hub.harborframework.com/datasets/terminal-bench/terminal-bench-2-1/latest/leaderboards/main/rows/f8d623c8-5f1b-4f9c-8deb-d110fa91e1d2",
+      "verification": {
+        "scope": "all_linked_trials",
+        "trial_count": 445,
+        "unique_trial_count": 445,
+        "inaccessible_trial_count": 0,
+        "job_urls": [
+          "https://hub.harborframework.com/jobs/17d1a7f6-3339-4670-8b70-3b145979f57f"
+        ],
+        "field_paths": {
+          "harness_version": "trial.agent.version",
+          "timeout_multiplier": "trial.lock.timeout_multiplier"
+        },
+        "timeout_multiplier_counts": [
+          {
+            "value": 1,
+            "count": 445
+          }
+        ],
+        "timeout_overrides_absent": true,
+        "api_requests": [
+          {
+            "template": "query_1",
+            "query": {
+              "row_id": "eq.f8d623c8-5f1b-4f9c-8deb-d110fa91e1d2",
+              "order": "trial_id",
+              "limit": "50",
+              "offset": "0"
+            }
+          },
+          {
+            "template": "query_1",
+            "query": {
+              "row_id": "eq.f8d623c8-5f1b-4f9c-8deb-d110fa91e1d2",
+              "order": "trial_id",
+              "limit": "50",
+              "offset": "50"
+            }
+          },
+          {
+            "template": "query_1",
+            "query": {
+              "row_id": "eq.f8d623c8-5f1b-4f9c-8deb-d110fa91e1d2",
+              "order": "trial_id",
+              "limit": "50",
+              "offset": "100"
+            }
+          },
+          {
+            "template": "query_1",
+            "query": {
+              "row_id": "eq.f8d623c8-5f1b-4f9c-8deb-d110fa91e1d2",
+              "order": "trial_id",
+              "limit": "50",
+              "offset": "150"
+            }
+          },
+          {
+            "template": "query_1",
+            "query": {
+              "row_id": "eq.f8d623c8-5f1b-4f9c-8deb-d110fa91e1d2",
+              "order": "trial_id",
+              "limit": "50",
+              "offset": "200"
+            }
+          },
+          {
+            "template": "query_1",
+            "query": {
+              "row_id": "eq.f8d623c8-5f1b-4f9c-8deb-d110fa91e1d2",
+              "order": "trial_id",
+              "limit": "50",
+              "offset": "250"
+            }
+          },
+          {
+            "template": "query_1",
+            "query": {
+              "row_id": "eq.f8d623c8-5f1b-4f9c-8deb-d110fa91e1d2",
+              "order": "trial_id",
+              "limit": "50",
+              "offset": "300"
+            }
+          },
+          {
+            "template": "query_1",
+            "query": {
+              "row_id": "eq.f8d623c8-5f1b-4f9c-8deb-d110fa91e1d2",
+              "order": "trial_id",
+              "limit": "50",
+              "offset": "350"
+            }
+          },
+          {
+            "template": "query_1",
+            "query": {
+              "row_id": "eq.f8d623c8-5f1b-4f9c-8deb-d110fa91e1d2",
+              "order": "trial_id",
+              "limit": "50",
+              "offset": "400"
+            }
+          },
+          {
+            "template": "query_2",
+            "query": {
+              "row_id": "eq.f8d623c8-5f1b-4f9c-8deb-d110fa91e1d2",
+              "order": "trial_id",
+              "limit": "1000"
+            }
+          }
+        ]
+      },
+      "version_note": null,
+      "raw_config": [],
+      "supplemental_sources": []
+    },
+    {
+      "row_id": "3d9a7a70-ad72-4197-b895-c73698601637",
+      "benchmark_id": "terminal-bench-2.1",
+      "match": {
+        "harness": "Codex",
+        "model": "GPT-6 Astra",
+        "thinking_level": "xhigh",
+        "accuracy": 85.84,
+        "trial_count": 445
+      },
+      "harness_version": "0.151.0",
+      "harness_version_variants": [
+        {
+          "version": "0.151.0",
+          "count": 445,
+          "source_url": "https://hub.harborframework.com/jobs/17d1a7f6-3339-4670-8b70-3b145979f57f/trials/007bd7fc-2a4f-4f7a-a7f0-3351e33a7eba"
+        }
+      ],
+      "timeout_multiplier": 1,
+      "source_url": "https://hub.harborframework.com/datasets/terminal-bench/terminal-bench-2-1/latest/leaderboards/main/rows/3d9a7a70-ad72-4197-b895-c73698601637",
+      "verification": {
+        "scope": "all_linked_trials",
+        "trial_count": 445,
+        "unique_trial_count": 445,
+        "inaccessible_trial_count": 0,
+        "job_urls": [
+          "https://hub.harborframework.com/jobs/17d1a7f6-3339-4670-8b70-3b145979f57f"
+        ],
+        "field_paths": {
+          "harness_version": "trial.agent.version",
+          "timeout_multiplier": "trial.lock.timeout_multiplier"
+        },
+        "timeout_multiplier_counts": [
+          {
+            "value": 1,
+            "count": 445
+          }
+        ],
+        "timeout_overrides_absent": true,
+        "api_requests": [
+          {
+            "template": "query_1",
+            "query": {
+              "row_id": "eq.3d9a7a70-ad72-4197-b895-c73698601637",
+              "order": "trial_id",
+              "limit": "50",
+              "offset": "0"
+            }
+          },
+          {
+            "template": "query_1",
+            "query": {
+              "row_id": "eq.3d9a7a70-ad72-4197-b895-c73698601637",
+              "order": "trial_id",
+              "limit": "50",
+              "offset": "50"
+            }
+          },
+          {
+            "template": "query_1",
+            "query": {
+              "row_id": "eq.3d9a7a70-ad72-4197-b895-c73698601637",
+              "order": "trial_id",
+              "limit": "50",
+              "offset": "100"
+            }
+          },
+          {
+            "template": "query_1",
+            "query": {
+              "row_id": "eq.3d9a7a70-ad72-4197-b895-c73698601637",
+              "order": "trial_id",
+              "limit": "50",
+              "offset": "150"
+            }
+          },
+          {
+            "template": "query_1",
+            "query": {
+              "row_id": "eq.3d9a7a70-ad72-4197-b895-c73698601637",
+              "order": "trial_id",
+              "limit": "50",
+              "offset": "200"
+            }
+          },
+          {
+            "template": "query_1",
+            "query": {
+              "row_id": "eq.3d9a7a70-ad72-4197-b895-c73698601637",
+              "order": "trial_id",
+              "limit": "50",
+              "offset": "250"
+            }
+          },
+          {
+            "template": "query_1",
+            "query": {
+              "row_id": "eq.3d9a7a70-ad72-4197-b895-c73698601637",
+              "order": "trial_id",
+              "limit": "50",
+              "offset": "300"
+            }
+          },
+          {
+            "template": "query_1",
+            "query": {
+              "row_id": "eq.3d9a7a70-ad72-4197-b895-c73698601637",
+              "order": "trial_id",
+              "limit": "50",
+              "offset": "350"
+            }
+          },
+          {
+            "template": "query_1",
+            "query": {
+              "row_id": "eq.3d9a7a70-ad72-4197-b895-c73698601637",
+              "order": "trial_id",
+              "limit": "50",
+              "offset": "400"
+            }
+          },
+          {
+            "template": "query_2",
+            "query": {
+              "row_id": "eq.3d9a7a70-ad72-4197-b895-c73698601637",
+              "order": "trial_id",
+              "limit": "1000"
+            }
+          }
+        ]
+      },
+      "version_note": null,
+      "raw_config": [],
+      "supplemental_sources": []
+    },
+    {
+      "row_id": "40dbe33d-e8af-475b-8eba-7d5d8f70054c",
+      "benchmark_id": "terminal-bench-2.1",
+      "match": {
+        "harness": "Claude Code",
+        "model": "Fable 5",
+        "thinking_level": "xhigh",
+        "accuracy": 83.82,
+        "trial_count": 445
+      },
+      "harness_version": "2.1.167",
+      "harness_version_variants": [
+        {
+          "version": "2.1.167",
+          "count": 445,
+          "source_url": "https://hub.harborframework.com/jobs/11efb542-89de-4746-8227-b776c7841a96/trials/00fa9da4-3d57-4166-b835-5d35053df155"
+        }
+      ],
+      "timeout_multiplier": 1,
+      "source_url": "https://hub.harborframework.com/datasets/terminal-bench/terminal-bench-2-1/latest/leaderboards/main/rows/40dbe33d-e8af-475b-8eba-7d5d8f70054c",
+      "verification": {
+        "scope": "all_linked_trials",
+        "trial_count": 445,
+        "unique_trial_count": 445,
+        "inaccessible_trial_count": 0,
+        "job_urls": [
+          "https://hub.harborframework.com/jobs/11efb542-89de-4746-8227-b776c7841a96"
+        ],
+        "field_paths": {
+          "harness_version": "trial.agent.version",
+          "timeout_multiplier": "trial.lock.timeout_multiplier"
+        },
+        "timeout_multiplier_counts": [
+          {
+            "value": 1,
+            "count": 445
+          }
+        ],
+        "timeout_overrides_absent": true,
+        "api_requests": [
+          {
+            "template": "query_1",
+            "query": {
+              "row_id": "eq.40dbe33d-e8af-475b-8eba-7d5d8f70054c",
+              "order": "trial_id",
+              "limit": "50",
+              "offset": "0"
+            }
+          },
+          {
+            "template": "query_1",
+            "query": {
+              "row_id": "eq.40dbe33d-e8af-475b-8eba-7d5d8f70054c",
+              "order": "trial_id",
+              "limit": "50",
+              "offset": "50"
+            }
+          },
+          {
+            "template": "query_1",
+            "query": {
+              "row_id": "eq.40dbe33d-e8af-475b-8eba-7d5d8f70054c",
+              "order": "trial_id",
+              "limit": "50",
+              "offset": "100"
+            }
+          },
+          {
+            "template": "query_1",
+            "query": {
+              "row_id": "eq.40dbe33d-e8af-475b-8eba-7d5d8f70054c",
+              "order": "trial_id",
+              "limit": "50",
+              "offset": "150"
+            }
+          },
+          {
+            "template": "query_1",
+            "query": {
+              "row_id": "eq.40dbe33d-e8af-475b-8eba-7d5d8f70054c",
+              "order": "trial_id",
+              "limit": "50",
+              "offset": "200"
+            }
+          },
+          {
+            "template": "query_1",
+            "query": {
+              "row_id": "eq.40dbe33d-e8af-475b-8eba-7d5d8f70054c",
+              "order": "trial_id",
+              "limit": "50",
+              "offset": "250"
+            }
+          },
+          {
+            "template": "query_1",
+            "query": {
+              "row_id": "eq.40dbe33d-e8af-475b-8eba-7d5d8f70054c",
+              "order": "trial_id",
+              "limit": "50",
+              "offset": "300"
+            }
+          },
+          {
+            "template": "query_1",
+            "query": {
+              "row_id": "eq.40dbe33d-e8af-475b-8eba-7d5d8f70054c",
+              "order": "trial_id",
+              "limit": "50",
+              "offset": "350"
+            }
+          },
+          {
+            "template": "query_1",
+            "query": {
+              "row_id": "eq.40dbe33d-e8af-475b-8eba-7d5d8f70054c",
+              "order": "trial_id",
+              "limit": "50",
+              "offset": "400"
+            }
+          },
+          {
+            "template": "query_2",
+            "query": {
+              "row_id": "eq.40dbe33d-e8af-475b-8eba-7d5d8f70054c",
+              "order": "trial_id",
+              "limit": "1000"
+            }
+          }
+        ]
+      },
+      "version_note": null,
+      "raw_config": [],
+      "supplemental_sources": [
+        {
+          "kind": "official_submission",
+          "url": "https://github.com/harbor-framework/terminal-bench-2-1/blob/7131e4375048a0e408a8fb404b5f499d726b695b/leaderboard/submissions/2026-06-07-anthropic-claude-fable-5-xhigh-claude-code.json",
+          "field_path": "source_filter.agent_version",
+          "reported_value": "2.1.167",
+          "note": null
+        }
+      ]
+    },
+    {
+      "row_id": "6d091468-3fda-4cbf-ba1c-645b0f522e97",
+      "benchmark_id": "terminal-bench-2.1",
+      "match": {
+        "harness": "Codex",
+        "model": "GPT-5.5",
+        "thinking_level": "xhigh",
+        "accuracy": 83.15,
+        "trial_count": 445
+      },
+      "harness_version": "0.125.0",
+      "harness_version_variants": [
+        {
+          "version": "0.125.0",
+          "count": 445,
+          "source_url": "https://hub.harborframework.com/jobs/c8fcaaeb-c49a-413a-9f8d-20bc09c53339/trials/0021ab28-cd2f-472a-be50-ebfc83a730b9"
+        }
+      ],
+      "timeout_multiplier": 1,
+      "source_url": "https://hub.harborframework.com/datasets/terminal-bench/terminal-bench-2-1/latest/leaderboards/main/rows/6d091468-3fda-4cbf-ba1c-645b0f522e97",
+      "verification": {
+        "scope": "all_linked_trials",
+        "trial_count": 445,
+        "unique_trial_count": 445,
+        "inaccessible_trial_count": 0,
+        "job_urls": [
+          "https://hub.harborframework.com/jobs/c8fcaaeb-c49a-413a-9f8d-20bc09c53339"
+        ],
+        "field_paths": {
+          "harness_version": "trial.agent.version",
+          "timeout_multiplier": "trial.lock.timeout_multiplier"
+        },
+        "timeout_multiplier_counts": [
+          {
+            "value": 1,
+            "count": 445
+          }
+        ],
+        "timeout_overrides_absent": true,
+        "api_requests": [
+          {
+            "template": "query_1",
+            "query": {
+              "row_id": "eq.6d091468-3fda-4cbf-ba1c-645b0f522e97",
+              "order": "trial_id",
+              "limit": "50",
+              "offset": "0"
+            }
+          },
+          {
+            "template": "query_1",
+            "query": {
+              "row_id": "eq.6d091468-3fda-4cbf-ba1c-645b0f522e97",
+              "order": "trial_id",
+              "limit": "50",
+              "offset": "50"
+            }
+          },
+          {
+            "template": "query_1",
+            "query": {
+              "row_id": "eq.6d091468-3fda-4cbf-ba1c-645b0f522e97",
+              "order": "trial_id",
+              "limit": "50",
+              "offset": "100"
+            }
+          },
+          {
+            "template": "query_1",
+            "query": {
+              "row_id": "eq.6d091468-3fda-4cbf-ba1c-645b0f522e97",
+              "order": "trial_id",
+              "limit": "50",
+              "offset": "150"
+            }
+          },
+          {
+            "template": "query_1",
+            "query": {
+              "row_id": "eq.6d091468-3fda-4cbf-ba1c-645b0f522e97",
+              "order": "trial_id",
+              "limit": "50",
+              "offset": "200"
+            }
+          },
+          {
+            "template": "query_1",
+            "query": {
+              "row_id": "eq.6d091468-3fda-4cbf-ba1c-645b0f522e97",
+              "order": "trial_id",
+              "limit": "50",
+              "offset": "250"
+            }
+          },
+          {
+            "template": "query_1",
+            "query": {
+              "row_id": "eq.6d091468-3fda-4cbf-ba1c-645b0f522e97",
+              "order": "trial_id",
+              "limit": "50",
+              "offset": "300"
+            }
+          },
+          {
+            "template": "query_1",
+            "query": {
+              "row_id": "eq.6d091468-3fda-4cbf-ba1c-645b0f522e97",
+              "order": "trial_id",
+              "limit": "50",
+              "offset": "350"
+            }
+          },
+          {
+            "template": "query_1",
+            "query": {
+              "row_id": "eq.6d091468-3fda-4cbf-ba1c-645b0f522e97",
+              "order": "trial_id",
+              "limit": "50",
+              "offset": "400"
+            }
+          },
+          {
+            "template": "query_2",
+            "query": {
+              "row_id": "eq.6d091468-3fda-4cbf-ba1c-645b0f522e97",
+              "order": "trial_id",
+              "limit": "1000"
+            }
+          }
+        ]
+      },
+      "version_note": null,
+      "raw_config": [],
+      "supplemental_sources": [
+        {
+          "kind": "official_submission",
+          "url": "https://github.com/harbor-framework/terminal-bench-2-1/blob/7131e4375048a0e408a8fb404b5f499d726b695b/leaderboard/submissions/2026-05-01-openai-gpt-5-5-xhigh-codex.json",
+          "field_path": "source_filter.agent_version",
+          "reported_value": "0.125.0",
+          "note": null
+        },
+        {
+          "kind": "official_review",
+          "url": "https://github.com/harbor-framework/terminal-bench-2-1/pull/45#issuecomment-4918272950",
+          "field_path": "timeout_multiplier",
+          "reported_value": 1,
+          "note": {
+            "zh": "保留官方审核来源；当前倍率由全部关联试验的 lock 配置独立核验。",
+            "en": "Retained official review; the current timeout multiplier is independently verified from every linked trial lock."
+          }
+        }
+      ]
+    },
+    {
+      "row_id": "ce0677b9-0fea-46ce-b8de-893c4d68e77a",
+      "benchmark_id": "terminal-bench-2.1",
+      "match": {
+        "harness": "Terminus 2",
+        "model": "Fable 5",
+        "thinking_level": "high",
+        "accuracy": 80.45,
+        "trial_count": 445
+      },
+      "harness_version": "2.0.0",
+      "harness_version_variants": [
+        {
+          "version": "2.0.0",
+          "count": 445,
+          "source_url": "https://hub.harborframework.com/jobs/17f04e4f-1a75-4204-9b75-d042ef0333ec/trials/00519c71-3698-4f0c-a837-6568c180ee50"
+        }
+      ],
+      "timeout_multiplier": 1,
+      "source_url": "https://hub.harborframework.com/datasets/terminal-bench/terminal-bench-2-1/latest/leaderboards/main/rows/ce0677b9-0fea-46ce-b8de-893c4d68e77a",
+      "verification": {
+        "scope": "all_linked_trials",
+        "trial_count": 445,
+        "unique_trial_count": 445,
+        "inaccessible_trial_count": 0,
+        "job_urls": [
+          "https://hub.harborframework.com/jobs/17f04e4f-1a75-4204-9b75-d042ef0333ec"
+        ],
+        "field_paths": {
+          "harness_version": "trial.agent.version",
+          "timeout_multiplier": "trial.lock.timeout_multiplier"
+        },
+        "timeout_multiplier_counts": [
+          {
+            "value": 1,
+            "count": 445
+          }
+        ],
+        "timeout_overrides_absent": true,
+        "api_requests": [
+          {
+            "template": "query_1",
+            "query": {
+              "row_id": "eq.ce0677b9-0fea-46ce-b8de-893c4d68e77a",
+              "order": "trial_id",
+              "limit": "50",
+              "offset": "0"
+            }
+          },
+          {
+            "template": "query_1",
+            "query": {
+              "row_id": "eq.ce0677b9-0fea-46ce-b8de-893c4d68e77a",
+              "order": "trial_id",
+              "limit": "50",
+              "offset": "50"
+            }
+          },
+          {
+            "template": "query_1",
+            "query": {
+              "row_id": "eq.ce0677b9-0fea-46ce-b8de-893c4d68e77a",
+              "order": "trial_id",
+              "limit": "50",
+              "offset": "100"
+            }
+          },
+          {
+            "template": "query_1",
+            "query": {
+              "row_id": "eq.ce0677b9-0fea-46ce-b8de-893c4d68e77a",
+              "order": "trial_id",
+              "limit": "50",
+              "offset": "150"
+            }
+          },
+          {
+            "template": "query_1",
+            "query": {
+              "row_id": "eq.ce0677b9-0fea-46ce-b8de-893c4d68e77a",
+              "order": "trial_id",
+              "limit": "50",
+              "offset": "200"
+            }
+          },
+          {
+            "template": "query_1",
+            "query": {
+              "row_id": "eq.ce0677b9-0fea-46ce-b8de-893c4d68e77a",
+              "order": "trial_id",
+              "limit": "50",
+              "offset": "250"
+            }
+          },
+          {
+            "template": "query_1",
+            "query": {
+              "row_id": "eq.ce0677b9-0fea-46ce-b8de-893c4d68e77a",
+              "order": "trial_id",
+              "limit": "50",
+              "offset": "300"
+            }
+          },
+          {
+            "template": "query_1",
+            "query": {
+              "row_id": "eq.ce0677b9-0fea-46ce-b8de-893c4d68e77a",
+              "order": "trial_id",
+              "limit": "50",
+              "offset": "350"
+            }
+          },
+          {
+            "template": "query_1",
+            "query": {
+              "row_id": "eq.ce0677b9-0fea-46ce-b8de-893c4d68e77a",
+              "order": "trial_id",
+              "limit": "50",
+              "offset": "400"
+            }
+          },
+          {
+            "template": "query_2",
+            "query": {
+              "row_id": "eq.ce0677b9-0fea-46ce-b8de-893c4d68e77a",
+              "order": "trial_id",
+              "limit": "1000"
+            }
+          }
+        ]
+      },
+      "version_note": null,
+      "raw_config": [],
+      "supplemental_sources": [
+        {
+          "kind": "official_submission",
+          "url": "https://github.com/harbor-framework/terminal-bench-2-1/blob/7131e4375048a0e408a8fb404b5f499d726b695b/leaderboard/submissions/2026-06-05-anthropic-claude-fable-5-high-terminus-2.json",
+          "field_path": "source_filter.agent_version",
+          "reported_value": "2.0.0",
+          "note": null
+        }
+      ]
+    },
+    {
+      "row_id": "1fe87c62-99ed-477b-9f6c-23ffbabc49f6",
+      "benchmark_id": "terminal-bench-2.1",
+      "match": {
+        "harness": "Cursor CLI",
+        "model": "Grok 4.5",
+        "thinking_level": "high",
+        "accuracy": 79.33,
+        "trial_count": 445
+      },
+      "harness_version": "2026.07.08-0c04a8a",
+      "harness_version_variants": [
+        {
+          "version": "2026.07.08-0c04a8a",
+          "count": 445,
+          "source_url": "https://hub.harborframework.com/jobs/da969e44-7659-4c1a-8041-a5dc9e624ee0/trials/006febba-970b-4dca-b74b-d06ec15423f0"
+        }
+      ],
+      "timeout_multiplier": 1,
+      "source_url": "https://hub.harborframework.com/datasets/terminal-bench/terminal-bench-2-1/latest/leaderboards/main/rows/1fe87c62-99ed-477b-9f6c-23ffbabc49f6",
+      "verification": {
+        "scope": "all_linked_trials",
+        "trial_count": 445,
+        "unique_trial_count": 445,
+        "inaccessible_trial_count": 0,
+        "job_urls": [
+          "https://hub.harborframework.com/jobs/da969e44-7659-4c1a-8041-a5dc9e624ee0"
+        ],
+        "field_paths": {
+          "harness_version": "trial.agent.version",
+          "timeout_multiplier": "trial.lock.timeout_multiplier"
+        },
+        "timeout_multiplier_counts": [
+          {
+            "value": 1,
+            "count": 445
+          }
+        ],
+        "timeout_overrides_absent": true,
+        "api_requests": [
+          {
+            "template": "query_1",
+            "query": {
+              "row_id": "eq.1fe87c62-99ed-477b-9f6c-23ffbabc49f6",
+              "order": "trial_id",
+              "limit": "50",
+              "offset": "0"
+            }
+          },
+          {
+            "template": "query_1",
+            "query": {
+              "row_id": "eq.1fe87c62-99ed-477b-9f6c-23ffbabc49f6",
+              "order": "trial_id",
+              "limit": "50",
+              "offset": "50"
+            }
+          },
+          {
+            "template": "query_1",
+            "query": {
+              "row_id": "eq.1fe87c62-99ed-477b-9f6c-23ffbabc49f6",
+              "order": "trial_id",
+              "limit": "50",
+              "offset": "100"
+            }
+          },
+          {
+            "template": "query_1",
+            "query": {
+              "row_id": "eq.1fe87c62-99ed-477b-9f6c-23ffbabc49f6",
+              "order": "trial_id",
+              "limit": "50",
+              "offset": "150"
+            }
+          },
+          {
+            "template": "query_1",
+            "query": {
+              "row_id": "eq.1fe87c62-99ed-477b-9f6c-23ffbabc49f6",
+              "order": "trial_id",
+              "limit": "50",
+              "offset": "200"
+            }
+          },
+          {
+            "template": "query_1",
+            "query": {
+              "row_id": "eq.1fe87c62-99ed-477b-9f6c-23ffbabc49f6",
+              "order": "trial_id",
+              "limit": "50",
+              "offset": "250"
+            }
+          },
+          {
+            "template": "query_1",
+            "query": {
+              "row_id": "eq.1fe87c62-99ed-477b-9f6c-23ffbabc49f6",
+              "order": "trial_id",
+              "limit": "50",
+              "offset": "300"
+            }
+          },
+          {
+            "template": "query_1",
+            "query": {
+              "row_id": "eq.1fe87c62-99ed-477b-9f6c-23ffbabc49f6",
+              "order": "trial_id",
+              "limit": "50",
+              "offset": "350"
+            }
+          },
+          {
+            "template": "query_1",
+            "query": {
+              "row_id": "eq.1fe87c62-99ed-477b-9f6c-23ffbabc49f6",
+              "order": "trial_id",
+              "limit": "50",
+              "offset": "400"
+            }
+          },
+          {
+            "template": "query_2",
+            "query": {
+              "row_id": "eq.1fe87c62-99ed-477b-9f6c-23ffbabc49f6",
+              "order": "trial_id",
+              "limit": "1000"
+            }
+          }
+        ]
+      },
+      "version_note": null,
+      "raw_config": [],
+      "supplemental_sources": [
+        {
+          "kind": "official_submission",
+          "url": "https://github.com/harbor-framework/terminal-bench-2-1/blob/7131e4375048a0e408a8fb404b5f499d726b695b/leaderboard/submissions/2026-07-09-cursor-grok-4-5-none-cursor-cli.json",
+          "field_path": "source_filter.agent_version",
+          "reported_value": "2026.07.08-0c04a8a",
+          "note": null
+        }
+      ]
+    },
+    {
+      "row_id": "dcd48d03-9df9-46ab-bc4c-ade6dc35b8da",
+      "benchmark_id": "terminal-bench-2.1",
+      "match": {
+        "harness": "Claude Code",
+        "model": "Opus 4.8",
+        "thinking_level": "high",
+        "accuracy": 78.88,
+        "trial_count": 445
+      },
+      "harness_version": "2.1.205",
+      "harness_version_variants": [
+        {
+          "version": "2.1.205",
+          "count": 445,
+          "source_url": "https://hub.harborframework.com/jobs/67e18b19-c047-4e2f-942b-5849801fae52/trials/01fdfce2-bf5e-49cb-98d3-a2ca67a18ed9"
+        }
+      ],
+      "timeout_multiplier": 1,
+      "source_url": "https://hub.harborframework.com/datasets/terminal-bench/terminal-bench-2-1/latest/leaderboards/main/rows/dcd48d03-9df9-46ab-bc4c-ade6dc35b8da",
+      "verification": {
+        "scope": "all_linked_trials",
+        "trial_count": 445,
+        "unique_trial_count": 445,
+        "inaccessible_trial_count": 0,
+        "job_urls": [
+          "https://hub.harborframework.com/jobs/67e18b19-c047-4e2f-942b-5849801fae52"
+        ],
+        "field_paths": {
+          "harness_version": "trial.agent.version",
+          "timeout_multiplier": "trial.lock.timeout_multiplier"
+        },
+        "timeout_multiplier_counts": [
+          {
+            "value": 1,
+            "count": 445
+          }
+        ],
+        "timeout_overrides_absent": true,
+        "api_requests": [
+          {
+            "template": "query_1",
+            "query": {
+              "row_id": "eq.dcd48d03-9df9-46ab-bc4c-ade6dc35b8da",
+              "order": "trial_id",
+              "limit": "50",
+              "offset": "0"
+            }
+          },
+          {
+            "template": "query_1",
+            "query": {
+              "row_id": "eq.dcd48d03-9df9-46ab-bc4c-ade6dc35b8da",
+              "order": "trial_id",
+              "limit": "50",
+              "offset": "50"
+            }
+          },
+          {
+            "template": "query_1",
+            "query": {
+              "row_id": "eq.dcd48d03-9df9-46ab-bc4c-ade6dc35b8da",
+              "order": "trial_id",
+              "limit": "50",
+              "offset": "100"
+            }
+          },
+          {
+            "template": "query_1",
+            "query": {
+              "row_id": "eq.dcd48d03-9df9-46ab-bc4c-ade6dc35b8da",
+              "order": "trial_id",
+              "limit": "50",
+              "offset": "150"
+            }
+          },
+          {
+            "template": "query_1",
+            "query": {
+              "row_id": "eq.dcd48d03-9df9-46ab-bc4c-ade6dc35b8da",
+              "order": "trial_id",
+              "limit": "50",
+              "offset": "200"
+            }
+          },
+          {
+            "template": "query_1",
+            "query": {
+              "row_id": "eq.dcd48d03-9df9-46ab-bc4c-ade6dc35b8da",
+              "order": "trial_id",
+              "limit": "50",
+              "offset": "250"
+            }
+          },
+          {
+            "template": "query_1",
+            "query": {
+              "row_id": "eq.dcd48d03-9df9-46ab-bc4c-ade6dc35b8da",
+              "order": "trial_id",
+              "limit": "50",
+              "offset": "300"
+            }
+          },
+          {
+            "template": "query_1",
+            "query": {
+              "row_id": "eq.dcd48d03-9df9-46ab-bc4c-ade6dc35b8da",
+              "order": "trial_id",
+              "limit": "50",
+              "offset": "350"
+            }
+          },
+          {
+            "template": "query_1",
+            "query": {
+              "row_id": "eq.dcd48d03-9df9-46ab-bc4c-ade6dc35b8da",
+              "order": "trial_id",
+              "limit": "50",
+              "offset": "400"
+            }
+          },
+          {
+            "template": "query_2",
+            "query": {
+              "row_id": "eq.dcd48d03-9df9-46ab-bc4c-ade6dc35b8da",
+              "order": "trial_id",
+              "limit": "1000"
+            }
+          }
+        ]
+      },
+      "version_note": null,
+      "raw_config": [],
+      "supplemental_sources": [
+        {
+          "kind": "official_submission",
+          "url": "https://github.com/harbor-framework/terminal-bench-2-1/blob/7131e4375048a0e408a8fb404b5f499d726b695b/leaderboard/submissions/2026-07-09-anthropic-claude-opus-4-8-high-claude-code.json",
+          "field_path": "source_filter.agent_version",
+          "reported_value": "2.1.205",
+          "note": null
+        }
+      ]
+    },
+    {
+      "row_id": "23ab6a14-4b2d-461d-9171-f8109f5692f1",
+      "benchmark_id": "terminal-bench-2.1",
+      "match": {
+        "harness": "Codex",
+        "model": "GPT-5.6 Terra",
+        "thinking_level": "max",
+        "accuracy": 78.43,
+        "trial_count": 445
+      },
+      "harness_version": null,
+      "harness_version_variants": [
+        {
+          "version": "0.144.0",
+          "count": 299,
+          "source_url": "https://hub.harborframework.com/jobs/77fc16b9-8db9-4d61-a172-dba037aba20b/trials/0233f263-8686-45d0-9255-d07112b4678a"
+        },
+        {
+          "version": "0.144.1",
+          "count": 136,
+          "source_url": "https://hub.harborframework.com/jobs/77fc16b9-8db9-4d61-a172-dba037aba20b/trials/0013ff95-4004-4293-9b08-adf9aa67d88a"
+        },
+        {
+          "version": "unknown",
+          "count": 10,
+          "source_url": "https://hub.harborframework.com/jobs/77fc16b9-8db9-4d61-a172-dba037aba20b/trials/034b0524-6ad0-4bb1-8bd1-e89d0a2c7d7d"
+        }
+      ],
+      "timeout_multiplier": 1,
+      "source_url": "https://hub.harborframework.com/datasets/terminal-bench/terminal-bench-2-1/latest/leaderboards/main/rows/23ab6a14-4b2d-461d-9171-f8109f5692f1",
+      "verification": {
+        "scope": "all_linked_trials",
+        "trial_count": 445,
+        "unique_trial_count": 445,
+        "inaccessible_trial_count": 0,
+        "job_urls": [
+          "https://hub.harborframework.com/jobs/77fc16b9-8db9-4d61-a172-dba037aba20b"
+        ],
+        "field_paths": {
+          "harness_version": "trial.agent.version",
+          "timeout_multiplier": "trial.lock.timeout_multiplier"
+        },
+        "timeout_multiplier_counts": [
+          {
+            "value": 1,
+            "count": 445
+          }
+        ],
+        "timeout_overrides_absent": true,
+        "api_requests": [
+          {
+            "template": "query_1",
+            "query": {
+              "row_id": "eq.23ab6a14-4b2d-461d-9171-f8109f5692f1",
+              "order": "trial_id",
+              "limit": "50",
+              "offset": "0"
+            }
+          },
+          {
+            "template": "query_1",
+            "query": {
+              "row_id": "eq.23ab6a14-4b2d-461d-9171-f8109f5692f1",
+              "order": "trial_id",
+              "limit": "50",
+              "offset": "50"
+            }
+          },
+          {
+            "template": "query_1",
+            "query": {
+              "row_id": "eq.23ab6a14-4b2d-461d-9171-f8109f5692f1",
+              "order": "trial_id",
+              "limit": "50",
+              "offset": "100"
+            }
+          },
+          {
+            "template": "query_1",
+            "query": {
+              "row_id": "eq.23ab6a14-4b2d-461d-9171-f8109f5692f1",
+              "order": "trial_id",
+              "limit": "50",
+              "offset": "150"
+            }
+          },
+          {
+            "template": "query_1",
+            "query": {
+              "row_id": "eq.23ab6a14-4b2d-461d-9171-f8109f5692f1",
+              "order": "trial_id",
+              "limit": "50",
+              "offset": "200"
+            }
+          },
+          {
+            "template": "query_1",
+            "query": {
+              "row_id": "eq.23ab6a14-4b2d-461d-9171-f8109f5692f1",
+              "order": "trial_id",
+              "limit": "50",
+              "offset": "250"
+            }
+          },
+          {
+            "template": "query_1",
+            "query": {
+              "row_id": "eq.23ab6a14-4b2d-461d-9171-f8109f5692f1",
+              "order": "trial_id",
+              "limit": "50",
+              "offset": "300"
+            }
+          },
+          {
+            "template": "query_1",
+            "query": {
+              "row_id": "eq.23ab6a14-4b2d-461d-9171-f8109f5692f1",
+              "order": "trial_id",
+              "limit": "50",
+              "offset": "350"
+            }
+          },
+          {
+            "template": "query_1",
+            "query": {
+              "row_id": "eq.23ab6a14-4b2d-461d-9171-f8109f5692f1",
+              "order": "trial_id",
+              "limit": "50",
+              "offset": "400"
+            }
+          },
+          {
+            "template": "query_2",
+            "query": {
+              "row_id": "eq.23ab6a14-4b2d-461d-9171-f8109f5692f1",
+              "order": "trial_id",
+              "limit": "1000"
+            }
+          }
+        ]
+      },
+      "version_note": {
+        "zh": "该行全部 445 次试验报告的版本：0.144.0 × 299；0.144.1 × 136；unknown × 10。unknown 表示试验未报告版本。",
+        "en": "Reported versions across all 445 trials: 0.144.0 × 299; 0.144.1 × 136; unknown × 10. “unknown” means the trial did not report a version."
+      },
+      "raw_config": [],
+      "supplemental_sources": [
+        {
+          "kind": "official_submission",
+          "url": "https://github.com/harbor-framework/terminal-bench-2-1/blob/7131e4375048a0e408a8fb404b5f499d726b695b/leaderboard/submissions/2026-07-11-openai-gpt-5-6-terra-max-codex.json",
+          "field_path": "source_filter.agent_version",
+          "reported_value": "0.144.1",
+          "note": {
+            "zh": "原提交声明版本 0.144.1；当前榜单关联试验包含多个版本及未报告版本，见逐版本计数。",
+            "en": "The submission states version 0.144.1; the currently linked trials report multiple versions and unknown entries. See the complete version counts."
+          }
+        }
+      ]
+    },
+    {
+      "row_id": "db1f499b-d948-43d2-9aaf-27cfe97f6caf",
+      "benchmark_id": "terminal-bench-2.1",
+      "match": {
+        "harness": "Terminus 2",
+        "model": "GPT-5.5",
+        "thinking_level": "xhigh",
+        "accuracy": 77.98,
+        "trial_count": 445
+      },
+      "harness_version": "2.0.0",
+      "harness_version_variants": [
+        {
+          "version": "2.0.0",
+          "count": 445,
+          "source_url": "https://hub.harborframework.com/jobs/c8fcaaeb-c49a-413a-9f8d-20bc09c53339/trials/002f9eef-ce43-4571-bb56-3eea362e0c0c"
+        }
+      ],
+      "timeout_multiplier": 1,
+      "source_url": "https://hub.harborframework.com/datasets/terminal-bench/terminal-bench-2-1/latest/leaderboards/main/rows/db1f499b-d948-43d2-9aaf-27cfe97f6caf",
+      "verification": {
+        "scope": "all_linked_trials",
+        "trial_count": 445,
+        "unique_trial_count": 445,
+        "inaccessible_trial_count": 0,
+        "job_urls": [
+          "https://hub.harborframework.com/jobs/c8fcaaeb-c49a-413a-9f8d-20bc09c53339"
+        ],
+        "field_paths": {
+          "harness_version": "trial.agent.version",
+          "timeout_multiplier": "trial.lock.timeout_multiplier"
+        },
+        "timeout_multiplier_counts": [
+          {
+            "value": 1,
+            "count": 445
+          }
+        ],
+        "timeout_overrides_absent": true,
+        "api_requests": [
+          {
+            "template": "query_1",
+            "query": {
+              "row_id": "eq.db1f499b-d948-43d2-9aaf-27cfe97f6caf",
+              "order": "trial_id",
+              "limit": "50",
+              "offset": "0"
+            }
+          },
+          {
+            "template": "query_1",
+            "query": {
+              "row_id": "eq.db1f499b-d948-43d2-9aaf-27cfe97f6caf",
+              "order": "trial_id",
+              "limit": "50",
+              "offset": "50"
+            }
+          },
+          {
+            "template": "query_1",
+            "query": {
+              "row_id": "eq.db1f499b-d948-43d2-9aaf-27cfe97f6caf",
+              "order": "trial_id",
+              "limit": "50",
+              "offset": "100"
+            }
+          },
+          {
+            "template": "query_1",
+            "query": {
+              "row_id": "eq.db1f499b-d948-43d2-9aaf-27cfe97f6caf",
+              "order": "trial_id",
+              "limit": "50",
+              "offset": "150"
+            }
+          },
+          {
+            "template": "query_1",
+            "query": {
+              "row_id": "eq.db1f499b-d948-43d2-9aaf-27cfe97f6caf",
+              "order": "trial_id",
+              "limit": "50",
+              "offset": "200"
+            }
+          },
+          {
+            "template": "query_1",
+            "query": {
+              "row_id": "eq.db1f499b-d948-43d2-9aaf-27cfe97f6caf",
+              "order": "trial_id",
+              "limit": "50",
+              "offset": "250"
+            }
+          },
+          {
+            "template": "query_1",
+            "query": {
+              "row_id": "eq.db1f499b-d948-43d2-9aaf-27cfe97f6caf",
+              "order": "trial_id",
+              "limit": "50",
+              "offset": "300"
+            }
+          },
+          {
+            "template": "query_1",
+            "query": {
+              "row_id": "eq.db1f499b-d948-43d2-9aaf-27cfe97f6caf",
+              "order": "trial_id",
+              "limit": "50",
+              "offset": "350"
+            }
+          },
+          {
+            "template": "query_1",
+            "query": {
+              "row_id": "eq.db1f499b-d948-43d2-9aaf-27cfe97f6caf",
+              "order": "trial_id",
+              "limit": "50",
+              "offset": "400"
+            }
+          },
+          {
+            "template": "query_2",
+            "query": {
+              "row_id": "eq.db1f499b-d948-43d2-9aaf-27cfe97f6caf",
+              "order": "trial_id",
+              "limit": "1000"
+            }
+          }
+        ]
+      },
+      "version_note": null,
+      "raw_config": [],
+      "supplemental_sources": [
+        {
+          "kind": "official_submission",
+          "url": "https://github.com/harbor-framework/terminal-bench-2-1/blob/7131e4375048a0e408a8fb404b5f499d726b695b/leaderboard/submissions/2026-05-01-openai-gpt-5-5-xhigh-terminus-2.json",
+          "field_path": "source_filter.agent_version",
+          "reported_value": "2.0.0",
+          "note": null
+        },
+        {
+          "kind": "official_review",
+          "url": "https://github.com/harbor-framework/terminal-bench-2-1/pull/47#issuecomment-4918273284",
+          "field_path": "timeout_multiplier",
+          "reported_value": 1,
+          "note": {
+            "zh": "保留官方审核来源；当前倍率由全部关联试验的 lock 配置独立核验。",
+            "en": "Retained official review; the current timeout multiplier is independently verified from every linked trial lock."
+          }
+        }
+      ]
+    },
+    {
+      "row_id": "64890377-54de-4cc2-bcd7-e76610983482",
+      "benchmark_id": "terminal-bench-2.1",
+      "match": {
+        "harness": "mini-SWE-agent",
+        "model": "Muse Spark 1.1",
+        "thinking_level": "xhigh",
+        "accuracy": 76.18,
+        "trial_count": 445
+      },
+      "harness_version": "2.4.5",
+      "harness_version_variants": [
+        {
+          "version": "2.4.5",
+          "count": 445,
+          "source_url": "https://hub.harborframework.com/jobs/1c76cec0-5fbd-491c-b1d9-76021e225d4d/trials/000bda55-ac98-46a8-99b0-dd253532d339"
+        }
+      ],
+      "timeout_multiplier": 1,
+      "source_url": "https://hub.harborframework.com/datasets/terminal-bench/terminal-bench-2-1/latest/leaderboards/main/rows/64890377-54de-4cc2-bcd7-e76610983482",
+      "verification": {
+        "scope": "all_linked_trials",
+        "trial_count": 445,
+        "unique_trial_count": 445,
+        "inaccessible_trial_count": 0,
+        "job_urls": [
+          "https://hub.harborframework.com/jobs/1c76cec0-5fbd-491c-b1d9-76021e225d4d"
+        ],
+        "field_paths": {
+          "harness_version": "trial.agent.version",
+          "timeout_multiplier": "trial.lock.timeout_multiplier"
+        },
+        "timeout_multiplier_counts": [
+          {
+            "value": 1,
+            "count": 445
+          }
+        ],
+        "timeout_overrides_absent": true,
+        "api_requests": [
+          {
+            "template": "query_1",
+            "query": {
+              "row_id": "eq.64890377-54de-4cc2-bcd7-e76610983482",
+              "order": "trial_id",
+              "limit": "50",
+              "offset": "0"
+            }
+          },
+          {
+            "template": "query_1",
+            "query": {
+              "row_id": "eq.64890377-54de-4cc2-bcd7-e76610983482",
+              "order": "trial_id",
+              "limit": "50",
+              "offset": "50"
+            }
+          },
+          {
+            "template": "query_1",
+            "query": {
+              "row_id": "eq.64890377-54de-4cc2-bcd7-e76610983482",
+              "order": "trial_id",
+              "limit": "50",
+              "offset": "100"
+            }
+          },
+          {
+            "template": "query_1",
+            "query": {
+              "row_id": "eq.64890377-54de-4cc2-bcd7-e76610983482",
+              "order": "trial_id",
+              "limit": "50",
+              "offset": "150"
+            }
+          },
+          {
+            "template": "query_1",
+            "query": {
+              "row_id": "eq.64890377-54de-4cc2-bcd7-e76610983482",
+              "order": "trial_id",
+              "limit": "50",
+              "offset": "200"
+            }
+          },
+          {
+            "template": "query_1",
+            "query": {
+              "row_id": "eq.64890377-54de-4cc2-bcd7-e76610983482",
+              "order": "trial_id",
+              "limit": "50",
+              "offset": "250"
+            }
+          },
+          {
+            "template": "query_1",
+            "query": {
+              "row_id": "eq.64890377-54de-4cc2-bcd7-e76610983482",
+              "order": "trial_id",
+              "limit": "50",
+              "offset": "300"
+            }
+          },
+          {
+            "template": "query_1",
+            "query": {
+              "row_id": "eq.64890377-54de-4cc2-bcd7-e76610983482",
+              "order": "trial_id",
+              "limit": "50",
+              "offset": "350"
+            }
+          },
+          {
+            "template": "query_1",
+            "query": {
+              "row_id": "eq.64890377-54de-4cc2-bcd7-e76610983482",
+              "order": "trial_id",
+              "limit": "50",
+              "offset": "400"
+            }
+          },
+          {
+            "template": "query_2",
+            "query": {
+              "row_id": "eq.64890377-54de-4cc2-bcd7-e76610983482",
+              "order": "trial_id",
+              "limit": "1000"
+            }
+          }
+        ]
+      },
+      "version_note": null,
+      "raw_config": [],
+      "supplemental_sources": [
+        {
+          "kind": "official_submission",
+          "url": "https://github.com/harbor-framework/terminal-bench-2-1/blob/7131e4375048a0e408a8fb404b5f499d726b695b/leaderboard/submissions/2026-07-09-openai-muse-spark-1-1-xhigh-mini-swe-agent.json",
+          "field_path": "source_filter.agent_version",
+          "reported_value": "2.4.5",
+          "note": null
+        }
+      ]
+    },
+    {
+      "row_id": "e5f3feda-4629-46ba-963f-300dcf7c2a4c",
+      "benchmark_id": "terminal-bench-2.1",
+      "match": {
+        "harness": "Codex",
+        "model": "GPT-5.6 Luna",
+        "thinking_level": "max",
+        "accuracy": 75.73,
+        "trial_count": 445
+      },
+      "harness_version": "0.144.1",
+      "harness_version_variants": [
+        {
+          "version": "0.144.1",
+          "count": 445,
+          "source_url": "https://hub.harborframework.com/jobs/413ec154-36fb-46f4-a0b2-2111e1c65501/trials/016d9d92-c4a5-4f3d-9cc3-33a6ed03bf37"
+        }
+      ],
+      "timeout_multiplier": 1,
+      "source_url": "https://hub.harborframework.com/datasets/terminal-bench/terminal-bench-2-1/latest/leaderboards/main/rows/e5f3feda-4629-46ba-963f-300dcf7c2a4c",
+      "verification": {
+        "scope": "all_linked_trials",
+        "trial_count": 445,
+        "unique_trial_count": 445,
+        "inaccessible_trial_count": 0,
+        "job_urls": [
+          "https://hub.harborframework.com/jobs/413ec154-36fb-46f4-a0b2-2111e1c65501"
+        ],
+        "field_paths": {
+          "harness_version": "trial.agent.version",
+          "timeout_multiplier": "trial.lock.timeout_multiplier"
+        },
+        "timeout_multiplier_counts": [
+          {
+            "value": 1,
+            "count": 445
+          }
+        ],
+        "timeout_overrides_absent": true,
+        "api_requests": [
+          {
+            "template": "query_1",
+            "query": {
+              "row_id": "eq.e5f3feda-4629-46ba-963f-300dcf7c2a4c",
+              "order": "trial_id",
+              "limit": "50",
+              "offset": "0"
+            }
+          },
+          {
+            "template": "query_1",
+            "query": {
+              "row_id": "eq.e5f3feda-4629-46ba-963f-300dcf7c2a4c",
+              "order": "trial_id",
+              "limit": "50",
+              "offset": "50"
+            }
+          },
+          {
+            "template": "query_1",
+            "query": {
+              "row_id": "eq.e5f3feda-4629-46ba-963f-300dcf7c2a4c",
+              "order": "trial_id",
+              "limit": "50",
+              "offset": "100"
+            }
+          },
+          {
+            "template": "query_1",
+            "query": {
+              "row_id": "eq.e5f3feda-4629-46ba-963f-300dcf7c2a4c",
+              "order": "trial_id",
+              "limit": "50",
+              "offset": "150"
+            }
+          },
+          {
+            "template": "query_1",
+            "query": {
+              "row_id": "eq.e5f3feda-4629-46ba-963f-300dcf7c2a4c",
+              "order": "trial_id",
+              "limit": "50",
+              "offset": "200"
+            }
+          },
+          {
+            "template": "query_1",
+            "query": {
+              "row_id": "eq.e5f3feda-4629-46ba-963f-300dcf7c2a4c",
+              "order": "trial_id",
+              "limit": "50",
+              "offset": "250"
+            }
+          },
+          {
+            "template": "query_1",
+            "query": {
+              "row_id": "eq.e5f3feda-4629-46ba-963f-300dcf7c2a4c",
+              "order": "trial_id",
+              "limit": "50",
+              "offset": "300"
+            }
+          },
+          {
+            "template": "query_1",
+            "query": {
+              "row_id": "eq.e5f3feda-4629-46ba-963f-300dcf7c2a4c",
+              "order": "trial_id",
+              "limit": "50",
+              "offset": "350"
+            }
+          },
+          {
+            "template": "query_1",
+            "query": {
+              "row_id": "eq.e5f3feda-4629-46ba-963f-300dcf7c2a4c",
+              "order": "trial_id",
+              "limit": "50",
+              "offset": "400"
+            }
+          },
+          {
+            "template": "query_2",
+            "query": {
+              "row_id": "eq.e5f3feda-4629-46ba-963f-300dcf7c2a4c",
+              "order": "trial_id",
+              "limit": "1000"
+            }
+          }
+        ]
+      },
+      "version_note": null,
+      "raw_config": [],
+      "supplemental_sources": [
+        {
+          "kind": "official_submission",
+          "url": "https://github.com/harbor-framework/terminal-bench-2-1/blob/7131e4375048a0e408a8fb404b5f499d726b695b/leaderboard/submissions/2026-07-11-openai-gpt-5-6-luna-max-codex.json",
+          "field_path": "source_filter.agent_version",
+          "reported_value": "0.144.1",
+          "note": null
+        }
+      ]
+    },
+    {
+      "row_id": "d7540f21-67af-4b3a-ad31-b81b85fef895",
+      "benchmark_id": "terminal-bench-2.1",
+      "match": {
+        "harness": "Claude Code",
+        "model": "Sonnet 5",
+        "thinking_level": "high",
+        "accuracy": 74.61,
+        "trial_count": 445
+      },
+      "harness_version": "2.1.205",
+      "harness_version_variants": [
+        {
+          "version": "2.1.205",
+          "count": 445,
+          "source_url": "https://hub.harborframework.com/jobs/84ac1a9d-52a7-491b-85fb-dc323231b67f/trials/0035d522-5bb3-4ace-bbb0-f59ff447b8b8"
+        }
+      ],
+      "timeout_multiplier": 1,
+      "source_url": "https://hub.harborframework.com/datasets/terminal-bench/terminal-bench-2-1/latest/leaderboards/main/rows/d7540f21-67af-4b3a-ad31-b81b85fef895",
+      "verification": {
+        "scope": "all_linked_trials",
+        "trial_count": 445,
+        "unique_trial_count": 445,
+        "inaccessible_trial_count": 0,
+        "job_urls": [
+          "https://hub.harborframework.com/jobs/84ac1a9d-52a7-491b-85fb-dc323231b67f"
+        ],
+        "field_paths": {
+          "harness_version": "trial.agent.version",
+          "timeout_multiplier": "trial.lock.timeout_multiplier"
+        },
+        "timeout_multiplier_counts": [
+          {
+            "value": 1,
+            "count": 445
+          }
+        ],
+        "timeout_overrides_absent": true,
+        "api_requests": [
+          {
+            "template": "query_1",
+            "query": {
+              "row_id": "eq.d7540f21-67af-4b3a-ad31-b81b85fef895",
+              "order": "trial_id",
+              "limit": "50",
+              "offset": "0"
+            }
+          },
+          {
+            "template": "query_1",
+            "query": {
+              "row_id": "eq.d7540f21-67af-4b3a-ad31-b81b85fef895",
+              "order": "trial_id",
+              "limit": "50",
+              "offset": "50"
+            }
+          },
+          {
+            "template": "query_1",
+            "query": {
+              "row_id": "eq.d7540f21-67af-4b3a-ad31-b81b85fef895",
+              "order": "trial_id",
+              "limit": "50",
+              "offset": "100"
+            }
+          },
+          {
+            "template": "query_1",
+            "query": {
+              "row_id": "eq.d7540f21-67af-4b3a-ad31-b81b85fef895",
+              "order": "trial_id",
+              "limit": "50",
+              "offset": "150"
+            }
+          },
+          {
+            "template": "query_1",
+            "query": {
+              "row_id": "eq.d7540f21-67af-4b3a-ad31-b81b85fef895",
+              "order": "trial_id",
+              "limit": "50",
+              "offset": "200"
+            }
+          },
+          {
+            "template": "query_1",
+            "query": {
+              "row_id": "eq.d7540f21-67af-4b3a-ad31-b81b85fef895",
+              "order": "trial_id",
+              "limit": "50",
+              "offset": "250"
+            }
+          },
+          {
+            "template": "query_1",
+            "query": {
+              "row_id": "eq.d7540f21-67af-4b3a-ad31-b81b85fef895",
+              "order": "trial_id",
+              "limit": "50",
+              "offset": "300"
+            }
+          },
+          {
+            "template": "query_1",
+            "query": {
+              "row_id": "eq.d7540f21-67af-4b3a-ad31-b81b85fef895",
+              "order": "trial_id",
+              "limit": "50",
+              "offset": "350"
+            }
+          },
+          {
+            "template": "query_1",
+            "query": {
+              "row_id": "eq.d7540f21-67af-4b3a-ad31-b81b85fef895",
+              "order": "trial_id",
+              "limit": "50",
+              "offset": "400"
+            }
+          },
+          {
+            "template": "query_2",
+            "query": {
+              "row_id": "eq.d7540f21-67af-4b3a-ad31-b81b85fef895",
+              "order": "trial_id",
+              "limit": "1000"
+            }
+          }
+        ]
+      },
+      "version_note": null,
+      "raw_config": [],
+      "supplemental_sources": [
+        {
+          "kind": "official_submission",
+          "url": "https://github.com/harbor-framework/terminal-bench-2-1/blob/7131e4375048a0e408a8fb404b5f499d726b695b/leaderboard/submissions/2026-07-09-anthropic-claude-sonnet-5-high-claude-code.json",
+          "field_path": "source_filter.agent_version",
+          "reported_value": "2.1.205",
+          "note": null
+        }
+      ]
+    },
+    {
+      "row_id": "b03a8a69-fea8-42dd-a4fb-96a6a39e6857",
+      "benchmark_id": "terminal-bench-2.1",
+      "match": {
+        "harness": "Terminus 2",
+        "model": "Gemini 3 Pro",
+        "thinking_level": "high",
+        "accuracy": 73.93,
+        "trial_count": 445
+      },
+      "harness_version": "2.0.0",
+      "harness_version_variants": [
+        {
+          "version": "2.0.0",
+          "count": 445,
+          "source_url": "https://hub.harborframework.com/jobs/c8fcaaeb-c49a-413a-9f8d-20bc09c53339/trials/003e6700-0ebf-4a51-8a2c-49be7ccfbfe5"
+        }
+      ],
+      "timeout_multiplier": 1,
+      "source_url": "https://hub.harborframework.com/datasets/terminal-bench/terminal-bench-2-1/latest/leaderboards/main/rows/b03a8a69-fea8-42dd-a4fb-96a6a39e6857",
+      "verification": {
+        "scope": "all_linked_trials",
+        "trial_count": 445,
+        "unique_trial_count": 445,
+        "inaccessible_trial_count": 0,
+        "job_urls": [
+          "https://hub.harborframework.com/jobs/c8fcaaeb-c49a-413a-9f8d-20bc09c53339"
+        ],
+        "field_paths": {
+          "harness_version": "trial.agent.version",
+          "timeout_multiplier": "trial.lock.timeout_multiplier"
+        },
+        "timeout_multiplier_counts": [
+          {
+            "value": 1,
+            "count": 445
+          }
+        ],
+        "timeout_overrides_absent": true,
+        "api_requests": [
+          {
+            "template": "query_1",
+            "query": {
+              "row_id": "eq.b03a8a69-fea8-42dd-a4fb-96a6a39e6857",
+              "order": "trial_id",
+              "limit": "50",
+              "offset": "0"
+            }
+          },
+          {
+            "template": "query_1",
+            "query": {
+              "row_id": "eq.b03a8a69-fea8-42dd-a4fb-96a6a39e6857",
+              "order": "trial_id",
+              "limit": "50",
+              "offset": "50"
+            }
+          },
+          {
+            "template": "query_1",
+            "query": {
+              "row_id": "eq.b03a8a69-fea8-42dd-a4fb-96a6a39e6857",
+              "order": "trial_id",
+              "limit": "50",
+              "offset": "100"
+            }
+          },
+          {
+            "template": "query_1",
+            "query": {
+              "row_id": "eq.b03a8a69-fea8-42dd-a4fb-96a6a39e6857",
+              "order": "trial_id",
+              "limit": "50",
+              "offset": "150"
+            }
+          },
+          {
+            "template": "query_1",
+            "query": {
+              "row_id": "eq.b03a8a69-fea8-42dd-a4fb-96a6a39e6857",
+              "order": "trial_id",
+              "limit": "50",
+              "offset": "200"
+            }
+          },
+          {
+            "template": "query_1",
+            "query": {
+              "row_id": "eq.b03a8a69-fea8-42dd-a4fb-96a6a39e6857",
+              "order": "trial_id",
+              "limit": "50",
+              "offset": "250"
+            }
+          },
+          {
+            "template": "query_1",
+            "query": {
+              "row_id": "eq.b03a8a69-fea8-42dd-a4fb-96a6a39e6857",
+              "order": "trial_id",
+              "limit": "50",
+              "offset": "300"
+            }
+          },
+          {
+            "template": "query_1",
+            "query": {
+              "row_id": "eq.b03a8a69-fea8-42dd-a4fb-96a6a39e6857",
+              "order": "trial_id",
+              "limit": "50",
+              "offset": "350"
+            }
+          },
+          {
+            "template": "query_1",
+            "query": {
+              "row_id": "eq.b03a8a69-fea8-42dd-a4fb-96a6a39e6857",
+              "order": "trial_id",
+              "limit": "50",
+              "offset": "400"
+            }
+          },
+          {
+            "template": "query_2",
+            "query": {
+              "row_id": "eq.b03a8a69-fea8-42dd-a4fb-96a6a39e6857",
+              "order": "trial_id",
+              "limit": "1000"
+            }
+          }
+        ]
+      },
+      "version_note": null,
+      "raw_config": [],
+      "supplemental_sources": [
+        {
+          "kind": "official_submission",
+          "url": "https://github.com/harbor-framework/terminal-bench-2-1/blob/7131e4375048a0e408a8fb404b5f499d726b695b/leaderboard/submissions/2026-05-01-gemini-gemini-3-pro-preview-high-terminus-2.json",
+          "field_path": "source_filter.agent_version",
+          "reported_value": "2.0.0",
+          "note": null
+        },
+        {
+          "kind": "official_review",
+          "url": "https://github.com/harbor-framework/terminal-bench-2-1/pull/48#issuecomment-4918273787",
+          "field_path": "timeout_multiplier",
+          "reported_value": 1,
+          "note": {
+            "zh": "保留官方审核来源；当前倍率由全部关联试验的 lock 配置独立核验。",
+            "en": "Retained official review; the current timeout multiplier is independently verified from every linked trial lock."
+          }
+        }
+      ]
+    },
+    {
+      "row_id": "fdb8393b-5b29-4645-b784-84f52cf31722",
+      "benchmark_id": "terminal-bench-2.1",
+      "match": {
+        "harness": "Claude Code",
+        "model": "Opus 4.7",
+        "thinking_level": "max",
+        "accuracy": 68.9,
+        "trial_count": 445
+      },
+      "harness_version": "2.1.123",
+      "harness_version_variants": [
+        {
+          "version": "2.1.123",
+          "count": 445,
+          "source_url": "https://hub.harborframework.com/jobs/c8fcaaeb-c49a-413a-9f8d-20bc09c53339/trials/000937a0-7486-436c-8d7d-7d41c92d5f01"
+        }
+      ],
+      "timeout_multiplier": 1,
+      "source_url": "https://hub.harborframework.com/datasets/terminal-bench/terminal-bench-2-1/latest/leaderboards/main/rows/fdb8393b-5b29-4645-b784-84f52cf31722",
+      "verification": {
+        "scope": "all_linked_trials",
+        "trial_count": 445,
+        "unique_trial_count": 445,
+        "inaccessible_trial_count": 0,
+        "job_urls": [
+          "https://hub.harborframework.com/jobs/c8fcaaeb-c49a-413a-9f8d-20bc09c53339"
+        ],
+        "field_paths": {
+          "harness_version": "trial.agent.version",
+          "timeout_multiplier": "trial.lock.timeout_multiplier"
+        },
+        "timeout_multiplier_counts": [
+          {
+            "value": 1,
+            "count": 445
+          }
+        ],
+        "timeout_overrides_absent": true,
+        "api_requests": [
+          {
+            "template": "query_1",
+            "query": {
+              "row_id": "eq.fdb8393b-5b29-4645-b784-84f52cf31722",
+              "order": "trial_id",
+              "limit": "50",
+              "offset": "0"
+            }
+          },
+          {
+            "template": "query_1",
+            "query": {
+              "row_id": "eq.fdb8393b-5b29-4645-b784-84f52cf31722",
+              "order": "trial_id",
+              "limit": "50",
+              "offset": "50"
+            }
+          },
+          {
+            "template": "query_1",
+            "query": {
+              "row_id": "eq.fdb8393b-5b29-4645-b784-84f52cf31722",
+              "order": "trial_id",
+              "limit": "50",
+              "offset": "100"
+            }
+          },
+          {
+            "template": "query_1",
+            "query": {
+              "row_id": "eq.fdb8393b-5b29-4645-b784-84f52cf31722",
+              "order": "trial_id",
+              "limit": "50",
+              "offset": "150"
+            }
+          },
+          {
+            "template": "query_1",
+            "query": {
+              "row_id": "eq.fdb8393b-5b29-4645-b784-84f52cf31722",
+              "order": "trial_id",
+              "limit": "50",
+              "offset": "200"
+            }
+          },
+          {
+            "template": "query_1",
+            "query": {
+              "row_id": "eq.fdb8393b-5b29-4645-b784-84f52cf31722",
+              "order": "trial_id",
+              "limit": "50",
+              "offset": "250"
+            }
+          },
+          {
+            "template": "query_1",
+            "query": {
+              "row_id": "eq.fdb8393b-5b29-4645-b784-84f52cf31722",
+              "order": "trial_id",
+              "limit": "50",
+              "offset": "300"
+            }
+          },
+          {
+            "template": "query_1",
+            "query": {
+              "row_id": "eq.fdb8393b-5b29-4645-b784-84f52cf31722",
+              "order": "trial_id",
+              "limit": "50",
+              "offset": "350"
+            }
+          },
+          {
+            "template": "query_1",
+            "query": {
+              "row_id": "eq.fdb8393b-5b29-4645-b784-84f52cf31722",
+              "order": "trial_id",
+              "limit": "50",
+              "offset": "400"
+            }
+          },
+          {
+            "template": "query_2",
+            "query": {
+              "row_id": "eq.fdb8393b-5b29-4645-b784-84f52cf31722",
+              "order": "trial_id",
+              "limit": "1000"
+            }
+          }
+        ]
+      },
+      "version_note": null,
+      "raw_config": [],
+      "supplemental_sources": [
+        {
+          "kind": "official_submission",
+          "url": "https://github.com/harbor-framework/terminal-bench-2-1/blob/7131e4375048a0e408a8fb404b5f499d726b695b/leaderboard/submissions/2026-05-01-anthropic-claude-opus-4-7-max-claude-code.json",
+          "field_path": "source_filter.agent_version",
+          "reported_value": "2.1.123",
+          "note": null
+        },
+        {
+          "kind": "official_review",
+          "url": "https://github.com/harbor-framework/terminal-bench-2-1/pull/44#issuecomment-4911326175",
+          "field_path": "timeout_multiplier",
+          "reported_value": 1,
+          "note": {
+            "zh": "保留官方审核来源；当前倍率由全部关联试验的 lock 配置独立核验。",
+            "en": "Retained official review; the current timeout multiplier is independently verified from every linked trial lock."
+          }
+        }
+      ]
+    },
+    {
+      "row_id": "f867b631-36c8-476e-aa2f-96007ae70da0",
+      "benchmark_id": "terminal-bench-2.1",
+      "match": {
+        "harness": "Terminus 2",
+        "model": "Opus 4.7",
+        "thinking_level": "max",
+        "accuracy": 66.07,
+        "trial_count": 445
+      },
+      "harness_version": "2.0.0",
+      "harness_version_variants": [
+        {
+          "version": "2.0.0",
+          "count": 445,
+          "source_url": "https://hub.harborframework.com/jobs/c8fcaaeb-c49a-413a-9f8d-20bc09c53339/trials/001ceadc-ee98-429b-947e-02d21e4de209"
+        }
+      ],
+      "timeout_multiplier": 1,
+      "source_url": "https://hub.harborframework.com/datasets/terminal-bench/terminal-bench-2-1/latest/leaderboards/main/rows/f867b631-36c8-476e-aa2f-96007ae70da0",
+      "verification": {
+        "scope": "all_linked_trials",
+        "trial_count": 445,
+        "unique_trial_count": 445,
+        "inaccessible_trial_count": 0,
+        "job_urls": [
+          "https://hub.harborframework.com/jobs/c8fcaaeb-c49a-413a-9f8d-20bc09c53339"
+        ],
+        "field_paths": {
+          "harness_version": "trial.agent.version",
+          "timeout_multiplier": "trial.lock.timeout_multiplier"
+        },
+        "timeout_multiplier_counts": [
+          {
+            "value": 1,
+            "count": 445
+          }
+        ],
+        "timeout_overrides_absent": true,
+        "api_requests": [
+          {
+            "template": "query_1",
+            "query": {
+              "row_id": "eq.f867b631-36c8-476e-aa2f-96007ae70da0",
+              "order": "trial_id",
+              "limit": "50",
+              "offset": "0"
+            }
+          },
+          {
+            "template": "query_1",
+            "query": {
+              "row_id": "eq.f867b631-36c8-476e-aa2f-96007ae70da0",
+              "order": "trial_id",
+              "limit": "50",
+              "offset": "50"
+            }
+          },
+          {
+            "template": "query_1",
+            "query": {
+              "row_id": "eq.f867b631-36c8-476e-aa2f-96007ae70da0",
+              "order": "trial_id",
+              "limit": "50",
+              "offset": "100"
+            }
+          },
+          {
+            "template": "query_1",
+            "query": {
+              "row_id": "eq.f867b631-36c8-476e-aa2f-96007ae70da0",
+              "order": "trial_id",
+              "limit": "50",
+              "offset": "150"
+            }
+          },
+          {
+            "template": "query_1",
+            "query": {
+              "row_id": "eq.f867b631-36c8-476e-aa2f-96007ae70da0",
+              "order": "trial_id",
+              "limit": "50",
+              "offset": "200"
+            }
+          },
+          {
+            "template": "query_1",
+            "query": {
+              "row_id": "eq.f867b631-36c8-476e-aa2f-96007ae70da0",
+              "order": "trial_id",
+              "limit": "50",
+              "offset": "250"
+            }
+          },
+          {
+            "template": "query_1",
+            "query": {
+              "row_id": "eq.f867b631-36c8-476e-aa2f-96007ae70da0",
+              "order": "trial_id",
+              "limit": "50",
+              "offset": "300"
+            }
+          },
+          {
+            "template": "query_1",
+            "query": {
+              "row_id": "eq.f867b631-36c8-476e-aa2f-96007ae70da0",
+              "order": "trial_id",
+              "limit": "50",
+              "offset": "350"
+            }
+          },
+          {
+            "template": "query_1",
+            "query": {
+              "row_id": "eq.f867b631-36c8-476e-aa2f-96007ae70da0",
+              "order": "trial_id",
+              "limit": "50",
+              "offset": "400"
+            }
+          },
+          {
+            "template": "query_2",
+            "query": {
+              "row_id": "eq.f867b631-36c8-476e-aa2f-96007ae70da0",
+              "order": "trial_id",
+              "limit": "1000"
+            }
+          }
+        ]
+      },
+      "version_note": null,
+      "raw_config": [],
+      "supplemental_sources": [
+        {
+          "kind": "official_submission",
+          "url": "https://github.com/harbor-framework/terminal-bench-2-1/blob/7131e4375048a0e408a8fb404b5f499d726b695b/leaderboard/submissions/2026-05-01-anthropic-claude-opus-4-7-max-terminus-2.json",
+          "field_path": "source_filter.agent_version",
+          "reported_value": "2.0.0",
+          "note": null
+        },
+        {
+          "kind": "official_review",
+          "url": "https://github.com/harbor-framework/terminal-bench-2-1/pull/46#issuecomment-4918273564",
+          "field_path": "timeout_multiplier",
+          "reported_value": 1,
+          "note": {
+            "zh": "保留官方审核来源；当前倍率由全部关联试验的 lock 配置独立核验。",
+            "en": "Retained official review; the current timeout multiplier is independently verified from every linked trial lock."
+          }
+        }
+      ]
+    },
+    {
+      "row_id": "660c330f-9cd8-4ce7-8890-3ce573d038a0",
+      "benchmark_id": "terminal-bench-2.1",
+      "match": {
+        "harness": "Gemini CLI",
+        "model": "Gemini 3 Pro",
+        "thinking_level": "high",
+        "accuracy": 65.84,
+        "trial_count": 445
+      },
+      "harness_version": "0.40.0",
+      "harness_version_variants": [
+        {
+          "version": "0.40.0",
+          "count": 445,
+          "source_url": "https://hub.harborframework.com/jobs/5b2904c3-c69a-4ad0-b30f-1d77729389f4/trials/00362257-ad6e-417c-8fa1-d1c5c88fcd4b"
+        }
+      ],
+      "timeout_multiplier": 1,
+      "source_url": "https://hub.harborframework.com/datasets/terminal-bench/terminal-bench-2-1/latest/leaderboards/main/rows/660c330f-9cd8-4ce7-8890-3ce573d038a0",
+      "verification": {
+        "scope": "all_linked_trials",
+        "trial_count": 445,
+        "unique_trial_count": 445,
+        "inaccessible_trial_count": 0,
+        "job_urls": [
+          "https://hub.harborframework.com/jobs/5b2904c3-c69a-4ad0-b30f-1d77729389f4"
+        ],
+        "field_paths": {
+          "harness_version": "trial.agent.version",
+          "timeout_multiplier": "trial.lock.timeout_multiplier"
+        },
+        "timeout_multiplier_counts": [
+          {
+            "value": 1,
+            "count": 445
+          }
+        ],
+        "timeout_overrides_absent": true,
+        "api_requests": [
+          {
+            "template": "query_1",
+            "query": {
+              "row_id": "eq.660c330f-9cd8-4ce7-8890-3ce573d038a0",
+              "order": "trial_id",
+              "limit": "50",
+              "offset": "0"
+            }
+          },
+          {
+            "template": "query_1",
+            "query": {
+              "row_id": "eq.660c330f-9cd8-4ce7-8890-3ce573d038a0",
+              "order": "trial_id",
+              "limit": "50",
+              "offset": "50"
+            }
+          },
+          {
+            "template": "query_1",
+            "query": {
+              "row_id": "eq.660c330f-9cd8-4ce7-8890-3ce573d038a0",
+              "order": "trial_id",
+              "limit": "50",
+              "offset": "100"
+            }
+          },
+          {
+            "template": "query_1",
+            "query": {
+              "row_id": "eq.660c330f-9cd8-4ce7-8890-3ce573d038a0",
+              "order": "trial_id",
+              "limit": "50",
+              "offset": "150"
+            }
+          },
+          {
+            "template": "query_1",
+            "query": {
+              "row_id": "eq.660c330f-9cd8-4ce7-8890-3ce573d038a0",
+              "order": "trial_id",
+              "limit": "50",
+              "offset": "200"
+            }
+          },
+          {
+            "template": "query_1",
+            "query": {
+              "row_id": "eq.660c330f-9cd8-4ce7-8890-3ce573d038a0",
+              "order": "trial_id",
+              "limit": "50",
+              "offset": "250"
+            }
+          },
+          {
+            "template": "query_1",
+            "query": {
+              "row_id": "eq.660c330f-9cd8-4ce7-8890-3ce573d038a0",
+              "order": "trial_id",
+              "limit": "50",
+              "offset": "300"
+            }
+          },
+          {
+            "template": "query_1",
+            "query": {
+              "row_id": "eq.660c330f-9cd8-4ce7-8890-3ce573d038a0",
+              "order": "trial_id",
+              "limit": "50",
+              "offset": "350"
+            }
+          },
+          {
+            "template": "query_1",
+            "query": {
+              "row_id": "eq.660c330f-9cd8-4ce7-8890-3ce573d038a0",
+              "order": "trial_id",
+              "limit": "50",
+              "offset": "400"
+            }
+          },
+          {
+            "template": "query_2",
+            "query": {
+              "row_id": "eq.660c330f-9cd8-4ce7-8890-3ce573d038a0",
+              "order": "trial_id",
+              "limit": "1000"
+            }
+          }
+        ]
+      },
+      "version_note": null,
+      "raw_config": [],
+      "supplemental_sources": [
+        {
+          "kind": "official_submission",
+          "url": "https://github.com/harbor-framework/terminal-bench-2-1/blob/7131e4375048a0e408a8fb404b5f499d726b695b/leaderboard/submissions/2026-05-01-gemini-gemini-3-pro-preview-high-gemini-cli.json",
+          "field_path": "source_filter.agent_version",
+          "reported_value": "0.40.0",
+          "note": null
+        }
+      ]
+    },
+    {
+      "row_id": "1095d399-9d66-44f4-8adc-e11fbb407a68",
+      "benchmark_id": "terminal-bench-2.1",
+      "match": {
+        "harness": "Gemini CLI",
+        "model": "Gemini 3.1 Pro",
+        "thinking_level": "high",
+        "accuracy": 65.84,
+        "trial_count": 445
+      },
+      "harness_version": "0.40.0",
+      "harness_version_variants": [
+        {
+          "version": "0.40.0",
+          "count": 445,
+          "source_url": "https://hub.harborframework.com/jobs/d5eae728-5413-4143-b52b-34eb170b045d/trials/005ea3e0-0727-4320-b1a1-69a92dcc48a6"
+        }
+      ],
+      "timeout_multiplier": 1,
+      "source_url": "https://hub.harborframework.com/datasets/terminal-bench/terminal-bench-2-1/latest/leaderboards/main/rows/1095d399-9d66-44f4-8adc-e11fbb407a68",
+      "verification": {
+        "scope": "all_linked_trials",
+        "trial_count": 445,
+        "unique_trial_count": 445,
+        "inaccessible_trial_count": 0,
+        "job_urls": [
+          "https://hub.harborframework.com/jobs/d5eae728-5413-4143-b52b-34eb170b045d"
+        ],
+        "field_paths": {
+          "harness_version": "trial.agent.version",
+          "timeout_multiplier": "trial.lock.timeout_multiplier"
+        },
+        "timeout_multiplier_counts": [
+          {
+            "value": 1,
+            "count": 445
+          }
+        ],
+        "timeout_overrides_absent": true,
+        "api_requests": [
+          {
+            "template": "query_1",
+            "query": {
+              "row_id": "eq.1095d399-9d66-44f4-8adc-e11fbb407a68",
+              "order": "trial_id",
+              "limit": "50",
+              "offset": "0"
+            }
+          },
+          {
+            "template": "query_1",
+            "query": {
+              "row_id": "eq.1095d399-9d66-44f4-8adc-e11fbb407a68",
+              "order": "trial_id",
+              "limit": "50",
+              "offset": "50"
+            }
+          },
+          {
+            "template": "query_1",
+            "query": {
+              "row_id": "eq.1095d399-9d66-44f4-8adc-e11fbb407a68",
+              "order": "trial_id",
+              "limit": "50",
+              "offset": "100"
+            }
+          },
+          {
+            "template": "query_1",
+            "query": {
+              "row_id": "eq.1095d399-9d66-44f4-8adc-e11fbb407a68",
+              "order": "trial_id",
+              "limit": "50",
+              "offset": "150"
+            }
+          },
+          {
+            "template": "query_1",
+            "query": {
+              "row_id": "eq.1095d399-9d66-44f4-8adc-e11fbb407a68",
+              "order": "trial_id",
+              "limit": "50",
+              "offset": "200"
+            }
+          },
+          {
+            "template": "query_1",
+            "query": {
+              "row_id": "eq.1095d399-9d66-44f4-8adc-e11fbb407a68",
+              "order": "trial_id",
+              "limit": "50",
+              "offset": "250"
+            }
+          },
+          {
+            "template": "query_1",
+            "query": {
+              "row_id": "eq.1095d399-9d66-44f4-8adc-e11fbb407a68",
+              "order": "trial_id",
+              "limit": "50",
+              "offset": "300"
+            }
+          },
+          {
+            "template": "query_1",
+            "query": {
+              "row_id": "eq.1095d399-9d66-44f4-8adc-e11fbb407a68",
+              "order": "trial_id",
+              "limit": "50",
+              "offset": "350"
+            }
+          },
+          {
+            "template": "query_1",
+            "query": {
+              "row_id": "eq.1095d399-9d66-44f4-8adc-e11fbb407a68",
+              "order": "trial_id",
+              "limit": "50",
+              "offset": "400"
+            }
+          },
+          {
+            "template": "query_2",
+            "query": {
+              "row_id": "eq.1095d399-9d66-44f4-8adc-e11fbb407a68",
+              "order": "trial_id",
+              "limit": "1000"
+            }
+          }
+        ]
+      },
+      "version_note": null,
+      "raw_config": [],
+      "supplemental_sources": [
+        {
+          "kind": "official_submission",
+          "url": "https://github.com/harbor-framework/terminal-bench-2-1/blob/7131e4375048a0e408a8fb404b5f499d726b695b/leaderboard/submissions/2026-05-05-gemini-gemini-3-1-pro-preview-high-gemini-cli.json",
+          "field_path": "source_filter.agent_version",
+          "reported_value": "0.40.0",
+          "note": null
+        }
+      ]
+    },
+    {
+      "row_id": "360942d9-d27b-4f7e-bcf6-e0ea9cdcdee8",
+      "benchmark_id": "terminal-bench-2.1",
+      "match": {
+        "harness": "Terminus 2",
+        "model": "Gemini 3.1 Pro",
+        "thinking_level": "high",
+        "accuracy": 65.62,
+        "trial_count": 445
+      },
+      "harness_version": "2.0.0",
+      "harness_version_variants": [
+        {
+          "version": "2.0.0",
+          "count": 445,
+          "source_url": "https://hub.harborframework.com/jobs/d5eae728-5413-4143-b52b-34eb170b045d/trials/002e5bbb-6c03-4f58-9c8c-211e39f6cb28"
+        }
+      ],
+      "timeout_multiplier": 1,
+      "source_url": "https://hub.harborframework.com/datasets/terminal-bench/terminal-bench-2-1/latest/leaderboards/main/rows/360942d9-d27b-4f7e-bcf6-e0ea9cdcdee8",
+      "verification": {
+        "scope": "all_linked_trials",
+        "trial_count": 445,
+        "unique_trial_count": 445,
+        "inaccessible_trial_count": 0,
+        "job_urls": [
+          "https://hub.harborframework.com/jobs/d5eae728-5413-4143-b52b-34eb170b045d"
+        ],
+        "field_paths": {
+          "harness_version": "trial.agent.version",
+          "timeout_multiplier": "trial.lock.timeout_multiplier"
+        },
+        "timeout_multiplier_counts": [
+          {
+            "value": 1,
+            "count": 445
+          }
+        ],
+        "timeout_overrides_absent": true,
+        "api_requests": [
+          {
+            "template": "query_1",
+            "query": {
+              "row_id": "eq.360942d9-d27b-4f7e-bcf6-e0ea9cdcdee8",
+              "order": "trial_id",
+              "limit": "50",
+              "offset": "0"
+            }
+          },
+          {
+            "template": "query_1",
+            "query": {
+              "row_id": "eq.360942d9-d27b-4f7e-bcf6-e0ea9cdcdee8",
+              "order": "trial_id",
+              "limit": "50",
+              "offset": "50"
+            }
+          },
+          {
+            "template": "query_1",
+            "query": {
+              "row_id": "eq.360942d9-d27b-4f7e-bcf6-e0ea9cdcdee8",
+              "order": "trial_id",
+              "limit": "50",
+              "offset": "100"
+            }
+          },
+          {
+            "template": "query_1",
+            "query": {
+              "row_id": "eq.360942d9-d27b-4f7e-bcf6-e0ea9cdcdee8",
+              "order": "trial_id",
+              "limit": "50",
+              "offset": "150"
+            }
+          },
+          {
+            "template": "query_1",
+            "query": {
+              "row_id": "eq.360942d9-d27b-4f7e-bcf6-e0ea9cdcdee8",
+              "order": "trial_id",
+              "limit": "50",
+              "offset": "200"
+            }
+          },
+          {
+            "template": "query_1",
+            "query": {
+              "row_id": "eq.360942d9-d27b-4f7e-bcf6-e0ea9cdcdee8",
+              "order": "trial_id",
+              "limit": "50",
+              "offset": "250"
+            }
+          },
+          {
+            "template": "query_1",
+            "query": {
+              "row_id": "eq.360942d9-d27b-4f7e-bcf6-e0ea9cdcdee8",
+              "order": "trial_id",
+              "limit": "50",
+              "offset": "300"
+            }
+          },
+          {
+            "template": "query_1",
+            "query": {
+              "row_id": "eq.360942d9-d27b-4f7e-bcf6-e0ea9cdcdee8",
+              "order": "trial_id",
+              "limit": "50",
+              "offset": "350"
+            }
+          },
+          {
+            "template": "query_1",
+            "query": {
+              "row_id": "eq.360942d9-d27b-4f7e-bcf6-e0ea9cdcdee8",
+              "order": "trial_id",
+              "limit": "50",
+              "offset": "400"
+            }
+          },
+          {
+            "template": "query_2",
+            "query": {
+              "row_id": "eq.360942d9-d27b-4f7e-bcf6-e0ea9cdcdee8",
+              "order": "trial_id",
+              "limit": "1000"
+            }
+          }
+        ]
+      },
+      "version_note": null,
+      "raw_config": [],
+      "supplemental_sources": [
+        {
+          "kind": "official_submission",
+          "url": "https://github.com/harbor-framework/terminal-bench-2-1/blob/7131e4375048a0e408a8fb404b5f499d726b695b/leaderboard/submissions/2026-05-05-gemini-gemini-3-1-pro-preview-high-terminus-2.json",
+          "field_path": "source_filter.agent_version",
+          "reported_value": "2.0.0",
+          "note": null
+        }
+      ]
+    },
+    {
+      "row_id": "ef2b00eb-f360-41e6-8c97-23c4d762d06b",
+      "benchmark_id": "terminal-bench-2.1",
+      "match": {
+        "harness": "Claude Code",
+        "model": "GLM-5.1",
+        "thinking_level": "max",
+        "accuracy": 58.65,
+        "trial_count": 445
+      },
+      "harness_version": "2.1.123",
+      "harness_version_variants": [
+        {
+          "version": "2.1.123",
+          "count": 445,
+          "source_url": "https://hub.harborframework.com/jobs/5b2904c3-c69a-4ad0-b30f-1d77729389f4/trials/001a9c9b-eba4-438f-af50-8d5a22600273"
+        }
+      ],
+      "timeout_multiplier": 1,
+      "source_url": "https://hub.harborframework.com/datasets/terminal-bench/terminal-bench-2-1/latest/leaderboards/main/rows/ef2b00eb-f360-41e6-8c97-23c4d762d06b",
+      "verification": {
+        "scope": "all_linked_trials",
+        "trial_count": 445,
+        "unique_trial_count": 445,
+        "inaccessible_trial_count": 0,
+        "job_urls": [
+          "https://hub.harborframework.com/jobs/5b2904c3-c69a-4ad0-b30f-1d77729389f4"
+        ],
+        "field_paths": {
+          "harness_version": "trial.agent.version",
+          "timeout_multiplier": "trial.lock.timeout_multiplier"
+        },
+        "timeout_multiplier_counts": [
+          {
+            "value": 1,
+            "count": 445
+          }
+        ],
+        "timeout_overrides_absent": true,
+        "api_requests": [
+          {
+            "template": "query_1",
+            "query": {
+              "row_id": "eq.ef2b00eb-f360-41e6-8c97-23c4d762d06b",
+              "order": "trial_id",
+              "limit": "50",
+              "offset": "0"
+            }
+          },
+          {
+            "template": "query_1",
+            "query": {
+              "row_id": "eq.ef2b00eb-f360-41e6-8c97-23c4d762d06b",
+              "order": "trial_id",
+              "limit": "50",
+              "offset": "50"
+            }
+          },
+          {
+            "template": "query_1",
+            "query": {
+              "row_id": "eq.ef2b00eb-f360-41e6-8c97-23c4d762d06b",
+              "order": "trial_id",
+              "limit": "50",
+              "offset": "100"
+            }
+          },
+          {
+            "template": "query_1",
+            "query": {
+              "row_id": "eq.ef2b00eb-f360-41e6-8c97-23c4d762d06b",
+              "order": "trial_id",
+              "limit": "50",
+              "offset": "150"
+            }
+          },
+          {
+            "template": "query_1",
+            "query": {
+              "row_id": "eq.ef2b00eb-f360-41e6-8c97-23c4d762d06b",
+              "order": "trial_id",
+              "limit": "50",
+              "offset": "200"
+            }
+          },
+          {
+            "template": "query_1",
+            "query": {
+              "row_id": "eq.ef2b00eb-f360-41e6-8c97-23c4d762d06b",
+              "order": "trial_id",
+              "limit": "50",
+              "offset": "250"
+            }
+          },
+          {
+            "template": "query_1",
+            "query": {
+              "row_id": "eq.ef2b00eb-f360-41e6-8c97-23c4d762d06b",
+              "order": "trial_id",
+              "limit": "50",
+              "offset": "300"
+            }
+          },
+          {
+            "template": "query_1",
+            "query": {
+              "row_id": "eq.ef2b00eb-f360-41e6-8c97-23c4d762d06b",
+              "order": "trial_id",
+              "limit": "50",
+              "offset": "350"
+            }
+          },
+          {
+            "template": "query_1",
+            "query": {
+              "row_id": "eq.ef2b00eb-f360-41e6-8c97-23c4d762d06b",
+              "order": "trial_id",
+              "limit": "50",
+              "offset": "400"
+            }
+          },
+          {
+            "template": "query_2",
+            "query": {
+              "row_id": "eq.ef2b00eb-f360-41e6-8c97-23c4d762d06b",
+              "order": "trial_id",
+              "limit": "1000"
+            }
+          }
+        ]
+      },
+      "version_note": null,
+      "raw_config": [],
+      "supplemental_sources": [
+        {
+          "kind": "official_submission",
+          "url": "https://github.com/harbor-framework/terminal-bench-2-1/blob/7131e4375048a0e408a8fb404b5f499d726b695b/leaderboard/submissions/2026-05-01-glm-5-1-max-claude-code.json",
+          "field_path": "source_filter.agent_version",
+          "reported_value": "2.1.123",
+          "note": null
+        }
+      ]
+    },
+    {
+      "row_id": "b26434fb-f08b-4f95-bcc5-ce0c7310e047",
+      "benchmark_id": "terminal-bench-3.0",
+      "match": {
+        "harness": "mini-SWE-agent",
+        "model": "Opus 5",
+        "thinking_level": "max",
+        "accuracy": 42.7,
+        "trial_count": 370
+      },
+      "harness_version": "2.4.5",
+      "harness_version_variants": [
+        {
+          "version": "2.4.5",
+          "count": 370,
+          "source_url": "https://hub.harborframework.com/jobs/138abf3c-dd37-528a-999a-582b25de1ae7/trials/018ad8d5-7bfb-5d64-802d-16306cdcc91b"
+        }
+      ],
+      "timeout_multiplier": 1,
+      "source_url": "https://hub.harborframework.com/datasets/terminal-bench/terminal-bench/1/leaderboards/3-0-0/rows/b26434fb-f08b-4f95-bcc5-ce0c7310e047",
+      "verification": {
+        "scope": "all_linked_trials",
+        "trial_count": 370,
+        "unique_trial_count": 370,
+        "inaccessible_trial_count": 0,
+        "job_urls": [
+          "https://hub.harborframework.com/jobs/138abf3c-dd37-528a-999a-582b25de1ae7"
+        ],
+        "field_paths": {
+          "harness_version": "trial.agent.version",
+          "timeout_multiplier": "trial.lock.timeout_multiplier"
+        },
+        "timeout_multiplier_counts": [
+          {
+            "value": 1,
+            "count": 370
+          }
+        ],
+        "timeout_overrides_absent": true,
+        "api_requests": [
+          {
+            "template": "query_1",
+            "query": {
+              "row_id": "eq.b26434fb-f08b-4f95-bcc5-ce0c7310e047",
+              "order": "trial_id",
+              "limit": "1000"
+            }
+          },
+          {
+            "template": "query_2",
+            "query": {
+              "row_id": "eq.b26434fb-f08b-4f95-bcc5-ce0c7310e047",
+              "order": "trial_id",
+              "limit": "1000"
+            }
+          }
+        ]
+      },
+      "version_note": null,
+      "raw_config": [],
+      "supplemental_sources": []
+    },
+    {
+      "row_id": "b8d9ccae-23a2-485e-b9f1-a7654c79c560",
+      "benchmark_id": "terminal-bench-3.0",
+      "match": {
+        "harness": "Codex",
+        "model": "GPT-5.6 Sol",
+        "thinking_level": "max",
+        "accuracy": 34.59,
+        "trial_count": 370
+      },
+      "harness_version": "0.144.1",
+      "harness_version_variants": [
+        {
+          "version": "0.144.1",
+          "count": 370,
+          "source_url": "https://hub.harborframework.com/jobs/dac7c92c-5def-522d-a865-59ba1a3a51bd/trials/000fb758-b9a6-5262-a269-6afb3093730b"
+        }
+      ],
+      "timeout_multiplier": 1,
+      "source_url": "https://hub.harborframework.com/datasets/terminal-bench/terminal-bench/1/leaderboards/3-0-0/rows/b8d9ccae-23a2-485e-b9f1-a7654c79c560",
+      "verification": {
+        "scope": "all_linked_trials",
+        "trial_count": 370,
+        "unique_trial_count": 370,
+        "inaccessible_trial_count": 0,
+        "job_urls": [
+          "https://hub.harborframework.com/jobs/dac7c92c-5def-522d-a865-59ba1a3a51bd"
+        ],
+        "field_paths": {
+          "harness_version": "trial.agent.version",
+          "timeout_multiplier": "trial.lock.timeout_multiplier"
+        },
+        "timeout_multiplier_counts": [
+          {
+            "value": 1,
+            "count": 370
+          }
+        ],
+        "timeout_overrides_absent": true,
+        "api_requests": [
+          {
+            "template": "query_1",
+            "query": {
+              "row_id": "eq.b8d9ccae-23a2-485e-b9f1-a7654c79c560",
+              "order": "trial_id",
+              "limit": "1000"
+            }
+          },
+          {
+            "template": "query_2",
+            "query": {
+              "row_id": "eq.b8d9ccae-23a2-485e-b9f1-a7654c79c560",
+              "order": "trial_id",
+              "limit": "1000"
+            }
+          }
+        ]
+      },
+      "version_note": null,
+      "raw_config": [],
+      "supplemental_sources": []
+    },
+    {
+      "row_id": "b8ed61a2-838a-495f-8d24-3ebffb9be16b",
+      "benchmark_id": "terminal-bench-3.0",
+      "match": {
+        "harness": "Claude Code",
+        "model": "Fable 5",
+        "thinking_level": "max",
+        "accuracy": 34.05,
+        "trial_count": 370
+      },
+      "harness_version": "2.1.207",
+      "harness_version_variants": [
+        {
+          "version": "2.1.207",
+          "count": 370,
+          "source_url": "https://hub.harborframework.com/jobs/ff53f05a-7c7d-51a1-99f3-10dba5f97a2a/trials/0041a4c3-0083-5217-9b17-d60aa81c00c8"
+        }
+      ],
+      "timeout_multiplier": 1,
+      "source_url": "https://hub.harborframework.com/datasets/terminal-bench/terminal-bench/1/leaderboards/3-0-0/rows/b8ed61a2-838a-495f-8d24-3ebffb9be16b",
+      "verification": {
+        "scope": "all_linked_trials",
+        "trial_count": 370,
+        "unique_trial_count": 370,
+        "inaccessible_trial_count": 0,
+        "job_urls": [
+          "https://hub.harborframework.com/jobs/ff53f05a-7c7d-51a1-99f3-10dba5f97a2a"
+        ],
+        "field_paths": {
+          "harness_version": "trial.agent.version",
+          "timeout_multiplier": "trial.lock.timeout_multiplier"
+        },
+        "timeout_multiplier_counts": [
+          {
+            "value": 1,
+            "count": 370
+          }
+        ],
+        "timeout_overrides_absent": true,
+        "api_requests": [
+          {
+            "template": "query_1",
+            "query": {
+              "row_id": "eq.b8ed61a2-838a-495f-8d24-3ebffb9be16b",
+              "order": "trial_id",
+              "limit": "1000"
+            }
+          },
+          {
+            "template": "query_2",
+            "query": {
+              "row_id": "eq.b8ed61a2-838a-495f-8d24-3ebffb9be16b",
+              "order": "trial_id",
+              "limit": "1000"
+            }
+          }
+        ]
+      },
+      "version_note": null,
+      "raw_config": [],
+      "supplemental_sources": []
+    },
+    {
+      "row_id": "d5152814-6bf2-473f-be57-b1908ed480a9",
+      "benchmark_id": "terminal-bench-3.0",
+      "match": {
+        "harness": "Claude Code",
+        "model": "GLM 5.3",
+        "thinking_level": "max",
+        "accuracy": 32.43,
+        "trial_count": 370
+      },
+      "harness_version": "2.1.207",
+      "harness_version_variants": [
+        {
+          "version": "2.1.207",
+          "count": 370,
+          "source_url": "https://hub.harborframework.com/jobs/b945743b-0271-5235-a6c1-8f59997d99d0/trials/01296ce5-5c49-5b20-80b4-b1de75ff8941"
+        }
+      ],
+      "timeout_multiplier": 1,
+      "source_url": "https://hub.harborframework.com/datasets/terminal-bench/terminal-bench/1/leaderboards/3-0-0/rows/d5152814-6bf2-473f-be57-b1908ed480a9",
+      "verification": {
+        "scope": "all_linked_trials",
+        "trial_count": 370,
+        "unique_trial_count": 370,
+        "inaccessible_trial_count": 0,
+        "job_urls": [
+          "https://hub.harborframework.com/jobs/b945743b-0271-5235-a6c1-8f59997d99d0"
+        ],
+        "field_paths": {
+          "harness_version": "trial.agent.version",
+          "timeout_multiplier": "trial.lock.timeout_multiplier"
+        },
+        "timeout_multiplier_counts": [
+          {
+            "value": 1,
+            "count": 370
+          }
+        ],
+        "timeout_overrides_absent": true,
+        "api_requests": [
+          {
+            "template": "query_1",
+            "query": {
+              "row_id": "eq.d5152814-6bf2-473f-be57-b1908ed480a9",
+              "order": "trial_id",
+              "limit": "1000"
+            }
+          },
+          {
+            "template": "query_2",
+            "query": {
+              "row_id": "eq.d5152814-6bf2-473f-be57-b1908ed480a9",
+              "order": "trial_id",
+              "limit": "1000"
+            }
+          }
+        ]
+      },
+      "version_note": null,
+      "raw_config": [
+        {
+          "name": "CLAUDE_CODE_AUTO_COMPACT_WINDOW",
+          "value": "1000000",
+          "field_paths": [
+            "trial.config.agent.env.CLAUDE_CODE_AUTO_COMPACT_WINDOW",
+            "trial.lock.agent.env.CLAUDE_CODE_AUTO_COMPACT_WINDOW"
+          ],
+          "trial_count": 370,
+          "note": {
+            "zh": "原始自动压缩窗口配置；不等于已证实的实际压缩触发阈值，不能据此填写 1M 阈值。",
+            "en": "Explicit auto-compaction window configuration, not a verified effective trigger threshold. Do not infer a 1M-token compaction threshold."
+          },
+          "documentation_url": "https://code.claude.com/docs/en/env-vars"
+        }
+      ],
+      "supplemental_sources": []
+    },
+    {
+      "row_id": "61adb66e-1cf1-4194-b68d-703554d21193",
+      "benchmark_id": "terminal-bench-3.0",
+      "match": {
+        "harness": "Grok Build",
+        "model": "Grok 4.6",
+        "thinking_level": "high",
+        "accuracy": 26.49,
+        "trial_count": 370
+      },
+      "harness_version": "1.0.0",
+      "harness_version_variants": [
+        {
+          "version": "1.0.0",
+          "count": 370,
+          "source_url": "https://hub.harborframework.com/jobs/c91fe84e-3060-57fc-bb48-fac939247eb0/trials/007b98f0-21e9-5616-adb6-cfdc47d19a7e"
+        }
+      ],
+      "timeout_multiplier": 1,
+      "source_url": "https://hub.harborframework.com/datasets/terminal-bench/terminal-bench/1/leaderboards/3-0-0/rows/61adb66e-1cf1-4194-b68d-703554d21193",
+      "verification": {
+        "scope": "all_linked_trials",
+        "trial_count": 370,
+        "unique_trial_count": 370,
+        "inaccessible_trial_count": 0,
+        "job_urls": [
+          "https://hub.harborframework.com/jobs/c91fe84e-3060-57fc-bb48-fac939247eb0"
+        ],
+        "field_paths": {
+          "harness_version": "trial.agent.version",
+          "timeout_multiplier": "trial.lock.timeout_multiplier"
+        },
+        "timeout_multiplier_counts": [
+          {
+            "value": 1,
+            "count": 370
+          }
+        ],
+        "timeout_overrides_absent": true,
+        "api_requests": [
+          {
+            "template": "query_1",
+            "query": {
+              "row_id": "eq.61adb66e-1cf1-4194-b68d-703554d21193",
+              "order": "trial_id",
+              "limit": "1000"
+            }
+          },
+          {
+            "template": "query_2",
+            "query": {
+              "row_id": "eq.61adb66e-1cf1-4194-b68d-703554d21193",
+              "order": "trial_id",
+              "limit": "1000"
+            }
+          }
+        ]
+      },
+      "version_note": null,
+      "raw_config": [],
+      "supplemental_sources": []
+    },
+    {
+      "row_id": "e728cc33-0f2b-4eda-9749-a46be31c01bb",
+      "benchmark_id": "terminal-bench-3.0",
+      "match": {
+        "harness": "Claude Code",
+        "model": "Opus 4.8",
+        "thinking_level": "max",
+        "accuracy": 21.08,
+        "trial_count": 370
+      },
+      "harness_version": "2.1.207",
+      "harness_version_variants": [
+        {
+          "version": "2.1.207",
+          "count": 370,
+          "source_url": "https://hub.harborframework.com/jobs/a29650ca-457d-5d7c-9a3d-9751b2208226/trials/000ac076-558e-5d94-8c09-f1ea0d6f65b2"
+        }
+      ],
+      "timeout_multiplier": 1,
+      "source_url": "https://hub.harborframework.com/datasets/terminal-bench/terminal-bench/1/leaderboards/3-0-0/rows/e728cc33-0f2b-4eda-9749-a46be31c01bb",
+      "verification": {
+        "scope": "all_linked_trials",
+        "trial_count": 370,
+        "unique_trial_count": 370,
+        "inaccessible_trial_count": 0,
+        "job_urls": [
+          "https://hub.harborframework.com/jobs/a29650ca-457d-5d7c-9a3d-9751b2208226"
+        ],
+        "field_paths": {
+          "harness_version": "trial.agent.version",
+          "timeout_multiplier": "trial.lock.timeout_multiplier"
+        },
+        "timeout_multiplier_counts": [
+          {
+            "value": 1,
+            "count": 370
+          }
+        ],
+        "timeout_overrides_absent": true,
+        "api_requests": [
+          {
+            "template": "query_1",
+            "query": {
+              "row_id": "eq.e728cc33-0f2b-4eda-9749-a46be31c01bb",
+              "order": "trial_id",
+              "limit": "1000"
+            }
+          },
+          {
+            "template": "query_2",
+            "query": {
+              "row_id": "eq.e728cc33-0f2b-4eda-9749-a46be31c01bb",
+              "order": "trial_id",
+              "limit": "1000"
+            }
+          }
+        ]
+      },
+      "version_note": null,
+      "raw_config": [],
+      "supplemental_sources": []
+    },
+    {
+      "row_id": "9e11b624-6922-4ac8-a26f-c38146b957d9",
+      "benchmark_id": "terminal-bench-3.0",
+      "match": {
+        "harness": "Codex",
+        "model": "GPT-5.6 Terra",
+        "thinking_level": "max",
+        "accuracy": 20.81,
+        "trial_count": 370
+      },
+      "harness_version": "0.144.1",
+      "harness_version_variants": [
+        {
+          "version": "0.144.1",
+          "count": 370,
+          "source_url": "https://hub.harborframework.com/jobs/297e09a8-637f-5a41-b3d0-db2d71410199/trials/00396b8d-27d3-564a-becf-9871a6592f9a"
+        }
+      ],
+      "timeout_multiplier": 1,
+      "source_url": "https://hub.harborframework.com/datasets/terminal-bench/terminal-bench/1/leaderboards/3-0-0/rows/9e11b624-6922-4ac8-a26f-c38146b957d9",
+      "verification": {
+        "scope": "all_linked_trials",
+        "trial_count": 370,
+        "unique_trial_count": 370,
+        "inaccessible_trial_count": 0,
+        "job_urls": [
+          "https://hub.harborframework.com/jobs/297e09a8-637f-5a41-b3d0-db2d71410199"
+        ],
+        "field_paths": {
+          "harness_version": "trial.agent.version",
+          "timeout_multiplier": "trial.lock.timeout_multiplier"
+        },
+        "timeout_multiplier_counts": [
+          {
+            "value": 1,
+            "count": 370
+          }
+        ],
+        "timeout_overrides_absent": true,
+        "api_requests": [
+          {
+            "template": "query_1",
+            "query": {
+              "row_id": "eq.9e11b624-6922-4ac8-a26f-c38146b957d9",
+              "order": "trial_id",
+              "limit": "1000"
+            }
+          },
+          {
+            "template": "query_2",
+            "query": {
+              "row_id": "eq.9e11b624-6922-4ac8-a26f-c38146b957d9",
+              "order": "trial_id",
+              "limit": "1000"
+            }
+          }
+        ]
+      },
+      "version_note": null,
+      "raw_config": [],
+      "supplemental_sources": []
+    },
+    {
+      "row_id": "7ebd2bd7-9a4c-4c62-bccd-843908653c16",
+      "benchmark_id": "terminal-bench-3.0",
+      "match": {
+        "harness": "Devin",
+        "model": "SWE-1.7 Lightning",
+        "thinking_level": null,
+        "accuracy": 18.65,
+        "trial_count": 370
+      },
+      "harness_version": null,
+      "harness_version_variants": [
+        {
+          "version": "devin 3000.4.25 (7e8e528a)",
+          "count": 312,
+          "source_url": "https://hub.harborframework.com/jobs/c5239447-4988-5e08-86ff-7cd1ee8db320/trials/00086b7b-0c8a-5e36-9c51-94532ee1c9fa"
+        },
+        {
+          "version": "devin 3000.4.16 (355c3c9e)",
+          "count": 58,
+          "source_url": "https://hub.harborframework.com/jobs/c5239447-4988-5e08-86ff-7cd1ee8db320/trials/003b746a-dc35-559a-a798-67defcee0c9b"
+        }
+      ],
+      "timeout_multiplier": 1,
+      "source_url": "https://hub.harborframework.com/datasets/terminal-bench/terminal-bench/1/leaderboards/3-0-0/rows/7ebd2bd7-9a4c-4c62-bccd-843908653c16",
+      "verification": {
+        "scope": "all_linked_trials",
+        "trial_count": 370,
+        "unique_trial_count": 370,
+        "inaccessible_trial_count": 0,
+        "job_urls": [
+          "https://hub.harborframework.com/jobs/c5239447-4988-5e08-86ff-7cd1ee8db320"
+        ],
+        "field_paths": {
+          "harness_version": "trial.agent.version",
+          "timeout_multiplier": "trial.lock.timeout_multiplier"
+        },
+        "timeout_multiplier_counts": [
+          {
+            "value": 1,
+            "count": 370
+          }
+        ],
+        "timeout_overrides_absent": true,
+        "api_requests": [
+          {
+            "template": "query_1",
+            "query": {
+              "row_id": "eq.7ebd2bd7-9a4c-4c62-bccd-843908653c16",
+              "order": "trial_id",
+              "limit": "1000"
+            }
+          },
+          {
+            "template": "query_2",
+            "query": {
+              "row_id": "eq.7ebd2bd7-9a4c-4c62-bccd-843908653c16",
+              "order": "trial_id",
+              "limit": "1000"
+            }
+          }
+        ]
+      },
+      "version_note": {
+        "zh": "该行全部 370 次试验报告的版本：devin 3000.4.25 (7e8e528a) × 312；devin 3000.4.16 (355c3c9e) × 58。unknown 表示试验未报告版本。",
+        "en": "Reported versions across all 370 trials: devin 3000.4.25 (7e8e528a) × 312; devin 3000.4.16 (355c3c9e) × 58. “unknown” means the trial did not report a version."
+      },
+      "raw_config": [],
+      "supplemental_sources": []
+    },
+    {
+      "row_id": "e660765d-7b96-48f7-97ed-3c2abe17dbb5",
+      "benchmark_id": "terminal-bench-3.0",
+      "match": {
+        "harness": "Cursor CLI",
+        "model": "Grok 4.5",
+        "thinking_level": "xhigh",
+        "accuracy": 15.68,
+        "trial_count": 370
+      },
+      "harness_version": null,
+      "harness_version_variants": [
+        {
+          "version": "2026.07.09-a3815c0",
+          "count": 363,
+          "source_url": "https://hub.harborframework.com/jobs/c04ff333-d3c0-5539-a141-3f9c0be58e74/trials/00e85ba9-e98e-50a5-8e8c-1e3e48e7357a"
+        },
+        {
+          "version": "unknown",
+          "count": 7,
+          "source_url": "https://hub.harborframework.com/jobs/c04ff333-d3c0-5539-a141-3f9c0be58e74/trials/23c9c6d8-55d7-5fda-ae0f-7e7c23311851"
+        }
+      ],
+      "timeout_multiplier": 1,
+      "source_url": "https://hub.harborframework.com/datasets/terminal-bench/terminal-bench/1/leaderboards/3-0-0/rows/e660765d-7b96-48f7-97ed-3c2abe17dbb5",
+      "verification": {
+        "scope": "all_linked_trials",
+        "trial_count": 370,
+        "unique_trial_count": 370,
+        "inaccessible_trial_count": 0,
+        "job_urls": [
+          "https://hub.harborframework.com/jobs/c04ff333-d3c0-5539-a141-3f9c0be58e74"
+        ],
+        "field_paths": {
+          "harness_version": "trial.agent.version",
+          "timeout_multiplier": "trial.lock.timeout_multiplier"
+        },
+        "timeout_multiplier_counts": [
+          {
+            "value": 1,
+            "count": 370
+          }
+        ],
+        "timeout_overrides_absent": true,
+        "api_requests": [
+          {
+            "template": "query_1",
+            "query": {
+              "row_id": "eq.e660765d-7b96-48f7-97ed-3c2abe17dbb5",
+              "order": "trial_id",
+              "limit": "1000"
+            }
+          },
+          {
+            "template": "query_2",
+            "query": {
+              "row_id": "eq.e660765d-7b96-48f7-97ed-3c2abe17dbb5",
+              "order": "trial_id",
+              "limit": "1000"
+            }
+          }
+        ]
+      },
+      "version_note": {
+        "zh": "该行全部 370 次试验报告的版本：2026.07.09-a3815c0 × 363；unknown × 7。unknown 表示试验未报告版本。",
+        "en": "Reported versions across all 370 trials: 2026.07.09-a3815c0 × 363; unknown × 7. “unknown” means the trial did not report a version."
+      },
+      "raw_config": [],
+      "supplemental_sources": []
+    },
+    {
+      "row_id": "a945badd-d54b-4c45-965d-aa35a042c27e",
+      "benchmark_id": "terminal-bench-3.0",
+      "match": {
+        "harness": "Claude Code",
+        "model": "Sonnet 5",
+        "thinking_level": "max",
+        "accuracy": 14.59,
+        "trial_count": 370
+      },
+      "harness_version": "2.1.207",
+      "harness_version_variants": [
+        {
+          "version": "2.1.207",
+          "count": 370,
+          "source_url": "https://hub.harborframework.com/jobs/559bfdc6-59ab-5e5f-b15d-1739c253ddb0/trials/00921b0a-5104-5c3e-a283-7a55e981be1b"
+        }
+      ],
+      "timeout_multiplier": 1,
+      "source_url": "https://hub.harborframework.com/datasets/terminal-bench/terminal-bench/1/leaderboards/3-0-0/rows/a945badd-d54b-4c45-965d-aa35a042c27e",
+      "verification": {
+        "scope": "all_linked_trials",
+        "trial_count": 370,
+        "unique_trial_count": 370,
+        "inaccessible_trial_count": 0,
+        "job_urls": [
+          "https://hub.harborframework.com/jobs/559bfdc6-59ab-5e5f-b15d-1739c253ddb0"
+        ],
+        "field_paths": {
+          "harness_version": "trial.agent.version",
+          "timeout_multiplier": "trial.lock.timeout_multiplier"
+        },
+        "timeout_multiplier_counts": [
+          {
+            "value": 1,
+            "count": 370
+          }
+        ],
+        "timeout_overrides_absent": true,
+        "api_requests": [
+          {
+            "template": "query_1",
+            "query": {
+              "row_id": "eq.a945badd-d54b-4c45-965d-aa35a042c27e",
+              "order": "trial_id",
+              "limit": "1000"
+            }
+          },
+          {
+            "template": "query_2",
+            "query": {
+              "row_id": "eq.a945badd-d54b-4c45-965d-aa35a042c27e",
+              "order": "trial_id",
+              "limit": "1000"
+            }
+          }
+        ]
+      },
+      "version_note": null,
+      "raw_config": [],
+      "supplemental_sources": []
+    },
+    {
+      "row_id": "5b10f961-312a-48ae-83d9-d5ce4de60a0e",
+      "benchmark_id": "terminal-bench-3.0",
+      "match": {
+        "harness": "Codex",
+        "model": "GPT-5.6 Luna",
+        "thinking_level": "max",
+        "accuracy": 14.32,
+        "trial_count": 370
+      },
+      "harness_version": "0.144.1",
+      "harness_version_variants": [
+        {
+          "version": "0.144.1",
+          "count": 370,
+          "source_url": "https://hub.harborframework.com/jobs/3fb81bdf-cae5-59c7-bc53-f2b910640653/trials/00e118d1-3d01-5a4b-a606-c45b7f232abb"
+        }
+      ],
+      "timeout_multiplier": 1,
+      "source_url": "https://hub.harborframework.com/datasets/terminal-bench/terminal-bench/1/leaderboards/3-0-0/rows/5b10f961-312a-48ae-83d9-d5ce4de60a0e",
+      "verification": {
+        "scope": "all_linked_trials",
+        "trial_count": 370,
+        "unique_trial_count": 370,
+        "inaccessible_trial_count": 0,
+        "job_urls": [
+          "https://hub.harborframework.com/jobs/3fb81bdf-cae5-59c7-bc53-f2b910640653"
+        ],
+        "field_paths": {
+          "harness_version": "trial.agent.version",
+          "timeout_multiplier": "trial.lock.timeout_multiplier"
+        },
+        "timeout_multiplier_counts": [
+          {
+            "value": 1,
+            "count": 370
+          }
+        ],
+        "timeout_overrides_absent": true,
+        "api_requests": [
+          {
+            "template": "query_1",
+            "query": {
+              "row_id": "eq.5b10f961-312a-48ae-83d9-d5ce4de60a0e",
+              "order": "trial_id",
+              "limit": "1000"
+            }
+          },
+          {
+            "template": "query_2",
+            "query": {
+              "row_id": "eq.5b10f961-312a-48ae-83d9-d5ce4de60a0e",
+              "order": "trial_id",
+              "limit": "1000"
+            }
+          }
+        ]
+      },
+      "version_note": null,
+      "raw_config": [],
+      "supplemental_sources": []
+    },
+    {
+      "row_id": "b3c7db0e-0289-4fa5-ac3a-da600b15a72a",
+      "benchmark_id": "terminal-bench-3.0",
+      "match": {
+        "harness": "Claude Code",
+        "model": "GLM 5.2",
+        "thinking_level": "max",
+        "accuracy": 4.59,
+        "trial_count": 370
+      },
+      "harness_version": "2.1.212",
+      "harness_version_variants": [
+        {
+          "version": "2.1.212",
+          "count": 370,
+          "source_url": "https://hub.harborframework.com/jobs/39e46742-0f20-52ef-a6cb-7a1a1c71c91b/trials/008f40c2-3199-5eb0-9fd6-ec32ddc807ba"
+        }
+      ],
+      "timeout_multiplier": 1,
+      "source_url": "https://hub.harborframework.com/datasets/terminal-bench/terminal-bench/1/leaderboards/3-0-0/rows/b3c7db0e-0289-4fa5-ac3a-da600b15a72a",
+      "verification": {
+        "scope": "all_linked_trials",
+        "trial_count": 370,
+        "unique_trial_count": 370,
+        "inaccessible_trial_count": 0,
+        "job_urls": [
+          "https://hub.harborframework.com/jobs/39e46742-0f20-52ef-a6cb-7a1a1c71c91b"
+        ],
+        "field_paths": {
+          "harness_version": "trial.agent.version",
+          "timeout_multiplier": "trial.lock.timeout_multiplier"
+        },
+        "timeout_multiplier_counts": [
+          {
+            "value": 1,
+            "count": 370
+          }
+        ],
+        "timeout_overrides_absent": true,
+        "api_requests": [
+          {
+            "template": "query_1",
+            "query": {
+              "row_id": "eq.b3c7db0e-0289-4fa5-ac3a-da600b15a72a",
+              "order": "trial_id",
+              "limit": "1000"
+            }
+          },
+          {
+            "template": "query_2",
+            "query": {
+              "row_id": "eq.b3c7db0e-0289-4fa5-ac3a-da600b15a72a",
+              "order": "trial_id",
+              "limit": "1000"
+            }
+          }
+        ]
+      },
+      "version_note": null,
+      "raw_config": [],
+      "supplemental_sources": []
+    },
+    {
+      "row_id": "5c537be4-7fc3-449b-8bfc-ceb9061c2535",
+      "benchmark_id": "terminal-bench-4.0",
+      "match": {
+        "harness": "Codex",
+        "model": "GPT-6 Astra",
+        "thinking_level": "max",
+        "accuracy": 58.18,
+        "trial_count": 330
+      },
+      "harness_version": "0.151.0",
+      "harness_version_variants": [
+        {
+          "version": "0.151.0",
+          "count": 330,
+          "source_url": "https://hub.harborframework.com/jobs/57652944-cae3-4458-8f33-a2b3bd5e3a14/trials/0080b8c5-605e-43a2-82e9-9f7f835a0777"
+        }
+      ],
+      "timeout_multiplier": 1,
+      "source_url": "https://hub.harborframework.com/datasets/terminal-bench/terminal-bench/4/leaderboards/4-0-0/rows/5c537be4-7fc3-449b-8bfc-ceb9061c2535",
+      "verification": {
+        "scope": "all_linked_trials",
+        "trial_count": 330,
+        "unique_trial_count": 330,
+        "inaccessible_trial_count": 0,
+        "job_urls": [
+          "https://hub.harborframework.com/jobs/57652944-cae3-4458-8f33-a2b3bd5e3a14"
+        ],
+        "field_paths": {
+          "harness_version": "trial.agent.version",
+          "timeout_multiplier": "trial.lock.timeout_multiplier"
+        },
+        "timeout_multiplier_counts": [
+          {
+            "value": 1,
+            "count": 330
+          }
+        ],
+        "timeout_overrides_absent": true,
+        "api_requests": [
+          {
+            "template": "query_3",
+            "query": {
+              "row_id": "eq.5c537be4-7fc3-449b-8bfc-ceb9061c2535",
+              "order": "trial_id",
+              "limit": "100"
+            }
+          },
+          {
+            "template": "query_3",
+            "query": {
+              "row_id": "eq.5c537be4-7fc3-449b-8bfc-ceb9061c2535",
+              "order": "trial_id",
+              "limit": "100",
+              "offset": "100"
+            }
+          },
+          {
+            "template": "query_3",
+            "query": {
+              "row_id": "eq.5c537be4-7fc3-449b-8bfc-ceb9061c2535",
+              "order": "trial_id",
+              "limit": "100",
+              "offset": "200"
+            }
+          },
+          {
+            "template": "query_3",
+            "query": {
+              "row_id": "eq.5c537be4-7fc3-449b-8bfc-ceb9061c2535",
+              "order": "trial_id",
+              "limit": "100",
+              "offset": "300"
+            }
+          },
+          {
+            "template": "query_2",
+            "query": {
+              "row_id": "eq.5c537be4-7fc3-449b-8bfc-ceb9061c2535",
+              "order": "trial_id",
+              "limit": "1000"
+            }
+          }
+        ]
+      },
+      "version_note": null,
+      "raw_config": [],
+      "supplemental_sources": []
+    },
+    {
+      "row_id": "c741608e-c94e-417d-b7a8-e67111a0c887",
+      "benchmark_id": "terminal-bench-4.0",
+      "match": {
+        "harness": "Claude Code",
+        "model": "Fable 5.1",
+        "thinking_level": "max",
+        "accuracy": 57.88,
+        "trial_count": 330
+      },
+      "harness_version": "2.1.257",
+      "harness_version_variants": [
+        {
+          "version": "2.1.257",
+          "count": 330,
+          "source_url": "https://hub.harborframework.com/jobs/a6319b9c-7dbc-42b1-8483-6c022e292ae2/trials/009ca21e-b5a3-48ff-b573-38ca9557c8bf"
+        }
+      ],
+      "timeout_multiplier": 1,
+      "source_url": "https://hub.harborframework.com/datasets/terminal-bench/terminal-bench/4/leaderboards/4-0-0/rows/c741608e-c94e-417d-b7a8-e67111a0c887",
+      "verification": {
+        "scope": "all_linked_trials",
+        "trial_count": 330,
+        "unique_trial_count": 330,
+        "inaccessible_trial_count": 0,
+        "job_urls": [
+          "https://hub.harborframework.com/jobs/a6319b9c-7dbc-42b1-8483-6c022e292ae2"
+        ],
+        "field_paths": {
+          "harness_version": "trial.agent.version",
+          "timeout_multiplier": "trial.lock.timeout_multiplier"
+        },
+        "timeout_multiplier_counts": [
+          {
+            "value": 1,
+            "count": 330
+          }
+        ],
+        "timeout_overrides_absent": true,
+        "api_requests": [
+          {
+            "template": "query_1",
+            "query": {
+              "row_id": "eq.c741608e-c94e-417d-b7a8-e67111a0c887",
+              "order": "trial_id",
+              "limit": "1000"
+            }
+          },
+          {
+            "template": "query_2",
+            "query": {
+              "row_id": "eq.c741608e-c94e-417d-b7a8-e67111a0c887",
+              "order": "trial_id",
+              "limit": "1000"
+            }
+          }
+        ]
+      },
+      "version_note": null,
+      "raw_config": [],
+      "supplemental_sources": [
+        {
+          "kind": "official_submission",
+          "url": "https://github.com/harbor-framework/terminal-bench/blob/83c7a6172d629c6575b785ab12c8db787bb2e323/leaderboard/submissions/2026-09-02-anthropic-claude-fable-5-1-max-claude-code.json",
+          "field_path": "source_filter.agent_version",
+          "reported_value": "2.1.257",
+          "note": null
+        }
+      ]
+    },
+    {
+      "row_id": "16db8ad5-84aa-4588-b660-1ce68c0d45e2",
+      "benchmark_id": "terminal-bench-4.0",
+      "match": {
+        "harness": "Codex",
+        "model": "GPT-6 Astra",
+        "thinking_level": "xhigh",
+        "accuracy": 57.88,
+        "trial_count": 330
+      },
+      "harness_version": "0.151.0",
+      "harness_version_variants": [
+        {
+          "version": "0.151.0",
+          "count": 330,
+          "source_url": "https://hub.harborframework.com/jobs/2101cf17-1b50-4d3a-bd5e-b5ee413d5362/trials/00939210-6cc5-463c-bbd3-82dca0b008bd"
+        }
+      ],
+      "timeout_multiplier": 1,
+      "source_url": "https://hub.harborframework.com/datasets/terminal-bench/terminal-bench/4/leaderboards/4-0-0/rows/16db8ad5-84aa-4588-b660-1ce68c0d45e2",
+      "verification": {
+        "scope": "all_linked_trials",
+        "trial_count": 330,
+        "unique_trial_count": 330,
+        "inaccessible_trial_count": 0,
+        "job_urls": [
+          "https://hub.harborframework.com/jobs/2101cf17-1b50-4d3a-bd5e-b5ee413d5362"
+        ],
+        "field_paths": {
+          "harness_version": "trial.agent.version",
+          "timeout_multiplier": "trial.lock.timeout_multiplier"
+        },
+        "timeout_multiplier_counts": [
+          {
+            "value": 1,
+            "count": 330
+          }
+        ],
+        "timeout_overrides_absent": true,
+        "api_requests": [
+          {
+            "template": "query_1",
+            "query": {
+              "row_id": "eq.16db8ad5-84aa-4588-b660-1ce68c0d45e2",
+              "order": "trial_id",
+              "limit": "1000"
+            }
+          },
+          {
+            "template": "query_2",
+            "query": {
+              "row_id": "eq.16db8ad5-84aa-4588-b660-1ce68c0d45e2",
+              "order": "trial_id",
+              "limit": "1000"
+            }
+          }
+        ]
+      },
+      "version_note": null,
+      "raw_config": [],
+      "supplemental_sources": []
+    },
+    {
+      "row_id": "3475050c-bf5e-4261-a3f6-0af5350af13f",
+      "benchmark_id": "terminal-bench-4.0",
+      "match": {
+        "harness": "Codex",
+        "model": "GPT-6 Astra",
+        "thinking_level": "high",
+        "accuracy": 57.88,
+        "trial_count": 330
+      },
+      "harness_version": "0.151.0",
+      "harness_version_variants": [
+        {
+          "version": "0.151.0",
+          "count": 330,
+          "source_url": "https://hub.harborframework.com/jobs/7aae99ba-b347-44b1-8a29-934d0e3a605a/trials/009e11c5-feaf-4401-811c-d0a05ba96886"
+        }
+      ],
+      "timeout_multiplier": 1,
+      "source_url": "https://hub.harborframework.com/datasets/terminal-bench/terminal-bench/4/leaderboards/4-0-0/rows/3475050c-bf5e-4261-a3f6-0af5350af13f",
+      "verification": {
+        "scope": "all_linked_trials",
+        "trial_count": 330,
+        "unique_trial_count": 330,
+        "inaccessible_trial_count": 0,
+        "job_urls": [
+          "https://hub.harborframework.com/jobs/7aae99ba-b347-44b1-8a29-934d0e3a605a"
+        ],
+        "field_paths": {
+          "harness_version": "trial.agent.version",
+          "timeout_multiplier": "trial.lock.timeout_multiplier"
+        },
+        "timeout_multiplier_counts": [
+          {
+            "value": 1,
+            "count": 330
+          }
+        ],
+        "timeout_overrides_absent": true,
+        "api_requests": [
+          {
+            "template": "query_3",
+            "query": {
+              "row_id": "eq.3475050c-bf5e-4261-a3f6-0af5350af13f",
+              "order": "trial_id",
+              "limit": "100"
+            }
+          },
+          {
+            "template": "query_3",
+            "query": {
+              "row_id": "eq.3475050c-bf5e-4261-a3f6-0af5350af13f",
+              "order": "trial_id",
+              "limit": "100",
+              "offset": "100"
+            }
+          },
+          {
+            "template": "query_3",
+            "query": {
+              "row_id": "eq.3475050c-bf5e-4261-a3f6-0af5350af13f",
+              "order": "trial_id",
+              "limit": "100",
+              "offset": "200"
+            }
+          },
+          {
+            "template": "query_3",
+            "query": {
+              "row_id": "eq.3475050c-bf5e-4261-a3f6-0af5350af13f",
+              "order": "trial_id",
+              "limit": "100",
+              "offset": "300"
+            }
+          },
+          {
+            "template": "query_2",
+            "query": {
+              "row_id": "eq.3475050c-bf5e-4261-a3f6-0af5350af13f",
+              "order": "trial_id",
+              "limit": "1000"
+            }
+          }
+        ]
+      },
+      "version_note": null,
+      "raw_config": [],
+      "supplemental_sources": []
+    },
+    {
+      "row_id": "f3c3d5a6-6424-4acb-bfcc-615c3f79f6dd",
+      "benchmark_id": "terminal-bench-4.0",
+      "match": {
+        "harness": "Codex",
+        "model": "GPT-6 Astra",
+        "thinking_level": "medium",
+        "accuracy": 54.24,
+        "trial_count": 330
+      },
+      "harness_version": "0.151.0",
+      "harness_version_variants": [
+        {
+          "version": "0.151.0",
+          "count": 330,
+          "source_url": "https://hub.harborframework.com/jobs/88425f65-aadd-4064-bd0e-a413e88fb4ee/trials/02be75cf-096f-40ea-bf4d-16e337d79f55"
+        }
+      ],
+      "timeout_multiplier": 1,
+      "source_url": "https://hub.harborframework.com/datasets/terminal-bench/terminal-bench/4/leaderboards/4-0-0/rows/f3c3d5a6-6424-4acb-bfcc-615c3f79f6dd",
+      "verification": {
+        "scope": "all_linked_trials",
+        "trial_count": 330,
+        "unique_trial_count": 330,
+        "inaccessible_trial_count": 0,
+        "job_urls": [
+          "https://hub.harborframework.com/jobs/88425f65-aadd-4064-bd0e-a413e88fb4ee"
+        ],
+        "field_paths": {
+          "harness_version": "trial.agent.version",
+          "timeout_multiplier": "trial.lock.timeout_multiplier"
+        },
+        "timeout_multiplier_counts": [
+          {
+            "value": 1,
+            "count": 330
+          }
+        ],
+        "timeout_overrides_absent": true,
+        "api_requests": [
+          {
+            "template": "query_1",
+            "query": {
+              "row_id": "eq.f3c3d5a6-6424-4acb-bfcc-615c3f79f6dd",
+              "order": "trial_id",
+              "limit": "100"
+            }
+          },
+          {
+            "template": "query_1",
+            "query": {
+              "row_id": "eq.f3c3d5a6-6424-4acb-bfcc-615c3f79f6dd",
+              "order": "trial_id",
+              "limit": "100",
+              "offset": "100"
+            }
+          },
+          {
+            "template": "query_1",
+            "query": {
+              "row_id": "eq.f3c3d5a6-6424-4acb-bfcc-615c3f79f6dd",
+              "order": "trial_id",
+              "limit": "100",
+              "offset": "200"
+            }
+          },
+          {
+            "template": "query_1",
+            "query": {
+              "row_id": "eq.f3c3d5a6-6424-4acb-bfcc-615c3f79f6dd",
+              "order": "trial_id",
+              "limit": "100",
+              "offset": "300"
+            }
+          },
+          {
+            "template": "query_2",
+            "query": {
+              "row_id": "eq.f3c3d5a6-6424-4acb-bfcc-615c3f79f6dd",
+              "order": "trial_id",
+              "limit": "1000"
+            }
+          }
+        ]
+      },
+      "version_note": null,
+      "raw_config": [],
+      "supplemental_sources": []
+    },
+    {
+      "row_id": "d71ac3d0-da36-49cb-89d9-323136e77111",
+      "benchmark_id": "terminal-bench-4.0",
+      "match": {
+        "harness": "Claude Code",
+        "model": "Opus 5",
+        "thinking_level": "max",
+        "accuracy": 51.82,
+        "trial_count": 330
+      },
+      "harness_version": "2.1.231",
+      "harness_version_variants": [
+        {
+          "version": "2.1.231",
+          "count": 330,
+          "source_url": "https://hub.harborframework.com/jobs/a1ac63a1-8a9b-4bc7-9906-2b63657ee1c2/trials/01f839d2-7372-43db-a702-cc77aec33ed6"
+        }
+      ],
+      "timeout_multiplier": 1,
+      "source_url": "https://hub.harborframework.com/datasets/terminal-bench/terminal-bench/4/leaderboards/4-0-0/rows/d71ac3d0-da36-49cb-89d9-323136e77111",
+      "verification": {
+        "scope": "all_linked_trials",
+        "trial_count": 330,
+        "unique_trial_count": 330,
+        "inaccessible_trial_count": 0,
+        "job_urls": [
+          "https://hub.harborframework.com/jobs/a1ac63a1-8a9b-4bc7-9906-2b63657ee1c2"
+        ],
+        "field_paths": {
+          "harness_version": "trial.agent.version",
+          "timeout_multiplier": "trial.lock.timeout_multiplier"
+        },
+        "timeout_multiplier_counts": [
+          {
+            "value": 1,
+            "count": 330
+          }
+        ],
+        "timeout_overrides_absent": true,
+        "api_requests": [
+          {
+            "template": "query_1",
+            "query": {
+              "row_id": "eq.d71ac3d0-da36-49cb-89d9-323136e77111",
+              "order": "trial_id",
+              "limit": "1000"
+            }
+          },
+          {
+            "template": "query_2",
+            "query": {
+              "row_id": "eq.d71ac3d0-da36-49cb-89d9-323136e77111",
+              "order": "trial_id",
+              "limit": "1000"
+            }
+          }
+        ]
+      },
+      "version_note": null,
+      "raw_config": [],
+      "supplemental_sources": [
+        {
+          "kind": "official_submission",
+          "url": "https://github.com/harbor-framework/terminal-bench/blob/83c7a6172d629c6575b785ab12c8db787bb2e323/leaderboard/submissions/2026-08-26-anthropic-claude-opus-5-max-claude-code.json",
+          "field_path": "source_filter.agent_version",
+          "reported_value": "2.1.231",
+          "note": null
+        }
+      ]
+    },
+    {
+      "row_id": "b3ad58f3-b311-4d4d-875b-3158cf0309d6",
+      "benchmark_id": "terminal-bench-4.0",
+      "match": {
+        "harness": "Codex",
+        "model": "GPT-6 Astra",
+        "thinking_level": "low",
+        "accuracy": 50.61,
+        "trial_count": 330
+      },
+      "harness_version": "0.151.0",
+      "harness_version_variants": [
+        {
+          "version": "0.151.0",
+          "count": 330,
+          "source_url": "https://hub.harborframework.com/jobs/8f898c4b-ffbb-4b94-b66f-024407420bd1/trials/00ad3085-86ab-4649-b2df-04cfeee04fc2"
+        }
+      ],
+      "timeout_multiplier": 1,
+      "source_url": "https://hub.harborframework.com/datasets/terminal-bench/terminal-bench/4/leaderboards/4-0-0/rows/b3ad58f3-b311-4d4d-875b-3158cf0309d6",
+      "verification": {
+        "scope": "all_linked_trials",
+        "trial_count": 330,
+        "unique_trial_count": 330,
+        "inaccessible_trial_count": 0,
+        "job_urls": [
+          "https://hub.harborframework.com/jobs/8f898c4b-ffbb-4b94-b66f-024407420bd1"
+        ],
+        "field_paths": {
+          "harness_version": "trial.agent.version",
+          "timeout_multiplier": "trial.lock.timeout_multiplier"
+        },
+        "timeout_multiplier_counts": [
+          {
+            "value": 1,
+            "count": 330
+          }
+        ],
+        "timeout_overrides_absent": true,
+        "api_requests": [
+          {
+            "template": "query_1",
+            "query": {
+              "row_id": "eq.b3ad58f3-b311-4d4d-875b-3158cf0309d6",
+              "order": "trial_id",
+              "limit": "1000"
+            }
+          },
+          {
+            "template": "query_2",
+            "query": {
+              "row_id": "eq.b3ad58f3-b311-4d4d-875b-3158cf0309d6",
+              "order": "trial_id",
+              "limit": "1000"
+            }
+          }
+        ]
+      },
+      "version_note": null,
+      "raw_config": [],
+      "supplemental_sources": []
+    },
+    {
+      "row_id": "36c077e0-4879-4444-b315-8532d66401d6",
+      "benchmark_id": "terminal-bench-4.0",
+      "match": {
+        "harness": "Claude Code",
+        "model": "Fable 5",
+        "thinking_level": "max",
+        "accuracy": 44.55,
+        "trial_count": 330
+      },
+      "harness_version": "2.1.231",
+      "harness_version_variants": [
+        {
+          "version": "2.1.231",
+          "count": 330,
+          "source_url": "https://hub.harborframework.com/jobs/991af5e0-8c5f-4511-9619-a2a46939ebd4/trials/005f7b66-9062-43b2-bf73-c8be302fa6f1"
+        }
+      ],
+      "timeout_multiplier": 1,
+      "source_url": "https://hub.harborframework.com/datasets/terminal-bench/terminal-bench/4/leaderboards/4-0-0/rows/36c077e0-4879-4444-b315-8532d66401d6",
+      "verification": {
+        "scope": "all_linked_trials",
+        "trial_count": 330,
+        "unique_trial_count": 330,
+        "inaccessible_trial_count": 0,
+        "job_urls": [
+          "https://hub.harborframework.com/jobs/991af5e0-8c5f-4511-9619-a2a46939ebd4"
+        ],
+        "field_paths": {
+          "harness_version": "trial.agent.version",
+          "timeout_multiplier": "trial.lock.timeout_multiplier"
+        },
+        "timeout_multiplier_counts": [
+          {
+            "value": 1,
+            "count": 330
+          }
+        ],
+        "timeout_overrides_absent": true,
+        "api_requests": [
+          {
+            "template": "query_1",
+            "query": {
+              "row_id": "eq.36c077e0-4879-4444-b315-8532d66401d6",
+              "order": "trial_id",
+              "limit": "1000"
+            }
+          },
+          {
+            "template": "query_2",
+            "query": {
+              "row_id": "eq.36c077e0-4879-4444-b315-8532d66401d6",
+              "order": "trial_id",
+              "limit": "1000"
+            }
+          }
+        ]
+      },
+      "version_note": null,
+      "raw_config": [],
+      "supplemental_sources": [
+        {
+          "kind": "official_submission",
+          "url": "https://github.com/harbor-framework/terminal-bench/blob/83c7a6172d629c6575b785ab12c8db787bb2e323/leaderboard/submissions/2026-08-26-anthropic-claude-fable-5-max-claude-code.json",
+          "field_path": "source_filter.agent_version",
+          "reported_value": "2.1.231",
+          "note": null
+        }
+      ]
+    },
+    {
+      "row_id": "d72e8775-f4f1-4313-99e7-35b1cb499f24",
+      "benchmark_id": "terminal-bench-4.0",
+      "match": {
+        "harness": "Claude Code",
+        "model": "GLM-5.3",
+        "thinking_level": "max",
+        "accuracy": 41.82,
+        "trial_count": 330
+      },
+      "harness_version": "2.1.207",
+      "harness_version_variants": [
+        {
+          "version": "2.1.207",
+          "count": 330,
+          "source_url": "https://hub.harborframework.com/jobs/18e4ee29-d8b4-516b-b79d-b8bad5bcd5be/trials/00d35695-9be4-5dd4-8600-913e02ed19cd"
+        }
+      ],
+      "timeout_multiplier": 1,
+      "source_url": "https://hub.harborframework.com/datasets/terminal-bench/terminal-bench/4/leaderboards/4-0-0/rows/d72e8775-f4f1-4313-99e7-35b1cb499f24",
+      "verification": {
+        "scope": "all_linked_trials",
+        "trial_count": 330,
+        "unique_trial_count": 330,
+        "inaccessible_trial_count": 0,
+        "job_urls": [
+          "https://hub.harborframework.com/jobs/18e4ee29-d8b4-516b-b79d-b8bad5bcd5be"
+        ],
+        "field_paths": {
+          "harness_version": "trial.agent.version",
+          "timeout_multiplier": "trial.lock.timeout_multiplier"
+        },
+        "timeout_multiplier_counts": [
+          {
+            "value": 1,
+            "count": 330
+          }
+        ],
+        "timeout_overrides_absent": true,
+        "api_requests": [
+          {
+            "template": "query_1",
+            "query": {
+              "row_id": "eq.d72e8775-f4f1-4313-99e7-35b1cb499f24",
+              "order": "trial_id",
+              "limit": "1000"
+            }
+          },
+          {
+            "template": "query_2",
+            "query": {
+              "row_id": "eq.d72e8775-f4f1-4313-99e7-35b1cb499f24",
+              "order": "trial_id",
+              "limit": "1000"
+            }
+          }
+        ]
+      },
+      "version_note": null,
+      "raw_config": [
+        {
+          "name": "CLAUDE_CODE_AUTO_COMPACT_WINDOW",
+          "value": "1000000",
+          "field_paths": [
+            "trial.config.agent.env.CLAUDE_CODE_AUTO_COMPACT_WINDOW",
+            "trial.lock.agent.env.CLAUDE_CODE_AUTO_COMPACT_WINDOW"
+          ],
+          "trial_count": 330,
+          "note": {
+            "zh": "原始自动压缩窗口配置；不等于已证实的实际压缩触发阈值，不能据此填写 1M 阈值。",
+            "en": "Explicit auto-compaction window configuration, not a verified effective trigger threshold. Do not infer a 1M-token compaction threshold."
+          },
+          "documentation_url": "https://code.claude.com/docs/en/env-vars"
+        }
+      ],
+      "supplemental_sources": [
+        {
+          "kind": "official_submission",
+          "url": "https://github.com/harbor-framework/terminal-bench/blob/83c7a6172d629c6575b785ab12c8db787bb2e323/leaderboard/submissions/2026-08-26-anthropic-glm-5-3-max-claude-code.json",
+          "field_path": "source_filter.agent_version",
+          "reported_value": "2.1.207",
+          "note": null
+        }
+      ]
+    },
+    {
+      "row_id": "0e349bde-b264-494d-a853-fada9c696192",
+      "benchmark_id": "terminal-bench-4.0",
+      "match": {
+        "harness": "Codex",
+        "model": "GPT-5.6 Sol",
+        "thinking_level": "max",
+        "accuracy": 37.27,
+        "trial_count": 330
+      },
+      "harness_version": "0.149.1",
+      "harness_version_variants": [
+        {
+          "version": "0.149.1",
+          "count": 330,
+          "source_url": "https://hub.harborframework.com/jobs/5aebbab5-1f8f-4cdb-8073-c6ce785a930d/trials/00879e34-1e4c-47a9-b44b-4756b383a65a"
+        }
+      ],
+      "timeout_multiplier": 1,
+      "source_url": "https://hub.harborframework.com/datasets/terminal-bench/terminal-bench/4/leaderboards/4-0-0/rows/0e349bde-b264-494d-a853-fada9c696192",
+      "verification": {
+        "scope": "all_linked_trials",
+        "trial_count": 330,
+        "unique_trial_count": 330,
+        "inaccessible_trial_count": 0,
+        "job_urls": [
+          "https://hub.harborframework.com/jobs/5aebbab5-1f8f-4cdb-8073-c6ce785a930d"
+        ],
+        "field_paths": {
+          "harness_version": "trial.agent.version",
+          "timeout_multiplier": "trial.lock.timeout_multiplier"
+        },
+        "timeout_multiplier_counts": [
+          {
+            "value": 1,
+            "count": 330
+          }
+        ],
+        "timeout_overrides_absent": true,
+        "api_requests": [
+          {
+            "template": "query_1",
+            "query": {
+              "row_id": "eq.0e349bde-b264-494d-a853-fada9c696192",
+              "order": "trial_id",
+              "limit": "1000"
+            }
+          },
+          {
+            "template": "query_2",
+            "query": {
+              "row_id": "eq.0e349bde-b264-494d-a853-fada9c696192",
+              "order": "trial_id",
+              "limit": "1000"
+            }
+          }
+        ]
+      },
+      "version_note": null,
+      "raw_config": [],
+      "supplemental_sources": [
+        {
+          "kind": "official_submission",
+          "url": "https://github.com/harbor-framework/terminal-bench/blob/83c7a6172d629c6575b785ab12c8db787bb2e323/leaderboard/submissions/2026-08-26-openai-gpt-5-6-sol-max-codex.json",
+          "field_path": "source_filter.agent_version",
+          "reported_value": "0.149.1",
+          "note": null
+        }
+      ]
+    },
+    {
+      "row_id": "952b4217-421f-4d14-849b-9968fcb2063b",
+      "benchmark_id": "terminal-bench-4.0",
+      "match": {
+        "harness": "Claude Code",
+        "model": "Opus 4.8",
+        "thinking_level": "max",
+        "accuracy": 23.64,
+        "trial_count": 330
+      },
+      "harness_version": "2.1.231",
+      "harness_version_variants": [
+        {
+          "version": "2.1.231",
+          "count": 330,
+          "source_url": "https://hub.harborframework.com/jobs/10722b22-0bbd-4c93-8d27-611fb8dd02a6/trials/0019151c-bf1f-4738-a9c1-84abf254a453"
+        }
+      ],
+      "timeout_multiplier": 1,
+      "source_url": "https://hub.harborframework.com/datasets/terminal-bench/terminal-bench/4/leaderboards/4-0-0/rows/952b4217-421f-4d14-849b-9968fcb2063b",
+      "verification": {
+        "scope": "all_linked_trials",
+        "trial_count": 330,
+        "unique_trial_count": 330,
+        "inaccessible_trial_count": 0,
+        "job_urls": [
+          "https://hub.harborframework.com/jobs/10722b22-0bbd-4c93-8d27-611fb8dd02a6"
+        ],
+        "field_paths": {
+          "harness_version": "trial.agent.version",
+          "timeout_multiplier": "trial.lock.timeout_multiplier"
+        },
+        "timeout_multiplier_counts": [
+          {
+            "value": 1,
+            "count": 330
+          }
+        ],
+        "timeout_overrides_absent": true,
+        "api_requests": [
+          {
+            "template": "query_1",
+            "query": {
+              "row_id": "eq.952b4217-421f-4d14-849b-9968fcb2063b",
+              "order": "trial_id",
+              "limit": "1000"
+            }
+          },
+          {
+            "template": "query_2",
+            "query": {
+              "row_id": "eq.952b4217-421f-4d14-849b-9968fcb2063b",
+              "order": "trial_id",
+              "limit": "1000"
+            }
+          }
+        ]
+      },
+      "version_note": null,
+      "raw_config": [],
+      "supplemental_sources": [
+        {
+          "kind": "official_submission",
+          "url": "https://github.com/harbor-framework/terminal-bench/blob/83c7a6172d629c6575b785ab12c8db787bb2e323/leaderboard/submissions/2026-08-26-anthropic-claude-opus-4-8-max-claude-code.json",
+          "field_path": "source_filter.agent_version",
+          "reported_value": "2.1.231",
+          "note": null
+        }
+      ]
+    },
+    {
+      "row_id": "e53da412-5e92-408c-b369-c767924c7c1c",
+      "benchmark_id": "terminal-bench-4.0",
+      "match": {
+        "harness": "Codex",
+        "model": "GPT-5.6 Terra",
+        "thinking_level": "max",
+        "accuracy": 21.52,
+        "trial_count": 330
+      },
+      "harness_version": "0.149.1",
+      "harness_version_variants": [
+        {
+          "version": "0.149.1",
+          "count": 330,
+          "source_url": "https://hub.harborframework.com/jobs/3de0aee9-6de7-4d94-83c4-ac5e789fe757/trials/00255fb8-fc21-4324-952a-5e77f5a20e49"
+        }
+      ],
+      "timeout_multiplier": 1,
+      "source_url": "https://hub.harborframework.com/datasets/terminal-bench/terminal-bench/4/leaderboards/4-0-0/rows/e53da412-5e92-408c-b369-c767924c7c1c",
+      "verification": {
+        "scope": "all_linked_trials",
+        "trial_count": 330,
+        "unique_trial_count": 330,
+        "inaccessible_trial_count": 0,
+        "job_urls": [
+          "https://hub.harborframework.com/jobs/3de0aee9-6de7-4d94-83c4-ac5e789fe757"
+        ],
+        "field_paths": {
+          "harness_version": "trial.agent.version",
+          "timeout_multiplier": "trial.lock.timeout_multiplier"
+        },
+        "timeout_multiplier_counts": [
+          {
+            "value": 1,
+            "count": 330
+          }
+        ],
+        "timeout_overrides_absent": true,
+        "api_requests": [
+          {
+            "template": "query_1",
+            "query": {
+              "row_id": "eq.e53da412-5e92-408c-b369-c767924c7c1c",
+              "order": "trial_id",
+              "limit": "1000"
+            }
+          },
+          {
+            "template": "query_2",
+            "query": {
+              "row_id": "eq.e53da412-5e92-408c-b369-c767924c7c1c",
+              "order": "trial_id",
+              "limit": "1000"
+            }
+          }
+        ]
+      },
+      "version_note": null,
+      "raw_config": [],
+      "supplemental_sources": [
+        {
+          "kind": "official_submission",
+          "url": "https://github.com/harbor-framework/terminal-bench/blob/83c7a6172d629c6575b785ab12c8db787bb2e323/leaderboard/submissions/2026-08-26-openai-gpt-5-6-terra-max-codex.json",
+          "field_path": "source_filter.agent_version",
+          "reported_value": "0.149.1",
+          "note": null
+        }
+      ]
+    },
+    {
+      "row_id": "26354542-edc0-40cd-8f8d-9fe6fbe92ac3",
+      "benchmark_id": "terminal-bench-4.0",
+      "match": {
+        "harness": "Grok Build",
+        "model": "Grok 4.6",
+        "thinking_level": "high",
+        "accuracy": 20.3,
+        "trial_count": 330
+      },
+      "harness_version": "1.0.5",
+      "harness_version_variants": [
+        {
+          "version": "1.0.5",
+          "count": 330,
+          "source_url": "https://hub.harborframework.com/jobs/2c89a14f-d14a-4ea8-ad8a-d08d90c67a5d/trials/00b2b345-c6b0-4479-8d0e-33811aa5f324"
+        }
+      ],
+      "timeout_multiplier": 1,
+      "source_url": "https://hub.harborframework.com/datasets/terminal-bench/terminal-bench/4/leaderboards/4-0-0/rows/26354542-edc0-40cd-8f8d-9fe6fbe92ac3",
+      "verification": {
+        "scope": "all_linked_trials",
+        "trial_count": 330,
+        "unique_trial_count": 330,
+        "inaccessible_trial_count": 0,
+        "job_urls": [
+          "https://hub.harborframework.com/jobs/2c89a14f-d14a-4ea8-ad8a-d08d90c67a5d"
+        ],
+        "field_paths": {
+          "harness_version": "trial.agent.version",
+          "timeout_multiplier": "trial.lock.timeout_multiplier"
+        },
+        "timeout_multiplier_counts": [
+          {
+            "value": 1,
+            "count": 330
+          }
+        ],
+        "timeout_overrides_absent": true,
+        "api_requests": [
+          {
+            "template": "query_1",
+            "query": {
+              "row_id": "eq.26354542-edc0-40cd-8f8d-9fe6fbe92ac3",
+              "order": "trial_id",
+              "limit": "1000"
+            }
+          },
+          {
+            "template": "query_2",
+            "query": {
+              "row_id": "eq.26354542-edc0-40cd-8f8d-9fe6fbe92ac3",
+              "order": "trial_id",
+              "limit": "1000"
+            }
+          }
+        ]
+      },
+      "version_note": null,
+      "raw_config": [],
+      "supplemental_sources": [
+        {
+          "kind": "official_submission",
+          "url": "https://github.com/harbor-framework/terminal-bench/blob/83c7a6172d629c6575b785ab12c8db787bb2e323/leaderboard/submissions/2026-08-26-xai-grok-4-6-none-grok-build.json",
+          "field_path": "source_filter.agent_version",
+          "reported_value": "1.0.5",
+          "note": {
+            "zh": "提交中的 reasoning_effort 为 null，榜单显示 high；仅保留其版本声明，行归属与版本由当前关联试验独立核验。",
+            "en": "The submission reports null reasoning effort while the leaderboard displays high; only its version statement is retained. Current row associations independently establish the version."
+          }
+        }
+      ]
+    },
+    {
+      "row_id": "06850434-507d-4dbd-b74a-09d52519ee35",
+      "benchmark_id": "terminal-bench-4.0",
+      "match": {
+        "harness": "mini-SWE-agent",
+        "model": "Gemini 3.8 Flash",
+        "thinking_level": "high",
+        "accuracy": 19.09,
+        "trial_count": 330
+      },
+      "harness_version": "2.4.6",
+      "harness_version_variants": [
+        {
+          "version": "2.4.6",
+          "count": 330,
+          "source_url": "https://hub.harborframework.com/jobs/0e1a4181-26a9-42de-9d5a-6a36515f13e2/trials/0030b76e-3579-4b6d-8bb1-039451d2c12d"
+        }
+      ],
+      "timeout_multiplier": 1,
+      "source_url": "https://hub.harborframework.com/datasets/terminal-bench/terminal-bench/4/leaderboards/4-0-0/rows/06850434-507d-4dbd-b74a-09d52519ee35",
+      "verification": {
+        "scope": "all_linked_trials",
+        "trial_count": 330,
+        "unique_trial_count": 330,
+        "inaccessible_trial_count": 0,
+        "job_urls": [
+          "https://hub.harborframework.com/jobs/0e1a4181-26a9-42de-9d5a-6a36515f13e2"
+        ],
+        "field_paths": {
+          "harness_version": "trial.agent.version",
+          "timeout_multiplier": "trial.lock.timeout_multiplier"
+        },
+        "timeout_multiplier_counts": [
+          {
+            "value": 1,
+            "count": 330
+          }
+        ],
+        "timeout_overrides_absent": true,
+        "api_requests": [
+          {
+            "template": "query_3",
+            "query": {
+              "row_id": "eq.06850434-507d-4dbd-b74a-09d52519ee35",
+              "order": "trial_id",
+              "limit": "100"
+            }
+          },
+          {
+            "template": "query_3",
+            "query": {
+              "row_id": "eq.06850434-507d-4dbd-b74a-09d52519ee35",
+              "order": "trial_id",
+              "limit": "100",
+              "offset": "100"
+            }
+          },
+          {
+            "template": "query_3",
+            "query": {
+              "row_id": "eq.06850434-507d-4dbd-b74a-09d52519ee35",
+              "order": "trial_id",
+              "limit": "100",
+              "offset": "200"
+            }
+          },
+          {
+            "template": "query_3",
+            "query": {
+              "row_id": "eq.06850434-507d-4dbd-b74a-09d52519ee35",
+              "order": "trial_id",
+              "limit": "100",
+              "offset": "300"
+            }
+          },
+          {
+            "template": "query_2",
+            "query": {
+              "row_id": "eq.06850434-507d-4dbd-b74a-09d52519ee35",
+              "order": "trial_id",
+              "limit": "1000"
+            }
+          }
+        ]
+      },
+      "version_note": null,
+      "raw_config": [],
+      "supplemental_sources": [
+        {
+          "kind": "official_submission",
+          "url": "https://github.com/harbor-framework/terminal-bench/blob/83c7a6172d629c6575b785ab12c8db787bb2e323/leaderboard/submissions/2026-09-01-gemini-gemini-3-8-flash-high-mini-swe-agent.json",
+          "field_path": "source_filter.agent_version",
+          "reported_value": "2.4.6",
+          "note": null
+        }
+      ]
+    },
+    {
+      "row_id": "51c6d76e-5baa-48c1-97b3-88656c620eef",
+      "benchmark_id": "terminal-bench-4.0",
+      "match": {
+        "harness": "Codex",
+        "model": "GPT-5.6 Luna",
+        "thinking_level": "max",
+        "accuracy": 17.27,
+        "trial_count": 330
+      },
+      "harness_version": "0.149.1",
+      "harness_version_variants": [
+        {
+          "version": "0.149.1",
+          "count": 330,
+          "source_url": "https://hub.harborframework.com/jobs/b7444ba2-78b7-46a0-a3c1-2196d40a337d/trials/0024a359-cd18-4822-aa03-c398cd818423"
+        }
+      ],
+      "timeout_multiplier": 1,
+      "source_url": "https://hub.harborframework.com/datasets/terminal-bench/terminal-bench/4/leaderboards/4-0-0/rows/51c6d76e-5baa-48c1-97b3-88656c620eef",
+      "verification": {
+        "scope": "all_linked_trials",
+        "trial_count": 330,
+        "unique_trial_count": 330,
+        "inaccessible_trial_count": 0,
+        "job_urls": [
+          "https://hub.harborframework.com/jobs/b7444ba2-78b7-46a0-a3c1-2196d40a337d"
+        ],
+        "field_paths": {
+          "harness_version": "trial.agent.version",
+          "timeout_multiplier": "trial.lock.timeout_multiplier"
+        },
+        "timeout_multiplier_counts": [
+          {
+            "value": 1,
+            "count": 330
+          }
+        ],
+        "timeout_overrides_absent": true,
+        "api_requests": [
+          {
+            "template": "query_1",
+            "query": {
+              "row_id": "eq.51c6d76e-5baa-48c1-97b3-88656c620eef",
+              "order": "trial_id",
+              "limit": "1000"
+            }
+          },
+          {
+            "template": "query_2",
+            "query": {
+              "row_id": "eq.51c6d76e-5baa-48c1-97b3-88656c620eef",
+              "order": "trial_id",
+              "limit": "1000"
+            }
+          }
+        ]
+      },
+      "version_note": null,
+      "raw_config": [],
+      "supplemental_sources": [
+        {
+          "kind": "official_submission",
+          "url": "https://github.com/harbor-framework/terminal-bench/blob/83c7a6172d629c6575b785ab12c8db787bb2e323/leaderboard/submissions/2026-08-26-openai-gpt-5-6-luna-max-codex.json",
+          "field_path": "source_filter.agent_version",
+          "reported_value": "0.149.1",
+          "note": null
+        }
+      ]
+    },
+    {
+      "row_id": "0eed5a0d-96b6-491b-aeb7-cd5e4700c2d7",
+      "benchmark_id": "terminal-bench-4.0",
+      "match": {
+        "harness": "Grok Build",
+        "model": "Grok 4.5",
+        "thinking_level": "high",
+        "accuracy": 12.42,
+        "trial_count": 330
+      },
+      "harness_version": "1.0.5",
+      "harness_version_variants": [
+        {
+          "version": "1.0.5",
+          "count": 330,
+          "source_url": "https://hub.harborframework.com/jobs/51a17348-a8b8-4c5e-b8d2-73a9a724c3b6/trials/017bb352-9604-49d9-a8d1-cf60bb00fd5c"
+        }
+      ],
+      "timeout_multiplier": 1,
+      "source_url": "https://hub.harborframework.com/datasets/terminal-bench/terminal-bench/4/leaderboards/4-0-0/rows/0eed5a0d-96b6-491b-aeb7-cd5e4700c2d7",
+      "verification": {
+        "scope": "all_linked_trials",
+        "trial_count": 330,
+        "unique_trial_count": 330,
+        "inaccessible_trial_count": 0,
+        "job_urls": [
+          "https://hub.harborframework.com/jobs/51a17348-a8b8-4c5e-b8d2-73a9a724c3b6"
+        ],
+        "field_paths": {
+          "harness_version": "trial.agent.version",
+          "timeout_multiplier": "trial.lock.timeout_multiplier"
+        },
+        "timeout_multiplier_counts": [
+          {
+            "value": 1,
+            "count": 330
+          }
+        ],
+        "timeout_overrides_absent": true,
+        "api_requests": [
+          {
+            "template": "query_1",
+            "query": {
+              "row_id": "eq.0eed5a0d-96b6-491b-aeb7-cd5e4700c2d7",
+              "order": "trial_id",
+              "limit": "1000"
+            }
+          },
+          {
+            "template": "query_2",
+            "query": {
+              "row_id": "eq.0eed5a0d-96b6-491b-aeb7-cd5e4700c2d7",
+              "order": "trial_id",
+              "limit": "1000"
+            }
+          }
+        ]
+      },
+      "version_note": null,
+      "raw_config": [],
+      "supplemental_sources": [
+        {
+          "kind": "official_submission",
+          "url": "https://github.com/harbor-framework/terminal-bench/blob/83c7a6172d629c6575b785ab12c8db787bb2e323/leaderboard/submissions/2026-08-26-xai-grok-4-5-none-grok-build.json",
+          "field_path": "source_filter.agent_version",
+          "reported_value": "1.0.5",
+          "note": {
+            "zh": "提交中的 reasoning_effort 为 null，榜单显示 high；仅保留其版本声明，行归属与版本由当前关联试验独立核验。",
+            "en": "The submission reports null reasoning effort while the leaderboard displays high; only its version statement is retained. Current row associations independently establish the version."
+          }
+        }
+      ]
+    },
+    {
+      "row_id": "8180b9e4-4990-43d0-b906-cd8b43adaaa2",
+      "benchmark_id": "terminal-bench-4.0",
+      "match": {
+        "harness": "Claude Code",
+        "model": "Sonnet 5",
+        "thinking_level": "max",
+        "accuracy": 12.42,
+        "trial_count": 330
+      },
+      "harness_version": "2.1.231",
+      "harness_version_variants": [
+        {
+          "version": "2.1.231",
+          "count": 330,
+          "source_url": "https://hub.harborframework.com/jobs/a5758f1a-9ef2-4100-9893-34a99c99bd9c/trials/00b996ef-2ff6-402e-8511-10a3e2ac52f7"
+        }
+      ],
+      "timeout_multiplier": 1,
+      "source_url": "https://hub.harborframework.com/datasets/terminal-bench/terminal-bench/4/leaderboards/4-0-0/rows/8180b9e4-4990-43d0-b906-cd8b43adaaa2",
+      "verification": {
+        "scope": "all_linked_trials",
+        "trial_count": 330,
+        "unique_trial_count": 330,
+        "inaccessible_trial_count": 0,
+        "job_urls": [
+          "https://hub.harborframework.com/jobs/a5758f1a-9ef2-4100-9893-34a99c99bd9c"
+        ],
+        "field_paths": {
+          "harness_version": "trial.agent.version",
+          "timeout_multiplier": "trial.lock.timeout_multiplier"
+        },
+        "timeout_multiplier_counts": [
+          {
+            "value": 1,
+            "count": 330
+          }
+        ],
+        "timeout_overrides_absent": true,
+        "api_requests": [
+          {
+            "template": "query_1",
+            "query": {
+              "row_id": "eq.8180b9e4-4990-43d0-b906-cd8b43adaaa2",
+              "order": "trial_id",
+              "limit": "1000"
+            }
+          },
+          {
+            "template": "query_2",
+            "query": {
+              "row_id": "eq.8180b9e4-4990-43d0-b906-cd8b43adaaa2",
+              "order": "trial_id",
+              "limit": "1000"
+            }
+          }
+        ]
+      },
+      "version_note": null,
+      "raw_config": [],
+      "supplemental_sources": [
+        {
+          "kind": "official_submission",
+          "url": "https://github.com/harbor-framework/terminal-bench/blob/83c7a6172d629c6575b785ab12c8db787bb2e323/leaderboard/submissions/2026-08-26-anthropic-claude-sonnet-5-max-claude-code.json",
+          "field_path": "source_filter.agent_version",
+          "reported_value": "2.1.231",
+          "note": null
+        }
+      ]
+    },
+    {
+      "row_id": "14f4da14-b86a-4dca-92d7-11178d4fe064",
+      "benchmark_id": "terminal-bench-4.0",
+      "match": {
+        "harness": "mini-SWE-agent",
+        "model": "Gemini 3.7 Flash",
+        "thinking_level": "high",
+        "accuracy": 11.21,
+        "trial_count": 330
+      },
+      "harness_version": "2.4.6",
+      "harness_version_variants": [
+        {
+          "version": "2.4.6",
+          "count": 330,
+          "source_url": "https://hub.harborframework.com/jobs/2d418f81-17d6-4f9c-8d16-d104f4ed6caa/trials/001fae10-f2bb-4a7d-9ada-cce94bd774f8"
+        }
+      ],
+      "timeout_multiplier": 1,
+      "source_url": "https://hub.harborframework.com/datasets/terminal-bench/terminal-bench/4/leaderboards/4-0-0/rows/14f4da14-b86a-4dca-92d7-11178d4fe064",
+      "verification": {
+        "scope": "all_linked_trials",
+        "trial_count": 330,
+        "unique_trial_count": 330,
+        "inaccessible_trial_count": 0,
+        "job_urls": [
+          "https://hub.harborframework.com/jobs/2d418f81-17d6-4f9c-8d16-d104f4ed6caa"
+        ],
+        "field_paths": {
+          "harness_version": "trial.agent.version",
+          "timeout_multiplier": "trial.lock.timeout_multiplier"
+        },
+        "timeout_multiplier_counts": [
+          {
+            "value": 1,
+            "count": 330
+          }
+        ],
+        "timeout_overrides_absent": true,
+        "api_requests": [
+          {
+            "template": "query_3",
+            "query": {
+              "row_id": "eq.14f4da14-b86a-4dca-92d7-11178d4fe064",
+              "order": "trial_id",
+              "limit": "100"
+            }
+          },
+          {
+            "template": "query_3",
+            "query": {
+              "row_id": "eq.14f4da14-b86a-4dca-92d7-11178d4fe064",
+              "order": "trial_id",
+              "limit": "100",
+              "offset": "100"
+            }
+          },
+          {
+            "template": "query_3",
+            "query": {
+              "row_id": "eq.14f4da14-b86a-4dca-92d7-11178d4fe064",
+              "order": "trial_id",
+              "limit": "100",
+              "offset": "200"
+            }
+          },
+          {
+            "template": "query_3",
+            "query": {
+              "row_id": "eq.14f4da14-b86a-4dca-92d7-11178d4fe064",
+              "order": "trial_id",
+              "limit": "100",
+              "offset": "300"
+            }
+          },
+          {
+            "template": "query_2",
+            "query": {
+              "row_id": "eq.14f4da14-b86a-4dca-92d7-11178d4fe064",
+              "order": "trial_id",
+              "limit": "1000"
+            }
+          }
+        ]
+      },
+      "version_note": null,
+      "raw_config": [],
+      "supplemental_sources": [
+        {
+          "kind": "official_submission",
+          "url": "https://github.com/harbor-framework/terminal-bench/blob/83c7a6172d629c6575b785ab12c8db787bb2e323/leaderboard/submissions/2026-09-02-gemini-gemini-3-7-flash-high-mini-swe-agent.json",
+          "field_path": "source_filter.agent_version",
+          "reported_value": "2.4.6",
+          "note": null
+        }
+      ]
+    }
+  ]
+}

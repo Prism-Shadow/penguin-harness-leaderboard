@@ -30,7 +30,6 @@ const translations = {
     harness: "Harness",
     model: "Model",
     thinkingLevel: "Thinking effort",
-    thinkingMeaning: "Source-reported thinking effort; the same label across models does not imply an equal compute budget.",
     harnessFilter: "Filter by harness",
     modelFilter: "Filter by model",
     thinkingFilter: "Filter by thinking effort",
@@ -39,7 +38,6 @@ const translations = {
     allLevels: "All efforts",
     showingResults: "Showing {shown} of {total} public results",
     filters: "Filters",
-    tableHint: "Scroll horizontally to view all columns →",
     loadingResults: "Loading public results…",
     resolutionRate: "Resolution rate",
     tokens: "Tokens",
@@ -150,7 +148,7 @@ const translations = {
     reportedCi: "Reported 95% CI; ± is in percentage points, not relative percent.",
     rowNumberMeaning: "Position in the current filtered and sorted view; not an official rank.",
     harnessMeaning: "Task-running framework and version for this observation. Select its name for evidence.",
-    modelMeaning: "Model name reported by the result source.",
+    modelMeaning: "Model and source-reported thinking effort; the same effort label across models does not imply an equal compute budget.",
     compressionMeaning: "Verified compaction trigger in tokens. Context windows are not triggers; window information remains in Details.",
     timeoutMeaning: "Multiplier applied to each task's original time limit, not a fixed duration. Unreported multipliers appear as —; other reported time limits remain in Harness details.",
     rateMeaning: "Source-reported success rate. Penguin: successful attempts / all attempts, not pass@k.",
@@ -180,7 +178,6 @@ const translations = {
     harness: "Harness",
     model: "模型",
     thinkingLevel: "思考强度",
-    thinkingMeaning: "来源报告的思考强度；不同模型的同名强度不等于相同计算预算。",
     harnessFilter: "按 Harness 筛选",
     modelFilter: "按模型筛选",
     thinkingFilter: "按思考强度筛选",
@@ -189,7 +186,6 @@ const translations = {
     allLevels: "全部强度",
     showingResults: "显示 {shown} / {total} 条公开结果",
     filters: "筛选",
-    tableHint: "横向滚动查看完整表格 →",
     loadingResults: "正在加载公开结果…",
     resolutionRate: "通过率",
     tokens: "Token",
@@ -300,7 +296,7 @@ const translations = {
     reportedCi: "来源报告的 95% 置信区间；± 表示百分点，不是相对百分比。",
     rowNumberMeaning: "当前筛选、排序后的行号，不代表官方排名。",
     harnessMeaning: "本条实验执行任务的框架及版本；点击名称可查看证据。",
-    modelMeaning: "来源报告的模型名称。",
+    modelMeaning: "模型及来源报告的思考强度；不同模型的同名强度不等于相同计算预算。",
     compressionMeaning: "已核实的压缩触发阈值，单位 tokens。上下文窗口不等于触发阈值，窗口信息保留在详情中。",
     timeoutMeaning: "对各任务原始时限的缩放倍数，不是固定时长。未披露倍率时显示 —；其他时间限制保留在 Harness 详情中。",
     rateMeaning: "来源报告的成功比例；Penguin 为成功尝试数 ÷ 全部尝试数，不是 pass@k。",
@@ -339,7 +335,6 @@ const elements = {
   thinkingFilter: document.querySelector(".thinking-filter"),
   resultCount: document.querySelector(".result-count"),
   tableWrap: document.querySelector(".table-wrap"),
-  tableHint: document.querySelector(".table-hint"),
   resultsHead: document.querySelector(".results-head"),
   resultsBody: document.querySelector(".results-body"),
   resultDialog: document.querySelector(".result-dialog"),
@@ -359,11 +354,6 @@ const elements = {
 
 let dialogTrigger = null;
 const customSelects = new Map();
-
-function updateTableOverflow() {
-  const { tableWrap, tableHint } = elements;
-  tableHint.hidden = tableWrap.scrollWidth <= tableWrap.clientWidth + 1;
-}
 
 function t(key, values = {}) {
   const template = translations[state.locale]?.[key] ?? translations.en[key] ?? key;
@@ -747,6 +737,12 @@ function entityName(item) {
     : missingValue();
 }
 
+function modelEffort(row) {
+  return row.thinking_level
+    ? `<span class="model-effort">(${escapeHtml(row.thinking_level)})</span>`
+    : "";
+}
+
 const HARNESS_LOGOS = Object.freeze({
   "Claude Code": ["assets/harnesses/anthropic.svg", true],
   Codex: ["assets/harnesses/openai.svg", true],
@@ -954,7 +950,7 @@ function setSort(key) {
   if (state.sort.key === key) {
     state.sort.direction = state.sort.direction === "asc" ? "desc" : "asc";
   } else {
-    state.sort = { key, direction: ["harness", "model", "thinking_level", "source_type", "compression_trigger", "timeout_multiplier", "total_cost_usd"].includes(key) ? "asc" : "desc" };
+    state.sort = { key, direction: ["harness", "model", "source_type", "compression_trigger", "timeout_multiplier", "total_cost_usd"].includes(key) ? "asc" : "desc" };
   }
   renderTable();
   elements.tableWrap.scrollTop = 0;
@@ -965,7 +961,6 @@ function renderTableHead() {
     ["row_number", "rowNumber"],
     ["harness", "harness"],
     ["model", "model"],
-    ["thinking_level", "thinkingLevel"],
     ["compression_trigger", "compressionColumn"],
     ["timeout_multiplier", "timeoutColumn"],
     ["accuracy", "resolutionRate"],
@@ -973,7 +968,7 @@ function renderTableHead() {
     ["source_type", "source"],
   ];
   const meanings = {
-    row_number: "rowNumberMeaning", harness: "harnessMeaning", model: "modelMeaning", thinking_level: "thinkingMeaning",
+    row_number: "rowNumberMeaning", harness: "harnessMeaning", model: "modelMeaning",
     compression_trigger: "compressionMeaning", timeout_multiplier: "timeoutMeaning",
     accuracy: "rateMeaning", total_cost_usd: "costMeaning", source_type: "sourceMeaning",
   };
@@ -1091,14 +1086,13 @@ function renderTable() {
   });
 
   if (!rows.length) {
-    elements.resultsBody.innerHTML = `<tr><td class="empty-cell" colspan="9">${escapeHtml(t("noResults"))}</td></tr>`;
+    elements.resultsBody.innerHTML = `<tr><td class="empty-cell" colspan="8">${escapeHtml(t("noResults"))}</td></tr>`;
     return;
   }
 
   elements.resultsBody.innerHTML = rows.map((row, index) => {
     const config = row.run_config;
     const active = (key) => state.sortInteracted && state.sort.key === key ? " is-active" : "";
-    const effort = row.thinking_level ? escapeHtml(row.thinking_level) : missingValue(true);
     return `
       <tr>
         <td class="row-number-cell">${index + 1}</td>
@@ -1107,9 +1101,8 @@ function renderTable() {
           ${harnessVersionLabel(row) ? `<div class="harness-meta"><span title="${escapeHtml(t(config ? "configuredVersion" : "harnessVersion"))}">${escapeHtml(harnessVersionLabel(row))}</span></div>` : ""}
         </td>
         <td class="entity-cell model-cell${active("model")}">
-          <div class="model-primary">${entityName(row.model)}</div>
+          <div class="model-primary">${entityName(row.model)}${modelEffort(row)}</div>
         </td>
-        <td class="thinking-cell${active("thinking_level")}">${effort}</td>
         <td class="config-cell${active("compression_trigger")}">${compressionCell(row)}</td>
         <td class="config-cell${active("timeout_multiplier")}">${timeoutCell(row)}</td>
         <td class="${active("accuracy").trim()}">${accuracyCell(row)}</td>
@@ -1744,7 +1737,6 @@ function syncResultUrl() {
 function renderResults() {
   renderTable();
   renderPareto();
-  updateTableOverflow();
   syncResultUrl();
 }
 
@@ -1889,9 +1881,6 @@ async function init() {
       point.dispatchEvent(new MouseEvent("click", { bubbles: true }));
     }
   });
-  const tableObserver = new ResizeObserver(updateTableOverflow);
-  tableObserver.observe(elements.tableWrap);
-  tableObserver.observe(elements.tableWrap.querySelector("table"));
   let plotWidth = 0;
   const plotObserver = new ResizeObserver(() => {
     const width = Math.floor(elements.paretoChart.clientWidth);
@@ -1956,7 +1945,7 @@ async function init() {
 
   } catch (error) {
     console.error(error);
-    elements.resultsBody.innerHTML = `<tr><td class="empty-cell" colspan="9">${escapeHtml(t("dataError"))}</td></tr>`;
+    elements.resultsBody.innerHTML = `<tr><td class="empty-cell" colspan="8">${escapeHtml(t("dataError"))}</td></tr>`;
     elements.resultCount.textContent = t("dataError");
   }
 }

@@ -70,7 +70,7 @@ def main():
             const interval = document.querySelector(".rate-copy span");
             const score = interval.previousElementSibling;
             const row = interval.closest("tr");
-            const timeout = row.querySelector("td:nth-child(6)");
+            const timeout = row.querySelector("td:nth-child(5)");
             const font = getComputedStyle(interval);
             return {
                 fontMatches:font.fontSize === getComputedStyle(score).fontSize,
@@ -78,6 +78,17 @@ def main():
                 rowLine:getComputedStyle(timeout).borderBottomColor,
                 expectedLine:document.documentElement.dataset.theme === "dark"
                     ? "rgb(45, 55, 69)" : "rgb(223, 227, 232)",
+                effortStyle:[...document.querySelectorAll(".model-effort")].every(span => {
+                    const style = getComputedStyle(span);
+                    const rect = span.getBoundingClientRect();
+                    const name = span.previousElementSibling.getBoundingClientRect();
+                    const cell = span.closest("td").getBoundingClientRect();
+                    return style.borderWidth === "0px"
+                        && style.backgroundColor === "rgba(0, 0, 0, 0)"
+                        && style.fontWeight === "400"
+                        && rect.left >= name.right && rect.right <= cell.right
+                        && Math.abs(rect.top - name.top) <= 1;
+                }),
                 noOverlap:[...document.querySelectorAll(".rate-copy span")].every(span => {
                     const bar = span.closest(".rate-cell").querySelector(".accuracy-track");
                     return span.getBoundingClientRect().right + 6 <= bar.getBoundingClientRect().left
@@ -86,6 +97,7 @@ def main():
             };
         """)
         assert result["fontMatches"] and result["colorMatches"] and result["noOverlap"], result
+        assert result["effortStyle"], result
         assert result["rowLine"] == result["expectedLine"], result
 
     try:
@@ -103,10 +115,10 @@ def main():
             assert initial["pageWidth"] <= width + 1 and initial["pageX"] == 0, initial
             # Collapsed outer borders can contribute a fractional CSS pixel.
             assert abs(initial["tableWidth"] - 1480) <= 1 and initial["scrollWidth"] > initial["wrap"]["right"] - initial["wrap"]["left"], initial
-            assert len(driver.find_elements(By.CSS_SELECTOR, ".results-head th")) == 9
-            assert driver.find_element(By.CSS_SELECTOR, ".column-thinking-level").text == "思考强度"
-            assert driver.find_element(By.CSS_SELECTOR, ".thinking-cell").text == "high"
-            assert not driver.find_elements(By.CSS_SELECTOR, ".effort-pill, .github-stars")
+            assert len(driver.find_elements(By.CSS_SELECTOR, ".results-head th")) == 8
+            assert driver.find_element(By.CSS_SELECTOR, ".model-effort").text == "(high)"
+            assert not driver.find_elements(By.CSS_SELECTOR, ".effort-pill, .github-stars, .column-thinking-level, .thinking-cell")
+            assert not driver.find_elements(By.CSS_SELECTOR, ".table-hint")
             assert not driver.find_element(By.CSS_SELECTOR, ".github-link").text.strip()
             assert initial["externalToolbar"], initial
             assert initial["pageHeight"] <= height + 1 and initial["pageY"] == 0, initial
@@ -173,15 +185,13 @@ def main():
             driver.find_element(By.CSS_SELECTOR, ".filter-toggle").click()
             driver.find_element(By.CSS_SELECTOR, '[data-filter-category="thinking"]').click()
             driver.find_element(By.CSS_SELECTOR, '[data-filter-value="high"]').click()
-            assert all(cell.text == "high" for cell in driver.find_elements(By.CSS_SELECTOR, ".thinking-cell"))
-            assert 0 < len(driver.find_elements(By.CSS_SELECTOR, ".thinking-cell")) < 38
+            efforts = driver.find_elements(By.CSS_SELECTOR, ".model-effort")
+            assert all(cell.text == "(high)" for cell in efforts)
+            assert 0 < len(efforts) < 38
+            assert len(efforts) == len(driver.find_elements(By.CSS_SELECTOR, ".harness-details-button"))
             driver.find_element(By.CSS_SELECTOR, ".filter-toggle").click()
             driver.find_element(By.CSS_SELECTOR, '[data-filter-value=""]').click()
             assert len(driver.find_elements(By.CSS_SELECTOR, ".harness-details-button")) == 38
-            driver.find_element(By.CSS_SELECTOR, ".column-thinking-level button").click()
-            assert driver.find_element(By.CSS_SELECTOR, ".column-thinking-level").get_attribute("aria-sort") == "ascending"
-            assert driver.find_elements(By.CSS_SELECTOR, ".thinking-cell")[-1].text == "—"
-            driver.find_element(By.CSS_SELECTOR, ".column-total-cost-usd button").click()
             driver.execute_script("document.querySelector('.table-wrap').scrollLeft=0")
 
             # A detail modal can be opened/closed without moving the workspace.
@@ -211,7 +221,7 @@ def main():
         # An empty result must not expand the page.
         driver.execute_script('state.filters.model="nonexistent";renderResults()')
         assert driver.find_element(By.CSS_SELECTOR, ".empty-cell").is_displayed()
-        assert driver.find_element(By.CSS_SELECTOR, ".empty-cell").get_attribute("colspan") == "9"
+        assert driver.find_element(By.CSS_SELECTOR, ".empty-cell").get_attribute("colspan") == "8"
         assert measure()["pageHeight"] <= measure()["viewport"] + 1
         assert not driver.execute_script("""
             return performance.getEntriesByType("resource").some(entry=>entry.name.includes("api.github.com"));

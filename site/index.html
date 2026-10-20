@@ -42,8 +42,8 @@
         document.documentElement.lang = locale === "zh" ? "zh-CN" : "en";
       } catch {}
     </script>
-    <link rel="stylesheet" href="styles.css?v=20261020-table-columns" />
-    <script src="script.js?v=20261020-table-columns" defer></script>
+    <link rel="stylesheet" href="styles.css?v=20261020-model-effort" />
+    <script src="script.js?v=20261020-model-effort" defer></script>
   </head>
   <body>
     <a class="skip-link" href="#results" data-i18n="skipToResults">Skip to results</a>
@@ -126,13 +126,12 @@
           <div class="leaderboard-card">
             <span class="result-count sr-only" aria-live="polite">Loading…</span>
             <div id="table-panel" role="tabpanel" aria-labelledby="table-tab">
-              <span class="table-hint" hidden data-i18n="tableHint">Scroll horizontally to view all columns →</span>
               <div class="table-wrap" role="region" aria-labelledby="results-title" tabindex="0">
                 <table>
                   <caption class="sr-only table-caption">Public Terminal-Bench results</caption>
                   <thead class="results-head"></thead>
                   <tbody class="results-body">
-                    <tr><td class="loading-cell" colspan="9" data-i18n="loadingResults">Loading public results…</td></tr>
+                    <tr><td class="loading-cell" colspan="8" data-i18n="loadingResults">Loading public results…</td></tr>
                   </tbody>
                 </table>
               </div>

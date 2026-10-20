@@ -17,15 +17,15 @@ with configuration before performance:
 | --- | --- |
 | No. | Sequential position in the current filtered and sorted view, not a rank |
 | Harness | Name + reported or configured version |
-| Model | Model name |
-| Thinking effort | Source-reported effort as plain text; **—** when unreported |
+| Model | Model name followed by source-reported thinking effort in plain parentheses, when available |
 | Compaction trigger | Context length that triggers compaction, not maximum context capacity |
 | Timeout multiplier | Reported scaling factor for each task's original time limit; fixed durations are not converted into multipliers |
 | Resolution rate | Percentage + score bar; 95% interval only when available |
 | Cost | Recorded USD total; incomplete billing is disclosed on hover and in Details |
 | Source | Benchmark official, vendor-reported, or Penguin |
 
-The nine display columns separate model and thinking effort. The Benchmark's full
+The eight display columns keep thinking effort beside the model, without a badge
+or a separate column. The Benchmark's full
 name remains above the table; with only TB 2.1 published, there is no version selector.
 Default ordering is ascending recorded total cost,
 with missing totals last (per-task means are not substituted for totals).

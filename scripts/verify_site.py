@@ -418,6 +418,9 @@ def verify_frontend_contract() -> None:
     assert 'class="harness-details-button"' in script, "Harness detail trigger is missing"
     assert "harness-detail-hint" not in html and "harnessDetailsHint" not in script, "Removed Harness hint is still present"
     assert 'class="result-count sr-only"' in html, "Result count must be screen-reader-only"
+    assert "table-hint" not in html + css and "tableHint" not in script, (
+        "The removed horizontal-scroll explanation must not return"
+    )
     assert '<h2 id="pareto-title">Pareto Frontier</h2>' in html, "Minimal Pareto heading is missing"
     assert 'pareto-chart-meta' not in html and 'pareto-subtitle' not in html, "Removed chart annotations are still present"
     assert 'const PUBLISHED_BENCHMARK_IDS = ["terminal-bench-2.1"]' in script, "Only TB 2.1 is ready for publication"
@@ -426,13 +429,14 @@ def verify_frontend_contract() -> None:
         "Harness detail trigger is not wired up"
     )
     assert 'aria-haspopup="dialog"' in script, "Harness detail trigger lacks dialog semantics"
-    assert 'colspan="9"' in html, "Loading row does not span the nine table columns"
-    assert script.count('colspan="9"') == 2, (
-        "Empty and error rows do not span the nine table columns"
+    assert 'colspan="8"' in html, "Loading row does not span the eight table columns"
+    assert script.count('colspan="8"') == 2, (
+        "Empty and error rows do not span the eight table columns"
     )
-    assert '["thinking_level", "thinkingLevel"]' in script and 'class="thinking-cell' in script, (
-        "Thinking effort must have a separate column"
+    assert '["thinking_level", "thinkingLevel"]' not in script and 'class="thinking-cell' not in script, (
+        "Thinking effort must not have a separate column"
     )
+    assert '${entityName(row.model)}${modelEffort(row)}' in script, "Thinking effort must follow the model name"
     assert "effort-pill" not in script + css, "Thinking effort must not use badge styling"
     for removed_selector in ("ci-whisker", "rate-track", "rate-fill"):
         assert removed_selector not in script, f"Removed {removed_selector} markup is still rendered"

@@ -312,6 +312,13 @@ def verify_frontend_contract() -> None:
     assert "showModal()" in script, "Result details dialog is not wired up"
     assert "elements.dialogBody.scrollTop = 0" in script, "New result details must start at the top"
     assert "hero-actions" not in html and "hero-actions" not in css, "Removed hero buttons must not return"
+    assert 'class="hero"' not in html and ".hero-brand" not in css, "Removed duplicate hero title must not return"
+    assert "<span>Penguin Harness Leaderboard</span>" in html, "Navigation must show the full brand name"
+    assert '<h1 class="results-title">' in html, "Benchmark must remain the page heading"
+    table_header = script[script.index("function renderTableHead()"):script.index("function accuracyCell(")]
+    assert ".title =" not in table_header and 'setAttribute("title"' not in table_header, (
+        "Column headers must not show native hover explanations"
+    )
     assert 'class="button button-primary official-detail-link"' in html, "Official Details action must remain"
     assert 'class="button button-secondary dialog-done"' in html, "Details close action must remain"
     assert 'class="pareto-panel"' in html, "Pareto panel missing"

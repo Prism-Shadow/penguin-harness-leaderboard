@@ -973,7 +973,6 @@ function renderTableHead() {
   columns.forEach(([key, labelKey]) => {
     const cell = document.createElement("th");
     cell.scope = "col";
-    cell.title = t(meanings[key]);
     cell.className = `column-${key.replaceAll("_", "-")}${state.sortInteracted && state.sort.key === key ? " is-active" : ""}`;
     if (key === "row_number") {
       cell.textContent = t("rowNumber");

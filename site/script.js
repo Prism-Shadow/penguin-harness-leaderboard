@@ -42,7 +42,7 @@ const translations = {
     resolutionRate: "Resolution rate",
     tokens: "Tokens",
     cost: "Cost",
-    rowNumber: "No.",
+    rowNumber: "RANK",
     compressionColumn: "Compaction trigger",
     timeoutColumn: "Timeout multiplier",
     releaseDate: "Release date",
@@ -987,13 +987,15 @@ function renderTableHead() {
     button.className = "sort-button";
     button.setAttribute("aria-label", `${t("sorting", { column: t(labelKey) })}. ${t(meanings[key])}`);
     button.textContent = t(labelKey);
+    // Reserve the arrow slot on every sortable column so sorting never shifts widths.
+    const arrow = document.createElement("span");
+    arrow.className = "sort-arrow";
+    arrow.setAttribute("aria-hidden", "true");
     if (state.sort.key === key) {
-      const arrow = document.createElement("span");
-      arrow.className = "sort-arrow";
       arrow.textContent = state.sort.direction === "asc" ? "↑" : "↓";
-      button.append(arrow);
       cell.setAttribute("aria-sort", state.sort.direction === "asc" ? "ascending" : "descending");
     }
+    button.append(arrow);
     button.addEventListener("click", () => setSort(key));
     cell.append(button);
     row.append(cell);

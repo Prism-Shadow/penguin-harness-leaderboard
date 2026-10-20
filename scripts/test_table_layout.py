@@ -1,4 +1,4 @@
-"""Offline regression checks for the fixed-width, eight-column table."""
+"""Offline regression checks for the content-sized, eight-column table."""
 
 import json
 from pathlib import Path
@@ -21,19 +21,36 @@ class TableLayoutTests(unittest.TestCase):
         return re.search(r"(?:^|\n)" + re.escape(selector) + r"\s*\{([^}]+)\}",
                          self.css).group(1)
 
-    def test_eight_fixed_columns_add_up_to_table_width(self):
+    def test_eight_columns_size_to_their_content(self):
         header = self.script[self.script.index("function renderTableHead()"):
                              self.script.index("function accuracyCell(")]
         columns = re.findall(r'\["([^"]+)", "[^"]+"\]', header)
         self.assertEqual(columns, ["row_number", "harness", "model",
                                   "compression_trigger", "timeout_multiplier", "accuracy",
                                   "total_cost_usd", "source_type"])
-        total = sum(int(re.search(r"width:\s*(\d+)px", self.css_rule(
-            ".column-" + column.replace("_", "-"))).group(1)) for column in columns)
         table = self.css_rule("table")
-        self.assertIn(f"width: {total}px", table)
-        self.assertIn(f"min-width: {total}px", table)
-        self.assertEqual(total, 1480)
+        self.assertIn("width: max-content", table)
+        self.assertIn("min-width: 100%", table)
+        self.assertIn("table-layout: auto", table)
+        self.assertNotRegex(self.css, r"\.column-[\w-]+\s*\{[^}]*\bwidth:")
+
+    def test_headers_use_dark_uppercase_left_aligned_text(self):
+        self.assertIn('rowNumber: "RANK"', self.script)
+        header = self.css_rule("th")
+        self.assertIn("color: var(--text)", header)
+        self.assertIn("text-transform: uppercase", header)
+        self.assertIn("color: var(--text)", self.css_rule("th.is-active .sort-button"))
+        button = self.css_rule(".sort-button")
+        self.assertIn("text-align: left", button)
+        self.assertIn("text-transform: inherit", button)
+        self.assertIn("white-space: nowrap", button)
+        self.assertIn("justify-content: flex-start", button)
+        self.assertIn("flex: 0 0 11px", self.css_rule(".sort-arrow"))
+
+    def test_all_css_boxes_use_square_corners(self):
+        radii = re.findall(r"\bborder-(?:[\w-]+-)?radius:\s*([^;]+);", self.css)
+        self.assertTrue(radii)
+        self.assertTrue(all(value == "0" for value in radii), radii)
 
     def test_score_track_cannot_flex_shrink(self):
         rule = self.css_rule(".accuracy-track")

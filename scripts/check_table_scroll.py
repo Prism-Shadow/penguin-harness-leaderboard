@@ -100,6 +100,47 @@ def main():
         assert result["effortStyle"], result
         assert result["rowLine"] == result["expectedLine"], result
 
+    def check_headers_and_corners():
+        result = driver.execute_script("""
+            const headers = [...document.querySelectorAll(".results-head th")];
+            const cells = [...document.querySelector(".results-body tr").cells];
+            const textRect = element => {
+                const range = document.createRange();
+                range.selectNodeContents(element);
+                return range.getBoundingClientRect();
+            };
+            const bodyColor = getComputedStyle(document.body).color;
+            const columns = headers.map((th, index) => {
+                const label = th.querySelector("button") || th;
+                const td = cells[index];
+                const style = getComputedStyle(label);
+                const rect = textRect(label);
+                return {
+                    label:label.innerText, left:textRect(td).left,
+                    headerLeft:rect.left, color:style.color,
+                    aligned:Math.abs(rect.left-textRect(td).left) < 1,
+                    singleLine:rect.height < 28,
+                    uppercase:label.innerText === label.innerText.toUpperCase(),
+                    fits:rect.right <= th.getBoundingClientRect().right-10,
+                    foreground:style.color === bodyColor,
+                    width:th.getBoundingClientRect().width
+                };
+            });
+            const rounded = [...document.querySelectorAll("body *")]
+                .filter(el => !(el instanceof SVGElement) && el.getClientRects().length)
+                .filter(el => {
+                    const s = getComputedStyle(el);
+                    return [s.borderTopLeftRadius,s.borderTopRightRadius,
+                            s.borderBottomLeftRadius,s.borderBottomRightRadius]
+                        .some(radius => radius !== "0px");
+                }).map(el => el.className || el.tagName);
+            return {columns, rounded};
+        """)
+        assert all(column["aligned"] and column["singleLine"] and column["uppercase"]
+                   and column["fits"] and column["foreground"] for column in result["columns"]), result
+        assert not result["rounded"], result
+        return [column["width"] for column in result["columns"]]
+
     try:
         for width, height in ((1440, 900), (1280, 720), (1100, 800), (768, 1024),
                               (390, 844), (320, 568), (844, 390)):
@@ -111,10 +152,10 @@ def main():
             driver.execute_script('setLocale("zh");setTheme("light")')
             time.sleep(.1)
             check_table_styling()
+            column_widths = check_headers_and_corners()
             initial = measure()
             assert initial["pageWidth"] <= width + 1 and initial["pageX"] == 0, initial
-            # Collapsed outer borders can contribute a fractional CSS pixel.
-            assert abs(initial["tableWidth"] - 1480) <= 1 and initial["scrollWidth"] > initial["wrap"]["right"] - initial["wrap"]["left"], initial
+            assert initial["scrollWidth"] > initial["wrap"]["right"] - initial["wrap"]["left"], initial
             assert len(driver.find_elements(By.CSS_SELECTOR, ".results-head th")) == 8
             assert driver.find_element(By.CSS_SELECTOR, ".model-effort").text == "(high)"
             assert not driver.find_elements(By.CSS_SELECTOR, ".effort-pill, .github-stars, .column-thinking-level, .thinking-cell")
@@ -140,6 +181,7 @@ def main():
             assert sideways["title"] == initial["title"] and sideways["card"] == initial["card"], sideways
             assert abs(sideways["header"]["left"] - initial["header"]["left"] + sideways["scrollLeft"]) <= 1, sideways
             check_table_styling()
+            check_headers_and_corners()
             if width in (1440, 390):
                 driver.save_screenshot(str(output / f"scroll-{width}-zh.png"))
             driver.execute_script("document.querySelector('.table-wrap').scrollLeft=0")
@@ -170,10 +212,12 @@ def main():
             assert driver.find_element(By.CSS_SELECTOR, ".column-total-cost-usd").get_attribute("aria-sort") == "descending"
             driver.find_element(By.CSS_SELECTOR, ".column-total-cost-usd button").click()
             assert driver.find_element(By.CSS_SELECTOR, ".column-total-cost-usd").get_attribute("aria-sort") == "ascending"
+            assert check_headers_and_corners() == column_widths
             driver.execute_script("document.querySelector('.table-wrap').scrollLeft=0")
 
             # External filter menu isn't clipped by the scrolling table.
             driver.find_element(By.CSS_SELECTOR, ".filter-toggle").click()
+            check_headers_and_corners()
             driver.find_element(By.CSS_SELECTOR, '[data-filter-category="source"]').click()
             driver.find_element(By.CSS_SELECTOR, '[data-filter-value="penguin_run"]').click()
             assert len(driver.find_elements(By.CSS_SELECTOR, ".harness-details-button")) == 6
@@ -197,6 +241,7 @@ def main():
             # A detail modal can be opened/closed without moving the workspace.
             driver.find_element(By.CSS_SELECTOR, ".harness-details-button").click()
             assert driver.find_element(By.CSS_SELECTOR, ".result-dialog").is_displayed()
+            check_headers_and_corners()
             driver.find_element(By.CSS_SELECTOR, ".dialog-close").click()
             assert measure()["pageY"] == 0
 
@@ -208,8 +253,24 @@ def main():
             assert measure()["pageHeight"] <= height + 1
             assert measure()["pageY"] == 0
 
-            driver.execute_script('setLocale("en");setTheme("dark")')
+            # Exercise the longer English labels in light/dark themes, before
+            # and after sorting the two columns that previously wrapped.
+            driver.execute_script('setLocale("en");setTheme("light")')
             check_table_styling()
+            english_widths = check_headers_and_corners()
+            assert driver.find_element(By.CSS_SELECTOR, ".column-row-number").text == "RANK"
+            driver.execute_script("document.querySelector('.table-wrap').scrollLeft=0")
+            if width in (1440, 390):
+                driver.save_screenshot(str(output / f"initial-{width}-en.png"))
+            for column in ("compression-trigger", "timeout-multiplier"):
+                driver.find_element(By.CSS_SELECTOR, f".column-{column} button").click()
+                assert check_headers_and_corners() == english_widths
+            if width == 1440:
+                driver.execute_script("document.querySelector('.table-wrap').scrollLeft=0")
+                driver.save_screenshot(str(output / "sorted-1440-en.png"))
+            driver.execute_script('setTheme("dark")')
+            check_table_styling()
+            check_headers_and_corners()
             wheel(500)
             dark = measure()
             assert dark["pageY"] == 0 and abs(dark["header"]["top"] - dark["wrap"]["top"]) <= 1, dark
@@ -217,7 +278,8 @@ def main():
             if width in (1440, 390):
                 driver.save_screenshot(str(output / f"scroll-{width}-en-dark.png"))
             reports.append({"width": width, "height": height, "scrollportHeight": initial["clientHeight"],
-                            "tableWidth": initial["tableWidth"], "trackWidth": 260})
+                            "tableWidth": initial["tableWidth"], "trackWidth": 260,
+                            "columnWidths": column_widths, "englishColumnWidths": english_widths})
         # An empty result must not expand the page.
         driver.execute_script('state.filters.model="nonexistent";renderResults()')
         assert driver.find_element(By.CSS_SELECTOR, ".empty-cell").is_displayed()

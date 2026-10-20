@@ -73,6 +73,7 @@ a {
 button,
 select {
   font: inherit;
+  border-radius: 0;
 }
 
 button,
@@ -108,7 +109,7 @@ select:focus-visible {
   padding: 9px 13px;
   color: #ffffff;
   background: #111827;
-  border-radius: 8px;
+  border-radius: 0;
   transform: translateY(-150%);
 }
 
@@ -169,7 +170,7 @@ main,
   width: 28px;
   height: 28px;
   flex: 0 0 auto;
-  border-radius: 7px;
+  border-radius: 0;
 }
 
 .brand span {
@@ -205,7 +206,7 @@ main,
   overflow: visible;
   color: var(--muted-strong);
   border: 1px solid transparent;
-  border-radius: 8px;
+  border-radius: 0;
   transition: border-color 160ms ease, background-color 160ms ease;
 }
 
@@ -276,7 +277,7 @@ main,
   color: var(--text);
   background: var(--surface);
   border: 1px solid var(--line);
-  border-radius: 8px;
+  border-radius: 0;
   cursor: pointer;
   font-size: 18px;
   font-weight: 400;
@@ -329,7 +330,7 @@ main,
   color: var(--text);
   background: var(--surface-raised);
   border: 1px solid var(--line);
-  border-radius: 10px;
+  border-radius: 0;
   box-shadow: 0 16px 38px rgb(15 23 42 / 0.2), 0 3px 10px rgb(15 23 42 / 0.08);
 }
 
@@ -348,7 +349,7 @@ main,
   color: var(--muted-strong);
   background: transparent;
   border: 0;
-  border-radius: 7px;
+  border-radius: 0;
   cursor: pointer;
   font-size: 16px;
   font-weight: 400;
@@ -416,14 +417,14 @@ main,
   width: 144px;
   min-width: 144px;
   padding: 4px;
-  border-radius: 8px;
+  border-radius: 0;
   box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
 }
 
 .locale-custom-select .custom-select-option {
   min-height: 36px;
   padding: 7px 8px;
-  border-radius: 4px;
+  border-radius: 0;
   color: var(--text);
   font-size: 14px;
 }
@@ -444,7 +445,7 @@ main,
   color: var(--muted-strong);
   background: transparent;
   border: 1px solid transparent;
-  border-radius: 8px;
+  border-radius: 0;
   cursor: pointer;
   transition: border-color 160ms ease, background-color 160ms ease, color 160ms ease;
 }
@@ -482,7 +483,7 @@ main,
   padding: 0 20px;
   gap: 8px;
   border: 1px solid var(--line);
-  border-radius: 8px;
+  border-radius: 0;
   font-size: 18px;
   font-weight: 550;
   transition: background-color 160ms ease, border-color 160ms ease;
@@ -535,10 +536,8 @@ main,
 }
 
 .leaderboard-card {
-  --results-gutter: 12px;
-  --row-number-inset: 9px;
   border: 1px solid var(--line);
-  border-radius: 10px;
+  border-radius: 0;
   background: var(--surface);
 }
 
@@ -566,7 +565,7 @@ main,
   scrollbar-gutter: stable;
   scroll-padding-top: 72px;
   scroll-padding-bottom: 8px;
-  border-radius: 10px;
+  border-radius: 0;
   background: var(--surface);
 }
 
@@ -588,27 +587,30 @@ main,
 }
 
 table {
-  /* Fixed column widths: the scrollport adapts, not the score bars. */
-  width: 1480px;
-  min-width: 1480px;
+  /* Fit each column to its longest label/value; scroll instead of wrapping.
+     Only the score tracks keep a fixed width. */
+  width: max-content;
+  min-width: 100%;
   border-collapse: collapse;
-  table-layout: fixed;
+  table-layout: auto;
   font-size: 14px;
 }
 
 th,
 td {
-  padding: 15px 12px;
+  padding: 15px 18px;
   border-bottom: 1px solid var(--table-line);
   text-align: left;
   vertical-align: middle;
+  white-space: nowrap;
 }
 
 th {
   height: 50px;
-  color: var(--muted);
-  font-size: 13px;
-  font-weight: 500;
+  color: var(--text);
+  font-size: 14px;
+  font-weight: 600;
+  text-transform: uppercase;
 }
 
 .results-head th:last-child {
@@ -617,14 +619,6 @@ th {
 
 tbody tr:last-child td {
   border-bottom: 0;
-}
-
-tbody tr:last-child td:first-child {
-  border-bottom-left-radius: 12px;
-}
-
-tbody tr:last-child td:last-child {
-  border-bottom-right-radius: 12px;
 }
 
 tbody tr:hover td {
@@ -637,18 +631,7 @@ td.is-active {
 }
 
 th.is-active .sort-button {
-  color: var(--accent);
-}
-
-.column-row-number {
-  width: 50px;
-  white-space: nowrap;
-}
-
-.column-row-number,
-.row-number-cell {
-  padding-inline: calc(var(--results-gutter) + var(--row-number-inset)) 4px;
-  text-align: left;
+  color: var(--text);
 }
 
 .row-number-cell {
@@ -659,34 +642,6 @@ th.is-active .sort-button {
 
 tbody tr:nth-child(-n + 3) .row-number-cell {
   color: var(--accent);
-}
-
-.column-harness {
-  width: 190px;
-}
-
-.column-model {
-  width: 374px;
-}
-
-.column-compression-trigger {
-  width: 126px;
-}
-
-.column-timeout-multiplier {
-  width: 108px;
-}
-
-.column-accuracy {
-  width: 408px;
-}
-
-.column-total-cost-usd {
-  width: 104px;
-}
-
-.column-source-type {
-  width: 120px;
 }
 
 .harness-meta {
@@ -713,6 +668,7 @@ tbody tr:nth-child(-n + 3) .row-number-cell {
 .sort-button {
   display: inline-flex;
   align-items: center;
+  justify-content: flex-start;
   min-height: 24px;
   padding: 0;
   gap: 5px;
@@ -721,6 +677,9 @@ tbody tr:nth-child(-n + 3) .row-number-cell {
   border: 0;
   cursor: pointer;
   font: inherit;
+  text-align: left;
+  text-transform: inherit;
+  white-space: nowrap;
 }
 
 .sort-button:hover {
@@ -729,6 +688,7 @@ tbody tr:nth-child(-n + 3) .row-number-cell {
 
 .sort-arrow {
   width: 11px;
+  flex: 0 0 11px;
   color: inherit;
   text-align: center;
 }
@@ -818,7 +778,7 @@ tbody tr:nth-child(-n + 3) .row-number-cell {
   z-index: 2;
   top: 50%;
   height: 1.5px;
-  border-radius: 99px;
+  border-radius: 0;
   background: var(--ci-line);
   transform: translateY(-50%);
 }
@@ -829,7 +789,7 @@ tbody tr:nth-child(-n + 3) .row-number-cell {
   top: 50%;
   width: 1px;
   height: 8px;
-  border-radius: 99px;
+  border-radius: 0;
   background: var(--ci-line);
   transform: translate(-50%, -50%);
 }
@@ -841,7 +801,7 @@ tbody tr:nth-child(-n + 3) .row-number-cell {
   padding: 3px 8px;
   color: var(--muted-strong);
   border: 1px solid var(--line);
-  border-radius: 99px;
+  border-radius: 0;
   background: var(--surface-soft);
   font-size: 11px;
   font-weight: 400;
@@ -935,7 +895,7 @@ tbody tr:nth-child(-n + 3) .row-number-cell {
   color: var(--text);
   background: var(--surface);
   border: 1px solid var(--line-strong);
-  border-radius: 14px;
+  border-radius: 0;
   box-shadow: 0 24px 80px rgb(0 0 0 / 0.28);
 }
 
@@ -986,7 +946,7 @@ tbody tr:nth-child(-n + 3) .row-number-cell {
   color: var(--muted);
   background: transparent;
   border: 1px solid var(--line);
-  border-radius: 8px;
+  border-radius: 0;
   cursor: pointer;
   font-size: 25px;
   line-height: 1;
@@ -1013,7 +973,7 @@ tbody tr:nth-child(-n + 3) .row-number-cell {
 .detail-summary > div {
   padding: 14px;
   border: 1px solid var(--line);
-  border-radius: 10px;
+  border-radius: 0;
   background: var(--surface-soft);
 }
 
@@ -1040,7 +1000,7 @@ tbody tr:nth-child(-n + 3) .row-number-cell {
 .detail-group {
   padding: 16px;
   border: 1px solid var(--line);
-  border-radius: 10px;
+  border-radius: 0;
 }
 
 .detail-group h3 {
@@ -1494,7 +1454,7 @@ tbody tr:nth-child(-n + 3) .row-number-cell {
   color: var(--text);
   background: var(--surface);
   border: 1px solid var(--line);
-  border-radius: 8px;
+  border-radius: 0;
   box-shadow: 0 4px 16px rgb(0 0 0 / 10%);
   overflow-y: auto;
   pointer-events: auto;
@@ -1573,14 +1533,12 @@ tbody tr:nth-child(-n + 3) .row-number-cell {
   font-size: 13px;
   cursor: pointer;
 }
-.filter-toggle { min-width: 36px; gap: 6px; padding: 0 9px; border-radius: 4px; }
+.filter-toggle { min-width: 36px; gap: 6px; padding: 0 9px; }
 .filter-toggle[aria-expanded="true"], .filter-toggle.has-filters { color: var(--accent); border-color: var(--accent); }
 .filter-count { font-size: 11px; }
 .view-tabs { display: flex; }
 .view-tabs button { min-width: 78px; padding: 0 16px; text-transform: uppercase; }
 .view-tabs button + button { border-left: 0; }
-.view-tabs button:first-child { border-radius: 4px 0 0 4px; }
-.view-tabs button:last-child { border-radius: 0 4px 4px 0; }
 .view-tabs button[aria-selected="true"] { color: var(--text); background: var(--line-soft); font-weight: 600; }
 .filter-toggle:hover, .view-tabs button:hover { background: var(--surface-soft); }
 .filter-menu {
@@ -1593,7 +1551,7 @@ tbody tr:nth-child(-n + 3) .row-number-cell {
   max-width: calc(100vw - 40px);
   padding: 4px;
   border: 1px solid var(--line);
-  border-radius: 5px;
+  border-radius: 0;
   background: var(--surface);
   box-shadow: 0 6px 20px rgb(0 0 0 / 10%);
 }
@@ -1608,7 +1566,7 @@ tbody tr:nth-child(-n + 3) .row-number-cell {
   min-height: 36px;
   padding: 8px 10px;
   border: 0;
-  border-radius: 3px;
+  border-radius: 0;
   background: transparent;
   color: var(--text);
   font: inherit;

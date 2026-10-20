@@ -15,7 +15,7 @@ with configuration before performance:
 
 | Column | Fixed comparison fields |
 | --- | --- |
-| No. | Sequential position in the current filtered and sorted view, not a rank |
+| Rank | Sequential position in the current filtered and sorted view, not an official rank |
 | Harness | Name + reported or configured version |
 | Model | Model name followed by source-reported thinking effort in plain parentheses, when available |
 | Compaction trigger | Context length that triggers compaction, not maximum context capacity |
@@ -51,10 +51,12 @@ Select each filter's **All** option to reset it.
 Filters and view tabs sit outside the card, aligned with its right edge.
 In Table mode, the results area fits the available viewport height: the benchmark
 title and controls stay visible while rows scroll inside the table. Column
-headers stick to the top of that scroll region at every screen width. The table
-itself is 1,480px wide with fixed column widths and 260px score tracks; horizontal
-scrolling inside the card exposes the remaining columns without shrinking the
-bars. The region is keyboard focusable.
+headers stick to the top of that scroll region at every screen width. Headers
+use uppercase text and the same foreground color as the body, with left-aligned
+labels on one line. Columns fit their longest label or value plus consistent
+padding; the score tracks retain their 260px width. Horizontal scrolling inside
+the card exposes the remaining columns without shrinking the bars. Controls,
+menus, badges, cards and dialogs use square corners. The region is keyboard focusable.
 Sorting or changing filters returns the rows to the top. Pareto retains its
 page-scrolling layout. Row dividers use a stronger neutral color in both themes.
 Reported ± intervals use the same size as the resolution rate and the same text

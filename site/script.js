@@ -1046,7 +1046,7 @@ function accuracyCell(row) {
         ${interval ? `<span title="${escapeHtml(t("reportedCi"))}" aria-label="${escapeHtml(interval + '. ' + t("reportedCi"))}">${escapeHtml(interval)}</span>` : ""}
       </div>
       <span class="accuracy-track" aria-hidden="true">
-        <i class="accuracy-fill" style="width:${Math.min(100, Math.max(0, row.accuracy))}%"></i>
+        <i class="accuracy-fill" data-model-series="${modelSeries(row)}" style="width:${Math.min(100, Math.max(0, row.accuracy))}%"></i>
         ${ci == null ? "" : `
           <i class="accuracy-ci" style="left:${lower}%;width:${upper - lower}%"></i>
           <i class="accuracy-cap accuracy-cap-lower" style="left:${lower}%"></i>
@@ -1058,6 +1058,29 @@ function accuracyCell(row) {
 
 function sourceLabel(row) {
   return `<span class="source-label">${escapeHtml(sourceTypeLabel(row.source_type))}</span>`;
+}
+
+function modelSeries(row) {
+  // Use model identity, never the harness, source, rank, or filtered row index.
+  const org = String(row.model_org?.label || "").trim().toLowerCase();
+  const organizations = {
+    openai: "gpt", deepseek: "deepseek", anthropic: "claude",
+    google: "gemini", qwen: "qwen", alibaba: "qwen",
+    "moonshot ai": "kimi", "z.ai": "glm", xai: "grok", meta: "muse",
+  };
+  if (Object.hasOwn(organizations, org)) return organizations[org];
+  // Older/partial records may omit the organization.
+  const model = String(row.model?.label || "").trim().toLowerCase();
+  if (/^(gpt(?:[-\s]|$)|o[134](?:[-\s]|$))/.test(model)) return "gpt";
+  if (/^deepseek(?:[-\s]|$)/.test(model)) return "deepseek";
+  if (/^(claude|opus|sonnet|haiku|fable)(?:[-\s]|$)/.test(model)) return "claude";
+  if (/^gemini(?:[-\s]|$)/.test(model)) return "gemini";
+  if (/^qwen(?:\d|[-\s]|$)/.test(model)) return "qwen";
+  if (/^kimi(?:[-\s]|$)/.test(model)) return "kimi";
+  if (/^glm(?:[-\s]|$)/.test(model)) return "glm";
+  if (/^grok(?:[-\s]|$)/.test(model)) return "grok";
+  if (/^muse(?:[-\s]|$)/.test(model)) return "muse";
+  return "unknown";
 }
 
 function harnessDetailsButton(row) {

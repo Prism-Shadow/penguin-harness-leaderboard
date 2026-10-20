@@ -17,6 +17,17 @@
   --accent-strong: #1769cf;
   --accent-soft: #f8fbff;
   --ci-line: #111111;
+  /* Official-site-inspired table palette; provenance/adaptations in README. */
+  --model-gpt: #10a37f;
+  --model-deepseek: #4d6bfe;
+  --model-claude: #d97757;
+  --model-gemini: #ac87eb;
+  --model-qwen: #7046d6;
+  --model-kimi: #009ac9;
+  --model-glm: #4d8a98;
+  --model-grok: #7c7c83;
+  --model-muse: #0064e0;
+  --model-unknown: #949ca8;
   --sans: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "PingFang SC", "Microsoft YaHei", sans-serif;
   --mono: "SFMono-Regular", "Cascadia Code", "Roboto Mono", Consolas, monospace;
 }
@@ -39,6 +50,9 @@
   --accent-strong: #a9c8fa;
   --accent-soft: rgba(4, 30, 73, 0.4);
   --ci-line: #f3f4f6;
+  /* Keep the light error whiskers legible on the two brightest fills. */
+  --model-gemini: #9466cf;
+  --model-kimi: #0085b5;
 }
 
 * {
@@ -775,8 +789,18 @@ tbody tr:nth-child(-n + 3) .row-number-cell {
   position: absolute;
   inset: 0 auto 0 0;
   border-radius: 0;
-  background: var(--accent);
+  background: var(--model-unknown);
 }
+
+.accuracy-fill[data-model-series="gpt"] { background: var(--model-gpt); }
+.accuracy-fill[data-model-series="deepseek"] { background: var(--model-deepseek); }
+.accuracy-fill[data-model-series="claude"] { background: var(--model-claude); }
+.accuracy-fill[data-model-series="gemini"] { background: var(--model-gemini); }
+.accuracy-fill[data-model-series="qwen"] { background: var(--model-qwen); }
+.accuracy-fill[data-model-series="kimi"] { background: var(--model-kimi); }
+.accuracy-fill[data-model-series="glm"] { background: var(--model-glm); }
+.accuracy-fill[data-model-series="grok"] { background: var(--model-grok); }
+.accuracy-fill[data-model-series="muse"] { background: var(--model-muse); }
 
 .accuracy-ci {
   position: absolute;

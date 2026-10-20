@@ -74,12 +74,40 @@ page-scrolling layout. Row dividers use a stronger neutral color in both themes.
 Reported ± intervals use the same size as the resolution rate and the same text
 color as timeout multipliers; their reserved space keeps score bars aligned.
 Error bars use thin black lines with vertical end caps in light mode and light
-neutral lines in dark mode; the blue score bars and interval data are unchanged.
+neutral lines in dark mode, independent of the model-series fill colors.
+The score and interval geometry/data are unchanged.
 Harness versions align with the name text using the same icon-column spacing,
 including when a logo is missing or fails to load.
 The navigation controls follow the Penguin homepage styling: compact language
 selection, sun/moon/system theme icons, and an outlined, icon-only GitHub link.
 The page does not display or fetch GitHub star counts.
+
+Score bars use one stable color per model organization/series, not per Harness,
+source, or sorted position. Opus, Sonnet, Haiku, and Fable share Claude's orange.
+Missing organizations fall back to the model name; unrecognized models use a
+neutral gray. Only the score-bar fill is colored, not the text or row background.
+PNG/SVG exports use the same computed colors. The separate Pareto source encoding
+remains unchanged.
+
+The palette was reviewed against public official sites on 2026-10-20. These are
+chart colors, not a claim that every vendor publishes one canonical brand hex:
+
+| Model series | Light-mode fill | Official reference / chart adaptation |
+| --- | --- | --- |
+| GPT | `#10a37f` | Green chart accent; [OpenAI's current identity](https://openai.com/brand/) is primarily monochrome, so this is not a prescribed logo color |
+| DeepSeek | `#4d6bfe` | [Homepage](https://www.deepseek.com/) CSS `--ds-color-brand` |
+| Claude | `#d97757` | [Homepage](https://claude.com/) clay accent, retaining the requested orange |
+| Gemini | `#ac87eb` | Purple used in the [official overview site's](https://gemini.google/overview/) gradient styling |
+| Qwen | `#7046d6` | Adapted from the [official team site's](https://qwenlm.github.io/about/) `theme-color` (`#615ced`), deepened toward violet to distinguish it from Gemini and DeepSeek |
+| Kimi | `#009ac9` | Cyan adaptation of the blues in the [Kimi Brand Book](https://www.kimi.ai/resources/kimi-brand), separated from DeepSeek/Meta |
+| GLM | `#4d8a98` | Muted blue-teal adaptation of [Z.ai's](https://chat.z.ai/) blue accent and neutral UI, not an official brand hex |
+| Grok | `#7c7c83` | [Grok's](https://grok.com/) neutral identity, lightened to keep black whiskers visible |
+| Muse Spark | `#0064e0` | Blue used by the [Meta AI site](https://ai.meta.com/) |
+
+In dark mode Gemini uses `#9466cf` and Kimi `#0085b5` so the light error
+whiskers retain contrast. Model names and percentages remain visible; color is
+only a supplementary series cue, not the only way to read or compare results.
+
 Table and Pareto tabs share the current filters; both the view and filters are
 saved in the URL. The **Pareto Frontier** view plots Penguin and benchmark-official
 results together. Blue circles identify Penguin;

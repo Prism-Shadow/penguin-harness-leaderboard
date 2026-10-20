@@ -180,7 +180,17 @@ def main():
         assert exported("svg") == "Downloaded"
         # CDP's allow-download mode overwrites an existing filename.
         wait.until(lambda _: svg_path.stat().st_size > previous_size)
-        assert int(ET.parse(svg_path).getroot().get("height")) > 2500
+        full_table = ET.parse(svg_path).getroot()
+        assert int(full_table.get("height")) > 2500
+        # Export every model-series fill using the actual theme's computed
+        # color, including rows that were outside the visible scrollport.
+        palette = driver.execute_script("""
+            return [...new Set([...document.querySelectorAll(".accuracy-fill")]
+                .map(fill => getComputedStyle(fill).backgroundColor))];
+        """)
+        fills = {rect.get("fill") for rect in full_table.iter("{http://www.w3.org/2000/svg}rect")}
+        assert len(palette) == 9 and set(palette) <= fills, (palette, fills)
+        assert "rgb(17, 17, 17)" in fills  # Error whiskers remain black.
 
         # Pareto exports are standalone and clear-all restores all plotted dots.
         find("#pareto-tab").click()

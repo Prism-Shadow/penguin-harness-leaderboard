@@ -97,6 +97,17 @@ def main():
                     return rect.width === 260 && rect.height === 14
                         && fill.height === 14 && fill.top === rect.top;
                 }),
+                modelColors:[...document.querySelectorAll(".results-body tr")].every(row => {
+                    const id = row.querySelector(".harness-details-button").dataset.resultId;
+                    const record = state.benchmark.results.find(item => item.id === id);
+                    const fill = row.querySelector(".accuracy-fill");
+                    const series = modelSeries(record);
+                    const rgb = getComputedStyle(document.documentElement)
+                        .getPropertyValue(`--model-${series}`).trim().slice(1)
+                        .match(/../g).map(value => parseInt(value, 16)).join(", ");
+                    return series !== "unknown" && fill.dataset.modelSeries === series
+                        && getComputedStyle(fill).backgroundColor === `rgb(${rgb})`;
+                }),
                 versionsAligned:[...document.querySelectorAll(".harness-meta")].every(meta => {
                     const name = meta.closest(".harness-cell").querySelector(".entity-name");
                     return Math.abs(name.getBoundingClientRect().left
@@ -136,6 +147,7 @@ def main():
         assert result["effortStyle"], result
         assert result["ciStyle"], result
         assert result["barGeometry"] and result["versionsAligned"], result
+        assert result["modelColors"], result
         assert result["sourcePlain"], result
         assert result["rowLine"] == result["expectedLine"], result
 
@@ -327,6 +339,10 @@ def main():
             driver.execute_script("document.querySelector('.table-wrap').scrollLeft=0")
             if width in (1440, 390):
                 driver.save_screenshot(str(output / f"initial-{width}-en.png"))
+                # Mixed-series rows are visible without changing default sort.
+                driver.execute_script("document.querySelector('.table-wrap').scrollTop=600")
+                driver.save_screenshot(str(output / f"model-colors-{width}-en.png"))
+                driver.execute_script("document.querySelector('.table-wrap').scrollTop=0")
                 driver.execute_script("document.querySelector('.table-wrap').scrollLeft=100000")
                 driver.save_screenshot(str(output / f"sources-{width}-en.png"))
                 driver.execute_script("document.querySelector('.table-wrap').scrollLeft=0")

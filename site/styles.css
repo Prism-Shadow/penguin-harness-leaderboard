@@ -681,21 +681,10 @@ tbody tr:nth-child(-n + 3) .row-number-cell {
 
 .column-total-cost-usd {
   width: 92px;
-  text-align: right;
 }
 
 .column-source-type {
   width: 100px;
-}
-
-.column-source-type .sort-button {
-  width: 100%;
-  justify-content: center;
-}
-
-.source-cell {
-  padding-inline: 8px;
-  text-align: center;
 }
 
 .harness-meta {
@@ -717,11 +706,6 @@ tbody tr:nth-child(-n + 3) .row-number-cell {
   margin-top: 4px;
   font-size: 11px;
   color: var(--muted-strong);
-}
-
-.column-total-cost-usd .sort-button {
-  width: 100%;
-  justify-content: flex-end;
 }
 
 .sort-button {
@@ -892,10 +876,6 @@ tbody tr:nth-child(-n + 3) .row-number-cell {
   font-size: 14px;
   font-variant-numeric: tabular-nums;
   white-space: nowrap;
-}
-
-.number-cell {
-  text-align: right;
   font-weight: 400;
 }
 

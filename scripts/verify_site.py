@@ -422,8 +422,17 @@ def verify_frontend_contract() -> None:
     assert "linkedName(row.harness, row.harness_org)" not in script, (
         "Harness organization is still repeated in the main table"
     )
-    assert ".column-total-cost-usd .sort-button" in css, "Cost header alignment missing"
-    assert ".number-cell" in css and "text-align: right" in css, "Numeric alignment missing"
+    table_cells = re.search(r"th,\s*td\s*\{([^}]+)\}", css)
+    assert table_cells and "text-align: left" in table_cells.group(1), "Table cells must align left"
+    alignment_selectors = {
+        ".column-total-cost-usd", ".column-source-type", ".number-cell", ".source-cell",
+        ".column-total-cost-usd .sort-button", ".column-source-type .sort-button", ".sort-button",
+    }
+    for selectors, declarations in re.findall(r"([^{}]+)\{([^{}]*)\}", css):
+        if alignment_selectors.intersection(selector.strip() for selector in selectors.split(",")):
+            assert not re.search(r"text-align:\s*(right|center)|justify-content:\s*(flex-end|end|center)", declarations), (
+                "Cost and source must retain the same left alignment as other columns"
+            )
     icon_dir = ROOT / "site" / "assets" / "harnesses"
     actual_icons = {path.name for path in icon_dir.glob("*.svg")}
     assert actual_icons == HARNESS_ICON_ASSETS, "Harness icon asset set changed"

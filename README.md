@@ -17,15 +17,15 @@ with configuration before performance:
 | --- | --- |
 | No. | Sequential position in the current filtered and sorted view, not a rank |
 | Harness | Name + reported or configured version |
-| Model | Model + reasoning effort |
+| Model | Model name |
+| Thinking effort | Source-reported effort as plain text; **—** when unreported |
 | Compaction trigger | Context length that triggers compaction, not maximum context capacity |
 | Timeout multiplier | Reported scaling factor for each task's original time limit; fixed durations are not converted into multipliers |
 | Resolution rate | Percentage + score bar; 95% interval only when available |
 | Cost | Recorded USD total; incomplete billing is disclosed on hover and in Details |
 | Source | Benchmark official, vendor-reported, or Penguin |
 
-This is six configuration fields and two result metrics in the six central
-columns, plus row number and source (eight display columns). The Benchmark's full
+The nine display columns separate model and thinking effort. The Benchmark's full
 name remains above the table; with only TB 2.1 published, there is no version selector.
 Default ordering is ascending recorded total cost,
 with missing totals last (per-task means are not substituted for totals).
@@ -46,21 +46,22 @@ The navigation brand reads **Penguin Harness Leaderboard**, with no duplicate
 hero title. The page starts directly with the Benchmark's full name and results.
 GitHub links remain in the navigation and footer. Column headers have no hover
 explanations; sorting and screen-reader descriptions remain available. A funnel menu groups
-Source, Harness, model and thinking level into a two-level category/option selector.
+Source, Harness, model and thinking effort into a two-level category/option selector.
 Select each filter's **All** option to reset it.
 Filters and view tabs sit outside the card, aligned with its right edge.
 In Table mode, the results area fits the available viewport height: the benchmark
 title and controls stay visible while rows scroll inside the table. Column
-headers stick to the top of that scroll region at every screen width. Horizontal
-scrolling is retained on narrow screens, and the region is keyboard focusable.
+headers stick to the top of that scroll region at every screen width. The table
+itself is 1,480px wide with fixed column widths and 260px score tracks; horizontal
+scrolling inside the card exposes the remaining columns without shrinking the
+bars. The region is keyboard focusable.
 Sorting or changing filters returns the rows to the top. Pareto retains its
 page-scrolling layout. Row dividers use a stronger neutral color in both themes.
 Reported ± intervals use the same size as the resolution rate and the same text
 color as timeout multipliers; their reserved space keeps score bars aligned.
 The navigation controls follow the Penguin homepage styling: compact language
-selection, sun/moon/system theme icons, and an outlined GitHub counter. The count
-comes from this leaderboard repository's public GitHub API, not the main Harness
-repository; unavailable counts display **—** without blocking the results.
+selection, sun/moon/system theme icons, and an outlined, icon-only GitHub link.
+The page does not display or fetch GitHub star counts.
 Table and Pareto tabs share the current filters; both the view and filters are
 saved in the URL. The **Pareto Frontier** view plots Penguin and benchmark-official
 results together. Blue circles identify Penguin;

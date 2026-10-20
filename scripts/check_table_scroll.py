@@ -46,18 +46,22 @@ def main():
                 title:rect(".results-title"), toolbar:rect(".result-toolbar"),
                 card:rect(".leaderboard-card"), wrap:rect(".table-wrap"),
                 header:rect(".results-head th"), last:rect(".results-body tr:last-child"),
-                pageY:scrollY, pageHeight:document.documentElement.scrollHeight,
+                pageY:scrollY, pageX:scrollX,
+                pageHeight:document.documentElement.scrollHeight,
+                pageWidth:document.documentElement.scrollWidth,
                 viewport:innerHeight, scrollTop:wrap.scrollTop,
+                scrollLeft:wrap.scrollLeft, scrollWidth:wrap.scrollWidth,
+                tableWidth:rect("table").right-rect("table").left,
                 scrollHeight:wrap.scrollHeight, clientHeight:wrap.clientHeight,
                 externalToolbar:!document.querySelector(".leaderboard-card .result-toolbar")
             };
         """)
 
-    def wheel(delta):
+    def wheel(delta, horizontal=0):
         area = measure()["wrap"]
         driver.execute_cdp_cmd("Input.dispatchMouseEvent", {
             "type": "mouseWheel", "x": area["left"] + 30,
-            "y": area["bottom"] - 30, "deltaX": 0, "deltaY": delta,
+            "y": area["bottom"] - 30, "deltaX": horizontal, "deltaY": delta,
         })
         time.sleep(.25)
 
@@ -66,7 +70,7 @@ def main():
             const interval = document.querySelector(".rate-copy span");
             const score = interval.previousElementSibling;
             const row = interval.closest("tr");
-            const timeout = row.querySelector("td:nth-child(5)");
+            const timeout = row.querySelector("td:nth-child(6)");
             const font = getComputedStyle(interval);
             return {
                 fontMatches:font.fontSize === getComputedStyle(score).fontSize,
@@ -77,7 +81,7 @@ def main():
                 noOverlap:[...document.querySelectorAll(".rate-copy span")].every(span => {
                     const bar = span.closest(".rate-cell").querySelector(".accuracy-track");
                     return span.getBoundingClientRect().right + 6 <= bar.getBoundingClientRect().left
-                        && bar.getBoundingClientRect().width > 60;
+                        && bar.getBoundingClientRect().width === 260;
                 })
             };
         """)
@@ -96,11 +100,21 @@ def main():
             time.sleep(.1)
             check_table_styling()
             initial = measure()
+            assert initial["pageWidth"] <= width + 1 and initial["pageX"] == 0, initial
+            # Collapsed outer borders can contribute a fractional CSS pixel.
+            assert abs(initial["tableWidth"] - 1480) <= 1 and initial["scrollWidth"] > initial["wrap"]["right"] - initial["wrap"]["left"], initial
+            assert len(driver.find_elements(By.CSS_SELECTOR, ".results-head th")) == 9
+            assert driver.find_element(By.CSS_SELECTOR, ".column-thinking-level").text == "思考强度"
+            assert driver.find_element(By.CSS_SELECTOR, ".thinking-cell").text == "high"
+            assert not driver.find_elements(By.CSS_SELECTOR, ".effort-pill, .github-stars")
+            assert not driver.find_element(By.CSS_SELECTOR, ".github-link").text.strip()
             assert initial["externalToolbar"], initial
             assert initial["pageHeight"] <= height + 1 and initial["pageY"] == 0, initial
             assert initial["scrollHeight"] > initial["clientHeight"] >= 120, initial
             assert initial["toolbar"]["bottom"] <= initial["card"]["top"] + 1, initial
             assert initial["title"]["top"] >= 64, initial
+            if width in (1440, 390):
+                driver.save_screenshot(str(output / f"initial-{width}-zh.png"))
             wheel(500)
             scrolled = measure()
             assert scrolled["scrollTop"] > 100, scrolled
@@ -108,8 +122,15 @@ def main():
             for key in ("title", "toolbar", "card", "wrap"):
                 assert scrolled[key] == initial[key], (key, initial, scrolled)
             assert abs(scrolled["header"]["top"] - initial["header"]["top"]) <= 1, scrolled
+            wheel(0, 350)
+            sideways = measure()
+            assert sideways["scrollLeft"] > 0 and sideways["pageX"] == 0, sideways
+            assert sideways["title"] == initial["title"] and sideways["card"] == initial["card"], sideways
+            assert abs(sideways["header"]["left"] - initial["header"]["left"] + sideways["scrollLeft"]) <= 1, sideways
+            check_table_styling()
             if width in (1440, 390):
                 driver.save_screenshot(str(output / f"scroll-{width}-zh.png"))
+            driver.execute_script("document.querySelector('.table-wrap').scrollLeft=0")
 
             # The final row remains reachable; wheel motion at either end does
             # not propagate to the page and move the benchmark title away.
@@ -149,6 +170,19 @@ def main():
             driver.find_element(By.CSS_SELECTOR, ".filter-toggle").click()
             driver.find_element(By.CSS_SELECTOR, '[data-filter-value=""]').click()
             assert len(driver.find_elements(By.CSS_SELECTOR, ".harness-details-button")) == 38
+            driver.find_element(By.CSS_SELECTOR, ".filter-toggle").click()
+            driver.find_element(By.CSS_SELECTOR, '[data-filter-category="thinking"]').click()
+            driver.find_element(By.CSS_SELECTOR, '[data-filter-value="high"]').click()
+            assert all(cell.text == "high" for cell in driver.find_elements(By.CSS_SELECTOR, ".thinking-cell"))
+            assert 0 < len(driver.find_elements(By.CSS_SELECTOR, ".thinking-cell")) < 38
+            driver.find_element(By.CSS_SELECTOR, ".filter-toggle").click()
+            driver.find_element(By.CSS_SELECTOR, '[data-filter-value=""]').click()
+            assert len(driver.find_elements(By.CSS_SELECTOR, ".harness-details-button")) == 38
+            driver.find_element(By.CSS_SELECTOR, ".column-thinking-level button").click()
+            assert driver.find_element(By.CSS_SELECTOR, ".column-thinking-level").get_attribute("aria-sort") == "ascending"
+            assert driver.find_elements(By.CSS_SELECTOR, ".thinking-cell")[-1].text == "—"
+            driver.find_element(By.CSS_SELECTOR, ".column-total-cost-usd button").click()
+            driver.execute_script("document.querySelector('.table-wrap').scrollLeft=0")
 
             # A detail modal can be opened/closed without moving the workspace.
             driver.find_element(By.CSS_SELECTOR, ".harness-details-button").click()
@@ -172,13 +206,17 @@ def main():
             assert not driver.find_elements(By.CSS_SELECTOR, ".results-head [title]")
             if width in (1440, 390):
                 driver.save_screenshot(str(output / f"scroll-{width}-en-dark.png"))
-            reports.append({"width": width, "height": height, "scrollportHeight": initial["clientHeight"]})
+            reports.append({"width": width, "height": height, "scrollportHeight": initial["clientHeight"],
+                            "tableWidth": initial["tableWidth"], "trackWidth": 260})
         # An empty result must not expand the page.
         driver.execute_script('state.filters.model="nonexistent";renderResults()')
         assert driver.find_element(By.CSS_SELECTOR, ".empty-cell").is_displayed()
+        assert driver.find_element(By.CSS_SELECTOR, ".empty-cell").get_attribute("colspan") == "9"
         assert measure()["pageHeight"] <= measure()["viewport"] + 1
-        errors = [entry for entry in driver.get_log("browser")
-                  if entry["level"] == "SEVERE" and "api.github.com" not in entry["message"]]
+        assert not driver.execute_script("""
+            return performance.getEntriesByType("resource").some(entry=>entry.name.includes("api.github.com"));
+        """)
+        errors = [entry for entry in driver.get_log("browser") if entry["level"] == "SEVERE"]
         assert not errors, errors
         print(json.dumps({"passed": True, "screenshots": str(output), "viewports": reports}))
     finally:

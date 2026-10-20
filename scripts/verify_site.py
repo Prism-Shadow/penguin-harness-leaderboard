@@ -369,8 +369,8 @@ def verify_frontend_contract() -> None:
     assert 'icon.toggleAttribute("hidden", icon.dataset.themeIcon !== mode)' in script, (
         "Theme icon must follow the selected mode"
     )
-    assert 'class="github-stars"' in html and "Number.isSafeInteger(repo.stargazers_count)" in script, (
-        "GitHub stars must come from a validated API count"
+    assert 'github-stars' not in html + css and "api.github.com" not in script, (
+        "The GitHub link must be icon-only, with no star-count request"
     )
     assert '<option value="system">' in html, "Follow system language option is missing"
     assert 'option[value="system"]' in script, "Follow system option is not translated"
@@ -426,10 +426,14 @@ def verify_frontend_contract() -> None:
         "Harness detail trigger is not wired up"
     )
     assert 'aria-haspopup="dialog"' in script, "Harness detail trigger lacks dialog semantics"
-    assert 'colspan="8"' in html, "Loading row does not span the eight table columns"
-    assert script.count('colspan="8"') == 2, (
-        "Empty and error rows do not span the eight table columns"
+    assert 'colspan="9"' in html, "Loading row does not span the nine table columns"
+    assert script.count('colspan="9"') == 2, (
+        "Empty and error rows do not span the nine table columns"
     )
+    assert '["thinking_level", "thinkingLevel"]' in script and 'class="thinking-cell' in script, (
+        "Thinking effort must have a separate column"
+    )
+    assert "effort-pill" not in script + css, "Thinking effort must not use badge styling"
     for removed_selector in ("ci-whisker", "rate-track", "rate-fill"):
         assert removed_selector not in script, f"Removed {removed_selector} markup is still rendered"
         assert removed_selector not in css, f"Removed {removed_selector} styling is still present"

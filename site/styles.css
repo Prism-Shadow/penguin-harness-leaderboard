@@ -454,18 +454,9 @@ main,
 }
 
 .github-link {
-  min-width: 36px;
-  padding-inline: 10px;
+  width: 36px;
   border-color: var(--line);
   background: var(--surface);
-  font-size: 12px;
-  font-weight: 500;
-}
-
-.github-stars {
-  min-width: 32px;
-  font-variant-numeric: tabular-nums;
-  text-align: center;
 }
 
 .nav-icon {
@@ -605,8 +596,9 @@ main,
 }
 
 table {
-  width: 100%;
-  min-width: 1188px;
+  /* Fixed column widths: the scrollport adapts, not the score bars. */
+  width: 1480px;
+  min-width: 1480px;
   border-collapse: collapse;
   table-layout: fixed;
   font-size: 14px;
@@ -678,11 +670,19 @@ tbody tr:nth-child(-n + 3) .row-number-cell {
 }
 
 .column-harness {
-  width: 180px;
+  width: 190px;
 }
 
 .column-model {
   width: 264px;
+}
+
+.column-thinking-level {
+  width: 110px;
+}
+
+.thinking-cell {
+  white-space: nowrap;
 }
 
 .column-compression-trigger {
@@ -694,15 +694,15 @@ tbody tr:nth-child(-n + 3) .row-number-cell {
 }
 
 .column-accuracy {
-  width: auto;
+  width: 408px;
 }
 
 .column-total-cost-usd {
-  width: 92px;
+  width: 104px;
 }
 
 .column-source-type {
-  width: 100px;
+  width: 120px;
 }
 
 .harness-meta {
@@ -775,28 +775,6 @@ tbody tr:nth-child(-n + 3) .row-number-cell {
   white-space: nowrap;
 }
 
-.effort-pill {
-  display: inline-flex;
-  align-items: center;
-  min-height: 23px;
-  padding: 3px 7px;
-  color: var(--accent-strong);
-  border: 1px solid color-mix(in srgb, var(--accent) 22%, var(--line));
-  border-radius: 99px;
-  background: var(--accent-soft);
-  font-size: 11px;
-  font-weight: 400;
-  line-height: 1.2;
-  flex: 0 0 auto;
-}
-
-.effort-pill.muted {
-  color: var(--faint);
-  border-color: transparent;
-  background: transparent;
-  padding-inline: 0;
-}
-
 .rate-cell {
   display: flex;
   align-items: center;
@@ -827,9 +805,10 @@ tbody tr:nth-child(-n + 3) .row-number-cell {
 .accuracy-track {
   position: relative;
   display: block;
-  min-width: 0;
+  width: 260px;
+  min-width: 260px;
   height: 10px;
-  flex: 1;
+  flex: 0 0 260px;
   overflow: visible;
   border-radius: 0;
   background: var(--line);

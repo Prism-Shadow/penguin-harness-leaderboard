@@ -53,7 +53,8 @@ def main():
                 scrollLeft:wrap.scrollLeft, scrollWidth:wrap.scrollWidth,
                 tableWidth:rect("table").right-rect("table").left,
                 scrollHeight:wrap.scrollHeight, clientHeight:wrap.clientHeight,
-                externalToolbar:!document.querySelector(".leaderboard-card .result-toolbar")
+                externalToolbar:!document.querySelector(".leaderboard-card .result-toolbar"),
+                titleFontSize:parseFloat(getComputedStyle(document.querySelector(".results-title")).fontSize)
             };
         """)
 
@@ -154,6 +155,8 @@ def main():
             check_table_styling()
             column_widths = check_headers_and_corners()
             initial = measure()
+            assert abs(initial["titleFontSize"] - min(40, max(28, width * .03))) < .1, initial
+            assert initial["title"]["height"] <= initial["titleFontSize"] * 1.25 + 1, initial
             assert initial["pageWidth"] <= width + 1 and initial["pageX"] == 0, initial
             assert initial["scrollWidth"] > initial["wrap"]["right"] - initial["wrap"]["left"], initial
             assert len(driver.find_elements(By.CSS_SELECTOR, ".results-head th")) == 8
@@ -259,6 +262,8 @@ def main():
             check_table_styling()
             english_widths = check_headers_and_corners()
             assert driver.find_element(By.CSS_SELECTOR, ".column-row-number").text == "RANK"
+            assert "COMPACT AT" in driver.find_element(By.CSS_SELECTOR, ".column-compression-trigger").text
+            assert "TIME BUDGET" in driver.find_element(By.CSS_SELECTOR, ".column-timeout-multiplier").text
             driver.execute_script("document.querySelector('.table-wrap').scrollLeft=0")
             if width in (1440, 390):
                 driver.save_screenshot(str(output / f"initial-{width}-en.png"))

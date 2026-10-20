@@ -18,15 +18,16 @@ with configuration before performance:
 | Rank | Sequential position in the current filtered and sorted view, not an official rank |
 | Harness | Name + reported or configured version |
 | Model | Model name followed by source-reported thinking effort in plain parentheses, when available |
-| Compaction trigger | Context length that triggers compaction, not maximum context capacity |
-| Timeout multiplier | Reported scaling factor for each task's original time limit; fixed durations are not converted into multipliers |
+| Compact at | Context length that triggers compaction, not maximum context capacity |
+| Time budget | Reported scaling factor (e.g. 4×) for each task's original time limit; fixed durations are not converted into multipliers |
 | Resolution rate | Percentage + score bar; 95% interval only when available |
 | Cost | Recorded USD total; incomplete billing is disclosed on hover and in Details |
 | Source | Benchmark official, vendor-reported, or Penguin |
 
 The eight display columns keep thinking effort beside the model, without a badge
 or a separate column. The Benchmark's full
-name remains above the table; with only TB 2.1 published, there is no version selector.
+name remains above the table, with a responsive 28–40px heading; with only
+TB 2.1 published, there is no version selector.
 Default ordering is ascending recorded total cost,
 with missing totals last (per-task means are not substituted for totals).
 The default sort arrow is neutral; column highlighting starts only after a header is selected.
@@ -47,7 +48,15 @@ hero title. The page starts directly with the Benchmark's full name and results.
 GitHub links remain in the navigation and footer. Column headers have no hover
 explanations; sorting and screen-reader descriptions remain available. A funnel menu groups
 Source, Harness, model and thinking effort into a two-level category/option selector.
-Select each filter's **All** option to reset it.
+Select each filter's **All** option to reset it. A **Clear all** action appears
+at the bottom of the filter menu only while any filter is active; it clears
+every filter in either view without changing the selected sort or view.
+The left toolbar provides copy/export and copy-link buttons. Markdown contains
+the complete filtered table in its current order; PNG/SVG exports contain the
+full table or the current Pareto chart, not just the visible scrollport.
+Exports are generated entirely in the browser, with local assets embedded.
+Shared links retain the benchmark, view, filters and sort. Clipboard failures
+are reported without claiming success; PNG and SVG can also be downloaded.
 Filters and view tabs sit outside the card, aligned with its right edge.
 In Table mode, the results area fits the available viewport height: the benchmark
 title and controls stay visible while rows scroll inside the table. Column
@@ -304,12 +313,14 @@ JSON request from local files.
     python3 scripts/verify_site.py --check-live
     python3 -m unittest discover -s scripts -p 'test_*.py'
     node --check site/script.js
+    node --check site/export.js
 
 For browser checks of internal scrolling, sticky headers, external controls,
 light/dark styling and narrow viewports (requires Selenium, Chromium and
 chromedriver), start the local server above, then run:
 
     python3 scripts/check_table_scroll.py --url http://127.0.0.1:8765/
+    python3 scripts/check_result_actions.py --url http://127.0.0.1:8765/
 
 To update curated records and configuration supplements while retaining official
 scores, costs, intervals and upstream snapshot dates:

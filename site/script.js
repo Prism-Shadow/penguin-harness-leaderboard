@@ -38,13 +38,26 @@ const translations = {
     allLevels: "All efforts",
     showingResults: "Showing {shown} of {total} public results",
     filters: "Filters",
+    clearFilters: "Clear all",
+    exportResults: "Copy / export",
+    copyLink: "Copy link",
+    copyMarkdown: "Copy Markdown",
+    copyPng: "Copy PNG",
+    downloadPng: "Download PNG",
+    downloadSvg: "Download SVG",
+    exportWorking: "Preparing…",
+    copied: "Copied",
+    downloaded: "Downloaded",
+    copyFailed: "Clipboard unavailable or denied. Please use a download option.",
+    linkCopyFailed: "Could not copy. Please copy the URL from your address bar.",
+    exportFailed: "Export failed. Please try again.",
     loadingResults: "Loading public results…",
     resolutionRate: "Resolution rate",
     tokens: "Tokens",
     cost: "Cost",
     rowNumber: "RANK",
-    compressionColumn: "Compaction trigger",
-    timeoutColumn: "Timeout multiplier",
+    compressionColumn: "Compact at",
+    timeoutColumn: "Time budget",
     releaseDate: "Release date",
     notReported: "Not reported",
     noResults: "No results match these filters.",
@@ -186,6 +199,19 @@ const translations = {
     allLevels: "全部强度",
     showingResults: "显示 {shown} / {total} 条公开结果",
     filters: "筛选",
+    clearFilters: "清除全部",
+    exportResults: "复制 / 导出",
+    copyLink: "复制链接",
+    copyMarkdown: "复制 Markdown",
+    copyPng: "复制 PNG",
+    downloadPng: "下载 PNG",
+    downloadSvg: "下载 SVG",
+    exportWorking: "正在准备…",
+    copied: "已复制",
+    downloaded: "已下载",
+    copyFailed: "剪贴板不可用或未获授权，请使用下载选项。",
+    linkCopyFailed: "复制失败，请从地址栏复制链接。",
+    exportFailed: "导出失败，请重试。",
     loadingResults: "正在加载公开结果…",
     resolutionRate: "通过率",
     tokens: "Token",
@@ -320,6 +346,10 @@ const state = {
 
 const elements = {
   toolbar: document.querySelector(".result-toolbar"),
+  exportToggle: document.querySelector(".export-toggle"),
+  exportMenu: document.querySelector(".export-menu"),
+  copyLink: document.querySelector(".copy-link"),
+  actionStatus: document.querySelector(".action-status"),
   filterToggle: document.querySelector(".filter-toggle"),
   filterMenu: document.querySelector(".filter-menu"),
   filterCategories: document.querySelector(".filter-categories"),
@@ -877,6 +907,7 @@ function setFilterMenu(open, focus = false) {
   elements.filterMenu.hidden = !open;
   elements.filterToggle.setAttribute("aria-expanded", String(open));
   if (open) {
+    setExportMenu(false);
     closeCustomSelects();
     renderFilterMenu();
     if (focus) elements.filterCategories.querySelector("button").focus();
@@ -896,17 +927,27 @@ function renderFilterMenu() {
     return `${t(label)}: ${select.selectedOptions[0]?.textContent || ""}`;
   }).join("\n");
   elements.filterCategories.innerHTML = Object.entries(fields).map(([key, label]) =>
-    `<button type="button" role="menuitem" data-filter-category="${key}" aria-haspopup="menu" aria-expanded="${key === active}" class="filter-category${key === active ? " is-active" : ""}"><span>${escapeHtml(t(label))}</span><span aria-hidden="true">${state.filters[key] ? "• " : ""}›</span></button>`).join("");
+    `<button type="button" role="menuitem" data-filter-category="${key}" aria-haspopup="menu" aria-expanded="${key === active}" class="filter-category${key === active ? " is-active" : ""}"><span>${escapeHtml(t(label))}</span><span aria-hidden="true">${state.filters[key] ? "• " : ""}›</span></button>`).join("")
+    + (count ? `<button type="button" role="menuitem" class="filter-clear">${escapeHtml(t("clearFilters"))}</button>` : "");
   const select = document.querySelector(`#${active}-filter`);
   elements.filterOptions.setAttribute("aria-label", t(fields[active]));
   elements.filterOptions.innerHTML = [...select.options].map((option) =>
     `<button type="button" role="menuitemradio" aria-checked="${option.selected}" data-filter-value="${escapeHtml(option.value)}"><span>${escapeHtml(option.textContent)}</span><span aria-hidden="true">${option.selected ? "✓" : ""}</span></button>`).join("");
 }
 
+function clearFilters() {
+  for (const key of Object.keys(state.filters)) state.filters[key] = "";
+  renderFilters();
+  renderResults();
+  elements.tableWrap.scrollTop = 0;
+  setFilterMenu(false, true);
+}
+
 function setResultView(view, focus = false) {
   state.view = view === "pareto" ? "pareto" : "table";
   document.documentElement.dataset.resultView = state.view;
   setFilterMenu(false);
+  setExportMenu(false);
   elements.viewTabs.querySelectorAll("[data-view]").forEach((tab) => {
     const selected = tab.dataset.view === state.view;
     tab.setAttribute("aria-selected", String(selected));
@@ -954,6 +995,7 @@ function setSort(key) {
   }
   renderTable();
   elements.tableWrap.scrollTop = 0;
+  syncResultUrl();
 }
 
 function renderTableHead() {
@@ -1727,6 +1769,13 @@ function syncResultUrl() {
   url.searchParams.delete("bench");
   url.searchParams.set("version", state.benchmark.version);
   url.searchParams.set("view", state.view);
+  if (state.sortInteracted) {
+    url.searchParams.set("sort", state.sort.key);
+    url.searchParams.set("direction", state.sort.direction);
+  } else {
+    url.searchParams.delete("sort");
+    url.searchParams.delete("direction");
+  }
   url.searchParams.delete("pareto_source");
   if (url.hash === "#pareto" && state.view !== "pareto") url.hash = "results";
   for (const [key, value] of Object.entries(state.filters)) {
@@ -1748,6 +1797,80 @@ function renderBenchmark() {
   document.querySelector(".results-title").textContent = state.benchmark.name;
   document.querySelector(".table-caption").textContent = state.benchmark.name;
   renderResults();
+}
+
+let actionStatusTimer;
+let exportBusy = false;
+
+function showActionStatus(key) {
+  clearTimeout(actionStatusTimer);
+  elements.actionStatus.textContent = t(key);
+  elements.actionStatus.hidden = false;
+  actionStatusTimer = setTimeout(() => { elements.actionStatus.hidden = true; }, 6000);
+}
+
+function setExportMenu(open, focus = false) {
+  elements.exportMenu.hidden = !open;
+  elements.exportToggle.setAttribute("aria-expanded", String(open));
+  if (open) {
+    setFilterMenu(false);
+    closeCustomSelects();
+    if (focus) elements.exportMenu.querySelector("button").focus();
+  } else if (focus) elements.exportToggle.focus();
+}
+
+function currentExportSvg() {
+  const title = `${state.benchmark.name}${state.view === "pareto" ? " — Pareto Frontier" : ""}`;
+  return state.view === "pareto"
+    ? LeaderboardExport.chartSvg(elements.paretoCanvas, title)
+    : LeaderboardExport.tableSvg(elements.tableWrap.querySelector("table"), title);
+}
+
+async function exportResults(action) {
+  if (!state.benchmark || exportBusy) return;
+  exportBusy = true;
+  elements.exportToggle.setAttribute("aria-busy", "true");
+  setExportMenu(false, true);
+  const filename = `terminal-bench-${state.benchmark.version}-${state.view}`;
+  showActionStatus("exportWorking");
+  try {
+    if (action === "markdown") {
+      await navigator.clipboard.writeText(LeaderboardExport.markdown(
+        elements.tableWrap.querySelector("table"), state.benchmark.name));
+    } else if (action === "copy-png") {
+      if (!navigator.clipboard?.write || !window.ClipboardItem) throw new Error("Clipboard unavailable");
+      // Pass the promise immediately to preserve Safari's user activation.
+      const png = Promise.resolve(currentExportSvg()).then(LeaderboardExport.png);
+      png.catch(() => {}); // Permission rejection can precede rasterization.
+      await navigator.clipboard.write([new ClipboardItem({ "image/png": png })]);
+    } else {
+      const svg = await currentExportSvg();
+      const blob = action === "svg" ? new Blob([svg], { type: "image/svg+xml" })
+        : await LeaderboardExport.png(svg);
+      LeaderboardExport.download(blob, `${filename}.${action === "svg" ? "svg" : "png"}`);
+    }
+    showActionStatus(action === "markdown" || action === "copy-png" ? "copied" : "downloaded");
+  } catch {
+    showActionStatus(action === "markdown" || action === "copy-png" ? "copyFailed" : "exportFailed");
+  } finally {
+    exportBusy = false;
+    elements.exportToggle.removeAttribute("aria-busy");
+  }
+}
+
+async function copyResultLink() {
+  if (!state.benchmark) return;
+  syncResultUrl();
+  const url = new URL(location.href);
+  url.searchParams.delete("v"); // Local preview cache tags aren't part of the result.
+  url.searchParams.set("sort", state.sort.key);
+  url.searchParams.set("direction", state.sort.direction);
+  try {
+    await navigator.clipboard.writeText(url.href);
+    showActionStatus("copied");
+  } catch {
+    showActionStatus("linkCopyFailed");
+  }
 }
 
 function selectBenchmark(id) {
@@ -1777,6 +1900,32 @@ async function init() {
   enhanceCustomSelects();
   elements.localeSelect.addEventListener("change", (event) => setLocale(event.target.value));
   elements.themeToggle.addEventListener("click", cycleTheme);
+  elements.exportToggle.addEventListener("click", () => {
+    if (state.benchmark) setExportMenu(elements.exportMenu.hidden);
+  });
+  elements.exportToggle.addEventListener("keydown", (event) => {
+    if (event.key === "ArrowDown" && state.benchmark) {
+      event.preventDefault();
+      setExportMenu(true, true);
+    }
+    if (event.key === "Escape") setExportMenu(false, true);
+  });
+  elements.copyLink.addEventListener("click", copyResultLink);
+  elements.exportMenu.addEventListener("click", (event) => {
+    const button = event.target.closest("[data-export]");
+    if (button) exportResults(button.dataset.export);
+  });
+  elements.exportMenu.addEventListener("keydown", (event) => {
+    if (event.key === "Escape") { event.preventDefault(); setExportMenu(false, true); return; }
+    if (["ArrowDown", "ArrowUp", "Home", "End"].includes(event.key)) {
+      event.preventDefault();
+      const buttons = [...elements.exportMenu.querySelectorAll("button")];
+      let index = buttons.indexOf(document.activeElement) + (event.key === "ArrowUp" ? -1 : 1);
+      if (event.key === "Home") index = 0;
+      if (event.key === "End") index = buttons.length - 1;
+      buttons[(index + buttons.length) % buttons.length].focus();
+    }
+  });
   elements.filterToggle.addEventListener("click", () => {
     if (state.benchmark) setFilterMenu(elements.filterMenu.hidden);
   });
@@ -1797,7 +1946,10 @@ async function init() {
     const button = event.target.closest("[data-filter-category]");
     if (button && button.dataset.filterCategory !== state.filterCategory) activateCategory(button);
   });
-  elements.filterCategories.addEventListener("click", (event) => activateCategory(event.target.closest("[data-filter-category]"), true));
+  elements.filterCategories.addEventListener("click", (event) => {
+    if (event.target.closest(".filter-clear")) clearFilters();
+    else activateCategory(event.target.closest("[data-filter-category]"), true);
+  });
   elements.filterOptions.addEventListener("click", (event) => {
     const button = event.target.closest("[data-filter-value]");
     if (!button) return;
@@ -1827,9 +1979,11 @@ async function init() {
   });
   document.addEventListener("pointerdown", (event) => {
     if (!event.target.closest(".filter-menu-wrap")) setFilterMenu(false);
+    if (!event.target.closest(".export-menu-wrap")) setExportMenu(false);
   });
   document.addEventListener("focusin", (event) => {
     if (!event.target.closest(".filter-menu-wrap")) setFilterMenu(false);
+    if (!event.target.closest(".export-menu-wrap")) setExportMenu(false);
   });
   elements.viewTabs.addEventListener("click", (event) => {
     const tab = event.target.closest("[data-view]");
@@ -1936,6 +2090,11 @@ async function init() {
       PUBLISHED_BENCHMARK_IDS.includes(bench.id));
     if (!state.payload.benchmarks.length) throw new Error("No published benchmarks available");
     const params = new URLSearchParams(location.search);
+    const sortKeys = ["harness", "model", "compression_trigger", "timeout_multiplier", "accuracy", "total_cost_usd", "source_type"];
+    if (sortKeys.includes(params.get("sort")) && ["asc", "desc"].includes(params.get("direction"))) {
+      state.sort = { key: params.get("sort"), direction: params.get("direction") };
+      state.sortInteracted = true;
+    }
     const chartRequested = params.get("view") === "pareto" || location.hash === "#pareto";
     for (const key of Object.keys(state.filters)) state.filters[key] = params.get(key) || "";
     selectBenchmark(initialBenchmark(state.payload).id);

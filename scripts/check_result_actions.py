@@ -10,6 +10,7 @@ import xml.etree.ElementTree as ET
 from urllib.parse import urlparse, parse_qs
 
 from selenium import webdriver
+from selenium.webdriver.common.action_chains import ActionChains
 from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.chrome.service import Service
 from selenium.webdriver.common.by import By
@@ -73,6 +74,24 @@ def main():
         driver.get(args.url)
         wait.until(lambda _: count(".harness-details-button") == 38)
         driver.execute_script('setLocale("en");setTheme("light")')
+        # Clearer action icons have translated, dismissible hover/keyboard hints.
+        for selector, hint, label in ((".export-toggle", "#export-hint", "Copy / export results"),
+                                      (".copy-link", "#copy-link-hint", "Copy filters link")):
+            ActionChains(driver).move_to_element(find(selector)).perform()
+            assert find(hint).is_displayed() and find(hint).text == label
+            assert find(selector).get_attribute("aria-describedby") == hint[1:]
+        driver.save_screenshot(str(output / "link-hint-desktop.png"))
+        ActionChains(driver).move_to_element(find("#copy-link-hint")).perform()
+        assert find("#copy-link-hint").is_displayed()
+        driver.switch_to.active_element.send_keys(Keys.ESCAPE)
+        assert not find("#copy-link-hint").is_displayed()
+        ActionChains(driver).move_to_element(find(".results-title")).perform()
+        driver.execute_script("elements.exportToggle.focus()")
+        driver.switch_to.active_element.send_keys(Keys.TAB)
+        assert driver.execute_script("return document.activeElement===elements.copyLink")
+        assert find("#copy-link-hint").is_displayed()
+        driver.switch_to.active_element.send_keys(Keys.ESCAPE)
+        assert not find("#copy-link-hint").is_displayed()
         find(".filter-toggle").click()
         assert count(".filter-clear") == 0
         find(".filter-toggle").click()
@@ -111,6 +130,7 @@ def main():
         """)
         find(".copy-link").click()
         wait.until(lambda _: find(".action-status").text == "Copied")
+        assert not find("#copy-link-hint").is_displayed()
         link = clipboard("navigator.clipboard.readText()")
         params = parse_qs(urlparse(link).query)
         assert params["source"] == ["penguin_run"] and params["sort"] == ["accuracy"]
@@ -185,6 +205,15 @@ def main():
             "width": 320, "height": 568, "deviceScaleFactor": 1, "mobile": False,
         })
         driver.execute_script('setLocale("zh");setTheme("dark")')
+        ActionChains(driver).move_to_element(find(".copy-link")).perform()
+        assert find("#copy-link-hint").text == "复制当前筛选链接"
+        assert find("#copy-link-hint").is_displayed()
+        assert driver.execute_script("""
+            const r=document.querySelector("#copy-link-hint").getBoundingClientRect();
+            return r.left>=0 && r.right<=innerWidth && r.top>=64;
+        """)
+        driver.save_screenshot(str(output / "link-hint-mobile.png"))
+        ActionChains(driver).move_to_element(find(".results-title")).perform()
         for category, value in (("source", "penguin_run"), ("harness", "Penguin"),
                                 ("model", "DeepSeek-V4-Flash-0731"), ("thinking", "max")):
             choose(category, value)

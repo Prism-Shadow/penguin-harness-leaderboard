@@ -86,6 +86,13 @@ assert.equal(elements.actionStatus.hidden,true);
         self.assertIn("url.origin !== location.origin", self.export)
         self.assertNotIn("foreignObject", self.export)
 
+    def test_action_hints_are_localized_and_accessible(self):
+        for hint in ("export-hint", "copy-link-hint"):
+            self.assertIn(f'aria-describedby="{hint}"', self.html)
+            self.assertIn(f'id="{hint}" class="action-tooltip" role="tooltip"', self.html)
+        self.assertIn('copyFiltersLink: "Copy filters link"', self.script)
+        self.assertIn('copyFiltersLink: "复制当前筛选链接"', self.script)
+
     def test_clipboard_png_preserves_activation_and_reports_failure(self):
         self.assertIn('new ClipboardItem({ "image/png": png })', self.script)
         self.assertIn('showActionStatus("linkCopyFailed")', self.script)

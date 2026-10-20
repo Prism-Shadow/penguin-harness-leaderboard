@@ -40,7 +40,9 @@ const translations = {
     filters: "Filters",
     clearFilters: "Clear all",
     exportResults: "Copy / export",
+    exportHint: "Copy / export results",
     copyLink: "Copy link",
+    copyFiltersLink: "Copy filters link",
     copyMarkdown: "Copy Markdown",
     copyPng: "Copy PNG",
     downloadPng: "Download PNG",
@@ -201,7 +203,9 @@ const translations = {
     filters: "筛选",
     clearFilters: "清除全部",
     exportResults: "复制 / 导出",
+    exportHint: "复制 / 导出结果",
     copyLink: "复制链接",
+    copyFiltersLink: "复制当前筛选链接",
     copyMarkdown: "复制 Markdown",
     copyPng: "复制 PNG",
     downloadPng: "下载 PNG",
@@ -1901,6 +1905,13 @@ async function init() {
   enhanceCustomSelects();
   elements.localeSelect.addEventListener("change", (event) => setLocale(event.target.value));
   elements.themeToggle.addEventListener("click", cycleTheme);
+  document.querySelectorAll(".action-tooltip-wrap").forEach((wrapper) => {
+    const button = wrapper.querySelector(".action-button");
+    button.addEventListener("click", () => { wrapper.dataset.tooltipDismissed = ""; });
+    button.addEventListener("focus", () => { delete wrapper.dataset.tooltipDismissed; });
+    button.addEventListener("blur", () => { delete wrapper.dataset.tooltipDismissed; });
+    wrapper.addEventListener("pointerleave", () => { delete wrapper.dataset.tooltipDismissed; });
+  });
   elements.exportToggle.addEventListener("click", () => {
     if (state.benchmark) setExportMenu(elements.exportMenu.hidden);
   });
@@ -2028,7 +2039,12 @@ async function init() {
   window.addEventListener("resize", hideParetoTooltip);
   window.visualViewport?.addEventListener("resize", hideParetoTooltip);
   document.addEventListener("keydown", (event) => {
-    if (event.key === "Escape") clearParetoSelection();
+    if (event.key === "Escape") {
+      clearParetoSelection();
+      document.querySelectorAll(".action-tooltip-wrap").forEach((wrapper) => {
+        wrapper.dataset.tooltipDismissed = "";
+      });
+    }
   });
   elements.paretoChart.addEventListener("focusout", clearParetoSelection);
   elements.paretoChart.addEventListener("keydown", (event) => {

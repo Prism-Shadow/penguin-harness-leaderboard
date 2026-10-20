@@ -51,7 +51,10 @@ Source, Harness, model and thinking effort into a two-level category/option sele
 Select each filter's **All** option to reset it. A **Clear all** action appears
 at the bottom of the filter menu only while any filter is active; it clears
 every filter in either view without changing the selected sort or view.
-The left toolbar provides copy/export and copy-link buttons. Markdown contains
+The left toolbar provides a download-tray icon for copy/export and a chain icon
+for copying the current filters link. Both have translated hover and keyboard
+hints that dismiss on click or Escape. Success feedback disappears after one
+second, with repeat actions restarting the timer. Markdown contains
 the complete filtered table in its current order; PNG/SVG exports contain the
 full table or the current Pareto chart, not just the visible scrollport.
 Exports are generated entirely in the browser, with local assets embedded.

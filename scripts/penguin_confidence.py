@@ -37,10 +37,13 @@ def metrics_from_histogram(histogram: list[int], attempts: int) -> dict:
         raise ValueError("A nonempty histogram with at least two attempts per task is required")
     tasks = sum(histogram)
     successes = sum(c * count for c, count in enumerate(histogram))
-    variance = sum(
-        count * (c / attempts) * (1 - c / attempts) / (attempts - 1)
-        for c, count in enumerate(histogram)
-    ) / tasks**2
+    # Keep the audited operation order across Python versions. Python 3.12+
+    # changed float sum(), which otherwise shifts the final JSON by one ULP
+    # and makes an unchanged curated import fail exact snapshot validation.
+    variance_sum = 0.0
+    for c, count in enumerate(histogram):
+        variance_sum += count * (c / attempts) * (1 - c / attempts) / (attempts - 1)
+    variance = variance_sum / tasks**2
     stderr = 100 * math.sqrt(variance)
     return {
         "task_count": tasks,

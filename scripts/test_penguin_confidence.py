@@ -1,6 +1,7 @@
 """Offline CI calculation, provenance and import regressions; no private archive needed."""
 
 import copy
+import builtins
 import json
 import math
 import unittest
@@ -56,6 +57,25 @@ class PenguinConfidenceTests(unittest.TestCase):
         self.assertAlmostEqual(result["accuracy_ci95_half_width"], 2.491558276180913)
         # 0/5 and 5/5 tasks contribute zero estimated variance under this method.
         self.assertEqual(ci.metrics_from_histogram([3, 0, 0, 0, 0, 2], 5)["accuracy_stderr"], 0)
+
+    def test_float_sum_changes_cannot_drift_the_published_snapshot(self):
+        def compensated_sum(values):
+            values = list(values)
+            if any(type(value) is float for value in values):
+                return math.fsum(values)
+            return builtins.sum(values)
+
+        # Simulate a compensated float sum even on a Python 3.11 developer
+        # machine; the same snapshot must pass on newer CI runners.
+        with patch.object(ci, "sum", compensated_sum, create=True):
+            for record in self.evidence["records"]:
+                calculated = ci.metrics_from_histogram(
+                    record["task_success_histogram"], record["attempts_per_task"]
+                )
+                for key, value in calculated.items():
+                    self.assertEqual(value, record[key], (record["experiment_id"], key))
+            payload = json.loads(importer.DEFAULT_OUTPUT.read_text())
+            self.assertEqual(importer.replace_curated_results(copy.deepcopy(payload)), payload)
 
     def trial_fixture(self):
         return {

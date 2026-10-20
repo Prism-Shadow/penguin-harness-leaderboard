@@ -158,6 +158,12 @@ const translations = {
     perTaskCostMeaning: "Reported mean cost per task, not total cost. Excluded from total-cost sorting and the Pareto plot.",
     ciEvidence: "Interval source",
     reportedCi: "Reported 95% CI; ± is in percentage points, not relative percent.",
+    derivedCi: "Approximate 95% CI calculated from archived trials; ± is in percentage points.",
+    derivedCiMethod: "{tasks} fixed tasks × {attempts} attempts. Per-task standard error × 1.96; {missing} missing rewards retained as failures. Not pass@5 or an officially certified interval.",
+    derivedCiLimit: "With only five attempts per task, all-success/all-failure tasks contribute zero estimated variance. This approximation does not cover different tasks, model versions or systematic environment changes, or establish significant differences between configurations.",
+    ciMethod: "Interval method",
+    ciLimit: "Interval limitations",
+    ciCalculatedOn: "Interval calculated on",
     rowNumberMeaning: "Position in the current filtered and sorted view; not an official rank.",
     harnessMeaning: "Task-running framework and version for this observation. Select its name for evidence.",
     modelMeaning: "Model and source-reported thinking effort; the same effort label across models does not imply an equal compute budget.",
@@ -318,6 +324,12 @@ const translations = {
     perTaskCostMeaning: "来源报告的每任务平均成本，不是总成本；不参与总成本排序及帕累托图绘制。",
     ciEvidence: "置信区间来源",
     reportedCi: "来源报告的 95% 置信区间；± 表示百分点，不是相对百分比。",
+    derivedCi: "由归档试验数据计算的近似 95% 置信区间；± 表示百分点。",
+    derivedCiMethod: "固定 {tasks} 道任务，每题 {attempts} 次；按任务计算标准误，再乘以 1.96。{missing} 条缺失奖励按未成功计，保留在分母中。这不是 pass@5，也不是官方认证区间。",
+    derivedCiLimit: "每题仅 5 次，全成功或全失败任务的估计方差贡献为零，不代表没有真实波动。此近似区间不涵盖任务集、模型版本或系统环境变化，也不能单凭它判断配置差异显著。",
+    ciMethod: "区间计算方法",
+    ciLimit: "区间局限",
+    ciCalculatedOn: "区间补算日期",
     rowNumberMeaning: "当前筛选、排序后的行号，不代表官方排名。",
     harnessMeaning: "本条实验执行任务的框架及版本；点击名称可查看证据。",
     modelMeaning: "模型及来源报告的思考强度；不同模型的同名强度不等于相同计算预算。",
@@ -1034,6 +1046,10 @@ function renderTableHead() {
   elements.resultsHead.replaceChildren(row);
 }
 
+function confidenceDescription(row) {
+  return t(row.accuracy_ci95_provenance?.kind === "derived_from_archived_trials" ? "derivedCi" : "reportedCi");
+}
+
 function accuracyCell(row) {
   const ci = row.accuracy_ci95_half_width;
   const lower = Math.max(0, row.accuracy - (ci ?? 0));
@@ -1043,7 +1059,7 @@ function accuracyCell(row) {
     <div class="rate-cell">
       <div class="rate-copy">
         <strong>${row.accuracy.toFixed(1)}%</strong>
-        ${interval ? `<span title="${escapeHtml(t("reportedCi"))}" aria-label="${escapeHtml(interval + '. ' + t("reportedCi"))}">${escapeHtml(interval)}</span>` : ""}
+        ${interval ? `<span title="${escapeHtml(confidenceDescription(row))}" aria-label="${escapeHtml(interval + '. ' + confidenceDescription(row))}">${escapeHtml(interval)}</span>` : ""}
       </div>
       <span class="accuracy-track" aria-hidden="true">
         <i class="accuracy-fill" data-model-series="${modelSeries(row)}" style="width:${Math.min(100, Math.max(0, row.accuracy))}%"></i>
@@ -1258,10 +1274,18 @@ function openDetails(row, trigger) {
       ? escapeHtml(t("traceInvalidJsonl", { count: formatNumber(traceArchive.invalid_jsonl_files) })) : null),
   ]);
 
+  const ciProvenance = row.accuracy_ci95_provenance;
+  const derivedCi = ciProvenance?.kind === "derived_from_archived_trials";
   const scores = detailGroup(t("scoreMetrics"), [
     detailItem(t("resolutionRate"), escapeHtml(formatPercent(row.accuracy, 2))),
     detailItem(t("confidenceInterval"), confidence ? escapeHtml(confidence) : null),
-    detailItem(t("ciEvidence"), confidence ? escapeHtml(t("reportedCi")) : null),
+    detailItem(t("ciEvidence"), confidence ? escapeHtml(confidenceDescription(row)) : null),
+    detailItem(t("ciMethod"), derivedCi ? `${escapeHtml(t("derivedCiMethod", {
+      tasks: ciProvenance.task_count, attempts: ciProvenance.attempts_per_task,
+      missing: ciProvenance.missing_reward_count,
+    }))} ${detailLink({url: ciProvenance.method_url}, "Terminal-Bench metrics.py")}` : null),
+    detailItem(t("ciCalculatedOn"), derivedCi ? escapeHtml(formatDate(ciProvenance.derived_at)) : null),
+    detailItem(t("ciLimit"), derivedCi ? escapeHtml(t("derivedCiLimit")) : null),
     detailItem(t("standardError"), row.accuracy_stderr == null ? null : escapeHtml(formatPercent(row.accuracy_stderr))),
     detailItem(t("trials"), row.trial_count == null ? null : escapeHtml(formatNumber(row.trial_count))),
     detailItem(t("successes"), row.successes == null ? null : escapeHtml(formatNumber(row.successes))),
@@ -1416,9 +1440,10 @@ function selectParetoPoint(id, showTooltip = false, pointer = null) {
     <span>${escapeHtml(configSummary)}</span>
     <span>${escapeHtml(sourceTypeLabel(row.source_type))}</span>
     <div class="pareto-tooltip-metrics">
-      <div><span>${escapeHtml(t("paretoTooltipRate"))}</span><b>${escapeHtml(formatPercent(row.accuracy, 2))}</b>${ci == null ? "" : `<small>± ${escapeHtml(formatPercent(ci))} · 95% CI</small>`}</div>
+      <div><span>${escapeHtml(t("paretoTooltipRate"))}</span><b>${escapeHtml(formatPercent(row.accuracy, 2))}</b>${ci == null ? "" : `<small title="${escapeHtml(confidenceDescription(row))}">± ${escapeHtml(formatPercent(ci))} · 95% CI</small>`}</div>
       <div><span>${escapeHtml(t(row.source_type === "penguin_run" ? "paretoTooltipCost" : "paretoTooltipOfficialCost"))}</span><b>${escapeHtml(formatExactCost(row.total_cost_usd))}</b></div>
     </div>
+    ${row.accuracy_ci95_provenance ? `<small>${escapeHtml(confidenceDescription(row))}</small>` : ""}
     ${partialCostNote(row) ? `<small>${escapeHtml(partialCostNote(row))}</small>` : ""}`;
   tooltip.hidden = false;
   const anchor = point.querySelector(".pareto-point-dot").getBoundingClientRect();

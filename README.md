@@ -157,8 +157,13 @@ unchanged Job Config model ID (`deepseek/deepseek-v4-flash`), not presented as
 a version disclosed by the archived config. Default 128k compression is a runner
 clarification, not an exact token integer recovered from the Job Config.
 
-- Scores are verified successful attempts / 445, not pass@5. No confidence
-  interval or average trial duration is fabricated from aggregate Job statistics.
+- Scores are verified successful attempts / 445, not pass@5. The six approximate
+  95% confidence intervals were calculated on 2026-10-20 from the archived
+  per-task trials, not inferred from an aggregate success rate. Original archive
+  records, including null rewards and originally absent intervals, are unchanged.
+  Missing rewards count as failures and remain in the denominator; a successful
+  reward still counts when an error is also recorded. Average trial durations
+  are not fabricated.
 - Costs and tokens are recorded totals. Every new run has missing trial costs;
   the cost tooltip and Details show the number of missing entries.
   These amounts are not complete bills. Null cost does not mean a free attempt.
@@ -174,7 +179,8 @@ clarification, not an exact token integer recovered from the Job Config.
   statistical significance, or a fair comparison with Claude Code. Its connecting
   segments are a visual guide, not measured intermediate configurations.
 - The chart includes eligible observations within its $0–$1,200 display range
-  and their reported confidence intervals. Its Y axis remains fixed at 0–100%;
+  and their available confidence intervals (reported for official rows, derived
+  from archived trials for Penguin). Its Y axis remains fixed at 0–100%;
   its X axis remains zero-based and linear. Official cost totals can cover
   differing numbers of trials.
 - Official points use gray squares and thin confidence whiskers; Penguin uses
@@ -290,12 +296,47 @@ inventories, and one small available structured trajectory yielded no additional
 reported fees. Costs remain incomplete; startup failure is not evidence of a zero
 bill. This is a bounded source audit, not proof that no other public evidence exists.
 
-Confidence whiskers use only `accuracy_ci95_half_width` reported by the source.
-There is no standard-error-to-CI fallback. All 52 official rows in the snapshot
+Confidence whiskers use the explicit `accuracy_ci95_half_width` field. There is
+no automatic standard-error-to-CI fallback for official or vendor rows.
+All 52 official rows in the snapshot
 checked on 2026-09-10 provide that field, so the audit does not alter their
 existing intervals. ± values are percentage points. Missing intervals stay absent.
 Offline checks validate structure, observation binding and generated consistency;
 they do not automatically read vendor pages or authenticate every source claim.
+
+### Derived Penguin confidence intervals
+
+`data/penguin_confidence_intervals.json` separately records the six derived
+intervals, the source archive SHA-256, calculation date, missing-reward policy,
+and each run's histogram of task success counts (0–5). It contains no raw trial
+payloads or private filesystem paths. `scripts/penguin_confidence.py` reproduces
+these aggregates from the unchanged archive:
+
+```bash
+python3 scripts/penguin_confidence.py --archive /path/to/证据快照.json --check
+```
+
+The [Terminal-Bench per-task implementation](https://github.com/harbor-framework/terminal-bench/blob/main/leaderboard/src/leaderboard/core/metrics.py)
+was checked on 2026-10-20. For N = 89 tasks, k = 5 attempts and per-task rate p_i,
+SE = 100 × sqrt(sum(p_i × (1 − p_i) / (k − 1)) / N²); the approximate 95% half-width
+is 1.96 × SE. Both values are in percentage points. This is not pass@5 or a
+pooled binomial estimate. Calculations keep full precision; display rounds to one
+decimal place, without changing any existing accuracy.
+
+Both full and curated-only imports bind evidence by experiment ID plus job,
+configuration, task/trial counts and successes, verify the histogram calculation,
+and preserve `accuracy_ci95_provenance`. Missing or mismatched evidence fails
+validation instead of silently attaching an interval to a different result.
+Unknown future runs receive no derived interval. Table, Pareto and exports use
+the same half-width. Interval hints and bilingual Details distinguish derived
+Penguin intervals from source-reported intervals; they are not official certification.
+
+These intervals concern the average success rate on the **fixed 89 tasks**.
+With only five attempts per task the normal approximation has limitations:
+0/5 and 5/5 tasks contribute zero estimated variance, not proof of no uncertainty.
+The intervals do not cover a new task set, model revision or systematic environment
+change, predict where the next run will fall, or establish significant differences
+between configurations.
 
 ### All configurations versus the official default view
 

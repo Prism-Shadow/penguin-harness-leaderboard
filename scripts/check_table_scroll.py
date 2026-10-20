@@ -108,6 +108,19 @@ def main():
                     return series !== "unknown" && fill.dataset.modelSeries === series
                         && getComputedStyle(fill).backgroundColor === `rgb(${rgb})`;
                 }),
+                derivedIntervals:[...document.querySelectorAll(".results-body tr")].every(row => {
+                    const id = row.querySelector(".harness-details-button").dataset.resultId;
+                    const record = state.benchmark.results.find(item => item.id === id);
+                    if (record.source_type !== "penguin_run") return true;
+                    const span = row.querySelector(".rate-copy span");
+                    const whisker = row.querySelector(".accuracy-ci");
+                    const expectedWidth = 260 * 2 * record.accuracy_ci95_half_width / 100;
+                    const expectedHint = document.documentElement.dataset.locale === "zh"
+                        ? "由归档试验数据计算" : "calculated from archived trials";
+                    return span?.textContent === `± ${record.accuracy_ci95_half_width.toFixed(1)}%`
+                        && span.title.includes(expectedHint)
+                        && Math.abs(whisker.getBoundingClientRect().width - expectedWidth) < .1;
+                }),
                 versionsAligned:[...document.querySelectorAll(".harness-meta")].every(meta => {
                     const name = meta.closest(".harness-cell").querySelector(".entity-name");
                     return Math.abs(name.getBoundingClientRect().left
@@ -146,6 +159,7 @@ def main():
         assert result["fontMatches"] and result["colorMatches"] and result["noOverlap"], result
         assert result["effortStyle"], result
         assert result["ciStyle"], result
+        assert result["derivedIntervals"], result
         assert result["barGeometry"] and result["versionsAligned"], result
         assert result["modelColors"], result
         assert result["sourcePlain"], result

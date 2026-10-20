@@ -13,6 +13,7 @@ from datetime import date
 from pathlib import Path
 from typing import Any
 
+from penguin_confidence import apply_penguin_confidence
 
 ROOT = Path(__file__).resolve().parents[1]
 DEFAULT_OUTPUT = ROOT / "site" / "data" / "benchmarks.json"
@@ -75,7 +76,8 @@ def normalize_row(raw: dict[str, Any], config: dict[str, str]) -> dict[str, Any]
     metadata = raw.get("metadata") or {}
     metrics = raw.get("metrics") or {}
     ci95 = metrics.get("accuracy_ci95_half_width")
-    # A standard error is not a reported 95% interval. Never synthesize one.
+    # Never infer official CIs from a standard error. Penguin's separately audited
+    # trial-derived intervals are applied only in load_curated_rows().
 
     release_date = metadata.get("release_date") or metadata.get("date")
     package_org, package_name = config["package"].split("/", maxsplit=1)
@@ -439,6 +441,7 @@ def load_curated_rows() -> tuple[list[dict[str, Any]], str]:
     unknown = sorted({row["benchmark_id"] for row in rows} - known_benchmarks)
     if unknown:
         raise SystemExit(f"Curated results reference unknown benchmarks: {', '.join(unknown)}")
+    apply_penguin_confidence(rows)
     return rows, max([verified_at, *(row["verified_at"] for row in rows)])
 
 

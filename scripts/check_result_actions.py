@@ -150,6 +150,16 @@ def main():
         assert len([line for line in markdown.splitlines() if line.startswith("|")]) == 8, markdown
         assert markdown.index("76.6%") < markdown.index("62.5%")
         assert "(max)" in markdown and "RANK" in markdown and "COST" in markdown
+        assert "76.6% ± 2.5%" in markdown and "67.2% ± 2.9%" in markdown
+        assert count(".accuracy-ci") == 6
+        driver.save_screenshot(str(output / "penguin-ci-table.png"))
+        # A derived interval must not be described as source-reported or certified.
+        find(".harness-details-button").click()
+        assert "calculated from archived trials" in find(".dialog-body").text
+        assert "Per-task standard error × 1.96" in find(".dialog-body").text
+        assert "Not pass@5 or an officially certified interval" in find(".dialog-body").text
+        driver.save_screenshot(str(output / "penguin-ci-details.png"))
+        find(".dialog-done").click()
 
         # Export full width even while the scrollport is scrolled sideways.
         driver.execute_script("elements.tableWrap.scrollLeft=400;elements.tableWrap.scrollTop=200")
@@ -159,6 +169,7 @@ def main():
         root = ET.parse(svg_path).getroot()
         assert root.get("width") and root.get("height")
         assert "76.6%" in "".join(root.itertext()) and "62.5%" in "".join(root.itertext())
+        assert "± 2.5%" in "".join(root.itertext()) and "± 2.9%" in "".join(root.itertext())
         assert "COST" in "".join(root.itertext()) and "SOURCE" in "".join(root.itertext())
         assert "data:image/svg+xml;base64," in svg_path.read_text()
         assert exported("png") == "Downloaded"
@@ -196,12 +207,20 @@ def main():
         find("#pareto-tab").click()
         choose("source", "penguin_run")
         assert count(".pareto-point") == 6
+        assert count(".pareto-interval") == 6
+        driver.save_screenshot(str(output / "penguin-ci-pareto.png"))
+        point = find(".pareto-point")
+        driver.execute_script("arguments[0].focus()", point)
+        wait.until(lambda _: find(".pareto-tooltip").is_displayed())
+        assert "calculated from archived trials" in find(".pareto-tooltip").text
+        driver.execute_script("arguments[0].blur()", point)
         assert exported("svg") == "Downloaded"
         chart = output / "terminal-bench-2.1-pareto.svg"
         wait.until(lambda _: chart.exists())
         chart_text = chart.read_text()
         assert "Pareto Frontier" in chart_text and "var(--" not in chart_text
         assert chart_text.count('class="pareto-point ') + chart_text.count('class="pareto-point"') == 6
+        assert chart_text.count('class="pareto-interval') == 6
         assert exported("png") == "Downloaded"
         wait.until(lambda _: (output / "terminal-bench-2.1-pareto.png").exists())
         find(".filter-toggle").click()

@@ -291,6 +291,14 @@ def verify_benchmark(bench: dict[str, Any]) -> None:
             assert config["task_count"] * config["attempts_per_task"] == row["trial_count"], row_id
             assert 0 <= row["successes"] <= row["trial_count"], row_id
             assert abs(row["accuracy"] - row["successes"] / row["trial_count"] * 100) < 1e-8, row_id
+            if ci95 is not None:
+                provenance = row.get("accuracy_ci95_provenance")
+                assert provenance and provenance["kind"] == "derived_from_archived_trials", row_id
+                assert provenance["units"] == "percentage_points", row_id
+                assert provenance["task_count"] == config["task_count"], row_id
+                assert provenance["attempts_per_task"] == config["attempts_per_task"], row_id
+                assert valid_date(provenance["derived_at"]), row_id
+                assert math.isclose(ci95, 1.96 * stderr, abs_tol=1e-10), row_id
             assert config["timeout_multiplier"] > 0 and config["concurrency"] > 0, row_id
             assert config["compression_trigger_source"] in {"job_config", "runner_confirmed_default"}, row_id
             verify_trace_archive(config, row["trial_count"], row_id)
@@ -376,6 +384,8 @@ def verify_frontend_contract() -> None:
     assert 'option[value="system"]' in script, "Follow system option is not translated"
     assert 'class="source-filter"' in html, "Source filter missing"
     assert "accuracy_ci95_half_width" in script, "Confidence-interval comparison is missing"
+    assert "function confidenceDescription(row)" in script, "CI provenance must distinguish derived intervals"
+    assert script.count("derivedCi:") == 2 and script.count("derivedCiLimit:") == 2, "Derived CI disclosure must be bilingual"
     assert "configEvidence?.source_url" in script and "row.configuration_source_url" in script, "Configuration evidence links missing"
     assert "harness_version_variants" in script and "configCoverageValue" in script, "Full-run configuration qualifications missing"
     assert 'pareto-range-toggle' not in html and 'paretoZoomed' not in script, "Removed chart range control is still present"

@@ -312,34 +312,58 @@ def verify_frontend_contract() -> None:
     assert "showModal()" in script, "Result details dialog is not wired up"
     assert "elements.dialogBody.scrollTop = 0" in script, "New result details must start at the top"
     assert 'class="pareto-panel"' in html, "Pareto panel missing"
-    assert html.index('id="results"') < html.index('id="pareto"') < html.index('id="coverage"'), "Pareto must follow results and precede coverage"
-    hero = html[html.index('<section class="hero">'):html.index('<section id="results"')]
-    assert 'pareto-panel' not in hero and 'hero-intro' not in hero, "Original hero was replaced by split layout"
-    for scope in ("penguin_run", "benchmark_official"):
-        assert f'data-pareto-scope="{scope}"' in html, "Pareto source control missing"
+    for view, panel in (("table", "table-panel"), ("pareto", "pareto")):
+        assert f'data-view="{view}"' in html and f'aria-controls="{panel}"' in html, "Result view tab missing"
+    assert 'function setResultView(' in script and 'role="tabpanel"' in html, "Result view switching is missing"
+    assert 'data-pareto-source' not in html and 'paretoSource' not in script, "Removed chart source switch is still present"
+    assert 'class="filter-toggle"' in html and 'class="filter-categories"' in html, "Categorized filter menu missing"
+    assert 'role="menuitemradio"' in script, "Filter options lack selection semantics"
+    assert 'filter-reset' not in html and 'filterReset' not in script, "Removed Clear control is still present"
+    for field in ("source", "harness", "model", "thinking"):
+        assert f'id="{field}-filter"' in html, f"{field} filter missing"
+        assert f'<label for="{field}-filter"' not in html, "Removed visible filter label is still present"
+        assert f'data-i18n-aria="{field}Filter"' in html, "Filter accessible name is missing"
+    assert 'paretoFrontier(rows.filter((row) => row.source_type === source))' in script, (
+        "Combined chart must calculate a separate frontier for each source"
+    )
     assert "function paretoFrontier(rows)" in script, "Pareto frontier calculation missing"
     assert "Number.isFinite(row.total_cost_usd)" in script, "Missing costs must not plot as zero"
-    assert script.count("paretoPenguinNote:") == 2, "Partial-cost disclosure must be bilingual"
     assert 'class="run-config-summary"' not in script, "Internal experiment IDs must not clutter the table"
     assert '"CI —"' not in script, "Missing confidence intervals must not render a placeholder annotation"
     assert "function paretoConfigLabel(row)" in script, "Chart points need readable configuration labels"
     assert "official_detail_url" in script, "Official result detail link is missing"
-    assert 'class="results-bench-rail"' in html, "Results benchmark rail missing"
-    assert 'classList.toggle("is-stuck"' in script, "Sticky benchmark rail state missing"
-    assert 'class="bench-switcher"' in html, "Results benchmark switcher missing"
-    assert 'data-i18n="resultsScopeNote"' in html, "All-efforts comparison note missing"
-    assert script.count("resultsScopeNote:") == 2, "Comparison note must be bilingual"
+    assert 'version-select' not in html and 'versionSelect' not in script, "Single-benchmark page must not have a version selector"
+    assert '--results-toolbar-height' in script and '--results-toolbar-height' in css, (
+        "Sticky table headers must account for toolbar height"
+    )
     assert 'officialUrl.searchParams.set("efforts", "all")' in script, (
         "Official comparison link must open the all-efforts view"
     )
     assert 'class="locale-control"' in html, "Language control missing"
     assert '<option value="system">' in html, "Follow system language option is missing"
     assert 'option[value="system"]' in script, "Follow system option is not translated"
-    assert 'class="filter-select source-filter"' in html, "Source filter missing"
+    assert 'class="source-filter"' in html, "Source filter missing"
     assert "accuracy_ci95_half_width" in script, "Confidence-interval comparison is missing"
     assert "configEvidence?.source_url" in script and "row.configuration_source_url" in script, "Configuration evidence links missing"
     assert "harness_version_variants" in script and "configCoverageValue" in script, "Full-run configuration qualifications missing"
-    assert 'class="pareto-range-toggle"' in html and "paretoZoomed" in script, "Explicit Pareto zoom control missing"
+    assert 'pareto-range-toggle' not in html and 'paretoZoomed' not in script, "Removed chart range control is still present"
+    assert 'data-x-scale="linear"' in script and 'i * step' in script, "Cost axis must use evenly spaced linear ticks"
+    assert 'paretoAxisLogCost' not in script, "Obsolete log scale remains"
+    assert 'pareto-extreme-ring' not in script and 'pareto-extreme-ring' not in css, "Removed decorative point rings must not return"
+    assert 'pareto-envelope' in script, "Frontier reference shading missing"
+    assert 'metricsLabel' not in script, "Numeric point labels must remain in tooltips"
+    assert 'pareto-label-toggle' not in html and 'paretoAllNames' not in script, "Removed all-names control must not return"
+    assert 'if (!onFrontier) return;' in script, "Overview must emphasize each source's frontier"
+    assert script.index('markers.unshift(') < script.index('if (!onFrontier)'), (
+        "Frontier labeling must not remove non-frontier points"
+    )
+    assert 'const PARETO_COST_MAX = 1200;' in script and 'const PARETO_COST_STEP = 300;' in script
+    assert 'const yMin = 0;' in script and 'const yMax = 100;' in script and 'const yStep = 20;' in script, (
+        "Resolution-rate axis must retain the full 0–100% range and 20-point ticks"
+    )
+    assert 'row.total_cost_usd <= PARETO_COST_MAX' in script, "Out-of-range costs must not be drawn inside the viewport"
+    assert 'paretoRangeNote' in script, "Chart range must be explained without removing table records"
+    assert 'paretoComparison' in script and 'partialCostNote(row)' in script, "Comparison and cost qualifications must remain accessible"
     assert "function paretoPointAt(event)" in script, "Close chart points need unambiguous hit testing"
     assert "timeoutNote" in script and "harnessMode" in script, "Non-multiplier configuration missing in Details"
     column_contract = (
@@ -360,8 +384,12 @@ def verify_frontend_contract() -> None:
     )
     assert 'class="details-cell"' not in script, "Removed Details cell is still rendered"
     assert 'class="harness-details-button"' in script, "Harness detail trigger is missing"
-    assert 'class="harness-detail-hint"' in html, "Harness detail hint is missing"
-    assert "harnessDetailsHint" in script, "Harness detail hint is not translated"
+    assert "harness-detail-hint" not in html and "harnessDetailsHint" not in script, "Removed Harness hint is still present"
+    assert 'class="result-count sr-only"' in html, "Result count must be screen-reader-only"
+    assert '<h2 id="pareto-title">Pareto Frontier</h2>' in html, "Minimal Pareto heading is missing"
+    assert 'pareto-chart-meta' not in html and 'pareto-subtitle' not in html, "Removed chart annotations are still present"
+    assert 'const PUBLISHED_BENCHMARK_IDS = ["terminal-bench-2.1"]' in script, "Only TB 2.1 is ready for publication"
+    assert "PUBLISHED_BENCHMARK_IDS.includes(bench.id)" in script, "Unpublished benchmarks must be excluded before routing"
     assert 'event.target.closest(".harness-details-button")' in script, (
         "Harness detail trigger is not wired up"
     )
@@ -381,11 +409,11 @@ def verify_frontend_contract() -> None:
     assert "function comparisonRanks(rows)" not in script, "Obsolete comparison rank logic remains"
     assert '<td class="row-number-cell">${index + 1}</td>' in script, "Row numbers must follow display order"
     assert 'if (key === "row_number")' in script, "Row number header must not offer a circular sort"
+    assert 'sort: { key: "total_cost_usd", direction: "asc" }' in script, "Default ordering must be ascending total cost"
+    assert 'sortInteracted: false' in script and script.count('state.sortInteracted && state.sort.key === key') == 2, "Default sorting must not highlight headers or cells"
     assert 'tbody tr:nth-child(-n + 3) .row-number-cell' in css, "Blue numbering must follow the first three displayed rows"
     assert 'class="source-cell' in script, "Dedicated source column missing"
     assert 'class="harness-meta"' in script, "Harness version must remain visible"
-    assert 'data-i18n="experimentTableNote"' in html, "Experiment comparability note missing"
-    assert script.count("experimentTableNote:") == 2, "Table-level partial-cost disclosure must be bilingual"
     assert script.count("costIncomplete:") == 2, "Detailed partial-cost disclosure must be bilingual"
     assert 't("runnerDefaultShort")' not in script and 't("partialCostShort")' not in script, "Repeated row annotations remain"
     assert script.count("modelRevisionConfirmed:") == 2, "Human-confirmed revision provenance must be bilingual"

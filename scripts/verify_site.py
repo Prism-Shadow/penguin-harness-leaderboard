@@ -311,6 +311,9 @@ def verify_frontend_contract() -> None:
     assert 'class="result-dialog"' in html, "Result details dialog missing"
     assert "showModal()" in script, "Result details dialog is not wired up"
     assert "elements.dialogBody.scrollTop = 0" in script, "New result details must start at the top"
+    assert "hero-actions" not in html and "hero-actions" not in css, "Removed hero buttons must not return"
+    assert 'class="button button-primary official-detail-link"' in html, "Official Details action must remain"
+    assert 'class="button button-secondary dialog-done"' in html, "Details close action must remain"
     assert 'class="pareto-panel"' in html, "Pareto panel missing"
     for view, panel in (("table", "table-panel"), ("pareto", "pareto")):
         assert f'data-view="{view}"' in html and f'aria-controls="{panel}"' in html, "Result view tab missing"

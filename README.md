@@ -42,9 +42,10 @@ Harness-click Details; they do not substitute for a trigger or multiplier.
 A reported mean cost carries **/task (mean)** and never replaces total cost in
 sorting or Pareto calculations. Sources remain in Details.
 
-The page opens with the Penguin title and quick links, then the Benchmark's full
-name. A funnel menu groups Source, Harness, model and thinking level into a
-two-level category/option selector. Select each filter's **All** option to reset it.
+The page opens with the Penguin title, followed directly by the Benchmark's full
+name. GitHub links remain in the navigation and footer. A funnel menu groups
+Source, Harness, model and thinking level into a two-level category/option selector.
+Select each filter's **All** option to reset it.
 Table and Pareto tabs share the current filters; both the view and filters are
 saved in the URL. The **Pareto Frontier** view plots Penguin and benchmark-official
 results together. Blue circles identify Penguin;

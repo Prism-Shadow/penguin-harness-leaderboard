@@ -476,14 +476,6 @@ main,
   text-transform: uppercase;
 }
 
-.hero-actions {
-  display: flex;
-  justify-content: center;
-  flex-wrap: wrap;
-  gap: 12px;
-  margin-top: 20px;
-}
-
 .button {
   display: inline-flex;
   align-items: center;
@@ -1221,10 +1213,6 @@ tbody tr:nth-child(-n + 3) .row-number-cell {
 
   .hero-inner {
     width: calc(100% - 20px);
-  }
-
-  .hero-actions {
-    flex-direction: column;
   }
 
   .button {

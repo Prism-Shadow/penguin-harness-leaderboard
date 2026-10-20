@@ -99,6 +99,42 @@ console.log(JSON.stringify({efforts:rows.map(modelEffort),
         self.assertNotIn("GitHubStars", self.script)
         self.assertIn('aria-label="GitHub"', self.html)
 
+    def test_source_labels_match_filters_in_both_languages(self):
+        source = self.script[self.script.index("const translations ="):
+                             self.script.index("const state =")]
+        source += self.script[self.script.index("function escapeHtml("):
+                              self.script.index("function safeUrl(")]
+        source += self.script[self.script.index("function sourceTypeLabel("):
+                              self.script.index("function updateSourceSelect(")]
+        source += self.script[self.script.index("function sourceLabel("):
+                              self.script.index("function harnessDetailsButton(")]
+        probe = """
+const assert = require("node:assert/strict");
+let locale = "en";
+const t = key => translations[locale][key];
+const expected = {benchmark_official:"Terminal-Bench", vendor_reported:"Vendor", penguin_run:"Penguin"};
+for (locale of ["en", "zh"]) {
+    for (const [source_type, label] of Object.entries(expected)) {
+        const row = {source_type};
+        assert.equal(sourceTypeLabel(source_type), label);
+        assert.equal(sourceLabel(row), `<span class="source-label">${label}</span>`);
+        assert.deepEqual(row, {source_type});
+    }
+}
+assert.equal(sourceLabel({source_type:"<unknown>"}),
+    '<span class="source-label">&lt;unknown&gt;</span>');
+"""
+        subprocess.run(["node", "-e", source + probe], capture_output=True,
+                       text=True, check=True, timeout=10)
+
+    def test_source_text_has_no_badge_or_box_including_exports(self):
+        export = (ROOT / "site/export.js").read_text()
+        self.assertNotIn("source-badge", self.script + self.css + export)
+        rule = self.css_rule(".source-label")
+        self.assertIn("font-size: inherit", rule)
+        self.assertIn("color: var(--text)", rule)
+        self.assertNotRegex(rule, r"\b(?:padding|border|background|min-height)\s*:")
+
 
 if __name__ == "__main__":
     unittest.main()

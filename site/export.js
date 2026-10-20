@@ -75,7 +75,7 @@ const LeaderboardExport = (() => {
         if (!transparent(cellStyle.backgroundColor)) {
           parts.push(rect(cellBounds.left + dx, y, cellBounds.width, rowHeight, cellStyle.backgroundColor));
         }
-        for (const node of cell.querySelectorAll(".source-badge, .accuracy-track, .accuracy-fill, .accuracy-ci, .accuracy-cap")) {
+        for (const node of cell.querySelectorAll(".accuracy-track, .accuracy-fill, .accuracy-ci, .accuracy-cap")) {
           const box = node.getBoundingClientRect();
           const style = getComputedStyle(node);
           parts.push(rect(box.left + dx, box.top + dy, box.width, box.height,

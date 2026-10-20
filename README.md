@@ -22,7 +22,7 @@ with configuration before performance:
 | Time budget | Reported scaling factor (e.g. 4×) for each task's original time limit; fixed durations are not converted into multipliers |
 | Resolution rate | Percentage + score bar; 95% interval only when available |
 | Cost | Recorded USD total; incomplete billing is disclosed on hover and in Details |
-| Source | Benchmark official, vendor-reported, or Penguin |
+| Source | Terminal-Bench, Vendor, or Penguin |
 
 The eight display columns keep thinking effort beside the model, without a badge
 or a separate column. The Benchmark's full
@@ -281,8 +281,11 @@ The `tbench.ai` link in each result's Details opens the matching `efforts=all` v
 - [Terminal-Bench 3.0 — all configurations](https://www.tbench.ai/?version=3.0&efforts=all)
 - [Terminal-Bench 4.0 — all configurations](https://www.tbench.ai/?version=4.0&efforts=all)
 
-The default source filter is **All sources**. Source badges have a dedicated
-column. Details retains the upstream **Official rank (all efforts)**;
+The default source filter is **All sources**. Both languages use the same concise
+source names in filters, the table, and exports: **Terminal-Bench** (official
+leaderboard), **Vendor** (vendor-reported), and **Penguin** (Penguin runs).
+The dedicated source column uses plain body-sized text, without badge borders,
+backgrounds, or extra padding. Details retains the upstream **Official rank (all efforts)**;
 the table's row numbers only indicate display order, not official ranks or
 evidence of a controlled comparison across protocols.
 

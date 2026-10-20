@@ -102,6 +102,18 @@ def main():
                     return Math.abs(name.getBoundingClientRect().left
                         - meta.querySelector("span").getBoundingClientRect().left) < 1;
                 }),
+                sourcePlain:[...document.querySelectorAll(".source-label")].every(label => {
+                    const style = getComputedStyle(label);
+                    const cellStyle = getComputedStyle(label.closest("td"));
+                    const name = label.textContent;
+                    return style.borderWidth === "0px" && style.padding === "0px"
+                        && style.backgroundColor === "rgba(0, 0, 0, 0)"
+                        && style.fontSize === cellStyle.fontSize
+                        && style.color === getComputedStyle(document.body).color
+                        && [...document.querySelector(".source-filter").options]
+                            .some(option => option.value && option.text === name)
+                        && ["Terminal-Bench", "Vendor", "Penguin"].includes(name);
+                }),
                 effortStyle:[...document.querySelectorAll(".model-effort")].every(span => {
                     const style = getComputedStyle(span);
                     const rect = span.getBoundingClientRect();
@@ -124,6 +136,7 @@ def main():
         assert result["effortStyle"], result
         assert result["ciStyle"], result
         assert result["barGeometry"] and result["versionsAligned"], result
+        assert result["sourcePlain"], result
         assert result["rowLine"] == result["expectedLine"], result
 
     def check_headers_and_corners():
@@ -314,6 +327,9 @@ def main():
             driver.execute_script("document.querySelector('.table-wrap').scrollLeft=0")
             if width in (1440, 390):
                 driver.save_screenshot(str(output / f"initial-{width}-en.png"))
+                driver.execute_script("document.querySelector('.table-wrap').scrollLeft=100000")
+                driver.save_screenshot(str(output / f"sources-{width}-en.png"))
+                driver.execute_script("document.querySelector('.table-wrap').scrollLeft=0")
             for column in ("compression-trigger", "timeout-multiplier"):
                 driver.find_element(By.CSS_SELECTOR, f".column-{column} button").click()
                 assert check_headers_and_corners() == english_widths

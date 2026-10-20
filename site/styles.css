@@ -799,30 +799,11 @@ tbody tr:nth-child(-n + 3) .row-number-cell {
   transform: translate(-50%, -50%);
 }
 
-.source-badge {
-  display: inline-flex;
-  align-items: center;
-  min-height: 25px;
-  padding: 3px 8px;
-  color: var(--muted-strong);
-  border: 1px solid var(--line);
-  border-radius: 0;
-  background: var(--surface-soft);
-  font-size: 11px;
+.source-label {
+  color: var(--text);
+  font-size: inherit;
   font-weight: 400;
   white-space: nowrap;
-}
-
-.source-vendor_reported {
-  color: var(--muted-strong);
-  border-color: var(--line-strong);
-  background: var(--surface-soft);
-}
-
-.source-penguin_run {
-  color: var(--accent-strong);
-  border-color: color-mix(in srgb, var(--accent) 28%, var(--line));
-  background: var(--accent-soft);
 }
 
 .number-cell {

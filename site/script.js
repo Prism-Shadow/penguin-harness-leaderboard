@@ -21,12 +21,9 @@ const translations = {
     source: "Source",
     sourceFilter: "Filter by source",
     allSources: "All sources",
-    benchmarkOfficial: "Benchmark official",
-    vendorReported: "Vendor-reported",
-    penguinRun: "Penguin run",
-    benchmarkOfficialShort: "Official",
-    vendorReportedShort: "Vendor",
-    penguinRunShort: "Penguin",
+    benchmarkOfficial: "Terminal-Bench",
+    vendorReported: "Vendor",
+    penguinRun: "Penguin",
     harness: "Harness",
     model: "Model",
     thinkingLevel: "Thinking effort",
@@ -184,12 +181,9 @@ const translations = {
     source: "来源",
     sourceFilter: "按来源筛选",
     allSources: "全部来源",
-    benchmarkOfficial: "Benchmark 官方",
-    vendorReported: "厂商自报",
-    penguinRun: "Penguin 实测",
-    benchmarkOfficialShort: "官方",
-    vendorReportedShort: "厂商自报",
-    penguinRunShort: "Penguin",
+    benchmarkOfficial: "Terminal-Bench",
+    vendorReported: "Vendor",
+    penguinRun: "Penguin",
     harness: "Harness",
     model: "模型",
     thinkingLevel: "思考强度",
@@ -824,15 +818,6 @@ function sourceTypeLabel(sourceType) {
   return labels[sourceType] || sourceType;
 }
 
-function sourceBadgeLabel(sourceType) {
-  const labels = {
-    benchmark_official: t("benchmarkOfficialShort"),
-    vendor_reported: t("vendorReportedShort"),
-    penguin_run: t("penguinRunShort"),
-  };
-  return labels[sourceType] || sourceType;
-}
-
 function updateSourceSelect(rows) {
   const values = [...new Set(rows.map((row) => row.source_type))];
   elements.sourceFilter.replaceChildren();
@@ -1071,10 +1056,8 @@ function accuracyCell(row) {
     </div>`;
 }
 
-function sourceBadge(row) {
-  const fullLabel = escapeHtml(sourceTypeLabel(row.source_type));
-  const shortLabel = escapeHtml(sourceBadgeLabel(row.source_type));
-  return `<span class="source-badge source-${escapeHtml(row.source_type)}" aria-label="${fullLabel}" title="${fullLabel}">${shortLabel}</span>`;
+function sourceLabel(row) {
+  return `<span class="source-label">${escapeHtml(sourceTypeLabel(row.source_type))}</span>`;
 }
 
 function harnessDetailsButton(row) {
@@ -1155,7 +1138,7 @@ function renderTable() {
         <td class="config-cell${active("timeout_multiplier")}">${timeoutCell(row)}</td>
         <td class="${active("accuracy").trim()}">${accuracyCell(row)}</td>
         <td class="number-cell${active("total_cost_usd")}">${costCell(row)}</td>
-        <td class="source-cell${active("source_type")}">${sourceBadge(row)}</td>
+        <td class="source-cell${active("source_type")}">${sourceLabel(row)}</td>
       </tr>`;
   }).join("");
   elements.resultsBody.querySelectorAll(".harness-logo").forEach((image) => {

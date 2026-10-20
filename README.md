@@ -1,9 +1,12 @@
 # Penguin Harness Leaderboard
 
 A static GitHub Pages leaderboard for comparing the complete evaluation setup,
-not only the model. The current demo combines the official Terminal-Bench 2.1,
-3.0, and 4.0 baselines from [tbench.ai](https://www.tbench.ai/) with separately
-labelled vendor reports and Penguin experiment records. Available outputs for the
+not only the model. The page currently presents Penguin's full-suite Terminal-Bench
+2.1 experiments alongside official baselines from [tbench.ai](https://www.tbench.ai/)
+and separately labelled vendor reports. TB 3.0 and 4.0 reference snapshots remain
+in the repository but are not shown until full-suite Penguin results are available.
+The frontend publication list is `PUBLISHED_BENCHMARK_IDS` in `site/script.js`;
+links to unpublished versions fall back to TB 2.1. Available outputs for the
 six Penguin jobs were archived locally on 2026-09-14; source trace gaps and native
 JSONL format issues remain explicitly recorded, not presented as a complete archive.
 
@@ -12,19 +15,23 @@ with configuration before performance:
 
 | Column | Fixed comparison fields |
 | --- | --- |
-| No. | Sequential position in the current filtered and sorted view, not a rank |
+| Rank | Sequential position in the current filtered and sorted view, not an official rank |
 | Harness | Name + reported or configured version |
-| Model | Model + reasoning effort |
-| Compaction trigger | Context length that triggers compaction, not maximum context capacity |
-| Timeout multiplier | Reported scaling factor for each task's original time limit; fixed durations are not converted into multipliers |
+| Model | Model name followed by source-reported thinking effort in plain parentheses, when available |
+| Compact at | Context length that triggers compaction, not maximum context capacity |
+| Time budget | Reported scaling factor (e.g. 4×) for each task's original time limit; fixed durations are not converted into multipliers |
 | Resolution rate | Percentage + score bar; 95% interval only when available |
-| Cost | Recorded USD total; incomplete billing is disclosed below the table and in Details |
-| Source | Benchmark official, vendor-reported, or Penguin |
+| Cost | Recorded USD total; incomplete billing is disclosed on hover and in Details |
+| Source | Terminal-Bench, Vendor, or Penguin |
 
-This is six configuration fields and two result metrics in the six central
-columns, plus row number and source (eight display columns). Benchmark version is
-selected above the table. Default ordering is descending resolution rate;
-row numbers always run from 1 to the displayed row count after filtering or sorting.
+The eight display columns keep thinking effort beside the model, without a badge
+or a separate column. The Benchmark's full
+name remains above the table, with a responsive 28–40px heading; with only
+TB 2.1 published, there is no version selector.
+Default ordering is ascending recorded total cost,
+with missing totals last (per-task means are not substituted for totals).
+The default sort arrow is neutral; column highlighting starts only after a header is selected.
+Row numbers always run from 1 to the displayed row count after filtering or sorting.
 The row-number header is not sortable. Official ranks remain in Details.
 Tokens, average trial duration, release/run dates, attempt counts, Sandbox,
 concurrency, and raw evidence remain in the data and Harness-click Details.
@@ -36,17 +43,107 @@ Harness-click Details; they do not substitute for a trigger or multiplier.
 A reported mean cost carries **/task (mean)** and never replaces total cost in
 sorting or Pareto calculations. Sources remain in Details.
 
-The original introductory hero remains unchanged. The third section, after the
-results table, contains a cost–resolution **Pareto view**, inspired by
-[tbench's Pareto view](https://www.tbench.ai/?view=pareto). Penguin configurations
-and official reference results have separate chart views; a reference point is
-not a controlled comparison against Penguin.
+The navigation brand reads **Penguin Harness Leaderboard**, with no duplicate
+hero title. The page starts directly with the Benchmark's full name and results.
+GitHub links remain in the navigation and footer. Column headers have no hover
+explanations; sorting and screen-reader descriptions remain available. A funnel menu groups
+Source, Harness, model and thinking effort into a two-level category/option selector.
+Select each filter's **All** option to reset it. A **Clear all** action appears
+at the bottom of the filter menu only while any filter is active; it clears
+every filter in either view without changing the selected sort or view.
+The left toolbar provides a download-tray icon for copy/export and a chain icon
+for copying the current filters link. Both have translated hover and keyboard
+hints that dismiss on click or Escape. Success feedback disappears after one
+second, with repeat actions restarting the timer. Markdown contains
+the complete filtered table in its current order; PNG/SVG exports contain the
+full table or the current Pareto chart, not just the visible scrollport.
+Exports are generated entirely in the browser, with local assets embedded.
+Shared links retain the benchmark, view, filters and sort. Clipboard failures
+are reported without claiming success; PNG and SVG can also be downloaded.
+Filters and view tabs sit outside the card, aligned with its right edge.
+In Table mode, the results area fits the available viewport height: the benchmark
+title and controls stay visible while rows scroll inside the table. Column
+headers stick to the top of that scroll region at every screen width. Headers
+use uppercase text and the same foreground color as the body, with left-aligned
+labels on one line. Columns fit their longest label or value plus consistent
+padding; the score tracks retain their 260px width and use a 14px height. Horizontal scrolling inside
+the card exposes the remaining columns without shrinking the bars. Controls,
+menus, badges, cards and dialogs use square corners. The region is keyboard focusable.
+Sorting or changing filters returns the rows to the top. Pareto retains its
+page-scrolling layout. Row dividers use a stronger neutral color in both themes.
+Reported ± intervals use the same size as the resolution rate and the same text
+color as timeout multipliers; their reserved space keeps score bars aligned.
+Error bars use thin black lines with vertical end caps in light mode and light
+neutral lines in dark mode, independent of the model-series fill colors.
+The score and interval geometry/data are unchanged.
+Harness versions align with the name text using the same icon-column spacing,
+including when a logo is missing or fails to load.
+The navigation controls follow the Penguin homepage styling: compact language
+selection, sun/moon/system theme icons, and an outlined, icon-only GitHub link.
+The page does not display or fetch GitHub star counts.
 
-The Penguin view uses circular markers, a dotted observed frontier, and direct
-configuration/score/cost labels, inspired by this
+Score bars use one stable color per model organization/series, not per Harness,
+source, or sorted position. Opus, Sonnet, Haiku, and Fable share Claude's orange.
+Missing organizations fall back to the model name; unrecognized models use a
+neutral gray. Only the score-bar fill is colored, not the text or row background.
+PNG/SVG exports use the same computed colors. The separate Pareto source encoding
+remains unchanged.
+
+The palette was reviewed against public official sites on 2026-10-20. These are
+chart colors, not a claim that every vendor publishes one canonical brand hex:
+
+| Model series | Light-mode fill | Official reference / chart adaptation |
+| --- | --- | --- |
+| GPT | `#10a37f` | Green chart accent; [OpenAI's current identity](https://openai.com/brand/) is primarily monochrome, so this is not a prescribed logo color |
+| DeepSeek | `#4d6bfe` | [Homepage](https://www.deepseek.com/) CSS `--ds-color-brand` |
+| Claude | `#d97757` | [Homepage](https://claude.com/) clay accent, retaining the requested orange |
+| Gemini | `#ac87eb` | Purple used in the [official overview site's](https://gemini.google/overview/) gradient styling |
+| Qwen | `#7046d6` | Adapted from the [official team site's](https://qwenlm.github.io/about/) `theme-color` (`#615ced`), deepened toward violet to distinguish it from Gemini and DeepSeek |
+| Kimi | `#009ac9` | Cyan adaptation of the blues in the [Kimi Brand Book](https://www.kimi.ai/resources/kimi-brand), separated from DeepSeek/Meta |
+| GLM | `#4d8a98` | Muted blue-teal adaptation of [Z.ai's](https://chat.z.ai/) blue accent and neutral UI, not an official brand hex |
+| Grok | `#7c7c83` | [Grok's](https://grok.com/) neutral identity, lightened to keep black whiskers visible |
+| Muse Spark | `#0064e0` | Blue used by the [Meta AI site](https://ai.meta.com/) |
+
+In dark mode Gemini uses `#9466cf` and Kimi `#0085b5` so the light error
+whiskers retain contrast. Model names and percentages remain visible; color is
+only a supplementary series cue, not the only way to read or compare results.
+
+Table and Pareto tabs share the current filters; both the view and filters are
+saved in the URL. The **Pareto Frontier** view plots Penguin and benchmark-official
+results together. Blue circles identify Penguin;
+gray squares identify official reference results. Each source has its own observed
+frontier, not a shared efficiency ranking. The cost axis is linear, from $0 to
+$1,200 in $300 steps. This is a chart-only display range: higher-cost records
+remain in the table and source data. The axis states its range, with a tooltip
+explaining the omission. The resolution-rate axis is fixed at 0–100%, with
+20-percentage-point ticks, including after filtering. Points use single markers without decorative outer
+rings. The overview labels each source's frontier, with other observations shown
+as quieter markers. Long names can wrap between Harness and model, never inside a model
+ID; neighboring annotations are arranged without moving the data points.
+Every point retains its full accessible identity, tooltip and Details action.
+Hovering or focusing a labeled point highlights its label and shows one connector
+routed around the other labels; connectors are not all drawn at once. Tooltips stay
+inside the viewport and close on Escape, page scrolling, or resizing.
+Pale shading above/left of the
+combined observed envelope is a visual reference, not a controlled comparison.
+Missing total costs remain in the table but are excluded from the chart.
+`view=pareto` opens the chart; obsolete `pareto_source`
+parameters are removed. Sources, cost coverage and configuration remain available
+in point tooltips and Details. Filter names remain accessible to screen readers
+without a redundant row of visible labels.
+This layout takes inspiration from [tbench](https://www.tbench.ai/?view=pareto).
+Versions without full-suite Penguin
+results are excluded from URL routing, not presented as empty pages.
+A reference point is not a controlled comparison against Penguin.
+
+Penguin uses circular markers and a dotted observed frontier. Labels contain
+Harness, model and reported thinking level, with collision avoidance.
+Non-frontier observations within the chart range remain accessible on hover/focus.
+Run settings, numeric values
+and source details are shown on hover/focus, inspired by this
 [Artificial Analysis chart](https://x.com/ArtificialAnlys/status/2098504939781906684/photo/1).
 Its costs remain recorded job totals, not the reference chart's cost per task.
-This styling is scoped to Penguin; the official reference view is unchanged.
+Official results retain their reported total costs and confidence intervals.
 
 ### Penguin experiments collected on 2026-09-09
 
@@ -60,36 +157,39 @@ unchanged Job Config model ID (`deepseek/deepseek-v4-flash`), not presented as
 a version disclosed by the archived config. Default 128k compression is a runner
 clarification, not an exact token integer recovered from the Job Config.
 
-- Scores are verified successful attempts / 445, not pass@5. No confidence
-  interval or average trial duration is fabricated from aggregate Job statistics.
+- Scores are verified successful attempts / 445, not pass@5. The six approximate
+  95% confidence intervals were calculated on 2026-10-20 from the archived
+  per-task trials, not inferred from an aggregate success rate. Original archive
+  records, including null rewards and originally absent intervals, are unchanged.
+  Missing rewards count as failures and remain in the denominator; a successful
+  reward still counts when an error is also recorded. Average trial durations
+  are not fabricated.
 - Costs and tokens are recorded totals. Every new run has missing trial costs;
-  one note below the table discloses this, and Details shows the number of missing entries.
+  the cost tooltip and Details show the number of missing entries.
   These amounts are not complete bills. Null cost does not mean a free attempt.
 - The chart excludes rows without any reported total cost. At the user's request,
   the earlier Penguin 0.2.2 / 75.2809% observation is no longer included in the
   site's curated dataset. Historical research/archive files are not deleted.
 - Table cells omit internal experiment IDs, default-value annotations and partial-cost
   sublabels. Configuration provenance and usage completeness remain in Details.
-  Chart points use readable effort / compression / timeout labels instead of E01–E06.
+  Chart labels identify Harness / model / thinking level instead of E01–E06;
+  compression and timeout settings remain in the tooltip.
 - The dotted Penguin frontier minimizes **recorded** cost and maximizes score among
   the plotted observations. It does not establish true billing efficiency,
   statistical significance, or a fair comparison with Claude Code. Its connecting
   segments are a visual guide, not measured intermediate configurations.
-- Penguin defaults to a focused view (currently 55–85%); the range is visibly
-  stated beside **Show 0–100%**. Official reference defaults to full range.
-  Switching Benchmark or source restores that source's default range; either
-  view allows focused/full scales. Official cost totals can cover differing
-  numbers of trials.
-- The official chart retains its light frame, square markers, thin frontier/CI
-  lines, and neutral 5%-opacity fill. Penguin uses a lighter open frame, circular
-  markers, a dotted frontier, and a pale blue fill. Both shaded regions extend
-  above/left of the observed frontier, including the leftmost and topmost margins;
-  neither is a confidence region or a claim that better results are impossible.
-  Penguin labels show configuration, score, and recorded cost next to each point.
-  Nearby labels are placed closest to their own points; short Penguin leader
-  lines are omitted. Gray points remain gray when selected; a keyboard focus ring
-  is not a frontier marker. Labels avoid the frontier and confidence whiskers.
-  The legend distinguishes points, frontier lines, and the shaded reference area.
+- The chart includes eligible observations within its $0–$1,200 display range
+  and their available confidence intervals (reported for official rows, derived
+  from archived trials for Penguin). Its Y axis remains fixed at 0–100%;
+  its X axis remains zero-based and linear. Official cost totals can cover
+  differing numbers of trials.
+- Official points use gray squares and thin confidence whiskers; Penguin uses
+  blue circles. The overview keeps only key labels, with other configurations
+  accessible on hover/focus. Labels avoid points and frontier lines, while
+  preferring clear space around confidence whiskers; extreme markers render last
+  so that ordinary points cannot cover them.
+  The pale upper-left envelope is neither a confidence region nor a claim that
+  better results are impossible. A keyboard focus ring is not a frontier marker.
   Hover/focus shows named metrics and available configuration, not unlabelled
   numbers; the card chooses a side that keeps its point visible. Click/Enter opens
   Details, and nearby points resolve by distance rather than hit-box draw order.
@@ -196,12 +296,47 @@ inventories, and one small available structured trajectory yielded no additional
 reported fees. Costs remain incomplete; startup failure is not evidence of a zero
 bill. This is a bounded source audit, not proof that no other public evidence exists.
 
-Confidence whiskers use only `accuracy_ci95_half_width` reported by the source.
-There is no standard-error-to-CI fallback. All 52 official rows in the snapshot
+Confidence whiskers use the explicit `accuracy_ci95_half_width` field. There is
+no automatic standard-error-to-CI fallback for official or vendor rows.
+All 52 official rows in the snapshot
 checked on 2026-09-10 provide that field, so the audit does not alter their
 existing intervals. ± values are percentage points. Missing intervals stay absent.
 Offline checks validate structure, observation binding and generated consistency;
 they do not automatically read vendor pages or authenticate every source claim.
+
+### Derived Penguin confidence intervals
+
+`data/penguin_confidence_intervals.json` separately records the six derived
+intervals, the source archive SHA-256, calculation date, missing-reward policy,
+and each run's histogram of task success counts (0–5). It contains no raw trial
+payloads or private filesystem paths. `scripts/penguin_confidence.py` reproduces
+these aggregates from the unchanged archive:
+
+```bash
+python3 scripts/penguin_confidence.py --archive /path/to/证据快照.json --check
+```
+
+The [Terminal-Bench per-task implementation](https://github.com/harbor-framework/terminal-bench/blob/main/leaderboard/src/leaderboard/core/metrics.py)
+was checked on 2026-10-20. For N = 89 tasks, k = 5 attempts and per-task rate p_i,
+SE = 100 × sqrt(sum(p_i × (1 − p_i) / (k − 1)) / N²); the approximate 95% half-width
+is 1.96 × SE. Both values are in percentage points. This is not pass@5 or a
+pooled binomial estimate. Calculations keep full precision; display rounds to one
+decimal place, without changing any existing accuracy.
+
+Both full and curated-only imports bind evidence by experiment ID plus job,
+configuration, task/trial counts and successes, verify the histogram calculation,
+and preserve `accuracy_ci95_provenance`. Missing or mismatched evidence fails
+validation instead of silently attaching an interval to a different result.
+Unknown future runs receive no derived interval. Table, Pareto and exports use
+the same half-width. Interval hints and bilingual Details distinguish derived
+Penguin intervals from source-reported intervals; they are not official certification.
+
+These intervals concern the average success rate on the **fixed 89 tasks**.
+With only five attempts per task the normal approximation has limitations:
+0/5 and 5/5 tasks contribute zero estimated variance, not proof of no uncertainty.
+The intervals do not cover a new task set, model revision or systematic environment
+change, predict where the next run will fall, or establish significant differences
+between configurations.
 
 ### All configurations versus the official default view
 
@@ -209,14 +344,17 @@ The official website defaults to `efforts=best`: for each Model × Harness pair,
 it keeps the highest-scoring thinking-level configuration and recalculates ranks.
 Its API also returns the other configurations. This site keeps them to support
 thinking-level comparisons, so its counts can exceed the official default view.
-The `tbench.ai` link above the table opens the matching `efforts=all` view:
+The `tbench.ai` link in each result's Details opens the matching `efforts=all` view:
 
 - [Terminal-Bench 2.1 — all configurations](https://www.tbench.ai/?version=2.1&efforts=all)
 - [Terminal-Bench 3.0 — all configurations](https://www.tbench.ai/?version=3.0&efforts=all)
 - [Terminal-Bench 4.0 — all configurations](https://www.tbench.ai/?version=4.0&efforts=all)
 
-The default source filter is **All sources**. Source badges have a dedicated
-column. Details retains the upstream **Official rank (all efforts)**;
+The default source filter is **All sources**. Both languages use the same concise
+source names in filters, the table, and exports: **Terminal-Bench** (official
+leaderboard), **Vendor** (vendor-reported), and **Penguin** (Penguin runs).
+The dedicated source column uses plain body-sized text, without badge borders,
+backgrounds, or extra padding. Details retains the upstream **Official rank (all efforts)**;
 the table's row numbers only indicate display order, not official ranks or
 evidence of a controlled comparison across protocols.
 
@@ -240,11 +378,9 @@ From this repository:
 
     python3 -m http.server 8765 --directory site
 
-Then open one of:
+Then open:
 
 - http://localhost:8765/?version=2.1
-- http://localhost:8765/?version=3.0
-- http://localhost:8765/?version=4.0
 
 Opening `site/index.html` directly is not supported because browsers block the
 JSON request from local files.
@@ -256,6 +392,14 @@ JSON request from local files.
     python3 scripts/verify_site.py --check-live
     python3 -m unittest discover -s scripts -p 'test_*.py'
     node --check site/script.js
+    node --check site/export.js
+
+For browser checks of internal scrolling, sticky headers, external controls,
+light/dark styling and narrow viewports (requires Selenium, Chromium and
+chromedriver), start the local server above, then run:
+
+    python3 scripts/check_table_scroll.py --url http://127.0.0.1:8765/
+    python3 scripts/check_result_actions.py --url http://127.0.0.1:8765/
 
 To update curated records and configuration supplements while retaining official
 scores, costs, intervals and upstream snapshot dates:
@@ -263,8 +407,9 @@ scores, costs, intervals and upstream snapshot dates:
     python3 scripts/import_terminal_bench.py --curated-only
     python3 scripts/verify_site.py
 
-Each new curated row may carry its own `verified_at`; the header shows the most
-recent manual check, not a claim that every older source was reverified that day.
+Each new curated row may carry its own `verified_at`, shown in its Details.
+The payload also retains the most recent manual check date; this does not mean
+every older source was reverified that day.
 
 Always review the generated JSON diff before committing. The GitHub Actions
 workflow repeats the live parity and frontend syntax checks on pull requests and
@@ -289,8 +434,9 @@ before a push to `main` is deployed.
 - Benchmark versions never share scores or ranks.
 - Official dates retain the Release Date semantics: TB 3.0 uses its
   `release_date`; other views use the official `date` field. These are model
-  release dates, not evaluation run dates. The snapshot timestamp remains
-  visible above the table. A vendor page publication date is stored separately
+  release dates, not evaluation run dates. The snapshot timestamp is retained
+  in the data and on the official snapshot link's tooltip in Details.
+  A vendor page publication date is stored separately
   as `published_at`, not copied into Release Date.
 - Penguin results retain their own evaluation protocols and evidence status.
   The earlier public report has two scoreable attempts per TB 2.1 task; the six

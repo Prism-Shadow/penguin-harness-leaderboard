@@ -1876,8 +1876,8 @@
           },
           "thinking_level": "max",
           "accuracy": 76.62921348314606,
-          "accuracy_stderr": null,
-          "accuracy_ci95_half_width": null,
+          "accuracy_stderr": 1.271203202133119,
+          "accuracy_ci95_half_width": 2.491558276180913,
           "display_accuracy": null,
           "release_date": null,
           "display_release_date": null,
@@ -1953,7 +1953,25 @@
           "timeout_hours": null,
           "wall_clock_limit_removed": null,
           "context_window_label": null,
-          "harness_mode": null
+          "harness_mode": null,
+          "accuracy_ci95_provenance": {
+            "kind": "derived_from_archived_trials",
+            "method": "task_stratified_normal_95",
+            "method_url": "https://github.com/harbor-framework/terminal-bench/blob/main/leaderboard/src/leaderboard/core/metrics.py",
+            "derived_at": "2026-10-20",
+            "units": "percentage_points",
+            "confidence_level": 0.95,
+            "z_score": 1.96,
+            "missing_reward_policy": "count_as_failure_keep_in_denominator",
+            "archive": {
+              "filename": "证据快照.json",
+              "archived_on": "2026-09-09",
+              "sha256": "cb037c6c1a5b9d86d72f7fc15e5cccb60e0fcc7fbb85ff1ec2a3370e330418f0"
+            },
+            "task_count": 89,
+            "attempts_per_task": 5,
+            "missing_reward_count": 2
+          }
         },
         {
           "id": "penguin-tb21-0d04ce0d-3a73-4f61-bacf-3e1deae67d31",
@@ -1977,8 +1995,8 @@
           },
           "thinking_level": "max",
           "accuracy": 76.40449438202246,
-          "accuracy_stderr": null,
-          "accuracy_ci95_half_width": null,
+          "accuracy_stderr": 1.1784369080563502,
+          "accuracy_ci95_half_width": 2.3097363397904465,
           "display_accuracy": null,
           "release_date": null,
           "display_release_date": null,
@@ -2054,7 +2072,25 @@
           "timeout_hours": null,
           "wall_clock_limit_removed": null,
           "context_window_label": null,
-          "harness_mode": null
+          "harness_mode": null,
+          "accuracy_ci95_provenance": {
+            "kind": "derived_from_archived_trials",
+            "method": "task_stratified_normal_95",
+            "method_url": "https://github.com/harbor-framework/terminal-bench/blob/main/leaderboard/src/leaderboard/core/metrics.py",
+            "derived_at": "2026-10-20",
+            "units": "percentage_points",
+            "confidence_level": 0.95,
+            "z_score": 1.96,
+            "missing_reward_policy": "count_as_failure_keep_in_denominator",
+            "archive": {
+              "filename": "证据快照.json",
+              "archived_on": "2026-09-09",
+              "sha256": "cb037c6c1a5b9d86d72f7fc15e5cccb60e0fcc7fbb85ff1ec2a3370e330418f0"
+            },
+            "task_count": 89,
+            "attempts_per_task": 5,
+            "missing_reward_count": 4
+          }
         },
         {
           "id": "64890377-54de-4cc2-bcd7-e76610983482",
@@ -2492,8 +2528,8 @@
           },
           "thinking_level": "max",
           "accuracy": 73.48314606741573,
-          "accuracy_stderr": null,
-          "accuracy_ci95_half_width": null,
+          "accuracy_stderr": 1.4649893045399212,
+          "accuracy_ci95_half_width": 2.8713790368982455,
           "display_accuracy": null,
           "release_date": null,
           "display_release_date": null,
@@ -2569,7 +2605,25 @@
           "timeout_hours": null,
           "wall_clock_limit_removed": null,
           "context_window_label": null,
-          "harness_mode": null
+          "harness_mode": null,
+          "accuracy_ci95_provenance": {
+            "kind": "derived_from_archived_trials",
+            "method": "task_stratified_normal_95",
+            "method_url": "https://github.com/harbor-framework/terminal-bench/blob/main/leaderboard/src/leaderboard/core/metrics.py",
+            "derived_at": "2026-10-20",
+            "units": "percentage_points",
+            "confidence_level": 0.95,
+            "z_score": 1.96,
+            "missing_reward_policy": "count_as_failure_keep_in_denominator",
+            "archive": {
+              "filename": "证据快照.json",
+              "archived_on": "2026-09-09",
+              "sha256": "cb037c6c1a5b9d86d72f7fc15e5cccb60e0fcc7fbb85ff1ec2a3370e330418f0"
+            },
+            "task_count": 89,
+            "attempts_per_task": 5,
+            "missing_reward_count": 8
+          }
         },
         {
           "id": "vendor-qwen3-8-27b-tb21-terminus",
@@ -2771,8 +2825,8 @@
           },
           "thinking_level": "high",
           "accuracy": 67.19101123595506,
-          "accuracy_stderr": null,
-          "accuracy_ci95_half_width": null,
+          "accuracy_stderr": 1.4906178833057977,
+          "accuracy_ci95_half_width": 2.9216110512793634,
           "display_accuracy": null,
           "release_date": null,
           "display_release_date": null,
@@ -2848,7 +2902,25 @@
           "timeout_hours": null,
           "wall_clock_limit_removed": null,
           "context_window_label": null,
-          "harness_mode": null
+          "harness_mode": null,
+          "accuracy_ci95_provenance": {
+            "kind": "derived_from_archived_trials",
+            "method": "task_stratified_normal_95",
+            "method_url": "https://github.com/harbor-framework/terminal-bench/blob/main/leaderboard/src/leaderboard/core/metrics.py",
+            "derived_at": "2026-10-20",
+            "units": "percentage_points",
+            "confidence_level": 0.95,
+            "z_score": 1.96,
+            "missing_reward_policy": "count_as_failure_keep_in_denominator",
+            "archive": {
+              "filename": "证据快照.json",
+              "archived_on": "2026-09-09",
+              "sha256": "cb037c6c1a5b9d86d72f7fc15e5cccb60e0fcc7fbb85ff1ec2a3370e330418f0"
+            },
+            "task_count": 89,
+            "attempts_per_task": 5,
+            "missing_reward_count": 10
+          }
         },
         {
           "id": "f867b631-36c8-476e-aa2f-96007ae70da0",
@@ -3286,8 +3358,8 @@
           },
           "thinking_level": "max",
           "accuracy": 63.370786516853926,
-          "accuracy_stderr": null,
-          "accuracy_ci95_half_width": null,
+          "accuracy_stderr": 1.3294561310336215,
+          "accuracy_ci95_half_width": 2.605734016825898,
           "display_accuracy": null,
           "release_date": null,
           "display_release_date": null,
@@ -3363,7 +3435,25 @@
           "timeout_hours": null,
           "wall_clock_limit_removed": null,
           "context_window_label": null,
-          "harness_mode": null
+          "harness_mode": null,
+          "accuracy_ci95_provenance": {
+            "kind": "derived_from_archived_trials",
+            "method": "task_stratified_normal_95",
+            "method_url": "https://github.com/harbor-framework/terminal-bench/blob/main/leaderboard/src/leaderboard/core/metrics.py",
+            "derived_at": "2026-10-20",
+            "units": "percentage_points",
+            "confidence_level": 0.95,
+            "z_score": 1.96,
+            "missing_reward_policy": "count_as_failure_keep_in_denominator",
+            "archive": {
+              "filename": "证据快照.json",
+              "archived_on": "2026-09-09",
+              "sha256": "cb037c6c1a5b9d86d72f7fc15e5cccb60e0fcc7fbb85ff1ec2a3370e330418f0"
+            },
+            "task_count": 89,
+            "attempts_per_task": 5,
+            "missing_reward_count": 1
+          }
         },
         {
           "id": "penguin-tb21-196c464e-d06d-4014-a0ef-e5438049a622",
@@ -3387,8 +3477,8 @@
           },
           "thinking_level": "max",
           "accuracy": 62.47191011235955,
-          "accuracy_stderr": null,
-          "accuracy_ci95_half_width": null,
+          "accuracy_stderr": 1.4821242649744852,
+          "accuracy_ci95_half_width": 2.904963559349991,
           "display_accuracy": null,
           "release_date": null,
           "display_release_date": null,
@@ -3464,7 +3554,25 @@
           "timeout_hours": null,
           "wall_clock_limit_removed": null,
           "context_window_label": null,
-          "harness_mode": null
+          "harness_mode": null,
+          "accuracy_ci95_provenance": {
+            "kind": "derived_from_archived_trials",
+            "method": "task_stratified_normal_95",
+            "method_url": "https://github.com/harbor-framework/terminal-bench/blob/main/leaderboard/src/leaderboard/core/metrics.py",
+            "derived_at": "2026-10-20",
+            "units": "percentage_points",
+            "confidence_level": 0.95,
+            "z_score": 1.96,
+            "missing_reward_policy": "count_as_failure_keep_in_denominator",
+            "archive": {
+              "filename": "证据快照.json",
+              "archived_on": "2026-09-09",
+              "sha256": "cb037c6c1a5b9d86d72f7fc15e5cccb60e0fcc7fbb85ff1ec2a3370e330418f0"
+            },
+            "task_count": 89,
+            "attempts_per_task": 5,
+            "missing_reward_count": 2
+          }
         },
         {
           "id": "ef2b00eb-f360-41e6-8c97-23c4d762d06b",

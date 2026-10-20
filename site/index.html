@@ -1,12 +1,12 @@
 <!doctype html>
-<html lang="en" data-theme="dark" data-theme-mode="system" data-locale="en" data-locale-pref="system">
+<html lang="en" data-theme="dark" data-theme-mode="system" data-locale="en" data-locale-pref="system" data-result-view="table">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="theme-color" content="#000000" />
     <meta
       name="description"
-      content="Penguin Harness Leaderboard — sourced Terminal-Bench 2.1, 3.0, and 4.0 model and harness results."
+      content="Penguin Harness Leaderboard — Penguin experiments and sourced Terminal-Bench 2.1 reference results."
     />
     <meta property="og:title" content="Penguin Harness Leaderboard" />
     <meta
@@ -42,23 +42,18 @@
         document.documentElement.lang = locale === "zh" ? "zh-CN" : "en";
       } catch {}
     </script>
-    <link rel="stylesheet" href="styles.css?v=20260917-v41-labels" />
-    <script src="script.js?v=20260917-v41-labels" defer></script>
+    <link rel="stylesheet" href="styles.css?v=20261020-model-colors" />
+    <script src="export.js?v=20261020-source-labels" defer></script>
+    <script src="script.js?v=20261020-penguin-ci" defer></script>
   </head>
   <body>
     <a class="skip-link" href="#results" data-i18n="skipToResults">Skip to results</a>
-
-    <div class="neon-bg" aria-hidden="true">
-      <div class="neon-blob neon-blob-a"></div>
-      <div class="neon-blob neon-blob-b"></div>
-      <div class="neon-blob neon-blob-c"></div>
-    </div>
 
     <header class="site-header">
       <div class="nav-shell">
         <a class="brand" href="#top" data-i18n-aria="home" aria-label="Penguin Harness Leaderboard home">
           <img src="favicon.svg" alt="" />
-          <span>Penguin Harness</span>
+          <span>Penguin Harness Leaderboard</span>
         </a>
 
         <nav class="nav-actions" data-i18n-aria="siteControls" aria-label="Site controls">
@@ -75,7 +70,17 @@
             </select>
           </div>
           <button class="theme-toggle" type="button" title="Theme" aria-label="Theme">
-            <span class="theme-icon" aria-hidden="true"></span>
+            <svg class="nav-icon" data-theme-icon="light" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" hidden>
+              <circle cx="12" cy="12" r="4"></circle>
+              <path d="M12 2v2M12 20v2M4.93 4.93l1.42 1.42M17.65 17.65l1.42 1.42M2 12h2M20 12h2M4.93 19.07l1.42-1.42M17.65 6.35l1.42-1.42"></path>
+            </svg>
+            <svg class="nav-icon" data-theme-icon="dark" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" hidden>
+              <path d="M20.9 13a9 9 0 0 1-9.9-9.9A9 9 0 1 0 20.9 13Z"></path>
+            </svg>
+            <svg class="nav-icon" data-theme-icon="system" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <rect x="2" y="3" width="20" height="14" rx="2"></rect>
+              <path d="M8 21h8M12 17v4"></path>
+            </svg>
           </button>
           <a
             class="github-link"
@@ -91,162 +96,80 @@
     </header>
 
     <main id="top">
-      <section class="hero">
-        <div class="hero-dots" aria-hidden="true"></div>
-        <div class="hero-inner">
-          <div class="hero-brand">
-            <img src="favicon.svg" alt="" />
-            <span>Penguin Harness Leaderboard</span>
-          </div>
-          <p class="eyebrow current-bench-name">Terminal-Bench</p>
-          <h1 data-i18n-html="heroTitle">The model isn't everything.<br /><span>The whole setup matters.</span></h1>
-          <p class="hero-copy current-bench-description">Loading public benchmark metadata…</p>
-          <div class="hero-actions">
-            <a class="button button-primary" href="#results">
-              <span data-i18n="viewResults">View results</span>
-              <span aria-hidden="true">↓</span>
-            </a>
-            <a class="button button-secondary" href="https://github.com/Prism-Shadow/penguin-harness-leaderboard">
-              <span data-i18n="viewGithub">View GitHub</span>
-            </a>
-          </div>
-
-          <dl class="hero-stats" data-i18n-aria="benchmarkSummary" aria-label="Benchmark summary">
-            <div>
-              <dd class="stat-results">—</dd>
-              <dt data-i18n="publicResults">Public results</dt>
-            </div>
-            <div>
-              <dd class="stat-models">—</dd>
-              <dt data-i18n="models">Models</dt>
-            </div>
-            <div>
-              <dd class="stat-harnesses">—</dd>
-              <dt data-i18n="harnesses">Harnesses</dt>
-            </div>
-            <div class="accent">
-              <dd class="stat-best">—</dd>
-              <dt data-i18n="officialBest">Official best</dt>
-            </div>
-          </dl>
-        </div>
-      </section>
-
       <section id="results" class="section section-anchor">
         <div class="section-shell results-content">
-          <div class="results-bench-rail">
-            <nav class="bench-switcher" data-i18n-aria="benchmarkSwitcher" aria-label="Benchmark selector"></nav>
-          </div>
           <header class="section-heading results-heading">
-            <div>
-              <p class="eyebrow" data-i18n="publicSnapshot">Public results</p>
-              <h2 class="results-title">Leaderboard</h2>
-              <p class="results-description">Loading public results…</p>
-            </div>
-            <a class="snapshot-link benchmark-source-link" href="https://www.tbench.ai">
-              <span class="snapshot-status" aria-hidden="true"></span>
-              <span class="snapshot-label">tbench.ai</span>
-            </a>
-            <p class="results-scope-note" data-i18n="resultsScopeNote">Includes all reported thinking levels; ranks follow current filters. The official default shows the best score per Model × Harness.</p>
+            <h1 id="results-title" class="results-title">Terminal-Bench 2.1</h1>
           </header>
 
           <div class="result-toolbar">
-            <div class="result-controls">
-              <div class="filter-field">
-                <label for="source-filter" data-i18n="source">Source</label>
-                <select id="source-filter" class="filter-select source-filter" data-i18n-aria="sourceFilter" aria-label="Filter by source">
-                  <option value="">All sources</option>
-                </select>
-              </div>
-              <div class="filter-field">
-                <label for="harness-filter" data-i18n="harness">Harness</label>
-                <select id="harness-filter" class="filter-select harness-filter" data-i18n-aria="harnessFilter" aria-label="Filter by harness">
-                  <option value="">All harnesses</option>
-                </select>
-              </div>
-              <div class="filter-field">
-                <label for="model-filter" data-i18n="model">Model</label>
-                <select id="model-filter" class="filter-select model-filter" data-i18n-aria="modelFilter" aria-label="Filter by model">
-                  <option value="">All models</option>
-                </select>
-              </div>
-              <div class="filter-field">
-                <label for="thinking-filter" data-i18n="thinkingLevel">Thinking level</label>
-                <select id="thinking-filter" class="filter-select thinking-filter" data-i18n-aria="thinkingFilter" aria-label="Filter by thinking level">
-                  <option value="">All levels</option>
-                </select>
-              </div>
-            </div>
-            <div class="result-summary">
-              <span class="result-count" aria-live="polite">Loading…</span>
-              <span class="harness-detail-hint" data-i18n="harnessDetailsHint">Select a Harness name to view full configuration and sources.</span>
-              <span class="table-hint" hidden data-i18n="tableHint">Scroll horizontally to view all columns →</span>
-            </div>
-          </div>
-
-          <div class="table-wrap">
-            <table>
-              <caption class="sr-only table-caption">Public Terminal-Bench results</caption>
-              <thead class="results-head"></thead>
-              <tbody class="results-body">
-                <tr><td class="loading-cell" colspan="8" data-i18n="loadingResults">Loading public results…</td></tr>
-              </tbody>
-            </table>
-          </div>
-          <p class="confidence-note">
-            <span data-i18n="confidenceNote">Every result has a score bar. Confidence whiskers appear only when the source reports a 95% interval; results without interval data show the bar alone.</span>
-          </p>
-          <p class="experiment-table-note" data-i18n="experimentTableNote" hidden></p>
-        </div>
-      </section>
-
-      <section id="pareto" class="section section-anchor pareto-section">
-        <div class="section-shell">
-          <section class="pareto-panel" aria-labelledby="pareto-title">
-            <header class="pareto-heading">
-              <div>
-                <p class="eyebrow" data-i18n="paretoEyebrow">PARETO FRONTIER</p>
-                <h2 id="pareto-title" data-i18n="paretoTitle">Cost &amp; resolution rate</h2>
-              </div>
-              <a class="pareto-benchmark" href="#results" aria-label="Select benchmark">TB 2.1</a>
-            </header>
-            <div class="pareto-toolbar">
-              <div class="pareto-scope" role="group" data-i18n-aria="paretoScope" aria-label="Chart source">
-                <button type="button" data-pareto-scope="penguin_run" aria-pressed="true" data-i18n="paretoPenguin">Penguin experiments</button>
-                <button type="button" data-pareto-scope="benchmark_official" aria-pressed="false" data-i18n="paretoOfficial">Official reference</button>
-              </div>
-              <div class="pareto-chart-controls">
-                <button class="pareto-range-toggle" type="button" data-i18n="paretoZoom">Focus on differences</button>
-                <span class="pareto-range-label"></span>
-              </div>
-            </div>
-            <p class="pareto-subtitle"></p>
-            <div class="pareto-plot-shell">
-              <div class="pareto-chart-meta">
-                <div class="pareto-legend">
-                  <span class="pareto-legend-frontier" data-i18n="paretoLegend">Observed frontier</span>
-                  <span class="pareto-legend-other" data-i18n="paretoOther">Other configurations</span>
-                  <span class="pareto-legend-shade" data-i18n="paretoShade">Above / left of frontier</span>
+            <div class="result-actions">
+              <div class="export-menu-wrap action-tooltip-wrap">
+                <button class="export-toggle action-button" type="button" aria-haspopup="menu" aria-controls="export-menu" aria-expanded="false" aria-describedby="export-hint" data-i18n-aria="exportResults" aria-label="Copy / export">
+                  <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v12m-4-4 4 4 4-4M4 16v5h16v-5"/></svg>
+                </button>
+                <span id="export-hint" class="action-tooltip" role="tooltip" data-i18n="exportHint">Copy / export results</span>
+                <div id="export-menu" class="export-menu" role="menu" data-i18n-aria="exportResults" aria-label="Copy / export" hidden>
+                  <button type="button" role="menuitem" data-export="markdown" data-i18n="copyMarkdown">Copy Markdown</button>
+                  <button type="button" role="menuitem" data-export="copy-png" data-i18n="copyPng">Copy PNG</button>
+                  <button type="button" role="menuitem" data-export="png" data-i18n="downloadPng">Download PNG</button>
+                  <button type="button" role="menuitem" data-export="svg" data-i18n="downloadSvg">Download SVG</button>
                 </div>
-                <span class="pareto-count"></span>
               </div>
-              <div class="pareto-chart"><div class="pareto-canvas"></div><div class="pareto-tooltip" hidden aria-hidden="true"></div></div>
-              <div class="pareto-footer"><span class="pareto-note"></span><span data-i18n="paretoInteraction">Hover for values · select for details</span></div>
+              <div class="action-tooltip-wrap">
+                <button class="copy-link action-button" type="button" aria-describedby="copy-link-hint" data-i18n-aria="copyLink" aria-label="Copy link">
+                  <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg>
+                </button>
+                <span id="copy-link-hint" class="action-tooltip" role="tooltip" data-i18n="copyFiltersLink">Copy filters link</span>
+              </div>
+              <span class="action-status" role="status" aria-live="polite" hidden></span>
             </div>
-            <div class="pareto-readout sr-only" aria-live="polite"></div>
-          </section>
-        </div>
-      </section>
-
-      <section id="coverage" class="section coverage-section">
-        <div class="section-shell">
-          <header class="section-heading coverage-heading">
-            <p class="eyebrow" data-i18n="dataCoverage">Data coverage</p>
-            <h2 data-i18n="coverageTitle">From public baselines to Penguin runs.</h2>
-            <p data-i18n="coverageDescription">See how official baselines, vendor reports, and Penguin runs are represented across every benchmark.</p>
-          </header>
-          <div class="coverage-grid" aria-live="polite"></div>
-          <article class="penguin-spotlight" hidden></article>
+            <div class="filter-menu-wrap">
+              <button class="filter-toggle" type="button" aria-haspopup="menu" aria-controls="filter-menu" aria-expanded="false" data-i18n-aria="filters" aria-label="Filters">
+                <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M4 4h16v3l-6 7v5l-4 2v-7L4 7Z"/></svg>
+                <span class="filter-count" hidden></span>
+              </button>
+              <div id="filter-menu" class="filter-menu" hidden>
+                <div class="filter-categories" role="menu" data-i18n-aria="filters" aria-label="Filters"></div>
+                <div class="filter-options" role="menu"></div>
+              </div>
+              <div hidden>
+                <select id="source-filter" class="source-filter" data-i18n-aria="sourceFilter" aria-label="Filter by source"></select>
+                <select id="harness-filter" class="harness-filter" data-i18n-aria="harnessFilter" aria-label="Filter by harness"></select>
+                <select id="model-filter" class="model-filter" data-i18n-aria="modelFilter" aria-label="Filter by model"></select>
+                <select id="thinking-filter" class="thinking-filter" data-i18n-aria="thinkingFilter" aria-label="Filter by thinking level"></select>
+              </div>
+            </div>
+            <div class="view-tabs" role="tablist" data-i18n-aria="resultView" aria-label="Results view">
+              <button id="table-tab" type="button" role="tab" aria-controls="table-panel" aria-selected="true" data-view="table" data-i18n="tableView">Table</button>
+              <button id="pareto-tab" type="button" role="tab" aria-controls="pareto" aria-selected="false" tabindex="-1" data-view="pareto" data-i18n="paretoView">Pareto</button>
+            </div>
+          </div>
+          <div class="leaderboard-card">
+            <span class="result-count sr-only" aria-live="polite">Loading…</span>
+            <div id="table-panel" role="tabpanel" aria-labelledby="table-tab">
+              <div class="table-wrap" role="region" aria-labelledby="results-title" tabindex="0">
+                <table>
+                  <caption class="sr-only table-caption">Public Terminal-Bench results</caption>
+                  <thead class="results-head"></thead>
+                  <tbody class="results-body">
+                    <tr><td class="loading-cell" colspan="8" data-i18n="loadingResults">Loading public results…</td></tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+            <div id="pareto" role="tabpanel" aria-labelledby="pareto-tab" hidden>
+              <div class="pareto-panel">
+                <header class="pareto-heading">
+                  <h2 id="pareto-title">Pareto Frontier</h2>
+                </header>
+                <div class="pareto-plot-shell">
+                  <div class="pareto-chart"><div class="pareto-canvas"></div><div class="pareto-tooltip" hidden aria-hidden="true"></div></div>
+                </div>
+                <div class="pareto-readout sr-only" aria-live="polite"></div>
+              </div>
+            </div>
+          </div>
         </div>
       </section>
 
@@ -255,8 +178,7 @@
     <footer class="footer">
       <div class="section-shell footer-inner">
         <span>© 2026 Prism Shadow</span>
-        <span data-i18n="footerText">Terminal-Bench official baselines · vendor reports · Penguin runs</span>
-        <a href="https://github.com/Prism-Shadow/penguin-harness-leaderboard">GitHub ↗</a>
+        <a href="https://github.com/Prism-Shadow/penguin-harness-leaderboard">GitHub</a>
       </div>
     </footer>
 

@@ -1,4 +1,9 @@
 const DATA_URL = "data/benchmarks.json";
+// Publish only benchmarks with full-suite Penguin results; retain other snapshots in the data.
+const PUBLISHED_BENCHMARK_IDS = ["terminal-bench-2.1"];
+// Chart viewport only: results outside this range remain in the table and data.
+const PARETO_COST_MAX = 1200;
+const PARETO_COST_STEP = 300;
 const THEME_KEY = "penguin-leaderboard.theme";
 const LOCALE_KEY = "penguin-leaderboard.locale";
 
@@ -6,7 +11,6 @@ const translations = {
   en: {
     skipToResults: "Skip to results",
     home: "Penguin Harness Leaderboard home",
-    benchmarkSwitcher: "Benchmark selector",
     siteControls: "Site controls",
     language: "Language",
     followSystem: "Follow system",
@@ -14,54 +18,45 @@ const translations = {
     system: "system",
     light: "light",
     dark: "dark",
-    heroTitle: "The model isn't everything.<br /><span>The whole setup matters.</span>",
-    viewResults: "View results",
-    viewGithub: "View GitHub",
-    publicResults: "Public results",
-    models: "Models",
-    harnesses: "Harnesses",
-    officialBest: "Official best",
-    publicSnapshot: "Public results",
-    snapshotUpdated: "Official snapshot updated {date}; latest curated verification {verified} (see each result for its date).",
-    resultsScopeNote: "Includes all reported thinking levels; row numbers follow the current display order, not official ranks. The official default keeps the best score per Model × Harness.",
     source: "Source",
     sourceFilter: "Filter by source",
     allSources: "All sources",
-    benchmarkOfficial: "Benchmark official",
-    vendorReported: "Vendor-reported",
-    penguinRun: "Penguin run",
-    benchmarkOfficialShort: "Official",
-    vendorReportedShort: "Vendor",
-    penguinRunShort: "Penguin",
+    benchmarkOfficial: "Terminal-Bench",
+    vendorReported: "Vendor",
+    penguinRun: "Penguin",
     harness: "Harness",
     model: "Model",
-    thinkingLevel: "Thinking level",
+    thinkingLevel: "Thinking effort",
     harnessFilter: "Filter by harness",
     modelFilter: "Filter by model",
-    thinkingFilter: "Filter by thinking level",
+    thinkingFilter: "Filter by thinking effort",
     allHarnesses: "All harnesses",
     allModels: "All models",
-    allLevels: "All levels",
+    allLevels: "All efforts",
     showingResults: "Showing {shown} of {total} public results",
-    harnessDetailsHint: "Select a Harness name to view full configuration and sources.",
-    tableHint: "Scroll horizontally to view all columns →",
+    filters: "Filters",
+    clearFilters: "Clear all",
+    exportResults: "Copy / export",
+    exportHint: "Copy / export results",
+    copyLink: "Copy link",
+    copyFiltersLink: "Copy filters link",
+    copyMarkdown: "Copy Markdown",
+    copyPng: "Copy PNG",
+    downloadPng: "Download PNG",
+    downloadSvg: "Download SVG",
+    exportWorking: "Preparing…",
+    copied: "Copied",
+    downloaded: "Downloaded",
+    copyFailed: "Clipboard unavailable or denied. Please use a download option.",
+    linkCopyFailed: "Could not copy. Please copy the URL from your address bar.",
+    exportFailed: "Export failed. Please try again.",
     loadingResults: "Loading public results…",
-    confidenceNote: "Every result has a score bar. Confidence whiskers appear only when the source reports a 95% interval; results without interval data show the bar alone.",
-    dataCoverage: "Data coverage",
-    coverageOfficial: "Official",
-    coverageTitle: "From public baselines to Penguin runs.",
-    coverageDescription: "See how official baselines, vendor reports, and Penguin runs are represented across every benchmark.",
-    officialSnapshot: "Official snapshot",
-    verifiedPenguinRun: "Penguin experiment record",
-    successSummary: "{successes} successes / {trials} attempts",
     resolutionRate: "Resolution rate",
     tokens: "Tokens",
     cost: "Cost",
-    rowNumber: "No.",
-    compressionColumn: "Compaction trigger",
-    timeoutColumn: "Timeout multiplier",
-    experimentTableNote: "Penguin costs include reported amounts only; some trial costs are missing. Run conditions differ. Select a Harness name for the full configuration and evidence.",
-    footerText: "Terminal-Bench official baselines · vendor reports · Penguin runs",
+    rowNumber: "RANK",
+    compressionColumn: "Compact at",
+    timeoutColumn: "Time budget",
     releaseDate: "Release date",
     notReported: "Not reported",
     noResults: "No results match these filters.",
@@ -106,27 +101,17 @@ const translations = {
     harnessVersion: "Harness version",
     sorting: "Sort by {column}",
     dataError: "Public results could not be loaded. Start a local web server and refresh.",
-    paretoEyebrow: "PARETO FRONTIER",
-    paretoTitle: "Cost & resolution rate",
-    paretoScope: "Chart source",
-    paretoPenguin: "Penguin experiments",
-    paretoOfficial: "Official reference",
-    paretoCount: "{shown} configurations plotted",
-    paretoPenguinSubtitle: "Penguin · DeepSeek-V4-Flash-0731 · 89 tasks × 5 attempts per configuration",
-    paretoOfficialSubtitle: "Official configurations · compare reported cost and resolution rate",
-    paretoAxisCost: "Total recorded cost (USD)",
-    paretoAxisOfficialCost: "Reported total cost (USD)",
-    paretoLegend: "Observed frontier",
-    paretoOther: "Other configurations",
-    paretoShade: "Above / left of frontier",
-    paretoZoom: "Focus on differences",
-    paretoFullRange: "Show 0–100%",
-    paretoRange: "Y-axis {min}–{max}%",
-    paretoFrontierMeaning: "No other plotted observation has at least this score at no greater recorded cost, with one strictly better. Lines are visual guides, not additional experiments or proof of statistical significance.",
-    paretoShadeMeaning: "The gray fill extends above and left of the plotted frontier to the axes. It is a visual reference, not a confidence interval or a claim that better results are impossible.",
-    paretoPenguinNote: "",
-    paretoOfficialNote: "Reported totals are a reference, not a controlled equal-budget comparison.",
-    paretoEmpty: "No results with a reported cost for this view.",
+    paretoAxisCost: "Recorded total cost (USD, 0–{max})",
+    paretoRangeNote: "The chart shows costs from $0 to ${max}. Higher-cost results remain available in the table.",
+    resultView: "Results view",
+    tableView: "Table",
+    paretoView: "Pareto",
+    paretoLowest: "Lowest recorded cost in source",
+    paretoHighest: "Highest resolution rate in source",
+    paretoShade: "The shaded area is above/left of the observed envelope. It is not a confidence interval or a claim of equal evaluation conditions.",
+    paretoFrontierMeaning: "Observed frontier within this source only. Lines are visual guides, not additional experiments or proof of statistical significance.",
+    paretoComparison: "Blue circles: Penguin; gray squares: benchmark-official results. Each source has its own frontier. Costs are recorded totals, not an equal-budget comparison; some Penguin trial costs are missing. Hover or select a point for its source, configuration and cost coverage.",
+    paretoEmpty: "No results with a reported cost in the $0–${max} chart range. See the table for all results.",
     paretoPoint: "{model}, {harness}: {score}, {cost}. Open result details.",
     viewConfiguration: "View configuration",
     recordedCost: "Recorded cost",
@@ -139,12 +124,10 @@ const translations = {
     runDate: "Run date (as reported)",
     configuredVersion: "Harness version (Job Config)",
     modelId: "Model ID",
-    paretoInteraction: "Hover for values · select for details",
     paretoTooltipRate: "Resolution rate",
     paretoTooltipCost: "Recorded total",
     paretoTooltipOfficialCost: "Reported total",
     paretoConfigSummary: "Thinking: {thinking} · Compaction: {compression} · Timeout: {timeout}×",
-    paretoDirection: "Higher score, lower cost ↖",
     modelRevision: "Model revision",
     modelRevisionConfirmed: "{revision} · user-confirmed on {date}; not stated in the archived Job Config",
     archiveStatus: "Trace archive",
@@ -175,9 +158,15 @@ const translations = {
     perTaskCostMeaning: "Reported mean cost per task, not total cost. Excluded from total-cost sorting and the Pareto plot.",
     ciEvidence: "Interval source",
     reportedCi: "Reported 95% CI; ± is in percentage points, not relative percent.",
+    derivedCi: "Approximate 95% CI calculated from archived trials; ± is in percentage points.",
+    derivedCiMethod: "{tasks} fixed tasks × {attempts} attempts. Per-task standard error × 1.96; {missing} missing rewards retained as failures. Not pass@5 or an officially certified interval.",
+    derivedCiLimit: "With only five attempts per task, all-success/all-failure tasks contribute zero estimated variance. This approximation does not cover different tasks, model versions or systematic environment changes, or establish significant differences between configurations.",
+    ciMethod: "Interval method",
+    ciLimit: "Interval limitations",
+    ciCalculatedOn: "Interval calculated on",
     rowNumberMeaning: "Position in the current filtered and sorted view; not an official rank.",
     harnessMeaning: "Task-running framework and version for this observation. Select its name for evidence.",
-    modelMeaning: "Model and reported reasoning effort. Identically named effort levels are not equal budgets across models.",
+    modelMeaning: "Model and source-reported thinking effort; the same effort label across models does not imply an equal compute budget.",
     compressionMeaning: "Verified compaction trigger in tokens. Context windows are not triggers; window information remains in Details.",
     timeoutMeaning: "Multiplier applied to each task's original time limit, not a fixed duration. Unreported multipliers appear as —; other reported time limits remain in Harness details.",
     rateMeaning: "Source-reported success rate. Penguin: successful attempts / all attempts, not pass@k.",
@@ -188,7 +177,6 @@ const translations = {
   zh: {
     skipToResults: "跳到榜单",
     home: "Penguin Harness 榜单首页",
-    benchmarkSwitcher: "Benchmark 切换",
     siteControls: "网站控制",
     language: "语言",
     followSystem: "跟随系统",
@@ -196,54 +184,45 @@ const translations = {
     system: "跟随系统",
     light: "浅色",
     dark: "深色",
-    heroTitle: "模型不是全部，<br /><span>整套配置同样重要。</span>",
-    viewResults: "查看榜单",
-    viewGithub: "查看Github",
-    publicResults: "公开结果",
-    models: "模型",
-    harnesses: "Harness",
-    officialBest: "官方最高分",
-    publicSnapshot: "公开结果",
-    snapshotUpdated: "官方快照更新时间：{date}；最近一次人工核验：{verified}（各条日期见详情）。",
-    resultsScopeNote: "本表保留全部思考等级配置，序号按当前筛选和排序后的显示顺序生成，不代表官方排名；官网默认每组 Model × Harness 只显示最高分。",
     source: "来源",
     sourceFilter: "按来源筛选",
     allSources: "全部来源",
-    benchmarkOfficial: "Benchmark 官方",
-    vendorReported: "厂商自报",
-    penguinRun: "Penguin 实测",
-    benchmarkOfficialShort: "官方",
-    vendorReportedShort: "厂商自报",
-    penguinRunShort: "Penguin",
+    benchmarkOfficial: "Terminal-Bench",
+    vendorReported: "Vendor",
+    penguinRun: "Penguin",
     harness: "Harness",
     model: "模型",
-    thinkingLevel: "思考等级",
+    thinkingLevel: "思考强度",
     harnessFilter: "按 Harness 筛选",
     modelFilter: "按模型筛选",
-    thinkingFilter: "按思考等级筛选",
+    thinkingFilter: "按思考强度筛选",
     allHarnesses: "全部 Harness",
     allModels: "全部模型",
-    allLevels: "全部等级",
+    allLevels: "全部强度",
     showingResults: "显示 {shown} / {total} 条公开结果",
-    harnessDetailsHint: "点击 Harness 名称查看完整配置与来源。",
-    tableHint: "横向滚动查看完整表格 →",
+    filters: "筛选",
+    clearFilters: "清除全部",
+    exportResults: "复制 / 导出",
+    exportHint: "复制 / 导出结果",
+    copyLink: "复制链接",
+    copyFiltersLink: "复制当前筛选链接",
+    copyMarkdown: "复制 Markdown",
+    copyPng: "复制 PNG",
+    downloadPng: "下载 PNG",
+    downloadSvg: "下载 SVG",
+    exportWorking: "正在准备…",
+    copied: "已复制",
+    downloaded: "已下载",
+    copyFailed: "剪贴板不可用或未获授权，请使用下载选项。",
+    linkCopyFailed: "复制失败，请从地址栏复制链接。",
+    exportFailed: "导出失败，请重试。",
     loadingResults: "正在加载公开结果…",
-    confidenceNote: "所有结果都显示分数条；仅当来源披露 95% 置信区间时才显示误差线，未披露区间的数据只显示分数条。",
-    dataCoverage: "数据覆盖",
-    coverageOfficial: "官方榜单",
-    coverageTitle: "从公开基线，到 Penguin 实测。",
-    coverageDescription: "清楚展示每个 Benchmark 收录的官方基线、厂商自报与 Penguin 实测。",
-    officialSnapshot: "官方快照",
-    verifiedPenguinRun: "Penguin 实验记录",
-    successSummary: "{successes} 次成功 / {trials} 次尝试",
     resolutionRate: "通过率",
     tokens: "Token",
     cost: "成本",
     rowNumber: "序号",
     compressionColumn: "压缩阈值",
     timeoutColumn: "超时倍率",
-    experimentTableNote: "Penguin 成本仅合计已记录费用，存在缺失项；各组运行条件有差异。完整配置与证据可点击 Harness 查看。",
-    footerText: "Terminal-Bench 官方基线 · 厂商自报 · Penguin 实测",
     releaseDate: "发布日期",
     notReported: "未披露",
     noResults: "没有符合当前筛选条件的结果。",
@@ -288,27 +267,17 @@ const translations = {
     harnessVersion: "Harness 版本",
     sorting: "按{column}排序",
     dataError: "无法加载公开结果，请启动本地 Web 服务后刷新。",
-    paretoEyebrow: "PARETO 前沿",
-    paretoTitle: "成本与通过率",
-    paretoScope: "图表来源",
-    paretoPenguin: "Penguin 配置",
-    paretoOfficial: "官方参考",
-    paretoCount: "{shown} 组配置入图",
-    paretoPenguinSubtitle: "Penguin · DeepSeek-V4-Flash-0731 · 每组 89 个任务 × 5 次尝试",
-    paretoOfficialSubtitle: "官方公开配置 · 对照来源报告的成本与通过率",
-    paretoAxisCost: "已记录总成本（美元）",
-    paretoAxisOfficialCost: "来源报告总成本（美元）",
-    paretoLegend: "当前结果前沿",
-    paretoOther: "其他配置",
-    paretoShade: "前沿上方／左侧",
-    paretoZoom: "聚焦差异",
-    paretoFullRange: "显示 0–100%",
-    paretoRange: "纵轴 {min}–{max}%",
-    paretoFrontierMeaning: "当前观测中，没有另一组成本不更高、分数不更低且至少一项更优的配置。连线仅辅助阅读，不代表额外实验或统计显著性。",
-    paretoShadeMeaning: "浅灰区域沿当前观测前沿的上方、左侧延伸到坐标边界，仅辅助阅读；不是置信区间，也不表示更优结果不可能出现。",
-    paretoPenguinNote: "",
-    paretoOfficialNote: "来源报告的总成本仅供参考，不代表控制了其他条件的等预算对照。",
-    paretoEmpty: "当前视图没有可用的成本记录。",
+    paretoAxisCost: "已记录总成本（美元，0–{max}）",
+    paretoRangeNote: "图中展示 0–{max} 美元范围内的记录；超出范围的结果仍保留在表格中。",
+    resultView: "结果视图",
+    tableView: "表格",
+    paretoView: "帕累托",
+    paretoLowest: "本来源最低已记录成本",
+    paretoHighest: "本来源最高通过率",
+    paretoShade: "浅灰区域位于当前观测边界上方或左侧，仅辅助阅读，不是置信区间，也不代表运行条件相同。",
+    paretoFrontierMeaning: "仅按该来源的观测结果计算前沿。连线仅辅助阅读，不代表额外实验或统计显著性。",
+    paretoComparison: "蓝色圆点：Penguin；灰色方点：Benchmark 官方结果。按来源分别绘制前沿。成本为已记录总额，不代表等预算对照；部分 Penguin 尝试的费用缺失。悬停或点击数据点查看来源、配置与费用覆盖情况。",
+    paretoEmpty: "当前筛选下没有成本在 0–{max} 美元范围内的记录，完整结果可在表格查看。",
     paretoPoint: "{model}，{harness}：{score}，{cost}。打开结果详情。",
     viewConfiguration: "查看配置",
     recordedCost: "已记录成本",
@@ -321,12 +290,10 @@ const translations = {
     runDate: "运行日期（按源记录）",
     configuredVersion: "Harness 版本（配置指定）",
     modelId: "Model ID",
-    paretoInteraction: "悬停读数 · 点击查看配置",
     paretoTooltipRate: "通过率",
     paretoTooltipCost: "已记录总成本",
     paretoTooltipOfficialCost: "来源报告总成本",
     paretoConfigSummary: "思考：{thinking} · 压缩：{compression} · 超时：{timeout}×",
-    paretoDirection: "更高通过率，更低成本 ↖",
     modelRevision: "模型版本确认",
     modelRevisionConfirmed: "{revision} · 用户于 {date} 确认；留档 Job Config 未注明该后缀",
     archiveStatus: "轨迹留档状态",
@@ -354,12 +321,18 @@ const translations = {
     meanTaskCost: "来源报告的每任务平均成本",
     contextWindow: "来源报告的上下文窗口",
     perTaskUnit: "/任务均值",
-    perTaskCostMeaning: "来源报告的每任务平均成本，不是总成本；不参与总成本排序及 Pareto 绘图。",
+    perTaskCostMeaning: "来源报告的每任务平均成本，不是总成本；不参与总成本排序及帕累托图绘制。",
     ciEvidence: "置信区间来源",
     reportedCi: "来源报告的 95% 置信区间；± 表示百分点，不是相对百分比。",
+    derivedCi: "由归档试验数据计算的近似 95% 置信区间；± 表示百分点。",
+    derivedCiMethod: "固定 {tasks} 道任务，每题 {attempts} 次；按任务计算标准误，再乘以 1.96。{missing} 条缺失奖励按未成功计，保留在分母中。这不是 pass@5，也不是官方认证区间。",
+    derivedCiLimit: "每题仅 5 次，全成功或全失败任务的估计方差贡献为零，不代表没有真实波动。此近似区间不涵盖任务集、模型版本或系统环境变化，也不能单凭它判断配置差异显著。",
+    ciMethod: "区间计算方法",
+    ciLimit: "区间局限",
+    ciCalculatedOn: "区间补算日期",
     rowNumberMeaning: "当前筛选、排序后的行号，不代表官方排名。",
     harnessMeaning: "本条实验执行任务的框架及版本；点击名称可查看证据。",
-    modelMeaning: "模型及来源报告的思考等级；不同模型的同名等级不等于相同计算预算。",
+    modelMeaning: "模型及来源报告的思考强度；不同模型的同名强度不等于相同计算预算。",
     compressionMeaning: "已核实的压缩触发阈值，单位 tokens。上下文窗口不等于触发阈值，窗口信息保留在详情中。",
     timeoutMeaning: "对各任务原始时限的缩放倍数，不是固定时长。未披露倍率时显示 —；其他时间限制保留在 Harness 详情中。",
     rateMeaning: "来源报告的成功比例；Penguin 为成功尝试数 ÷ 全部尝试数，不是 pass@k。",
@@ -374,16 +347,26 @@ const state = {
   benchmark: null,
   locale: document.documentElement.dataset.locale || "en",
   filters: { source: "", harness: "", model: "", thinking: "" },
-  sort: { key: "accuracy", direction: "desc" },
-  paretoScope: "penguin_run",
+  sort: { key: "total_cost_usd", direction: "asc" },
+  sortInteracted: false,
+  view: "table",
+  filterCategory: "source",
   paretoSelectedId: null,
-  paretoZoomed: false,
 };
 
 const elements = {
-  benchSwitcher: document.querySelector(".bench-switcher"),
-  benchRail: document.querySelector(".results-bench-rail"),
-  resultsSection: document.querySelector("#results"),
+  toolbar: document.querySelector(".result-toolbar"),
+  exportToggle: document.querySelector(".export-toggle"),
+  exportMenu: document.querySelector(".export-menu"),
+  copyLink: document.querySelector(".copy-link"),
+  actionStatus: document.querySelector(".action-status"),
+  filterToggle: document.querySelector(".filter-toggle"),
+  filterMenu: document.querySelector(".filter-menu"),
+  filterCategories: document.querySelector(".filter-categories"),
+  filterOptions: document.querySelector(".filter-options"),
+  viewTabs: document.querySelector(".view-tabs"),
+  tablePanel: document.querySelector("#table-panel"),
+  paretoSection: document.querySelector("#pareto"),
   localeSelect: document.querySelector(".locale-select"),
   themeToggle: document.querySelector(".theme-toggle"),
   sourceFilter: document.querySelector(".source-filter"),
@@ -392,7 +375,6 @@ const elements = {
   thinkingFilter: document.querySelector(".thinking-filter"),
   resultCount: document.querySelector(".result-count"),
   tableWrap: document.querySelector(".table-wrap"),
-  tableHint: document.querySelector(".table-hint"),
   resultsHead: document.querySelector(".results-head"),
   resultsBody: document.querySelector(".results-body"),
   resultDialog: document.querySelector(".result-dialog"),
@@ -403,8 +385,6 @@ const elements = {
   dialogOfficialLinkLabel: document.querySelector(".official-detail-link-label"),
   dialogClose: document.querySelector(".dialog-close"),
   dialogDone: document.querySelector(".dialog-done"),
-  coverageGrid: document.querySelector(".coverage-grid"),
-  penguinSpotlight: document.querySelector(".penguin-spotlight"),
   paretoPanel: document.querySelector(".pareto-panel"),
   paretoChart: document.querySelector(".pareto-chart"),
   paretoCanvas: document.querySelector(".pareto-canvas"),
@@ -414,23 +394,6 @@ const elements = {
 
 let dialogTrigger = null;
 const customSelects = new Map();
-
-function updateBenchRailState() {
-  const headerHeight = Number.parseFloat(
-    getComputedStyle(document.documentElement).getPropertyValue("--header-height"),
-  ) || 64;
-  const railBounds = elements.benchRail.getBoundingClientRect();
-  const resultsBounds = elements.resultsSection.getBoundingClientRect();
-  const isStuck = Math.abs(railBounds.top - headerHeight) <= 1
-    && resultsBounds.top < headerHeight
-    && resultsBounds.bottom > headerHeight + railBounds.height;
-  elements.benchRail.classList.toggle("is-stuck", isStuck);
-}
-
-function updateTableOverflow() {
-  const { tableWrap, tableHint } = elements;
-  tableHint.hidden = tableWrap.scrollWidth <= tableWrap.clientWidth + 1;
-}
 
 function t(key, values = {}) {
   const template = translations[state.locale]?.[key] ?? translations.en[key] ?? key;
@@ -535,6 +498,7 @@ function refreshCustomSelect(widget) {
   if (!trigger.hasAttribute("aria-labelledby")) {
     const label = select.getAttribute("aria-label") || "";
     trigger.setAttribute("aria-label", [label, value.textContent].filter(Boolean).join(": "));
+    menu.setAttribute("aria-label", label || value.textContent);
   }
   menu.replaceChildren();
 
@@ -675,13 +639,7 @@ function enhanceCustomSelect(select) {
 }
 
 function enhanceCustomSelects() {
-  [
-    elements.localeSelect,
-    elements.sourceFilter,
-    elements.harnessFilter,
-    elements.modelFilter,
-    elements.thinkingFilter,
-  ].forEach(enhanceCustomSelect);
+  enhanceCustomSelect(elements.localeSelect);
   document.addEventListener("pointerdown", (event) => {
     const active = [...customSelects.values()].find((widget) => !widget.menu.hidden);
     if (active && !active.wrapper.contains(event.target)) closeCustomSelect(active);
@@ -693,9 +651,6 @@ function applyTranslations() {
   document.documentElement.dataset.locale = state.locale;
   document.querySelectorAll("[data-i18n]").forEach((node) => {
     node.textContent = t(node.dataset.i18n);
-  });
-  document.querySelectorAll("[data-i18n-html]").forEach((node) => {
-    node.innerHTML = t(node.dataset.i18nHtml);
   });
   document.querySelectorAll("[data-i18n-aria]").forEach((node) => {
     node.setAttribute("aria-label", t(node.dataset.i18nAria));
@@ -742,6 +697,9 @@ function updateThemeLabel() {
   const label = t("theme", { mode: t(mode) });
   elements.themeToggle.setAttribute("aria-label", label);
   elements.themeToggle.title = label;
+  elements.themeToggle.querySelectorAll("[data-theme-icon]").forEach((icon) => {
+    icon.toggleAttribute("hidden", icon.dataset.themeIcon !== mode);
+  });
 }
 
 function cycleTheme() {
@@ -819,6 +777,12 @@ function entityName(item) {
     : missingValue();
 }
 
+function modelEffort(row) {
+  return row.thinking_level
+    ? `<span class="model-effort">(${escapeHtml(row.thinking_level)})</span>`
+    : "";
+}
+
 const HARNESS_LOGOS = Object.freeze({
   "Claude Code": ["assets/harnesses/anthropic.svg", true],
   Codex: ["assets/harnesses/openai.svg", true],
@@ -840,32 +804,6 @@ function harnessLogo(label) {
   const [src, monochrome] = logo;
   const className = monochrome ? "harness-logo harness-logo-monochrome" : "harness-logo";
   return `<img class="${className}" src="${escapeHtml(src)}" alt="" decoding="async" />`;
-}
-
-function renderBenchSwitcher() {
-  const benchmarks = state.payload.benchmarks;
-  const activeIndex = Math.max(0, benchmarks.findIndex((bench) => bench.id === state.benchmark.id));
-  elements.benchSwitcher.style.setProperty("--bench-count", benchmarks.length);
-
-  let buttons = [...elements.benchSwitcher.querySelectorAll(".bench-tab")];
-  if (buttons.length !== benchmarks.length) {
-    elements.benchSwitcher.replaceChildren();
-
-    benchmarks.forEach((bench) => {
-      const button = document.createElement("button");
-      button.type = "button";
-      button.className = "bench-tab";
-      button.innerHTML = `<span class="bench-tab-prefix">TB</span><span class="bench-tab-version">${escapeHtml(bench.version)}</span>`;
-      button.dataset.benchmark = bench.id;
-      button.addEventListener("click", () => selectBenchmark(bench.id));
-      elements.benchSwitcher.append(button);
-    });
-    buttons = [...elements.benchSwitcher.querySelectorAll(".bench-tab")];
-  }
-
-  buttons.forEach((button, index) => {
-    button.setAttribute("aria-pressed", String(index === activeIndex));
-  });
 }
 
 function updateSelect(select, values, current, emptyLabel) {
@@ -892,15 +830,6 @@ function sourceTypeLabel(sourceType) {
   return labels[sourceType] || sourceType;
 }
 
-function sourceBadgeLabel(sourceType) {
-  const labels = {
-    benchmark_official: t("benchmarkOfficialShort"),
-    vendor_reported: t("vendorReportedShort"),
-    penguin_run: t("penguinRunShort"),
-  };
-  return labels[sourceType] || sourceType;
-}
-
 function updateSourceSelect(rows) {
   const values = [...new Set(rows.map((row) => row.source_type))];
   elements.sourceFilter.replaceChildren();
@@ -909,16 +838,15 @@ function updateSourceSelect(rows) {
   all.textContent = t("allSources");
   elements.sourceFilter.append(all);
   ["benchmark_official", "vendor_reported", "penguin_run"]
-    .filter((value) => values.includes(value))
+    .filter((value) => values.includes(value) || value === state.filters.source)
     .forEach((value) => {
       const option = document.createElement("option");
       option.value = value;
       option.textContent = sourceTypeLabel(value);
       elements.sourceFilter.append(option);
     });
-  elements.sourceFilter.value = values.includes(state.filters.source)
-    ? state.filters.source
-    : "";
+  elements.sourceFilter.value = state.filters.source;
+  if (elements.sourceFilter.selectedIndex < 0) elements.sourceFilter.value = "";
 }
 
 function rowsMatchingFilters(rows, filters) {
@@ -973,6 +901,63 @@ function renderFilters() {
     t("allLevels"),
   );
   state.filters.thinking = elements.thinkingFilter.value;
+  renderFilterMenu();
+}
+
+function setFilterMenu(open, focus = false) {
+  elements.filterMenu.hidden = !open;
+  elements.filterToggle.setAttribute("aria-expanded", String(open));
+  if (open) {
+    setExportMenu(false);
+    closeCustomSelects();
+    renderFilterMenu();
+    if (focus) elements.filterCategories.querySelector("button").focus();
+  } else if (focus) elements.filterToggle.focus();
+}
+
+function renderFilterMenu() {
+  const fields = { source: "source", harness: "harness", model: "model", thinking: "thinkingLevel" };
+  const active = state.filterCategory;
+  const count = Object.values(state.filters).filter(Boolean).length;
+  const badge = elements.filterToggle.querySelector(".filter-count");
+  badge.hidden = !count;
+  badge.textContent = count;
+  elements.filterToggle.classList.toggle("has-filters", count > 0);
+  elements.filterToggle.title = Object.entries(fields).map(([key, label]) => {
+    const select = document.querySelector(`#${key}-filter`);
+    return `${t(label)}: ${select.selectedOptions[0]?.textContent || ""}`;
+  }).join("\n");
+  elements.filterCategories.innerHTML = Object.entries(fields).map(([key, label]) =>
+    `<button type="button" role="menuitem" data-filter-category="${key}" aria-haspopup="menu" aria-expanded="${key === active}" class="filter-category${key === active ? " is-active" : ""}"><span>${escapeHtml(t(label))}</span><span aria-hidden="true">${state.filters[key] ? "• " : ""}›</span></button>`).join("")
+    + (count ? `<button type="button" role="menuitem" class="filter-clear">${escapeHtml(t("clearFilters"))}</button>` : "");
+  const select = document.querySelector(`#${active}-filter`);
+  elements.filterOptions.setAttribute("aria-label", t(fields[active]));
+  elements.filterOptions.innerHTML = [...select.options].map((option) =>
+    `<button type="button" role="menuitemradio" aria-checked="${option.selected}" data-filter-value="${escapeHtml(option.value)}"><span>${escapeHtml(option.textContent)}</span><span aria-hidden="true">${option.selected ? "✓" : ""}</span></button>`).join("");
+}
+
+function clearFilters() {
+  for (const key of Object.keys(state.filters)) state.filters[key] = "";
+  renderFilters();
+  renderResults();
+  elements.tableWrap.scrollTop = 0;
+  setFilterMenu(false, true);
+}
+
+function setResultView(view, focus = false) {
+  state.view = view === "pareto" ? "pareto" : "table";
+  document.documentElement.dataset.resultView = state.view;
+  setFilterMenu(false);
+  setExportMenu(false);
+  elements.viewTabs.querySelectorAll("[data-view]").forEach((tab) => {
+    const selected = tab.dataset.view === state.view;
+    tab.setAttribute("aria-selected", String(selected));
+    tab.tabIndex = selected ? 0 : -1;
+    if (selected && focus) tab.focus();
+  });
+  elements.tablePanel.hidden = state.view !== "table";
+  elements.paretoSection.hidden = state.view !== "pareto";
+  if (state.benchmark) renderResults();
 }
 
 function filteredRows() {
@@ -1003,12 +988,15 @@ function sortedRows(rows) {
 }
 
 function setSort(key) {
+  state.sortInteracted = true;
   if (state.sort.key === key) {
     state.sort.direction = state.sort.direction === "asc" ? "desc" : "asc";
   } else {
-    state.sort = { key, direction: ["harness", "model", "source_type", "compression_trigger", "timeout_multiplier"].includes(key) ? "asc" : "desc" };
+    state.sort = { key, direction: ["harness", "model", "source_type", "compression_trigger", "timeout_multiplier", "total_cost_usd"].includes(key) ? "asc" : "desc" };
   }
   renderTable();
+  elements.tableWrap.scrollTop = 0;
+  syncResultUrl();
 }
 
 function renderTableHead() {
@@ -1031,8 +1019,7 @@ function renderTableHead() {
   columns.forEach(([key, labelKey]) => {
     const cell = document.createElement("th");
     cell.scope = "col";
-    cell.title = t(meanings[key]);
-    cell.className = `column-${key.replaceAll("_", "-")}${state.sort.key === key ? " is-active" : ""}`;
+    cell.className = `column-${key.replaceAll("_", "-")}${state.sortInteracted && state.sort.key === key ? " is-active" : ""}`;
     if (key === "row_number") {
       cell.textContent = t("rowNumber");
       row.append(cell);
@@ -1043,18 +1030,24 @@ function renderTableHead() {
     button.className = "sort-button";
     button.setAttribute("aria-label", `${t("sorting", { column: t(labelKey) })}. ${t(meanings[key])}`);
     button.textContent = t(labelKey);
+    // Reserve the arrow slot on every sortable column so sorting never shifts widths.
+    const arrow = document.createElement("span");
+    arrow.className = "sort-arrow";
+    arrow.setAttribute("aria-hidden", "true");
     if (state.sort.key === key) {
-      const arrow = document.createElement("span");
-      arrow.className = "sort-arrow";
       arrow.textContent = state.sort.direction === "asc" ? "↑" : "↓";
-      button.append(arrow);
       cell.setAttribute("aria-sort", state.sort.direction === "asc" ? "ascending" : "descending");
     }
+    button.append(arrow);
     button.addEventListener("click", () => setSort(key));
     cell.append(button);
     row.append(cell);
   });
   elements.resultsHead.replaceChildren(row);
+}
+
+function confidenceDescription(row) {
+  return t(row.accuracy_ci95_provenance?.kind === "derived_from_archived_trials" ? "derivedCi" : "reportedCi");
 }
 
 function accuracyCell(row) {
@@ -1066,10 +1059,10 @@ function accuracyCell(row) {
     <div class="rate-cell">
       <div class="rate-copy">
         <strong>${row.accuracy.toFixed(1)}%</strong>
-        ${interval ? `<span title="${escapeHtml(t("reportedCi"))}" aria-label="${escapeHtml(interval + '. ' + t("reportedCi"))}">${escapeHtml(interval)}</span>` : ""}
+        ${interval ? `<span title="${escapeHtml(confidenceDescription(row))}" aria-label="${escapeHtml(interval + '. ' + confidenceDescription(row))}">${escapeHtml(interval)}</span>` : ""}
       </div>
       <span class="accuracy-track" aria-hidden="true">
-        <i class="accuracy-fill" style="width:${Math.min(100, Math.max(0, row.accuracy))}%"></i>
+        <i class="accuracy-fill" data-model-series="${modelSeries(row)}" style="width:${Math.min(100, Math.max(0, row.accuracy))}%"></i>
         ${ci == null ? "" : `
           <i class="accuracy-ci" style="left:${lower}%;width:${upper - lower}%"></i>
           <i class="accuracy-cap accuracy-cap-lower" style="left:${lower}%"></i>
@@ -1079,10 +1072,31 @@ function accuracyCell(row) {
     </div>`;
 }
 
-function sourceBadge(row) {
-  const fullLabel = escapeHtml(sourceTypeLabel(row.source_type));
-  const shortLabel = escapeHtml(sourceBadgeLabel(row.source_type));
-  return `<span class="source-badge source-${escapeHtml(row.source_type)}" aria-label="${fullLabel}" title="${fullLabel}">${shortLabel}</span>`;
+function sourceLabel(row) {
+  return `<span class="source-label">${escapeHtml(sourceTypeLabel(row.source_type))}</span>`;
+}
+
+function modelSeries(row) {
+  // Use model identity, never the harness, source, rank, or filtered row index.
+  const org = String(row.model_org?.label || "").trim().toLowerCase();
+  const organizations = {
+    openai: "gpt", deepseek: "deepseek", anthropic: "claude",
+    google: "gemini", qwen: "qwen", alibaba: "qwen",
+    "moonshot ai": "kimi", "z.ai": "glm", xai: "grok", meta: "muse",
+  };
+  if (Object.hasOwn(organizations, org)) return organizations[org];
+  // Older/partial records may omit the organization.
+  const model = String(row.model?.label || "").trim().toLowerCase();
+  if (/^(gpt(?:[-\s]|$)|o[134](?:[-\s]|$))/.test(model)) return "gpt";
+  if (/^deepseek(?:[-\s]|$)/.test(model)) return "deepseek";
+  if (/^(claude|opus|sonnet|haiku|fable)(?:[-\s]|$)/.test(model)) return "claude";
+  if (/^gemini(?:[-\s]|$)/.test(model)) return "gemini";
+  if (/^qwen(?:\d|[-\s]|$)/.test(model)) return "qwen";
+  if (/^kimi(?:[-\s]|$)/.test(model)) return "kimi";
+  if (/^glm(?:[-\s]|$)/.test(model)) return "glm";
+  if (/^grok(?:[-\s]|$)/.test(model)) return "grok";
+  if (/^muse(?:[-\s]|$)/.test(model)) return "muse";
+  return "unknown";
 }
 
 function harnessDetailsButton(row) {
@@ -1136,7 +1150,6 @@ function renderTable() {
   renderTableHead();
   const filtered = filteredRows();
   const rows = sortedRows(filtered);
-  document.querySelector(".experiment-table-note").hidden = !rows.some((row) => row.run_config);
   elements.resultCount.textContent = t("showingResults", {
     shown: rows.length,
     total: state.benchmark.result_count,
@@ -1149,10 +1162,7 @@ function renderTable() {
 
   elements.resultsBody.innerHTML = rows.map((row, index) => {
     const config = row.run_config;
-    const active = (key) => state.sort.key === key ? " is-active" : "";
-    const effort = row.thinking_level
-      ? `<span class="effort-pill">${escapeHtml(row.thinking_level)}</span>`
-      : `<span class="effort-pill muted">${missingValue(true)}</span>`;
+    const active = (key) => state.sortInteracted && state.sort.key === key ? " is-active" : "";
     return `
       <tr>
         <td class="row-number-cell">${index + 1}</td>
@@ -1161,13 +1171,13 @@ function renderTable() {
           ${harnessVersionLabel(row) ? `<div class="harness-meta"><span title="${escapeHtml(t(config ? "configuredVersion" : "harnessVersion"))}">${escapeHtml(harnessVersionLabel(row))}</span></div>` : ""}
         </td>
         <td class="entity-cell model-cell${active("model")}">
-          <div class="model-primary">${entityName(row.model)}${effort}</div>
+          <div class="model-primary">${entityName(row.model)}${modelEffort(row)}</div>
         </td>
         <td class="config-cell${active("compression_trigger")}">${compressionCell(row)}</td>
         <td class="config-cell${active("timeout_multiplier")}">${timeoutCell(row)}</td>
         <td class="${active("accuracy").trim()}">${accuracyCell(row)}</td>
         <td class="number-cell${active("total_cost_usd")}">${costCell(row)}</td>
-        <td class="source-cell${active("source_type")}">${sourceBadge(row)}</td>
+        <td class="source-cell${active("source_type")}">${sourceLabel(row)}</td>
       </tr>`;
   }).join("");
   elements.resultsBody.querySelectorAll(".harness-logo").forEach((image) => {
@@ -1227,6 +1237,8 @@ function openDetails(row, trigger) {
 
   const config = row.run_config;
   const configEvidence = row.config_evidence;
+  const officialUrl = new URL(state.benchmark.official_url);
+  officialUrl.searchParams.set("efforts", "all");
   const traceArchive = config?.trace_archive;
   const versionDetails = row.harness_version ? escapeHtml(row.harness_version)
     : (row.harness_version_variants || []).map((item) => detailLink({url: item.source_url}, t("versionAttempts", {
@@ -1262,10 +1274,18 @@ function openDetails(row, trigger) {
       ? escapeHtml(t("traceInvalidJsonl", { count: formatNumber(traceArchive.invalid_jsonl_files) })) : null),
   ]);
 
+  const ciProvenance = row.accuracy_ci95_provenance;
+  const derivedCi = ciProvenance?.kind === "derived_from_archived_trials";
   const scores = detailGroup(t("scoreMetrics"), [
     detailItem(t("resolutionRate"), escapeHtml(formatPercent(row.accuracy, 2))),
     detailItem(t("confidenceInterval"), confidence ? escapeHtml(confidence) : null),
-    detailItem(t("ciEvidence"), confidence ? escapeHtml(t("reportedCi")) : null),
+    detailItem(t("ciEvidence"), confidence ? escapeHtml(confidenceDescription(row)) : null),
+    detailItem(t("ciMethod"), derivedCi ? `${escapeHtml(t("derivedCiMethod", {
+      tasks: ciProvenance.task_count, attempts: ciProvenance.attempts_per_task,
+      missing: ciProvenance.missing_reward_count,
+    }))} ${detailLink({url: ciProvenance.method_url}, "Terminal-Bench metrics.py")}` : null),
+    detailItem(t("ciCalculatedOn"), derivedCi ? escapeHtml(formatDate(ciProvenance.derived_at)) : null),
+    detailItem(t("ciLimit"), derivedCi ? escapeHtml(t("derivedCiLimit")) : null),
     detailItem(t("standardError"), row.accuracy_stderr == null ? null : escapeHtml(formatPercent(row.accuracy_stderr))),
     detailItem(t("trials"), row.trial_count == null ? null : escapeHtml(formatNumber(row.trial_count))),
     detailItem(t("successes"), row.successes == null ? null : escapeHtml(formatNumber(row.successes))),
@@ -1313,7 +1333,7 @@ function openDetails(row, trigger) {
       ? `<a href="${escapeHtml(officialRow)}" target="_blank" rel="noreferrer">Harbor ↗</a>`
       : null),
     detailItem(t("submission"), detailLink(row.submission, row.submission?.label)),
-    detailItem(t("benchmarkSnapshot"), `<a href="${escapeHtml(safeUrl(state.benchmark.official_url))}" target="_blank" rel="noreferrer">tbench.ai ↗</a>`),
+    detailItem(t("benchmarkSnapshot"), `<a href="${escapeHtml(officialUrl.href)}" title="${escapeHtml(formatSnapshot(state.benchmark.snapshot_updated_at))}" target="_blank" rel="noreferrer">tbench.ai ↗</a>`),
   ]);
 
   const rawConfiguration = detailGroup(t("rawConfig"), (configEvidence?.raw_config || []).map((item) => detailItem(
@@ -1344,9 +1364,10 @@ function paretoFrontier(rows) {
   });
 }
 
-function paretoRows(source) {
-  return state.benchmark.results.filter((row) => row.source_type === source
-    && Number.isFinite(row.total_cost_usd) && row.total_cost_usd >= 0);
+function paretoRows() {
+  return filteredRows().filter((row) => ["penguin_run", "benchmark_official"].includes(row.source_type)
+    && Number.isFinite(row.total_cost_usd) && row.total_cost_usd >= 0
+    && row.total_cost_usd <= PARETO_COST_MAX);
 }
 
 function paretoConfigLabel(row) {
@@ -1356,12 +1377,15 @@ function paretoConfigLabel(row) {
     : row.thinking_level || t("notReported");
 }
 
-function selectParetoPoint(id, showTooltip = false) {
-  const row = paretoRows(state.paretoScope).find((item) => item.id === id);
+function selectParetoPoint(id, showTooltip = false, pointer = null) {
+  const row = paretoRows().find((item) => item.id === id);
   if (!row) return;
   state.paretoSelectedId = id;
   elements.paretoChart.querySelectorAll(".pareto-point").forEach((point) => {
-    point.classList.toggle("is-selected", point.dataset.resultId === id);
+    point.classList.toggle("is-selected", showTooltip && point.dataset.resultId === id);
+  });
+  elements.paretoChart.querySelectorAll(".pareto-point-label, .pareto-label-leader").forEach((node) => {
+    node.classList.toggle("is-selected", showTooltip && node.dataset.resultId === id);
   });
   elements.paretoReadout.textContent = t("paretoPoint", {
     model: row.model.label, harness: `${row.harness.label} · ${paretoConfigLabel(row)}`,
@@ -1370,6 +1394,39 @@ function selectParetoPoint(id, showTooltip = false) {
   if (!showTooltip) return;
   const point = [...elements.paretoChart.querySelectorAll(".pareto-point")].find((node) => node.dataset.resultId === id);
   if (!point) return;
+  const leader = [...elements.paretoChart.querySelectorAll(".pareto-label-leader")].find((node) => node.dataset.resultId === id);
+  if (leader && !leader.hasAttribute("d")) {
+    const label = [...elements.paretoChart.querySelectorAll(".pareto-point-label")].find((node) => node.dataset.resultId === id);
+    const dot = point.querySelector(".pareto-point-dot").getBBox();
+    const box = label.getBBox();
+    const start = { x: dot.x + dot.width / 2, y: dot.y + dot.height / 2 };
+    const nearest = {
+      x: Math.max(box.x - 4, Math.min(start.x, box.x + box.width + 4)),
+      y: Math.max(box.y - 4, Math.min(start.y, box.y + box.height + 4)),
+    };
+    const obstacles = [...elements.paretoChart.querySelectorAll(".pareto-point-label")]
+      .map((node) => {
+        const b = node.getBBox();
+        // Match the 3px text halo (1.5px per side). A larger artificial box can
+        // seal the real gap between adjacent labels and trap a nearby point.
+        return { x: b.x - 1.5, y: b.y - 1.5, width: b.width + 3, height: b.height + 3 };
+      });
+    // The nearest side may be blocked by a neighboring label. Try exposed edges
+    // instead of silently losing a connector or cutting through that neighbor.
+    const ends = [nearest,
+      { x: box.x - 4, y: box.y + box.height / 2 },
+      { x: box.x + box.width + 4, y: box.y + box.height / 2 },
+      { x: box.x + box.width / 2, y: box.y - 4 },
+      { x: box.x + box.width / 2, y: box.y + box.height + 4 },
+    ].sort((a, b) => Math.hypot(a.x - start.x, a.y - start.y) - Math.hypot(b.x - start.x, b.y - start.y));
+    let route = [];
+    for (const end of ends) {
+      if (obstacles.some((b) => segmentCrossesBox(end, end, b))) continue;
+      route = routeParetoLeader(start, end, obstacles);
+      if (route.length) break;
+    }
+    leader.setAttribute("d", route.map((p, i) => `${i ? "L" : "M"}${p.x},${p.y}`).join(" "));
+  }
   const tooltip = elements.paretoTooltip;
   const ci = row.accuracy_ci95_half_width;
   const version = harnessVersionLabel(row);
@@ -1381,23 +1438,39 @@ function selectParetoPoint(id, showTooltip = false) {
   tooltip.innerHTML = `<strong>${escapeHtml(row.model.label)}</strong>
     <span title="${escapeHtml(t(row.run_config ? "configuredVersion" : "harnessVersion"))}">${escapeHtml(`${row.harness.label}${version ? ` ${version}` : ""}`)}</span>
     <span>${escapeHtml(configSummary)}</span>
+    <span>${escapeHtml(sourceTypeLabel(row.source_type))}</span>
     <div class="pareto-tooltip-metrics">
-      <div><span>${escapeHtml(t("paretoTooltipRate"))}</span><b>${escapeHtml(formatPercent(row.accuracy, 2))}</b>${ci == null ? "" : `<small>± ${escapeHtml(formatPercent(ci))} · 95% CI</small>`}</div>
+      <div><span>${escapeHtml(t("paretoTooltipRate"))}</span><b>${escapeHtml(formatPercent(row.accuracy, 2))}</b>${ci == null ? "" : `<small title="${escapeHtml(confidenceDescription(row))}">± ${escapeHtml(formatPercent(ci))} · 95% CI</small>`}</div>
       <div><span>${escapeHtml(t(row.source_type === "penguin_run" ? "paretoTooltipCost" : "paretoTooltipOfficialCost"))}</span><b>${escapeHtml(formatExactCost(row.total_cost_usd))}</b></div>
     </div>
+    ${row.accuracy_ci95_provenance ? `<small>${escapeHtml(confidenceDescription(row))}</small>` : ""}
     ${partialCostNote(row) ? `<small>${escapeHtml(partialCostNote(row))}</small>` : ""}`;
   tooltip.hidden = false;
   const anchor = point.querySelector(".pareto-point-dot").getBoundingClientRect();
-  const box = elements.paretoChart.getBoundingClientRect();
-  const scrollX = elements.paretoChart.scrollLeft;
-  const px = anchor.left - box.left + scrollX + anchor.width / 2;
-  const py = anchor.top - box.top + anchor.height / 2;
-  const maxLeft = scrollX + elements.paretoChart.clientWidth - tooltip.offsetWidth - 8;
-  const maxTop = elements.paretoChart.clientHeight - tooltip.offsetHeight - 8;
+  // A viewport-level tooltip also follows a displaced label, not its distant dot.
+  const viewport = window.visualViewport;
+  const viewportLeft = viewport?.offsetLeft || 0;
+  const viewportTop = viewport?.offsetTop || 0;
+  const viewportWidth = viewport?.width || document.documentElement.clientWidth;
+  const viewportHeight = viewport?.height || window.innerHeight;
+  const minLeft = viewportLeft + 8;
+  const minTop = viewportTop + 8;
+  tooltip.style.maxWidth = `${Math.max(0, viewportWidth - 16)}px`;
+  tooltip.style.maxHeight = `${Math.max(0, viewportHeight - 16)}px`;
+  const px = pointer?.x ?? anchor.left + anchor.width / 2;
+  const py = pointer?.y ?? anchor.top + anchor.height / 2;
+  const maxLeft = viewportLeft + viewportWidth - tooltip.offsetWidth - 8;
+  const maxTop = viewportTop + viewportHeight - tooltip.offsetHeight - 8;
   const preferredLeft = px + 16 <= maxLeft ? px + 16 : px - tooltip.offsetWidth - 16;
   const preferredTop = py + 16 <= maxTop ? py + 16 : py - tooltip.offsetHeight - 16;
-  tooltip.style.left = `${Math.max(scrollX + 8, Math.min(preferredLeft, maxLeft))}px`;
-  tooltip.style.top = `${Math.max(8, Math.min(preferredTop, maxTop))}px`;
+  tooltip.style.left = `${Math.max(minLeft, Math.min(preferredLeft, maxLeft))}px`;
+  tooltip.style.top = `${Math.max(minTop, Math.min(preferredTop, maxTop))}px`;
+}
+
+function clearParetoSelection() {
+  elements.paretoTooltip.hidden = true;
+  elements.paretoChart.classList.remove("has-hover-point");
+  elements.paretoChart.querySelectorAll(".is-selected").forEach((node) => node.classList.remove("is-selected"));
 }
 
 // Clip a segment to a label's padded box; labels must not cross frontier/CI lines.
@@ -1419,6 +1492,84 @@ function segmentCrossesBox(start, end, box) {
   return true;
 }
 
+// A shortest visible route around text boxes. Only the active connector is drawn;
+// displaying every connector at once turns a dense scatter plot into a web.
+function routeParetoLeader(start, end, boxes) {
+  const clear = (a, b) => !boxes.some((box) => segmentCrossesBox(a, b, box));
+  if (clear(start, end)) return [start, end];
+  const corners = boxes.flatMap((box) => [
+    { x: box.x - 1, y: box.y - 1 },
+    { x: box.x + box.width + 1, y: box.y - 1 },
+    { x: box.x - 1, y: box.y + box.height + 1 },
+    { x: box.x + box.width + 1, y: box.y + box.height + 1 },
+  ]).filter((p) => clear(p, p));
+  const nodes = [start, end, ...corners];
+  const distance = nodes.map(() => Infinity);
+  const previous = nodes.map(() => -1);
+  const visited = new Set();
+  distance[0] = 0;
+  for (let step = 0; step < nodes.length; step += 1) {
+    let current = -1;
+    for (let i = 0; i < nodes.length; i += 1) {
+      if (!visited.has(i) && (current < 0 || distance[i] < distance[current])) current = i;
+    }
+    if (current < 0 || !Number.isFinite(distance[current])) break;
+    if (current === 1) {
+      const route = [];
+      for (let at = 1; at !== -1; at = previous[at]) route.unshift(nodes[at]);
+      return route;
+    }
+    visited.add(current);
+    for (let next = 0; next < nodes.length; next += 1) {
+      if (visited.has(next)) continue;
+      const cost = distance[current] + Math.hypot(nodes[next].x - nodes[current].x, nodes[next].y - nodes[current].y);
+      if (cost < distance[next] && clear(nodes[current], nodes[next])) {
+        distance[next] = cost;
+        previous[next] = current;
+      }
+    }
+  }
+  // Never draw through text if a future font/layout makes the target unreachable.
+  return [];
+}
+
+// Resolve neighboring annotations together: moving one label a little can free
+// the only nearby space for another, without scattering names across the plot.
+function layoutParetoLabels(jobs) {
+  const overlaps = (p, b) => p.x < b.x + b.width + 3 && p.x + p.width + 3 > b.x
+    && p.y - p.top < b.y + b.bottom + 3 && p.y + p.bottom + 3 > b.y - b.top;
+  let positions = [];
+  for (const job of jobs) {
+    positions.push(job.choices.find((p) => !positions.some((b) => overlaps(p, b))) || job.fallback);
+  }
+  for (let pass = 0; pass < 4; pass += 1) {
+    let changed = false;
+    const order = positions.map((p, i) => i).sort((a, b) => positions[b].cost - positions[a].cost);
+    for (const i of order) {
+      for (const choice of jobs[i].choices.slice(0, 128)) {
+        if (choice.cost >= positions[i].cost) break;
+        const blocked = positions.map((p, j) => j).filter((j) => j !== i && overlaps(choice, positions[j]));
+        if (blocked.length > 2) continue;
+        const trial = [...positions];
+        trial[i] = choice;
+        let valid = true;
+        for (const j of blocked) {
+          const replacement = jobs[j].choices.find((p) => (!jobs[j].preserveProximity || p.cost <= positions[j].cost)
+            && !trial.some((b, k) => k !== j && overlaps(p, b)));
+          if (!replacement) { valid = false; break; }
+          trial[j] = replacement;
+        }
+        if (!valid) continue;
+        const oldCost = positions[i].cost + blocked.reduce((sum, j) => sum + positions[j].cost, 0);
+        const newCost = trial[i].cost + blocked.reduce((sum, j) => sum + trial[j].cost, 0);
+        if (newCost + 1 < oldCost) { positions = trial; changed = true; break; }
+      }
+    }
+    if (!changed) break;
+  }
+  return positions;
+}
+
 // Resolve close points by distance, rather than whichever hit box was drawn last.
 // Keyboard activation still targets its focused point directly.
 function paretoPointAt(event) {
@@ -1438,303 +1589,331 @@ function paretoPointAt(event) {
 }
 
 function renderPareto() {
-  elements.paretoTooltip.hidden = true;
-  const availablePenguin = paretoRows("penguin_run");
-  if (!availablePenguin.length) state.paretoScope = "benchmark_official";
-  const isPenguin = state.paretoScope === "penguin_run";
-  const rows = paretoRows(state.paretoScope);
-  const frontier = paretoFrontier(rows);
-  const frontierIds = new Set(frontier.map((row) => row.id));
-  const rangeToggle = elements.paretoPanel.querySelector(".pareto-range-toggle");
-  rangeToggle.textContent = t(state.paretoZoomed ? "paretoFullRange" : "paretoZoom");
-  rangeToggle.dataset.zoomed = String(state.paretoZoomed);
-  elements.paretoPanel.querySelector(".pareto-legend-frontier").title = t("paretoFrontierMeaning");
-  elements.paretoPanel.querySelector(".pareto-legend-shade").title = t("paretoShadeMeaning");
-  elements.paretoPanel.classList.toggle("is-penguin-view", isPenguin);
-  elements.paretoPanel.querySelectorAll("[data-pareto-scope]").forEach((button) => {
-    button.disabled = button.dataset.paretoScope === "penguin_run" && !availablePenguin.length;
-    button.setAttribute("aria-pressed", String(button.dataset.paretoScope === state.paretoScope));
-  });
-  elements.paretoPanel.querySelector(".pareto-count").textContent = t("paretoCount", { shown: rows.length });
-  const benchmarkLink = elements.paretoPanel.querySelector(".pareto-benchmark");
-  benchmarkLink.textContent = `TB ${state.benchmark.version}`;
-  benchmarkLink.setAttribute("aria-label", t("benchmarkSwitcher"));
-  elements.paretoPanel.querySelector(".pareto-subtitle").textContent = t(isPenguin ? "paretoPenguinSubtitle" : "paretoOfficialSubtitle");
+  if (state.view !== "pareto") return;
+  clearParetoSelection();
+  const rows = paretoRows();
+  // Shared axes, separate observed frontiers: protocols and cost coverage differ.
+  // Both views share the same filters; missing costs never become zero-cost dots.
+  const groups = ["benchmark_official", "penguin_run"].map((source) => ({
+    source, frontier: paretoFrontier(rows.filter((row) => row.source_type === source)),
+  }));
+  const frontierIds = new Set(groups.flatMap((group) => group.frontier.map((row) => row.id)));
+  const extremes = new Map();
+  for (const { source } of groups) {
+    const sourceRows = rows.filter((row) => row.source_type === source);
+    const cheapest = Math.min(...sourceRows.map((row) => row.total_cost_usd));
+    const highest = Math.max(...sourceRows.map((row) => row.accuracy));
+    for (const row of sourceRows) {
+      const flags = [];
+      if (row.total_cost_usd === cheapest) flags.push(t("paretoLowest"));
+      if (row.accuracy === highest) flags.push(t("paretoHighest"));
+      if (flags.length) extremes.set(row.id, flags.join(" · "));
+    }
+  }
+
   if (!rows.length) {
-    elements.paretoCanvas.innerHTML = `<p class="pareto-empty">${escapeHtml(t("paretoEmpty"))}</p>`;
-    elements.paretoPanel.querySelector(".pareto-note").textContent = "";
-    elements.paretoPanel.querySelector(".pareto-range-label").textContent = "";
+    elements.paretoCanvas.innerHTML = `<p class="pareto-empty">${escapeHtml(t("paretoEmpty", { max: formatNumber(PARETO_COST_MAX) }))}</p>`;
     elements.paretoReadout.replaceChildren();
     return;
   }
 
   const width = Math.max(640, Math.floor(elements.paretoChart.clientWidth));
-  const height = 520;
+  const height = Math.max(480, rows.length * 16 + 160);
   const left = 72;
   const right = 32;
-  const top = 32;
-  const bottom = 66;
+  const top = 24;
+  const bottom = 58;
   const plotWidth = width - left - right;
   const plotHeight = height - top - bottom;
-  const maximum = Math.max(...rows.map((row) => row.total_cost_usd), 1) * 1.08;
-  const tickTarget = isPenguin ? 10 : 5;
-  const power = 10 ** Math.floor(Math.log10(maximum / tickTarget));
-  const step = [1, 2, 2.5, 5, 10].find((value) => value * power >= maximum / tickTarget) * power;
-  const xMax = Math.ceil(maximum / step) * step;
-  // The focused Penguin view states its range next to the full-scale control.
-  const xMin = state.paretoZoomed ? Math.max(0, Math.floor((Math.min(...rows.map((row) => row.total_cost_usd)) - step / 2) / step) * step) : 0;
-  const yMin = state.paretoZoomed ? Math.max(0, Math.floor((Math.min(...rows.map((row) => row.accuracy - (row.accuracy_ci95_half_width ?? 0))) - 5) / 5) * 5) : 0;
-  const yMax = state.paretoZoomed ? Math.min(100, Math.ceil((Math.max(...rows.map((row) => row.accuracy + (row.accuracy_ci95_half_width ?? 0))) + 5) / 5) * 5) : 100;
-  elements.paretoPanel.querySelector(".pareto-note").textContent = t(isPenguin ? "paretoPenguinNote" : "paretoOfficialNote", { min: yMin, max: yMax });
-  elements.paretoPanel.querySelector(".pareto-range-label").textContent = t("paretoRange", { min: yMin, max: yMax });
-  const x = (value) => left + (value - xMin) / (xMax - xMin) * plotWidth;
+  const step = PARETO_COST_STEP;
+  const xMax = PARETO_COST_MAX;
+  const xTicks = Array.from({ length: Math.round(xMax / step) + 1 }, (_, i) => i * step);
+  // Keep the complete percentage scale, including when filters change.
+  const yMin = 0;
+  const yMax = 100;
+  const x = (value) => left + value / xMax * plotWidth;
   const y = (value) => top + (yMax - value) / (yMax - yMin) * plotHeight;
   const moneyTick = (value) => value >= 1000 ? `$${Number((value / 1000).toFixed(1))}k` : `$${Number(value.toFixed(2))}`;
   const parts = [];
-  if (frontier.length) {
-    // Match tbench's continuous upper/left envelope, not independent edge strips.
-    // Its boundary follows observed scores, never CI endpoints or estimated costs.
-    const boundary = [...frontier].reverse().map((row) => `L ${x(row.total_cost_usd)} ${y(row.accuracy)}`).join(" ");
-    const shade = `M ${left} ${height - bottom} V ${top} H ${width - right} V ${y(frontier.at(-1).accuracy)} ${boundary} V ${height - bottom} Z`;
-    parts.push(`<path class="pareto-frontier-shade" d="${shade}" aria-hidden="true" />`);
-  }
-  for (let tick = xMin; tick <= xMax + step / 100; tick += step) {
+  const envelope = paretoFrontier(rows);
+  const boundary = [...envelope].reverse().map((row) => `L ${x(row.total_cost_usd)} ${y(row.accuracy)}`).join(" ");
+  parts.push(`<path class="pareto-envelope" d="M ${left} ${height - bottom} V ${top} H ${width - right} V ${y(envelope.at(-1).accuracy)} ${boundary} V ${height - bottom} Z"><title>${escapeHtml(t("paretoShade"))}</title></path>`);
+  for (const tick of xTicks) {
     parts.push(`<line class="pareto-grid pareto-grid-vertical" x1="${x(tick)}" x2="${x(tick)}" y1="${top}" y2="${height - bottom}" />
       <text class="pareto-tick" x="${x(tick)}" y="${height - bottom + 24}" text-anchor="middle">${moneyTick(tick)}</text>`);
   }
-  const yStep = state.paretoZoomed ? (yMax - yMin <= 40 ? 5 : 10) : 20;
+  const yStep = 20;
   for (let tick = yMin; tick <= yMax; tick += yStep) {
     parts.push(`<line class="pareto-grid" x1="${left}" x2="${width - right}" y1="${y(tick)}" y2="${y(tick)}" />
       <text class="pareto-tick" x="${left - 12}" y="${y(tick) + 5}" text-anchor="end">${tick}%</text>`);
   }
-  if (frontier.length) {
+  for (const { source, frontier } of groups) {
     if (frontier.length > 1) {
       const points = frontier.map((row) => `${x(row.total_cost_usd)},${y(row.accuracy)}`).join(" ");
-      parts.push(`<polyline class="pareto-frontier${isPenguin ? " is-provisional" : ""}" points="${points}" />`);
+      parts.push(`<polyline class="pareto-frontier" data-source="${source}" points="${points}"><title>${escapeHtml(sourceTypeLabel(source) + ": " + t("paretoFrontierMeaning"))}</title></polyline>`);
     }
   }
   parts.push(`<path class="pareto-axis" d="M ${left} ${top} V ${height - bottom} H ${width - right}" />`);
-  const labelBoxes = [];
+  const labelJobs = [];
   const labels = [];
+  const intervals = [];
+  const markers = [];
+  const leaders = [];
   const textMeasure = document.createElement("canvas").getContext("2d");
   const chartFont = getComputedStyle(elements.paretoChart).fontFamily;
-  const pointPositions = rows.map((row) => ({ x: x(row.total_cost_usd), y: y(row.accuracy) }));
-  const frontierPositions = frontier.map((row) => ({ x: x(row.total_cost_usd), y: y(row.accuracy) }));
-  const labelObstacles = frontierPositions.slice(1).map((point, i) => [frontierPositions[i], point]);
+  const pointPositions = rows.map((row) => ({
+    x: x(row.total_cost_usd), y: y(row.accuracy),
+    // Avoid the visible marker, not its much larger invisible pointer target.
+    radius: (row.source_type === "penguin_run" ? (frontierIds.has(row.id) ? 7 : 6)
+      : (frontierIds.has(row.id) ? 5 : 4)) + 1,
+  }));
+  const labelObstacles = groups.flatMap(({ frontier }) => {
+    const positions = frontier.map((row) => ({ x: x(row.total_cost_usd), y: y(row.accuracy) }));
+    return positions.slice(1).map((point, i) => [positions[i], point]);
+  });
+  const intervalObstacles = [];
   rows.forEach((row) => {
     if (row.accuracy_ci95_half_width == null) return;
     const px = x(row.total_cost_usd);
     const low = y(Math.max(yMin, row.accuracy - row.accuracy_ci95_half_width));
     const high = y(Math.min(yMax, row.accuracy + row.accuracy_ci95_half_width));
-    labelObstacles.push([{ x: px, y: low }, { x: px, y: high }],
+    intervalObstacles.push([{ x: px, y: low }, { x: px, y: high }],
       [{ x: px - 3, y: low }, { x: px + 3, y: low }],
       [{ x: px - 3, y: high }, { x: px + 3, y: high }]);
   });
-  const prioritized = [...rows].sort((a, b) => Number(frontierIds.has(b.id)) - Number(frontierIds.has(a.id)) || b.accuracy - a.accuracy);
-  const baseLabel = (row) => isPenguin ? paretoConfigLabel(row)
-    : `${row.model.label}${row.thinking_level ? ` · ${row.thinking_level}` : ""}`;
-  const labelCounts = new Map();
-  rows.forEach((row) => labelCounts.set(baseLabel(row), (labelCounts.get(baseLabel(row)) || 0) + 1));
+  const prioritized = [...rows].sort((a, b) => Number(b.source_type === "penguin_run") - Number(a.source_type === "penguin_run")
+    || (a.source_type === "penguin_run" && b.source_type === "penguin_run"
+      ? b.accuracy - a.accuracy : 0)
+    || Number(extremes.has(b.id)) - Number(extremes.has(a.id))
+    || Number(frontierIds.has(b.id)) - Number(frontierIds.has(a.id)) || b.accuracy - a.accuracy);
+  const baseLabel = (row) => `${row.harness.label} · ${row.model.label}${row.thinking_level ? ` (${row.thinking_level})` : ""}`;
   prioritized.forEach((row) => {
+    const isPenguin = row.source_type === "penguin_run";
     const px = x(row.total_cost_usd);
     const py = y(row.accuracy);
     const onFrontier = frontierIds.has(row.id);
-    const label = baseLabel(row) + (!isPenguin && labelCounts.get(baseLabel(row)) > 1 ? ` · ${row.harness.label}` : "");
+    const extreme = extremes.get(row.id);
+    const label = baseLabel(row);
     const ci = row.accuracy_ci95_half_width;
     const pointTitle = t("paretoPoint", { model: row.model.label, harness: `${row.harness.label} · ${paretoConfigLabel(row)}`, score: formatPercent(row.accuracy, 2), cost: formatExactCost(row.total_cost_usd) });
     if (ci != null) {
       const lower = y(Math.max(yMin, row.accuracy - ci));
       const upper = y(Math.min(yMax, row.accuracy + ci));
-      parts.push(`<path class="pareto-interval" d="M${px},${lower}V${upper}M${px - 3},${lower}h6M${px - 3},${upper}h6" />`);
+      intervals.push(`<path class="pareto-interval${onFrontier ? " is-frontier" : ""}" d="M${px},${lower}V${upper}M${px - 3},${lower}h6M${px - 3},${upper}h6" />`);
     }
     const half = onFrontier ? 5 : 4;
     const marker = isPenguin
       ? `<circle class="pareto-point-hit" cx="${px}" cy="${py}" r="14"/><circle class="pareto-point-dot" cx="${px}" cy="${py}" r="${onFrontier ? 7 : 6}"/>`
       : `<rect class="pareto-point-hit" x="${px - 12}" y="${py - 12}" width="24" height="24" rx="3"/><rect class="pareto-point-dot" x="${px - half}" y="${py - half}" width="${half * 2}" height="${half * 2}"/>`;
-    parts.push(`<g class="pareto-point${onFrontier ? " is-frontier" : ""}" data-result-id="${escapeHtml(row.id)}" tabindex="0" role="button" aria-haspopup="dialog" aria-label="${escapeHtml(pointTitle)}">${marker}</g>`);
-    textMeasure.font = `${isPenguin || onFrontier ? 500 : 400} ${isPenguin ? 15 : 14}px ${chartFont}`;
-    let labelWidth = textMeasure.measureText(label).width + 8;
-    const metricsLabel = isPenguin ? `${formatPercent(row.accuracy, 1)} · ${formatExactCost(row.total_cost_usd)}` : "";
-    if (isPenguin) {
-      textMeasure.font = `400 13px ${chartFont}`;
-      labelWidth = Math.max(labelWidth, textMeasure.measureText(metricsLabel).width + 8);
-    }
-    const labelTop = isPenguin ? 16 : 14;
-    const labelBottom = isPenguin ? 24 : 4;
-    const candidates = [
-      { x: px + 14, y: py + 4 }, { x: px - labelWidth - 14, y: py + 4 },
-      { x: px + 14, y: py - 20 }, { x: px - labelWidth - 14, y: py - 20 },
-      { x: px + 14, y: py + 32 }, { x: px - labelWidth - 14, y: py + 32 },
-      { x: px + 14, y: py - 44 }, { x: px - labelWidth - 14, y: py + 56 },
-      { x: px - labelWidth - 14, y: py - 44 }, { x: px + 14, y: py + 56 },
-      { x: px - labelWidth / 2, y: py - 20 }, { x: px - labelWidth / 2, y: py + 32 },
-      { x: px + 14, y: py - 68 }, { x: px - labelWidth - 14, y: py - 68 },
-      { x: px + 14, y: py + 80 }, { x: px - labelWidth - 14, y: py + 80 },
-      { x: px + 38, y: py + 32 },
-    ];
-    const distanceToLabel = (point, position) => Math.hypot(
-      Math.max(position.x - point.x, 0, point.x - position.x - labelWidth),
-      Math.max(position.y - labelTop - point.y, 0, point.y - position.y - labelBottom),
-    );
-    const position = candidates.find((p) => p.x >= left + 2 && p.x + labelWidth <= width - right
-      && p.y - labelTop >= top && p.y + labelBottom <= height - bottom
-      && !pointPositions.some((point) => point.x + 9 > p.x && point.x - 9 < p.x + labelWidth && point.y + 9 > p.y - labelTop && point.y - 9 < p.y + labelBottom)
-      // A nearby Penguin label should belong visually to its own dot, not a neighbour.
-      && (!isPenguin || pointPositions.every((point) => distanceToLabel({ x: px, y: py }, p) <= distanceToLabel(point, p) + 0.01))
-      && !labelObstacles.some(([start, end]) => segmentCrossesBox(start, end, { x: p.x - 2, y: p.y - labelTop - 1, width: labelWidth + 4, height: labelTop + labelBottom + 3 }))
-      && !labelBoxes.some((box) => p.x < box.x + box.width && p.x + labelWidth > box.x && p.y - labelTop - 1 < box.y + labelBottom + 1 && p.y + labelBottom + 1 > box.y - labelTop - 1));
-    if (position) {
-      labelBoxes.push({ ...position, width: labelWidth });
-      if (position.y !== py + 4) {
-        const endX = Math.max(position.x - 3, Math.min(px, position.x + labelWidth - 5));
-        const endY = position.y < py ? position.y + labelBottom + 1 : position.y - labelTop - 1;
-        // Nearby Penguin labels are clear without a tiny diagonal connector.
-        if (!isPenguin || Math.hypot(endX - px, endY - py) > 28) {
-          labels.unshift(`<line class="pareto-label-leader" x1="${px}" y1="${py}" x2="${endX}" y2="${endY}" />`);
-        }
+    // Render ordinary points first and extreme points last, so overlapping dots
+    // cannot obscure the most important markers. Label placement stays priority-first.
+    markers.unshift(`<g class="pareto-point${onFrontier ? " is-frontier" : ""}${extreme ? " is-extreme" : ""}" data-result-id="${escapeHtml(row.id)}" data-source="${escapeHtml(row.source_type)}" tabindex="0" role="button" aria-haspopup="dialog" aria-label="${escapeHtml(pointTitle + (extreme ? ` ${extreme}` : ""))}">${marker}</g>`);
+    // The overview emphasizes each source's observed frontier. Every observation
+    // within this viewport remains hoverable/focusable, without filling the
+    // point cloud with competing long annotations.
+    if (!onFrontier) return;
+    textMeasure.font = `500 13px ${chartFont}`;
+    // A semantic wrap keeps model IDs intact. Full identity remains available
+    // in the tooltip and accessible name.
+    const modelLine = `${row.model.label}${row.thinking_level ? ` (${row.thinking_level})` : ""}`;
+    const formats = [[label], [row.harness.label, modelLine]].map((lines) => {
+      const ink = lines.map((line) => {
+        const metrics = textMeasure.measureText(line);
+        return { width: metrics.width,
+          top: Math.ceil(metrics.actualBoundingBoxAscent) + 1.5,
+          bottom: Math.ceil(metrics.actualBoundingBoxDescent) + 1.5 };
+      });
+      return { lines, ink, width: Math.min(Math.max(...ink.map((b) => b.width)) + 4, plotWidth - 16),
+        // SVG text uses a full font box even when one line has no descenders.
+        // Reserve that box between labels; use ink only against plotted marks.
+        top: 14, bottom: 4 + (lines.length - 1) * 16 };
+    });
+    const inkBoxes = (p) => p.ink.map((b, i) => ({
+      x: p.x - 1.5, y: p.y + i * 16 - b.top, width: b.width + 3, height: b.top + b.bottom,
+    }));
+    const candidates = [];
+    for (const format of formats) {
+      const xs = [px + 14, px - format.width - 14, px - format.width / 2, px, left + 6];
+      for (let dx = 30; dx <= 150; dx += 24) xs.push(px + dx, px - format.width - dx);
+      for (let dy = -144; dy <= 144; dy += 4) {
+        for (const lx of xs) candidates.push({ x: lx, y: py + dy, ...format });
       }
-      const content = isPenguin
-        ? `<tspan x="${position.x}">${escapeHtml(label)}</tspan><tspan class="pareto-point-values" x="${position.x}" dy="20">${escapeHtml(metricsLabel)}</tspan>`
-        : escapeHtml(label);
-      labels.push(`<text class="pareto-point-label${onFrontier ? " is-frontier" : ""}" data-result-id="${escapeHtml(row.id)}" x="${position.x}" y="${position.y}">${content}</text>`);
+      // Finite fallback search; dense data must not silently lose a label.
+      for (let ly = top + format.top + 4; ly <= height - bottom - format.bottom - 4; ly += 24) {
+        for (let lx = left + 6; lx + format.width <= width - right - 4; lx += 24) candidates.push({ x: lx, y: ly, ...format });
+      }
     }
+    const labelDistance = (p) => Math.hypot(
+      Math.max(p.x - px, 0, px - p.x - p.width),
+      (isPenguin ? 1 : 2) * Math.max(p.y - p.top - py, 0, py - p.y - p.bottom),
+    ) + (p.lines.length - 1) * 6;
+    const available = candidates.filter((p) => p.x >= left + 2 && p.x + p.width <= width - right
+      && p.y - p.top >= top && p.y + p.bottom <= height - bottom
+      && inkBoxes(p).every((box) => !pointPositions.some((point) =>
+        point.x + point.radius > box.x && point.x - point.radius < box.x + box.width
+        && point.y + point.radius > box.y && point.y - point.radius < box.y + box.height)
+        && !labelObstacles.some(([start, end]) => segmentCrossesBox(start, end, box))));
+    for (const p of available) {
+      const intervalCrossings = intervalObstacles.filter(([start, end]) => segmentCrossesBox(start, end, {
+        x: p.x, y: p.y - p.top, width: p.width, height: p.top + p.bottom,
+      })).length;
+      p.cost = (labelDistance(p) + intervalCrossings * 3) ** 2 * (isPenguin ? 3 : 1);
+    }
+    available.sort((a, b) => a.cost - b.cost);
+    const choices = [];
+    const occupiedCells = new Set();
+    for (const p of available) {
+      const cell = `${p.lines.length}:${Math.round(p.x / 12)}:${Math.round(p.y / 12)}`;
+      if (occupiedCells.has(cell)) continue;
+      occupiedCells.add(cell);
+      choices.push(p);
+      if (choices.length >= 1200) break;
+    }
+    labelJobs.push({ row, label, choices, preserveProximity: isPenguin,
+      fallback: { x: left + 6, y: height + 24 + labelJobs.length * 24, ...formats[0], overflow: true, cost: 1e8 },
+    });
   });
-  const xLabel = t(isPenguin ? "paretoAxisCost" : "paretoAxisOfficialCost");
-  elements.paretoCanvas.innerHTML = `<svg class="pareto-svg" viewBox="0 0 ${width} ${height}" data-y-min="${yMin}" data-y-max="${yMax}" role="group" aria-label="${escapeHtml(t("resolutionRate") + ' × ' + xLabel)}">
-    <desc>${escapeHtml(t("paretoShadeMeaning"))}</desc>
+  const placements = layoutParetoLabels(labelJobs);
+  let canvasHeight = height;
+  labelJobs.forEach(({ row, label }, i) => {
+    const position = placements[i];
+    if (position.overflow) canvasHeight = Math.max(canvasHeight, position.y + 16);
+    const onFrontier = frontierIds.has(row.id);
+    leaders.push(`<path class="pareto-label-leader" data-result-id="${escapeHtml(row.id)}" />`);
+    const content = position.lines.map((line, i) => {
+      const fitText = textMeasure.measureText(line).width > position.width - 4
+        ? ` textLength="${position.width - 4}" lengthAdjust="spacingAndGlyphs"` : "";
+      return `<tspan x="${position.x}" dy="${i ? 16 : 0}"${fitText}>${escapeHtml(line)}</tspan>`;
+    }).join("");
+    labels.push(`<text class="pareto-point-label${onFrontier ? " is-frontier" : ""}" aria-label="${escapeHtml(label)}" data-label="${escapeHtml(label)}" data-source="${row.source_type}" data-result-id="${escapeHtml(row.id)}" x="${position.x}" y="${position.y}">${content}</text>`);
+  });
+  const xLabel = t("paretoAxisCost", { max: formatNumber(PARETO_COST_MAX) });
+  const rangeNote = t("paretoRangeNote", { max: formatNumber(PARETO_COST_MAX) });
+  elements.paretoCanvas.innerHTML = `<svg class="pareto-svg" viewBox="0 0 ${width} ${canvasHeight}" data-x-scale="linear" data-x-max="${xMax}" data-x-step="${step}" data-y-min="${yMin}" data-y-max="${yMax}" role="group" aria-label="${escapeHtml(t("resolutionRate") + ' × ' + xLabel)}" aria-describedby="pareto-description">
+    <desc id="pareto-description">${escapeHtml(rangeNote + " " + t("paretoComparison") + " " + t("paretoShade"))}</desc>
     <rect class="pareto-plot-background" x="${left}" y="${top}" width="${plotWidth}" height="${plotHeight}" rx="0" />
-    ${parts.join("")}${labels.join("")}
-    <text class="pareto-axis-label" x="${left + plotWidth / 2}" y="${height - 8}" text-anchor="middle">${escapeHtml(xLabel)}</text>
+    ${parts.join("")}${intervals.join("")}${leaders.join("")}${markers.join("")}${labels.join("")}
+    <text class="pareto-axis-label" x="${left + plotWidth / 2}" y="${height - 8}" text-anchor="middle"><title>${escapeHtml(rangeNote)}</title>${escapeHtml(xLabel)}</text>
     <text class="pareto-axis-label" transform="translate(17 ${top + plotHeight / 2}) rotate(-90)" text-anchor="middle">${escapeHtml(t("resolutionRate"))}</text>
   </svg>`;
-  const selected = rows.find((row) => row.id === state.paretoSelectedId) || frontier.at(-1) || rows[0];
-  selectParetoPoint(selected.id);
+  if (rows.some((row) => row.id === state.paretoSelectedId)) selectParetoPoint(state.paretoSelectedId);
 }
 
-function renderCoverage() {
-  const benchmarks = state.payload?.benchmarks || [];
-  elements.coverageGrid.innerHTML = benchmarks.map((bench) => {
-    const isCurrent = bench.id === state.benchmark.id;
-    return `
-      <article class="coverage-card${isCurrent ? " is-current" : ""}"${isCurrent ? ' aria-current="true"' : ""}>
-        <h3>${escapeHtml(bench.name)}</h3>
-        <div class="coverage-total">
-          <strong>${escapeHtml(formatNumber(bench.result_count) ?? "0")}</strong>
-          <span>${escapeHtml(t("publicResults"))}</span>
-        </div>
-        <dl class="coverage-source-grid">
-          <div><dt title="${escapeHtml(t("benchmarkOfficial"))}">${escapeHtml(t("coverageOfficial"))}</dt><dd>${escapeHtml(formatNumber(bench.official_result_count ?? 0))}</dd></div>
-          <div><dt title="${escapeHtml(t("vendorReported"))}">${escapeHtml(t("vendorReportedShort"))}</dt><dd>${escapeHtml(formatNumber(bench.vendor_result_count ?? 0))}</dd></div>
-          <div><dt>${escapeHtml(t("penguinRun"))}</dt><dd>${escapeHtml(formatNumber(bench.penguin_result_count ?? 0))}</dd></div>
-        </dl>
-        <footer class="coverage-card-footer">
-          <span>${escapeHtml(formatNumber(bench.model_count) ?? "0")} ${escapeHtml(t("models"))}</span>
-          <span>${escapeHtml(formatNumber(bench.harness_count) ?? "0")} ${escapeHtml(t("harnesses"))}</span>
-          <span>${escapeHtml(t("officialSnapshot"))} · ${escapeHtml(formatSnapshot(bench.snapshot_updated_at))}</span>
-        </footer>
-      </article>
-    `;
-  }).join("");
-
-  const penguinRuns = benchmarks.flatMap((bench) => bench.results
-    .filter((row) => row.source_type === "penguin_run")
-    .map((row) => ({ bench, row })));
-  penguinRuns.sort((left, right) => {
-    const leftDate = Date.parse(left.row.verified_at || left.row.published_at || "") || 0;
-    const rightDate = Date.parse(right.row.verified_at || right.row.published_at || "") || 0;
-    return rightDate - leftDate;
-  });
-
-  const latest = penguinRuns[0];
-  if (!latest) {
-    elements.penguinSpotlight.hidden = true;
-    elements.penguinSpotlight.replaceChildren();
-    return;
+function syncResultUrl() {
+  const url = new URL(location.href);
+  url.searchParams.delete("bench");
+  url.searchParams.set("version", state.benchmark.version);
+  url.searchParams.set("view", state.view);
+  if (state.sortInteracted) {
+    url.searchParams.set("sort", state.sort.key);
+    url.searchParams.set("direction", state.sort.direction);
+  } else {
+    url.searchParams.delete("sort");
+    url.searchParams.delete("direction");
   }
+  url.searchParams.delete("pareto_source");
+  if (url.hash === "#pareto" && state.view !== "pareto") url.hash = "results";
+  for (const [key, value] of Object.entries(state.filters)) {
+    if (value) url.searchParams.set(key, value);
+    else url.searchParams.delete(key);
+  }
+  history.replaceState({}, "", url);
+}
 
-  const { bench, row } = latest;
-  const protocolNote = row.protocol_note !== null && typeof row.protocol_note === "object"
-    ? row.protocol_note[state.locale] || row.protocol_note.en
-    : row.protocol_note;
-  const harnessName = row.harness_version
-    ? `${row.harness.label} ${row.harness_version}`
-    : row.harness.label;
-  const successSummary = row.successes != null && row.trial_count != null
-    ? t("successSummary", {
-      successes: formatNumber(row.successes),
-      trials: formatNumber(row.trial_count),
-    })
-    : "";
-
-  elements.penguinSpotlight.hidden = false;
-  elements.penguinSpotlight.innerHTML = `
-    <div class="penguin-spotlight-copy">
-      <div class="penguin-spotlight-label">
-        <img src="favicon.svg" alt="" />
-        <span>${escapeHtml(t("verifiedPenguinRun"))}</span>
-      </div>
-      <span class="penguin-benchmark-pill">${escapeHtml(bench.name)}</span>
-      <h3>${escapeHtml(harnessName)} <span>×</span> ${escapeHtml(row.model.label)}</h3>
-      ${protocolNote ? `<p>${escapeHtml(protocolNote)}</p>` : ""}
-    </div>
-    <div class="penguin-spotlight-result">
-      <div class="penguin-score">
-        <strong>${escapeHtml(formatPercent(row.accuracy, 1))}</strong>
-        <span>${escapeHtml(t("resolutionRate"))}</span>
-        ${successSummary ? `<small>${escapeHtml(successSummary)}</small>` : ""}
-      </div>
-      <dl class="penguin-run-facts">
-        <div><dt>${escapeHtml(t("thinkingLevel"))}</dt><dd>${escapeHtml(row.thinking_level || t("notReported"))}</dd></div>
-        <div><dt>${escapeHtml(t("verifiedOn"))}</dt><dd>${escapeHtml(formatDate(row.verified_at))}</dd></div>
-      </dl>
-    </div>
-  `;
+function renderResults() {
+  renderTable();
+  renderPareto();
+  syncResultUrl();
 }
 
 function renderBenchmark() {
   applyTranslations();
-  renderBenchSwitcher();
   renderFilters();
-
-  const bench = state.benchmark;
-  document.querySelector(".current-bench-name").textContent = bench.name;
-  document.querySelector(".current-bench-description").textContent = bench.description[state.locale];
-  document.querySelector(".results-title").textContent = bench.name;
-  document.querySelector(".results-description").textContent = t("snapshotUpdated", {
-    date: formatSnapshot(bench.snapshot_updated_at),
-    verified: formatDate(state.payload.curated_verified_at),
-  });
-  document.querySelector(".stat-results").textContent = bench.result_count;
-  document.querySelector(".stat-models").textContent = bench.model_count;
-  document.querySelector(".stat-harnesses").textContent = bench.harness_count;
-  document.querySelector(".stat-best").textContent = `${bench.official_best_accuracy.toFixed(1)}%`;
-  document.querySelector(".table-caption").textContent = `${bench.name} public results`;
-  const officialUrl = new URL(bench.official_url);
-  officialUrl.searchParams.set("efforts", "all");
-  document.querySelectorAll(".benchmark-source-link").forEach((link) => {
-    link.href = officialUrl.href;
-  });
-  document.querySelector(".snapshot-label").textContent = `tbench.ai · ${bench.version}`;
-  renderTable();
-  renderCoverage();
-  renderPareto();
+  document.querySelector(".results-title").textContent = state.benchmark.name;
+  document.querySelector(".table-caption").textContent = state.benchmark.name;
+  renderResults();
 }
 
-function selectBenchmark(id, updateUrl = true) {
+let actionStatusTimer;
+let exportBusy = false;
+
+function showActionStatus(key) {
+  clearTimeout(actionStatusTimer);
+  elements.actionStatus.textContent = t(key);
+  elements.actionStatus.hidden = false;
+  const duration = key === "copied" || key === "downloaded" ? 1000 : 6000;
+  actionStatusTimer = setTimeout(() => { elements.actionStatus.hidden = true; }, duration);
+}
+
+function setExportMenu(open, focus = false) {
+  elements.exportMenu.hidden = !open;
+  elements.exportToggle.setAttribute("aria-expanded", String(open));
+  if (open) {
+    setFilterMenu(false);
+    closeCustomSelects();
+    if (focus) elements.exportMenu.querySelector("button").focus();
+  } else if (focus) elements.exportToggle.focus();
+}
+
+function currentExportSvg() {
+  const title = `${state.benchmark.name}${state.view === "pareto" ? " — Pareto Frontier" : ""}`;
+  return state.view === "pareto"
+    ? LeaderboardExport.chartSvg(elements.paretoCanvas, title)
+    : LeaderboardExport.tableSvg(elements.tableWrap.querySelector("table"), title);
+}
+
+async function exportResults(action) {
+  if (!state.benchmark || exportBusy) return;
+  exportBusy = true;
+  elements.exportToggle.setAttribute("aria-busy", "true");
+  setExportMenu(false, true);
+  const filename = `terminal-bench-${state.benchmark.version}-${state.view}`;
+  showActionStatus("exportWorking");
+  try {
+    if (action === "markdown") {
+      await navigator.clipboard.writeText(LeaderboardExport.markdown(
+        elements.tableWrap.querySelector("table"), state.benchmark.name));
+    } else if (action === "copy-png") {
+      if (!navigator.clipboard?.write || !window.ClipboardItem) throw new Error("Clipboard unavailable");
+      // Pass the promise immediately to preserve Safari's user activation.
+      const png = Promise.resolve(currentExportSvg()).then(LeaderboardExport.png);
+      png.catch(() => {}); // Permission rejection can precede rasterization.
+      await navigator.clipboard.write([new ClipboardItem({ "image/png": png })]);
+    } else {
+      const svg = await currentExportSvg();
+      const blob = action === "svg" ? new Blob([svg], { type: "image/svg+xml" })
+        : await LeaderboardExport.png(svg);
+      LeaderboardExport.download(blob, `${filename}.${action === "svg" ? "svg" : "png"}`);
+    }
+    showActionStatus(action === "markdown" || action === "copy-png" ? "copied" : "downloaded");
+  } catch {
+    showActionStatus(action === "markdown" || action === "copy-png" ? "copyFailed" : "exportFailed");
+  } finally {
+    exportBusy = false;
+    elements.exportToggle.removeAttribute("aria-busy");
+  }
+}
+
+async function copyResultLink() {
+  if (!state.benchmark) return;
+  syncResultUrl();
+  const url = new URL(location.href);
+  url.searchParams.delete("v"); // Local preview cache tags aren't part of the result.
+  url.searchParams.set("sort", state.sort.key);
+  url.searchParams.set("direction", state.sort.direction);
+  try {
+    await navigator.clipboard.writeText(url.href);
+    showActionStatus("copied");
+  } catch {
+    showActionStatus("linkCopyFailed");
+  }
+}
+
+function selectBenchmark(id) {
   const bench = state.payload.benchmarks.find((item) => item.id === id);
   if (!bench) return;
   state.benchmark = bench;
-  state.filters = { source: "", harness: "", model: "", thinking: "" };
-  state.sort = { key: "accuracy", direction: "desc" };
-  state.paretoScope = "penguin_run";
   state.paretoSelectedId = null;
-  state.paretoZoomed = state.benchmark.results.some((row) => row.source_type === "penguin_run" && Number.isFinite(row.total_cost_usd));
-  if (updateUrl) {
-    const url = new URL(window.location.href);
-    url.searchParams.delete("bench");
-    url.searchParams.set("version", bench.version);
-    history.replaceState({}, "", url);
-  }
   renderBenchmark();
 }
 
@@ -1748,6 +1927,8 @@ function initialBenchmark(payload) {
 }
 
 async function init() {
+  // Escape the chart's scrolling/clipping container without changing the plot.
+  document.body.append(elements.paretoTooltip);
   const localePreference = document.documentElement.dataset.localePref || "system";
   elements.localeSelect.value = ["system", "en", "zh"].includes(localePreference)
     ? localePreference
@@ -1755,20 +1936,110 @@ async function init() {
   enhanceCustomSelects();
   elements.localeSelect.addEventListener("change", (event) => setLocale(event.target.value));
   elements.themeToggle.addEventListener("click", cycleTheme);
+  document.querySelectorAll(".action-tooltip-wrap").forEach((wrapper) => {
+    const button = wrapper.querySelector(".action-button");
+    button.addEventListener("click", () => { wrapper.dataset.tooltipDismissed = ""; });
+    button.addEventListener("focus", () => { delete wrapper.dataset.tooltipDismissed; });
+    button.addEventListener("blur", () => { delete wrapper.dataset.tooltipDismissed; });
+    wrapper.addEventListener("pointerleave", () => { delete wrapper.dataset.tooltipDismissed; });
+  });
+  elements.exportToggle.addEventListener("click", () => {
+    if (state.benchmark) setExportMenu(elements.exportMenu.hidden);
+  });
+  elements.exportToggle.addEventListener("keydown", (event) => {
+    if (event.key === "ArrowDown" && state.benchmark) {
+      event.preventDefault();
+      setExportMenu(true, true);
+    }
+    if (event.key === "Escape") setExportMenu(false, true);
+  });
+  elements.copyLink.addEventListener("click", copyResultLink);
+  elements.exportMenu.addEventListener("click", (event) => {
+    const button = event.target.closest("[data-export]");
+    if (button) exportResults(button.dataset.export);
+  });
+  elements.exportMenu.addEventListener("keydown", (event) => {
+    if (event.key === "Escape") { event.preventDefault(); setExportMenu(false, true); return; }
+    if (["ArrowDown", "ArrowUp", "Home", "End"].includes(event.key)) {
+      event.preventDefault();
+      const buttons = [...elements.exportMenu.querySelectorAll("button")];
+      let index = buttons.indexOf(document.activeElement) + (event.key === "ArrowUp" ? -1 : 1);
+      if (event.key === "Home") index = 0;
+      if (event.key === "End") index = buttons.length - 1;
+      buttons[(index + buttons.length) % buttons.length].focus();
+    }
+  });
+  elements.filterToggle.addEventListener("click", () => {
+    if (state.benchmark) setFilterMenu(elements.filterMenu.hidden);
+  });
+  elements.filterToggle.addEventListener("keydown", (event) => {
+    if (event.key === "Escape") { setFilterMenu(false, true); return; }
+    if (event.key === "ArrowDown" && state.benchmark) {
+      event.preventDefault();
+      setFilterMenu(true, true);
+    }
+  });
+  const activateCategory = (button, focus = false) => {
+    if (!button) return;
+    state.filterCategory = button.dataset.filterCategory;
+    renderFilterMenu();
+    if (focus) elements.filterOptions.querySelector("button")?.focus();
+  };
+  elements.filterCategories.addEventListener("pointermove", (event) => {
+    const button = event.target.closest("[data-filter-category]");
+    if (button && button.dataset.filterCategory !== state.filterCategory) activateCategory(button);
+  });
+  elements.filterCategories.addEventListener("click", (event) => {
+    if (event.target.closest(".filter-clear")) clearFilters();
+    else activateCategory(event.target.closest("[data-filter-category]"), true);
+  });
+  elements.filterOptions.addEventListener("click", (event) => {
+    const button = event.target.closest("[data-filter-value]");
+    if (!button) return;
+    const select = document.querySelector(`#${state.filterCategory}-filter`);
+    select.value = button.dataset.filterValue;
+    select.dispatchEvent(new Event("change", { bubbles: true }));
+    setFilterMenu(false, true);
+  });
+  elements.filterMenu.addEventListener("keydown", (event) => {
+    if (event.key === "Escape") { event.preventDefault(); setFilterMenu(false, true); return; }
+    const button = event.target.closest("button");
+    if (!button) return;
+    if (event.key === "ArrowRight" && button.dataset.filterCategory) {
+      event.preventDefault(); activateCategory(button, true); return;
+    }
+    if (event.key === "ArrowLeft" && elements.filterOptions.contains(button)) {
+      event.preventDefault(); elements.filterCategories.querySelector(`[data-filter-category="${state.filterCategory}"]`).focus(); return;
+    }
+    if (["ArrowDown", "ArrowUp", "Home", "End"].includes(event.key)) {
+      event.preventDefault();
+      const buttons = [...button.parentElement.querySelectorAll("button")];
+      let index = buttons.indexOf(button) + (event.key === "ArrowUp" ? -1 : 1);
+      if (event.key === "Home") index = 0;
+      if (event.key === "End") index = buttons.length - 1;
+      buttons[(index + buttons.length) % buttons.length].focus();
+    }
+  });
+  document.addEventListener("pointerdown", (event) => {
+    if (!event.target.closest(".filter-menu-wrap")) setFilterMenu(false);
+    if (!event.target.closest(".export-menu-wrap")) setExportMenu(false);
+  });
+  document.addEventListener("focusin", (event) => {
+    if (!event.target.closest(".filter-menu-wrap")) setFilterMenu(false);
+    if (!event.target.closest(".export-menu-wrap")) setExportMenu(false);
+  });
+  elements.viewTabs.addEventListener("click", (event) => {
+    const tab = event.target.closest("[data-view]");
+    if (tab) setResultView(tab.dataset.view);
+  });
+  elements.viewTabs.addEventListener("keydown", (event) => {
+    if (["ArrowLeft", "ArrowRight", "Home", "End"].includes(event.key)) {
+      event.preventDefault();
+      const next = event.key === "Home" ? "table" : event.key === "End" ? "pareto" : state.view === "table" ? "pareto" : "table";
+      setResultView(next, true);
+    }
+  });
   elements.paretoPanel.addEventListener("click", (event) => {
-    if (event.target.closest(".pareto-range-toggle")) {
-      state.paretoZoomed = !state.paretoZoomed;
-      renderPareto();
-      return;
-    }
-    const scope = event.target.closest("[data-pareto-scope]");
-    if (scope && !scope.disabled) {
-      state.paretoScope = scope.dataset.paretoScope;
-      state.paretoSelectedId = null;
-      state.paretoZoomed = state.paretoScope === "penguin_run";
-      renderPareto();
-      return;
-    }
     const trigger = paretoPointAt(event);
     if (!trigger) return;
     const id = trigger.dataset.resultId;
@@ -1778,17 +2049,35 @@ async function init() {
   elements.paretoChart.addEventListener("pointermove", (event) => {
     const point = paretoPointAt(event);
     elements.paretoChart.classList.toggle("has-hover-point", !!point);
-    if (point) selectParetoPoint(point.dataset.resultId, true);
-    else elements.paretoTooltip.hidden = true;
+    if (point) selectParetoPoint(point.dataset.resultId, true, { x: event.clientX, y: event.clientY });
+    else clearParetoSelection();
   });
   elements.paretoChart.addEventListener("focusin", (event) => {
     const point = event.target.closest(".pareto-point");
     if (point) selectParetoPoint(point.dataset.resultId, true);
   });
-  elements.paretoChart.addEventListener("pointerleave", () => {
-    if (!elements.paretoChart.contains(document.activeElement)) elements.paretoTooltip.hidden = true;
+  elements.paretoChart.addEventListener("pointerleave", (event) => {
+    if (elements.paretoTooltip.contains(event.relatedTarget)) return;
+    if (!elements.paretoChart.contains(document.activeElement)) clearParetoSelection();
   });
-  elements.paretoChart.addEventListener("focusout", () => { elements.paretoTooltip.hidden = true; });
+  elements.paretoTooltip.addEventListener("pointerleave", (event) => {
+    if (!elements.paretoChart.contains(event.relatedTarget)) clearParetoSelection();
+  });
+  const hideParetoTooltip = (event) => {
+    if (!(event?.target instanceof Node) || !elements.paretoTooltip.contains(event.target)) clearParetoSelection();
+  };
+  window.addEventListener("scroll", hideParetoTooltip, { capture: true, passive: true });
+  window.addEventListener("resize", hideParetoTooltip);
+  window.visualViewport?.addEventListener("resize", hideParetoTooltip);
+  document.addEventListener("keydown", (event) => {
+    if (event.key === "Escape") {
+      clearParetoSelection();
+      document.querySelectorAll(".action-tooltip-wrap").forEach((wrapper) => {
+        wrapper.dataset.tooltipDismissed = "";
+      });
+    }
+  });
+  elements.paretoChart.addEventListener("focusout", clearParetoSelection);
   elements.paretoChart.addEventListener("keydown", (event) => {
     const point = event.target.closest(".pareto-point");
     if (point && ["Enter", " "].includes(event.key)) {
@@ -1796,40 +2085,27 @@ async function init() {
       point.dispatchEvent(new MouseEvent("click", { bubbles: true }));
     }
   });
-  addEventListener("scroll", updateBenchRailState, { passive: true });
-  addEventListener("resize", updateBenchRailState);
-  const tableObserver = new ResizeObserver(updateTableOverflow);
-  tableObserver.observe(elements.tableWrap);
-  tableObserver.observe(elements.tableWrap.querySelector("table"));
   let plotWidth = 0;
   const plotObserver = new ResizeObserver(() => {
     const width = Math.floor(elements.paretoChart.clientWidth);
-    if (state.benchmark && width !== plotWidth) {
+    if (state.benchmark && width > 0 && width !== plotWidth) {
       plotWidth = width;
       renderPareto();
     }
   });
   plotObserver.observe(elements.paretoChart);
-  elements.sourceFilter.addEventListener("change", (event) => {
-    state.filters.source = event.target.value;
-    renderFilters();
-    renderTable();
-  });
-  elements.harnessFilter.addEventListener("change", (event) => {
-    state.filters.harness = event.target.value;
-    renderFilters();
-    renderTable();
-  });
-  elements.modelFilter.addEventListener("change", (event) => {
-    state.filters.model = event.target.value;
-    renderFilters();
-    renderTable();
-  });
-  elements.thinkingFilter.addEventListener("change", (event) => {
-    state.filters.thinking = event.target.value;
-    renderFilters();
-    renderTable();
-  });
+  for (const [key, select] of Object.entries({
+    source: elements.sourceFilter, harness: elements.harnessFilter,
+    model: elements.modelFilter, thinking: elements.thinkingFilter,
+  })) {
+    select.addEventListener("change", (event) => {
+      state.filters[key] = event.target.value;
+      renderFilters();
+      renderResults();
+      elements.tableWrap.scrollTop = 0;
+    });
+  }
+
   elements.resultsBody.addEventListener("click", (event) => {
     const button = event.target.closest(".harness-details-button");
     if (!button) return;
@@ -1844,6 +2120,9 @@ async function init() {
   elements.resultDialog.addEventListener("close", () => {
     dialogTrigger?.focus();
     dialogTrigger = null;
+    // Restoring chart focus must not resurrect the old tooltip over its
+    // neighbor; the next pointer move or keyboard focus opens the right one.
+    clearParetoSelection();
   });
 
   matchMedia("(prefers-color-scheme: dark)").addEventListener("change", () => {
@@ -1855,16 +2134,24 @@ async function init() {
     const response = await fetch(DATA_URL, { cache: "no-store" });
     if (!response.ok) throw new Error(`HTTP ${response.status}`);
     state.payload = await response.json();
-    selectBenchmark(initialBenchmark(state.payload).id, false);
-    updateBenchRailState();
-    // The results table grows after the browser's initial fragment navigation.
-    // Restore an explicit chart deep link once data and fonts have settled.
-    if (location.hash === "#pareto") {
-      await document.fonts.ready;
-      requestAnimationFrame(() => {
-        if (location.hash === "#pareto") elements.paretoPanel.scrollIntoView({block: "start", behavior: "instant"});
-      });
+    state.payload.benchmarks = state.payload.benchmarks.filter((bench) =>
+      PUBLISHED_BENCHMARK_IDS.includes(bench.id));
+    if (!state.payload.benchmarks.length) throw new Error("No published benchmarks available");
+    const params = new URLSearchParams(location.search);
+    const sortKeys = ["harness", "model", "compression_trigger", "timeout_multiplier", "accuracy", "total_cost_usd", "source_type"];
+    if (sortKeys.includes(params.get("sort")) && ["asc", "desc"].includes(params.get("direction"))) {
+      state.sort = { key: params.get("sort"), direction: params.get("direction") };
+      state.sortInteracted = true;
     }
+    const chartRequested = params.get("view") === "pareto" || location.hash === "#pareto";
+    for (const key of Object.keys(state.filters)) state.filters[key] = params.get(key) || "";
+    selectBenchmark(initialBenchmark(state.payload).id);
+    setResultView(chartRequested ? "pareto" : "table");
+    if (chartRequested) {
+      await document.fonts.ready;
+      requestAnimationFrame(() => document.querySelector("#results").scrollIntoView({ block: "start", behavior: "instant" }));
+    }
+
   } catch (error) {
     console.error(error);
     elements.resultsBody.innerHTML = `<tr><td class="empty-cell" colspan="8">${escapeHtml(t("dataError"))}</td></tr>`;

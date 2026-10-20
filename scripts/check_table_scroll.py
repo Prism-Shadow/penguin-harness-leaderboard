@@ -73,12 +73,21 @@ def main():
             const row = interval.closest("tr");
             const timeout = row.querySelector("td:nth-child(5)");
             const font = getComputedStyle(interval);
+            const ciColor = document.documentElement.dataset.theme === "dark"
+                ? "rgb(243, 244, 246)" : "rgb(17, 17, 17)";
             return {
                 fontMatches:font.fontSize === getComputedStyle(score).fontSize,
                 colorMatches:font.color === getComputedStyle(timeout).color,
                 rowLine:getComputedStyle(timeout).borderBottomColor,
                 expectedLine:document.documentElement.dataset.theme === "dark"
                     ? "rgb(45, 55, 69)" : "rgb(223, 227, 232)",
+                ciStyle:[...document.querySelectorAll(".accuracy-ci, .accuracy-cap")].every(line => {
+                    const style = getComputedStyle(line);
+                    return style.backgroundColor === ciColor
+                        && (line.classList.contains("accuracy-ci")
+                            ? style.height === "1px"
+                            : style.width === "1px" && style.height === "14px");
+                }),
                 effortStyle:[...document.querySelectorAll(".model-effort")].every(span => {
                     const style = getComputedStyle(span);
                     const rect = span.getBoundingClientRect();
@@ -99,6 +108,7 @@ def main():
         """)
         assert result["fontMatches"] and result["colorMatches"] and result["noOverlap"], result
         assert result["effortStyle"], result
+        assert result["ciStyle"], result
         assert result["rowLine"] == result["expectedLine"], result
 
     def check_headers_and_corners():

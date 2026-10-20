@@ -16,7 +16,7 @@
   --accent: #1a73e8;
   --accent-strong: #1769cf;
   --accent-soft: #f8fbff;
-  --ci-line: #6f9fe7;
+  --ci-line: #111111;
   --sans: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "PingFang SC", "Microsoft YaHei", sans-serif;
   --mono: "SFMono-Regular", "Cascadia Code", "Roboto Mono", Consolas, monospace;
 }
@@ -38,7 +38,7 @@
   --accent: #8ab4f8;
   --accent-strong: #a9c8fa;
   --accent-soft: rgba(4, 30, 73, 0.4);
-  --ci-line: #bfd7ff;
+  --ci-line: #f3f4f6;
 }
 
 * {
@@ -777,7 +777,7 @@ tbody tr:nth-child(-n + 3) .row-number-cell {
   position: absolute;
   z-index: 2;
   top: 50%;
-  height: 1.5px;
+  height: 1px;
   border-radius: 0;
   background: var(--ci-line);
   transform: translateY(-50%);
@@ -788,7 +788,7 @@ tbody tr:nth-child(-n + 3) .row-number-cell {
   z-index: 2;
   top: 50%;
   width: 1px;
-  height: 8px;
+  height: 14px;
   border-radius: 0;
   background: var(--ci-line);
   transform: translate(-50%, -50%);

@@ -70,6 +70,8 @@ Sorting or changing filters returns the rows to the top. Pareto retains its
 page-scrolling layout. Row dividers use a stronger neutral color in both themes.
 Reported ± intervals use the same size as the resolution rate and the same text
 color as timeout multipliers; their reserved space keeps score bars aligned.
+Error bars use thin black lines with vertical end caps in light mode and light
+neutral lines in dark mode; the blue score bars and interval data are unchanged.
 The navigation controls follow the Penguin homepage styling: compact language
 selection, sun/moon/system theme icons, and an outlined, icon-only GitHub link.
 The page does not display or fetch GitHub star counts.

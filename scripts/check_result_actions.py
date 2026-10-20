@@ -96,12 +96,30 @@ def main():
         # Share URL captures selection/view/sort, and opening it restores them.
         choose("source", "penguin_run")
         driver.execute_script('setSort("accuracy")')
+        driver.execute_script("""
+            window.feedbackDuration=null;
+            let started;
+            const status=elements.actionStatus;
+            const observer=new MutationObserver(()=>{
+                if (!status.hidden && status.textContent==="Copied") started=performance.now();
+                else if (status.hidden && started!==undefined) {
+                    window.feedbackDuration=performance.now()-started;
+                    observer.disconnect();
+                }
+            });
+            observer.observe(status,{attributes:true,childList:true,subtree:true});
+        """)
         find(".copy-link").click()
         wait.until(lambda _: find(".action-status").text == "Copied")
         link = clipboard("navigator.clipboard.readText()")
         params = parse_qs(urlparse(link).query)
         assert params["source"] == ["penguin_run"] and params["sort"] == ["accuracy"]
         assert params["direction"] == ["desc"] and "v" not in params
+        WebDriverWait(driver, 3, poll_frequency=.05).until(
+            lambda _: driver.execute_script("return window.feedbackDuration!==null"))
+        duration = driver.execute_script("return window.feedbackDuration")
+        assert 900 <= duration <= 1800, duration
+        assert not find(".action-status").is_displayed()
         driver.get(link)
         wait.until(lambda _: count(".harness-details-button") == 6)
         assert find(".column-accuracy").get_attribute("aria-sort") == "descending"

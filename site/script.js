@@ -1806,7 +1806,8 @@ function showActionStatus(key) {
   clearTimeout(actionStatusTimer);
   elements.actionStatus.textContent = t(key);
   elements.actionStatus.hidden = false;
-  actionStatusTimer = setTimeout(() => { elements.actionStatus.hidden = true; }, 6000);
+  const duration = key === "copied" || key === "downloaded" ? 1000 : 6000;
+  actionStatusTimer = setTimeout(() => { elements.actionStatus.hidden = true; }, duration);
 }
 
 function setExportMenu(open, focus = false) {

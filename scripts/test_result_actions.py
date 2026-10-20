@@ -46,6 +46,37 @@ unchanged:before===JSON.stringify([state.view,state.sort,state.benchmark])}));
         self.assertIn('clearFilters: "清除全部"', self.script)
         self.assertIn('event.target.closest(".filter-clear")', self.script)
 
+    def test_success_feedback_lasts_one_second_and_restarts(self):
+        function = self.script[self.script.index("function showActionStatus("):
+                               self.script.index("function setExportMenu(")]
+        probe = """
+const assert = require("node:assert/strict");
+let actionStatusTimer, nextId=0;
+const timers = new Map();
+const elements = {actionStatus:{hidden:true,textContent:""}};
+const t = key => key;
+function setTimeout(callback,duration) {
+    const id=++nextId;
+    timers.set(id,{callback,duration});
+    return id;
+}
+function clearTimeout(id) {timers.delete(id)}
+for (const key of ["copied","copied","downloaded","copyFailed","linkCopyFailed","exportFailed"]) {
+    const previous=actionStatusTimer;
+    showActionStatus(key);
+    assert.equal(timers.has(previous),false);
+    assert.equal(timers.size,1);
+    assert.equal(elements.actionStatus.hidden,false);
+    assert.equal(elements.actionStatus.textContent,key);
+    assert.equal(timers.get(actionStatusTimer).duration,
+        ["copied","downloaded"].includes(key) ? 1000 : 6000);
+}
+timers.get(actionStatusTimer).callback();
+assert.equal(elements.actionStatus.hidden,true);
+"""
+        subprocess.run(["node", "-e", function + probe], check=True,
+                       capture_output=True, text=True, timeout=10)
+
     def test_export_menu_and_helper_are_loaded(self):
         for action in ("markdown", "copy-png", "png", "svg"):
             self.assertIn(f'data-export="{action}"', self.html)

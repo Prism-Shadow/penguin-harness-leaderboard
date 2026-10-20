@@ -63,7 +63,7 @@ title and controls stay visible while rows scroll inside the table. Column
 headers stick to the top of that scroll region at every screen width. Headers
 use uppercase text and the same foreground color as the body, with left-aligned
 labels on one line. Columns fit their longest label or value plus consistent
-padding; the score tracks retain their 260px width. Horizontal scrolling inside
+padding; the score tracks retain their 260px width and use a 14px height. Horizontal scrolling inside
 the card exposes the remaining columns without shrinking the bars. Controls,
 menus, badges, cards and dialogs use square corners. The region is keyboard focusable.
 Sorting or changing filters returns the rows to the top. Pareto retains its
@@ -72,6 +72,8 @@ Reported ± intervals use the same size as the resolution rate and the same text
 color as timeout multipliers; their reserved space keeps score bars aligned.
 Error bars use thin black lines with vertical end caps in light mode and light
 neutral lines in dark mode; the blue score bars and interval data are unchanged.
+Harness versions align with the name text using the same icon-column spacing,
+including when a logo is missing or fails to load.
 The navigation controls follow the Penguin homepage styling: compact language
 selection, sun/moon/system theme icons, and an outlined, icon-only GitHub link.
 The page does not display or fetch GitHub star counts.

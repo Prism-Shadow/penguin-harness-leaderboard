@@ -644,12 +644,17 @@ tbody tr:nth-child(-n + 3) .row-number-cell {
   color: var(--accent);
 }
 
+.harness-cell {
+  --harness-icon-size: 16px;
+  --harness-icon-gap: 5px;
+}
+
 .harness-meta {
   display: flex;
   flex-wrap: wrap;
   align-items: center;
   gap: 6px;
-  margin: 6px 0 0 32px;
+  margin: 6px 0 0 calc(var(--harness-icon-size) + var(--harness-icon-gap));
   color: var(--muted-strong);
   font-size: 11px;
 }
@@ -759,7 +764,7 @@ tbody tr:nth-child(-n + 3) .row-number-cell {
   display: block;
   width: 260px;
   min-width: 260px;
-  height: 10px;
+  height: 14px;
   flex: 0 0 260px;
   overflow: visible;
   border-radius: 0;
@@ -788,7 +793,7 @@ tbody tr:nth-child(-n + 3) .row-number-cell {
   z-index: 2;
   top: 50%;
   width: 1px;
-  height: 14px;
+  height: 18px;
   border-radius: 0;
   background: var(--ci-line);
   transform: translate(-50%, -50%);
@@ -834,11 +839,12 @@ tbody tr:nth-child(-n + 3) .row-number-cell {
 }
 
 .harness-details-button {
-  display: inline-flex;
+  display: inline-grid;
+  grid-template-columns: var(--harness-icon-size) minmax(0, 1fr);
   align-items: center;
   max-width: 100%;
   padding: 0;
-  gap: 5px;
+  gap: var(--harness-icon-gap);
   color: var(--text);
   background: transparent;
   border: 0;
@@ -849,10 +855,16 @@ tbody tr:nth-child(-n + 3) .row-number-cell {
 }
 
 .harness-logo {
-  width: 16px;
-  height: 16px;
-  flex: 0 0 16px;
+  grid-column: 1;
+  grid-row: 1;
+  width: var(--harness-icon-size);
+  height: var(--harness-icon-size);
   object-fit: contain;
+}
+
+.harness-details-button > :not(.harness-logo) {
+  grid-column: 2;
+  grid-row: 1;
 }
 
 :root[data-theme="dark"] .harness-logo-monochrome {

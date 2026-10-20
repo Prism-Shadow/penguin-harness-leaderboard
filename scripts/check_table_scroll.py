@@ -83,10 +83,24 @@ def main():
                     ? "rgb(45, 55, 69)" : "rgb(223, 227, 232)",
                 ciStyle:[...document.querySelectorAll(".accuracy-ci, .accuracy-cap")].every(line => {
                     const style = getComputedStyle(line);
+                    const rect = line.getBoundingClientRect();
+                    const track = line.closest(".accuracy-track").getBoundingClientRect();
                     return style.backgroundColor === ciColor
+                        && Math.abs((rect.top + rect.bottom) - (track.top + track.bottom)) < 1
                         && (line.classList.contains("accuracy-ci")
                             ? style.height === "1px"
-                            : style.width === "1px" && style.height === "14px");
+                            : style.width === "1px" && style.height === "18px");
+                }),
+                barGeometry:[...document.querySelectorAll(".accuracy-track")].every(track => {
+                    const rect = track.getBoundingClientRect();
+                    const fill = track.querySelector(".accuracy-fill").getBoundingClientRect();
+                    return rect.width === 260 && rect.height === 14
+                        && fill.height === 14 && fill.top === rect.top;
+                }),
+                versionsAligned:[...document.querySelectorAll(".harness-meta")].every(meta => {
+                    const name = meta.closest(".harness-cell").querySelector(".entity-name");
+                    return Math.abs(name.getBoundingClientRect().left
+                        - meta.querySelector("span").getBoundingClientRect().left) < 1;
                 }),
                 effortStyle:[...document.querySelectorAll(".model-effort")].every(span => {
                     const style = getComputedStyle(span);
@@ -109,6 +123,7 @@ def main():
         assert result["fontMatches"] and result["colorMatches"] and result["noOverlap"], result
         assert result["effortStyle"], result
         assert result["ciStyle"], result
+        assert result["barGeometry"] and result["versionsAligned"], result
         assert result["rowLine"] == result["expectedLine"], result
 
     def check_headers_and_corners():
@@ -163,6 +178,28 @@ def main():
             driver.execute_script('setLocale("zh");setTheme("light")')
             time.sleep(.1)
             check_table_styling()
+            if width == 1440:
+                # A failed or unknown logo must not shift the name away from
+                # the version beneath it.
+                driver.execute_script("""
+                    window.probeLogo=document.querySelector(".harness-logo");
+                    window.probeNameLeft=probeLogo.nextElementSibling.getBoundingClientRect().left;
+                    probeLogo.dispatchEvent(new Event("error"));
+                """)
+                check_table_styling()
+                assert driver.execute_script("""
+                    return probeLogo.hidden
+                        && probeLogo.nextElementSibling.getBoundingClientRect().left === probeNameLeft;
+                """)
+                driver.execute_script("window.probeButton=probeLogo.parentElement;probeLogo.remove()")
+                check_table_styling()
+                assert driver.execute_script("""
+                    return probeButton.querySelector(".entity-name").getBoundingClientRect().left === probeNameLeft;
+                """)
+                driver.execute_script("""
+                    probeButton.prepend(probeLogo);probeLogo.hidden=false;
+                    delete window.probeLogo;delete window.probeButton;delete window.probeNameLeft;
+                """)
             column_widths = check_headers_and_corners()
             initial = measure()
             assert abs(initial["titleFontSize"] - min(40, max(28, width * .03))) < .1, initial

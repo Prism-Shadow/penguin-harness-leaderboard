@@ -48,6 +48,19 @@ GitHub links remain in the navigation and footer. Column headers have no hover
 explanations; sorting and screen-reader descriptions remain available. A funnel menu groups
 Source, Harness, model and thinking level into a two-level category/option selector.
 Select each filter's **All** option to reset it.
+Filters and view tabs sit outside the card, aligned with its right edge.
+In Table mode, the results area fits the available viewport height: the benchmark
+title and controls stay visible while rows scroll inside the table. Column
+headers stick to the top of that scroll region at every screen width. Horizontal
+scrolling is retained on narrow screens, and the region is keyboard focusable.
+Sorting or changing filters returns the rows to the top. Pareto retains its
+page-scrolling layout. Row dividers use a stronger neutral color in both themes.
+Reported ± intervals use the same size as the resolution rate and the same text
+color as timeout multipliers; their reserved space keeps score bars aligned.
+The navigation controls follow the Penguin homepage styling: compact language
+selection, sun/moon/system theme icons, and an outlined GitHub counter. The count
+comes from this leaderboard repository's public GitHub API, not the main Harness
+repository; unavailable counts display **—** without blocking the results.
 Table and Pareto tabs share the current filters; both the view and filters are
 saved in the URL. The **Pareto Frontier** view plots Penguin and benchmark-official
 results together. Blue circles identify Penguin;
@@ -288,6 +301,12 @@ JSON request from local files.
     python3 scripts/verify_site.py --check-live
     python3 -m unittest discover -s scripts -p 'test_*.py'
     node --check site/script.js
+
+For browser checks of internal scrolling, sticky headers, external controls,
+light/dark styling and narrow viewports (requires Selenium, Chromium and
+chromedriver), start the local server above, then run:
+
+    python3 scripts/check_table_scroll.py --url http://127.0.0.1:8765/
 
 To update curated records and configuration supplements while retaining official
 scores, costs, intervals and upstream snapshot dates:

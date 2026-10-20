@@ -6,6 +6,7 @@ const PARETO_COST_MAX = 1200;
 const PARETO_COST_STEP = 300;
 const THEME_KEY = "penguin-leaderboard.theme";
 const LOCALE_KEY = "penguin-leaderboard.locale";
+const GITHUB_REPO = "Prism-Shadow/penguin-harness-leaderboard";
 
 const translations = {
   en: {
@@ -15,6 +16,7 @@ const translations = {
     language: "Language",
     followSystem: "Follow system",
     theme: "Theme: {mode}",
+    githubStars: "GitHub · {count} stars",
     system: "system",
     light: "light",
     dark: "dark",
@@ -164,6 +166,7 @@ const translations = {
     language: "语言",
     followSystem: "跟随系统",
     theme: "主题：{mode}",
+    githubStars: "GitHub · {count} 个星标",
     system: "跟随系统",
     light: "浅色",
     dark: "深色",
@@ -318,6 +321,7 @@ const state = {
   view: "table",
   filterCategory: "source",
   paretoSelectedId: null,
+  githubStars: null,
 };
 
 const elements = {
@@ -331,6 +335,8 @@ const elements = {
   paretoSection: document.querySelector("#pareto"),
   localeSelect: document.querySelector(".locale-select"),
   themeToggle: document.querySelector(".theme-toggle"),
+  githubLink: document.querySelector(".github-link"),
+  githubStars: document.querySelector(".github-stars"),
   sourceFilter: document.querySelector(".source-filter"),
   harnessFilter: document.querySelector(".harness-filter"),
   modelFilter: document.querySelector(".model-filter"),
@@ -626,6 +632,7 @@ function applyTranslations() {
   elements.localeSelect.querySelector('option[value="system"]').textContent = t("followSystem");
   customSelects.forEach(refreshCustomSelect);
   updateThemeLabel();
+  renderGitHubStars();
 }
 
 function resolvedLocale(preference) {
@@ -665,6 +672,39 @@ function updateThemeLabel() {
   const label = t("theme", { mode: t(mode) });
   elements.themeToggle.setAttribute("aria-label", label);
   elements.themeToggle.title = label;
+  elements.themeToggle.querySelectorAll("[data-theme-icon]").forEach((icon) => {
+    icon.toggleAttribute("hidden", icon.dataset.themeIcon !== mode);
+  });
+}
+
+function renderGitHubStars() {
+  const count = state.githubStars === null ? null : new Intl.NumberFormat("en-US").format(state.githubStars);
+  elements.githubStars.textContent = count ?? "—";
+  const label = count === null ? "GitHub" : t("githubStars", { count });
+  elements.githubLink.setAttribute("aria-label", label);
+  elements.githubLink.title = label;
+}
+
+async function loadGitHubStars() {
+  const controller = new AbortController();
+  const timeout = setTimeout(() => controller.abort(), 5000);
+  try {
+    const response = await fetch(`https://api.github.com/repos/${GITHUB_REPO}`, {
+      signal: controller.signal,
+      headers: { Accept: "application/vnd.github+json" },
+      credentials: "omit",
+      referrerPolicy: "no-referrer",
+    });
+    if (!response.ok) return;
+    const repo = await response.json();
+    if (repo.full_name !== GITHUB_REPO || !Number.isSafeInteger(repo.stargazers_count) || repo.stargazers_count < 0) return;
+    state.githubStars = repo.stargazers_count;
+    renderGitHubStars();
+  } catch {
+    // An unavailable GitHub counter must never prevent the leaderboard loading.
+  } finally {
+    clearTimeout(timeout);
+  }
 }
 
 function cycleTheme() {
@@ -904,6 +944,7 @@ function renderFilterMenu() {
 
 function setResultView(view, focus = false) {
   state.view = view === "pareto" ? "pareto" : "table";
+  document.documentElement.dataset.resultView = state.view;
   setFilterMenu(false);
   elements.viewTabs.querySelectorAll("[data-view]").forEach((tab) => {
     const selected = tab.dataset.view === state.view;
@@ -951,6 +992,7 @@ function setSort(key) {
     state.sort = { key, direction: ["harness", "model", "source_type", "compression_trigger", "timeout_multiplier", "total_cost_usd"].includes(key) ? "asc" : "desc" };
   }
   renderTable();
+  elements.tableWrap.scrollTop = 0;
 }
 
 function renderTableHead() {
@@ -1882,9 +1924,6 @@ async function init() {
       point.dispatchEvent(new MouseEvent("click", { bubbles: true }));
     }
   });
-  new ResizeObserver(() => {
-    document.documentElement.style.setProperty("--results-toolbar-height", elements.toolbar.offsetHeight + "px");
-  }).observe(elements.toolbar);
   const tableObserver = new ResizeObserver(updateTableOverflow);
   tableObserver.observe(elements.tableWrap);
   tableObserver.observe(elements.tableWrap.querySelector("table"));
@@ -1905,6 +1944,7 @@ async function init() {
       state.filters[key] = event.target.value;
       renderFilters();
       renderResults();
+      elements.tableWrap.scrollTop = 0;
     });
   }
 
@@ -1932,6 +1972,7 @@ async function init() {
   });
 
   applyTranslations();
+  void loadGitHubStars();
   try {
     const response = await fetch(DATA_URL, { cache: "no-store" });
     if (!response.ok) throw new Error(`HTTP ${response.status}`);

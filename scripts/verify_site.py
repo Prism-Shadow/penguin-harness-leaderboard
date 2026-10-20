@@ -314,7 +314,7 @@ def verify_frontend_contract() -> None:
     assert "hero-actions" not in html and "hero-actions" not in css, "Removed hero buttons must not return"
     assert 'class="hero"' not in html and ".hero-brand" not in css, "Removed duplicate hero title must not return"
     assert "<span>Penguin Harness Leaderboard</span>" in html, "Navigation must show the full brand name"
-    assert '<h1 class="results-title">' in html, "Benchmark must remain the page heading"
+    assert '<h1 id="results-title" class="results-title">' in html, "Benchmark must remain the page heading"
     table_header = script[script.index("function renderTableHead()"):script.index("function accuracyCell(")]
     assert ".title =" not in table_header and 'setAttribute("title"' not in table_header, (
         "Column headers must not show native hover explanations"
@@ -343,13 +343,35 @@ def verify_frontend_contract() -> None:
     assert "function paretoConfigLabel(row)" in script, "Chart points need readable configuration labels"
     assert "official_detail_url" in script, "Official result detail link is missing"
     assert 'version-select' not in html and 'versionSelect' not in script, "Single-benchmark page must not have a version selector"
-    assert '--results-toolbar-height' in script and '--results-toolbar-height' in css, (
-        "Sticky table headers must account for toolbar height"
+    assert 'data-result-view="table"' in html and 'dataset.resultView = state.view' in script, (
+        "The viewport-sized table layout must follow the selected view"
+    )
+    assert 'class="table-wrap" role="region" aria-labelledby="results-title" tabindex="0"' in html, (
+        "The table scroll region must be named and keyboard accessible"
+    )
+    scroll_region = re.search(r"\.table-wrap\s*\{([^}]+)\}", css).group(1)
+    assert "overflow: auto" in scroll_region and "overscroll-behavior: contain" in scroll_region, (
+        "Table scrolling must stay inside the table viewport"
+    )
+    sticky_header = re.search(r"\.results-head th\s*\{([^}]+)\}", css).group(1)
+    assert "position: sticky" in sticky_header and "top: 0" in sticky_header, (
+        "Column headers must stick to the table scrollport at every screen width"
+    )
+    assert html.index('class="result-toolbar"') < html.index('class="leaderboard-card"'), (
+        "Filters and view tabs must sit outside and above the table card"
     )
     assert 'officialUrl.searchParams.set("efforts", "all")' in script, (
         "Official comparison link must open the all-efforts view"
     )
     assert 'class="locale-control"' in html, "Language control missing"
+    for mode in ("light", "dark", "system"):
+        assert f'data-theme-icon="{mode}"' in html, f"{mode} theme icon missing"
+    assert 'icon.toggleAttribute("hidden", icon.dataset.themeIcon !== mode)' in script, (
+        "Theme icon must follow the selected mode"
+    )
+    assert 'class="github-stars"' in html and "Number.isSafeInteger(repo.stargazers_count)" in script, (
+        "GitHub stars must come from a validated API count"
+    )
     assert '<option value="system">' in html, "Follow system language option is missing"
     assert 'option[value="system"]' in script, "Follow system option is not translated"
     assert 'class="source-filter"' in html, "Source filter missing"

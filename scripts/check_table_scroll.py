@@ -1,0 +1,189 @@
+#!/usr/bin/env python3
+"""Optional Chromium UI regression check (requires Selenium + chromedriver).
+
+Run against an already-running local site, without publishing anything:
+    python3 scripts/check_table_scroll.py --url http://127.0.0.1:18765/
+"""
+
+import argparse
+import json
+import tempfile
+import time
+from pathlib import Path
+
+from selenium import webdriver
+from selenium.webdriver.chrome.options import Options
+from selenium.webdriver.chrome.service import Service
+from selenium.webdriver.common.by import By
+from selenium.webdriver.common.keys import Keys
+from selenium.webdriver.support.ui import WebDriverWait
+
+
+def main():
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("--url", default="http://127.0.0.1:18765/")
+    parser.add_argument("--browser", default="/usr/bin/chromium")
+    parser.add_argument("--driver", default="/usr/bin/chromedriver")
+    args = parser.parse_args()
+    output = Path(tempfile.mkdtemp(prefix="penguin-table-scroll-"))
+    options = Options()
+    options.binary_location = args.browser
+    for flag in ("--headless=new", "--no-sandbox", "--disable-dev-shm-usage", "--no-proxy-server"):
+        options.add_argument(flag)
+    options.set_capability("goog:loggingPrefs", {"browser": "ALL"})
+    driver = webdriver.Chrome(service=Service(args.driver), options=options)
+    wait = WebDriverWait(driver, 15)
+    reports = []
+
+    def measure():
+        return driver.execute_script("""
+            const rect = selector => {
+                const r = document.querySelector(selector).getBoundingClientRect();
+                return {top:r.top,bottom:r.bottom,left:r.left,right:r.right,height:r.height};
+            };
+            const wrap = document.querySelector(".table-wrap");
+            return {
+                title:rect(".results-title"), toolbar:rect(".result-toolbar"),
+                card:rect(".leaderboard-card"), wrap:rect(".table-wrap"),
+                header:rect(".results-head th"), last:rect(".results-body tr:last-child"),
+                pageY:scrollY, pageHeight:document.documentElement.scrollHeight,
+                viewport:innerHeight, scrollTop:wrap.scrollTop,
+                scrollHeight:wrap.scrollHeight, clientHeight:wrap.clientHeight,
+                externalToolbar:!document.querySelector(".leaderboard-card .result-toolbar")
+            };
+        """)
+
+    def wheel(delta):
+        area = measure()["wrap"]
+        driver.execute_cdp_cmd("Input.dispatchMouseEvent", {
+            "type": "mouseWheel", "x": area["left"] + 30,
+            "y": area["bottom"] - 30, "deltaX": 0, "deltaY": delta,
+        })
+        time.sleep(.25)
+
+    def check_table_styling():
+        result = driver.execute_script("""
+            const interval = document.querySelector(".rate-copy span");
+            const score = interval.previousElementSibling;
+            const row = interval.closest("tr");
+            const timeout = row.querySelector("td:nth-child(5)");
+            const font = getComputedStyle(interval);
+            return {
+                fontMatches:font.fontSize === getComputedStyle(score).fontSize,
+                colorMatches:font.color === getComputedStyle(timeout).color,
+                rowLine:getComputedStyle(timeout).borderBottomColor,
+                expectedLine:document.documentElement.dataset.theme === "dark"
+                    ? "rgb(45, 55, 69)" : "rgb(223, 227, 232)",
+                noOverlap:[...document.querySelectorAll(".rate-copy span")].every(span => {
+                    const bar = span.closest(".rate-cell").querySelector(".accuracy-track");
+                    return span.getBoundingClientRect().right + 6 <= bar.getBoundingClientRect().left
+                        && bar.getBoundingClientRect().width > 60;
+                })
+            };
+        """)
+        assert result["fontMatches"] and result["colorMatches"] and result["noOverlap"], result
+        assert result["rowLine"] == result["expectedLine"], result
+
+    try:
+        for width, height in ((1440, 900), (1280, 720), (1100, 800), (768, 1024),
+                              (390, 844), (320, 568), (844, 390)):
+            driver.execute_cdp_cmd("Emulation.setDeviceMetricsOverride", {
+                "width": width, "height": height, "deviceScaleFactor": 1, "mobile": False,
+            })
+            driver.get(args.url)
+            wait.until(lambda _: len(driver.find_elements(By.CSS_SELECTOR, ".harness-details-button")) == 38)
+            driver.execute_script('setLocale("zh");setTheme("light")')
+            time.sleep(.1)
+            check_table_styling()
+            initial = measure()
+            assert initial["externalToolbar"], initial
+            assert initial["pageHeight"] <= height + 1 and initial["pageY"] == 0, initial
+            assert initial["scrollHeight"] > initial["clientHeight"] >= 120, initial
+            assert initial["toolbar"]["bottom"] <= initial["card"]["top"] + 1, initial
+            assert initial["title"]["top"] >= 64, initial
+            wheel(500)
+            scrolled = measure()
+            assert scrolled["scrollTop"] > 100, scrolled
+            assert scrolled["pageY"] == 0, scrolled
+            for key in ("title", "toolbar", "card", "wrap"):
+                assert scrolled[key] == initial[key], (key, initial, scrolled)
+            assert abs(scrolled["header"]["top"] - initial["header"]["top"]) <= 1, scrolled
+            if width in (1440, 390):
+                driver.save_screenshot(str(output / f"scroll-{width}-zh.png"))
+
+            # The final row remains reachable; wheel motion at either end does
+            # not propagate to the page and move the benchmark title away.
+            driver.execute_script("document.querySelector('.table-wrap').scrollTop=100000")
+            wheel(800)
+            bottom = measure()
+            assert bottom["last"]["bottom"] <= bottom["wrap"]["bottom"] + 1, bottom
+            assert bottom["last"]["top"] >= bottom["header"]["bottom"], bottom
+            assert bottom["pageY"] == 0 and bottom["title"] == initial["title"], bottom
+            driver.execute_script("document.querySelector('.table-wrap').scrollTop=0")
+            wheel(-800)
+            assert measure()["pageY"] == 0
+
+            # Native keyboard scrolling works for the named region too.
+            region = driver.find_element(By.CSS_SELECTOR, ".table-wrap")
+            driver.execute_script("arguments[0].focus()", region)
+            region.send_keys(Keys.PAGE_DOWN)
+            wait.until(lambda _: measure()["scrollTop"] > 0)
+            time.sleep(.3)
+            assert measure()["pageY"] == 0
+
+            # Sorting stays usable after scrolling and returns to the first row.
+            driver.find_element(By.CSS_SELECTOR, ".column-total-cost-usd button").click()
+            assert measure()["scrollTop"] == 0, measure()
+            assert driver.find_element(By.CSS_SELECTOR, ".column-total-cost-usd").get_attribute("aria-sort") == "descending"
+            driver.find_element(By.CSS_SELECTOR, ".column-total-cost-usd button").click()
+            assert driver.find_element(By.CSS_SELECTOR, ".column-total-cost-usd").get_attribute("aria-sort") == "ascending"
+            driver.execute_script("document.querySelector('.table-wrap').scrollLeft=0")
+
+            # External filter menu isn't clipped by the scrolling table.
+            driver.find_element(By.CSS_SELECTOR, ".filter-toggle").click()
+            driver.find_element(By.CSS_SELECTOR, '[data-filter-category="source"]').click()
+            driver.find_element(By.CSS_SELECTOR, '[data-filter-value="penguin_run"]').click()
+            assert len(driver.find_elements(By.CSS_SELECTOR, ".harness-details-button")) == 6
+            assert measure()["wrap"] == initial["wrap"]
+            assert measure()["scrollTop"] == 0
+            driver.find_element(By.CSS_SELECTOR, ".filter-toggle").click()
+            driver.find_element(By.CSS_SELECTOR, '[data-filter-value=""]').click()
+            assert len(driver.find_elements(By.CSS_SELECTOR, ".harness-details-button")) == 38
+
+            # A detail modal can be opened/closed without moving the workspace.
+            driver.find_element(By.CSS_SELECTOR, ".harness-details-button").click()
+            assert driver.find_element(By.CSS_SELECTOR, ".result-dialog").is_displayed()
+            driver.find_element(By.CSS_SELECTOR, ".dialog-close").click()
+            assert measure()["pageY"] == 0
+
+            # Pareto is not height-clipped; switching back restores the workspace.
+            driver.find_element(By.CSS_SELECTOR, "#pareto-tab").click()
+            wait.until(lambda _: len(driver.find_elements(By.CSS_SELECTOR, ".pareto-point")) == 27)
+            assert driver.execute_script("return document.documentElement.dataset.resultView") == "pareto"
+            driver.find_element(By.CSS_SELECTOR, "#table-tab").click()
+            assert measure()["pageHeight"] <= height + 1
+            assert measure()["pageY"] == 0
+
+            driver.execute_script('setLocale("en");setTheme("dark")')
+            check_table_styling()
+            wheel(500)
+            dark = measure()
+            assert dark["pageY"] == 0 and abs(dark["header"]["top"] - dark["wrap"]["top"]) <= 1, dark
+            assert not driver.find_elements(By.CSS_SELECTOR, ".results-head [title]")
+            if width in (1440, 390):
+                driver.save_screenshot(str(output / f"scroll-{width}-en-dark.png"))
+            reports.append({"width": width, "height": height, "scrollportHeight": initial["clientHeight"]})
+        # An empty result must not expand the page.
+        driver.execute_script('state.filters.model="nonexistent";renderResults()')
+        assert driver.find_element(By.CSS_SELECTOR, ".empty-cell").is_displayed()
+        assert measure()["pageHeight"] <= measure()["viewport"] + 1
+        errors = [entry for entry in driver.get_log("browser")
+                  if entry["level"] == "SEVERE" and "api.github.com" not in entry["message"]]
+        assert not errors, errors
+        print(json.dumps({"passed": True, "screenshots": str(output), "viewports": reports}))
+    finally:
+        driver.quit()
+
+
+if __name__ == "__main__":
+    main()

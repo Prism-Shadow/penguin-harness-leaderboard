@@ -67,13 +67,20 @@ const LeaderboardExport = (() => {
     let y = 60;
     for (const row of table.rows) {
       const rowHeight = row.getBoundingClientRect().height;
+      const rowTop = Math.min(...[...row.cells].map(cell => cell.getBoundingClientRect().top));
       for (const cell of row.cells) {
         const cellBounds = cell.getBoundingClientRect();
         const dx = 18 - bounds.left;
-        const dy = y - cellBounds.top;
+        const dy = y - rowTop;
         const cellStyle = getComputedStyle(cell);
         if (!transparent(cellStyle.backgroundColor)) {
-          parts.push(rect(cellBounds.left + dx, y, cellBounds.width, rowHeight, cellStyle.backgroundColor));
+          parts.push(rect(cellBounds.left + dx, cellBounds.top + dy, cellBounds.width, cellBounds.height, cellStyle.backgroundColor));
+        }
+        const labelStyle = getComputedStyle(cell, "::before");
+        if (cell.dataset.label && !["none", "normal"].includes(labelStyle.content)) {
+          parts.push(text(cell.dataset.label.toUpperCase(),
+            cellBounds.left + dx + parseFloat(cellStyle.paddingLeft),
+            cellBounds.top + dy + (cellBounds.height - parseFloat(labelStyle.lineHeight)) / 2, labelStyle));
         }
         for (const node of cell.querySelectorAll(".accuracy-track, .accuracy-fill, .accuracy-ci, .accuracy-cap")) {
           const box = node.getBoundingClientRect();
@@ -100,8 +107,30 @@ const LeaderboardExport = (() => {
           range.setEnd(node, start + node.textContent.trim().length);
           const box = range.getBoundingClientRect();
           const style = getComputedStyle(node.parentElement);
-          parts.push(text(style.textTransform === "uppercase" ? value.toUpperCase() : value,
+          const paint = (value, box) => parts.push(text(style.textTransform === "uppercase" ? value.toUpperCase() : value,
             box.left + dx, box.top + dy, style));
+          if (range.getClientRects().length <= 1) {
+            paint(value, box);
+          } else {
+            // Responsive cells may wrap. Preserve their rendered line breaks
+            // instead of exporting one overflowing line of text.
+            let line = "", lineBox, offset = start;
+            for (const character of value) {
+              range.setStart(node, offset);
+              offset += character.length;
+              range.setEnd(node, offset);
+              const characterBox = range.getBoundingClientRect();
+              if (lineBox && Math.abs(characterBox.top - lineBox.top) > 1) {
+                paint(line.trimEnd(), lineBox);
+                line = "";
+                lineBox = null;
+              }
+              if (!lineBox && !character.trim()) continue;
+              lineBox ||= characterBox;
+              line += character;
+            }
+            if (lineBox) paint(line.trimEnd(), lineBox);
+          }
         }
       }
       y += rowHeight;

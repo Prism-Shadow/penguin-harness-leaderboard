@@ -574,7 +574,8 @@ main,
 
 .table-wrap {
   width: 100%;
-  overflow: auto;
+  overflow-y: auto;
+  overflow-x: hidden;
   overscroll-behavior: contain;
   scrollbar-gutter: stable;
   scroll-padding-top: 72px;
@@ -601,22 +602,25 @@ main,
 }
 
 table {
-  /* Fit each column to its longest label/value; scroll instead of wrapping.
-     Only the score tracks keep a fixed width. */
-  width: max-content;
-  min-width: 100%;
+  /* Visible column weights are normalized by renderTableHead. */
+  width: 100%;
   border-collapse: collapse;
-  table-layout: auto;
+  table-layout: fixed;
   font-size: 14px;
 }
 
 th,
 td {
-  padding: 15px 18px;
+  padding: 12px 10px;
   border-bottom: 1px solid var(--table-line);
   text-align: left;
   vertical-align: middle;
-  white-space: nowrap;
+  white-space: normal;
+  overflow-wrap: anywhere;
+}
+
+.results-body tr[data-row-id] {
+  height: 72px;
 }
 
 th {
@@ -663,16 +667,6 @@ tbody tr:nth-child(-n + 3) .row-number-cell {
   --harness-icon-gap: 5px;
 }
 
-.harness-meta {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: 6px;
-  margin: 6px 0 0 calc(var(--harness-icon-size) + var(--harness-icon-gap));
-  color: var(--muted-strong);
-  font-size: 11px;
-}
-
 .config-cell {
   font-variant-numeric: tabular-nums;
 }
@@ -698,7 +692,7 @@ tbody tr:nth-child(-n + 3) .row-number-cell {
   font: inherit;
   text-align: left;
   text-transform: inherit;
-  white-space: nowrap;
+  white-space: normal;
 }
 
 .sort-button:hover {
@@ -723,22 +717,19 @@ tbody tr:nth-child(-n + 3) .row-number-cell {
 }
 
 .model-primary {
-  display: flex;
-  align-items: center;
+  display: block;
   min-width: 0;
-  flex-wrap: nowrap;
-  gap: 7px;
 }
 
 .model-primary .entity-name {
+  display: inline;
   min-width: 0;
   max-width: 100%;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
+  white-space: normal;
 }
 
 .model-effort {
+  margin-left: 7px;
   flex: 0 0 auto;
   color: var(--muted);
   font-size: 14px;
@@ -747,9 +738,11 @@ tbody tr:nth-child(-n + 3) .row-number-cell {
 }
 
 .rate-cell {
-  display: flex;
+  container: score / inline-size;
+  display: grid;
+  grid-template-columns: minmax(0, 112px) minmax(0, 1fr);
   align-items: center;
-  gap: 12px;
+  gap: 6px 12px;
   font-variant-numeric: tabular-nums;
 }
 
@@ -761,9 +754,10 @@ tbody tr:nth-child(-n + 3) .row-number-cell {
 
 .rate-copy {
   display: flex;
+  min-width: 0;
   align-items: baseline;
-  width: 112px;
-  flex: 0 0 112px;
+  width: 100%;
+  flex-wrap: wrap;
   gap: 4px;
   white-space: nowrap;
 }
@@ -776,10 +770,9 @@ tbody tr:nth-child(-n + 3) .row-number-cell {
 .accuracy-track {
   position: relative;
   display: block;
-  width: 260px;
-  min-width: 260px;
+  width: 100%;
+  min-width: 0;
   height: 14px;
-  flex: 0 0 260px;
   overflow: visible;
   border-radius: 0;
   background: var(--line);
@@ -806,7 +799,7 @@ tbody tr:nth-child(-n + 3) .row-number-cell {
   position: absolute;
   z-index: 2;
   top: 50%;
-  height: 1px;
+  height: 2px;
   border-radius: 0;
   background: var(--ci-line);
   transform: translateY(-50%);
@@ -816,25 +809,74 @@ tbody tr:nth-child(-n + 3) .row-number-cell {
   position: absolute;
   z-index: 2;
   top: 50%;
-  width: 1px;
-  height: 18px;
+  width: 2px;
+  height: 10px;
   border-radius: 0;
   background: var(--ci-line);
   transform: translate(-50%, -50%);
+}
+
+/* Preserve useful bar length when a narrower column cannot fit label + bar. */
+@container score (max-width: 300px) {
+  .rate-copy, .accuracy-track { grid-column: 1 / -1; }
+  .rate-copy { width: auto; }
+}
+
+@media (max-width: 1450px) {
+  th, td { padding-inline: 8px; }
+}
+
+@media (min-width: 981px) and (max-width: 1100px) {
+  th, td { padding-inline: 6px; }
+  .results-body tr[data-row-id] { height: 96px; }
+}
+
+/* On narrow screens, keep every selected value readable without sideways
+   scrolling. The compact sticky header still exposes the same sort buttons. */
+@media (max-width: 980px) {
+  .table-wrap table, .results-head, .results-head tr, .results-body { display: block; }
+  .results-head {
+    position: sticky;
+    top: 0;
+    z-index: 6;
+    background: var(--surface);
+  }
+  .results-head tr { display: flex; flex-wrap: wrap; }
+  .results-head th { position: static; width: auto !important; height: auto; padding: 6px 10px; }
+  .results-head .sort-button { font-size: 12px; }
+  .results-body tr[data-row-id] { display: block; height: auto; border-bottom: 1px solid var(--table-line); }
+  .results-body td[data-column] {
+    display: grid;
+    grid-template-columns: 106px minmax(0, 1fr);
+    align-items: center;
+    min-height: 60px;
+    padding: 8px 10px;
+    gap: 8px;
+    border-bottom: 0;
+  }
+  .results-body td[data-column]::before {
+    content: attr(data-label);
+    color: var(--text);
+    font-size: 12px;
+    font-weight: 600;
+    text-transform: uppercase;
+  }
+  .rate-cell { grid-template-columns: minmax(0, 1fr); }
+  .source-label { overflow-wrap: anywhere; }
 }
 
 .source-label {
   color: var(--text);
   font-size: inherit;
   font-weight: 400;
-  white-space: nowrap;
+  white-space: normal;
 }
 
 .number-cell {
   color: var(--text);
   font-size: 14px;
   font-variant-numeric: tabular-nums;
-  white-space: nowrap;
+  white-space: normal;
   font-weight: 400;
 }
 
@@ -882,11 +924,9 @@ tbody tr:nth-child(-n + 3) .row-number-cell {
 
 .harness-details-button .entity-name {
   min-width: 0;
-  overflow: hidden;
   color: inherit;
   text-decoration: none;
-  text-overflow: ellipsis;
-  white-space: nowrap;
+  white-space: normal;
 }
 
 .harness-details-button:hover .entity-name,
@@ -1237,7 +1277,16 @@ tbody tr:nth-child(-n + 3) .row-number-cell {
 
 :root[data-result-view="table"] #results {
   height: 100%;
-  padding-bottom: 24px;
+  padding-top: 20px;
+  padding-bottom: 12px;
+}
+
+:root[data-result-view="table"] .results-content {
+  width: calc(100% - 48px);
+}
+
+:root[data-result-view="table"] .results-heading {
+  margin-bottom: 16px;
 }
 
 :root[data-result-view="table"] .results-content {
@@ -1538,6 +1587,52 @@ tbody tr:nth-child(-n + 3) .row-number-cell {
 }
 
 .filter-menu-wrap { position: relative; }
+.benchmark-control .custom-select-trigger {
+  height: 34px;
+  min-width: 76px;
+  font-size: 14px;
+}
+.benchmark-control .custom-select-option { font-size: 14px; min-height: 36px; }
+.benchmark-control .custom-select-menu { min-width: 100%; }
+.columns-menu-wrap { position: relative; }
+.columns-toggle.has-custom-columns, .columns-toggle[aria-expanded="true"] {
+  color: var(--accent);
+  border-color: var(--accent);
+}
+.columns-menu {
+  position: absolute;
+  top: calc(100% + 6px);
+  right: 0;
+  width: 248px;
+  max-width: calc(100vw - 32px);
+  max-height: min(530px, 58dvh);
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  padding: 4px;
+  border: 1px solid var(--line);
+  background: var(--surface);
+  box-shadow: 0 6px 20px rgb(0 0 0 / 10%);
+}
+.columns-menu button {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  width: 100%;
+  min-height: 36px;
+  padding: 8px 10px;
+  border: 0;
+  background: transparent;
+  color: var(--text);
+  font: inherit;
+  font-size: 13px;
+  text-align: left;
+  text-transform: uppercase;
+  cursor: pointer;
+}
+.columns-menu button:hover, .columns-menu button:focus-visible { background: var(--line-soft); }
+.columns-menu button[aria-disabled="true"] { color: var(--muted); cursor: default; }
+.columns-menu .columns-reset { border-top: 1px solid var(--line); text-transform: none; }
 .filter-toggle, .view-tabs button, .action-button {
   display: inline-flex;
   align-items: center;
@@ -1593,6 +1688,7 @@ tbody tr:nth-child(-n + 3) .row-number-cell {
 .action-tooltip-wrap .export-toggle[aria-expanded="true"] + .action-tooltip { display: none; }
 .export-menu-wrap { position: relative; }
 .export-menu {
+  z-index: 80;
   position: absolute;
   top: calc(100% + 6px);
   left: 0;
@@ -1680,6 +1776,13 @@ tbody tr:nth-child(-n + 3) .row-number-cell {
 }
 @media (max-width: 700px) {
   .filter-menu { position: fixed; top: calc(var(--header-height) + 56px); left: 20px; right: 20px; width: auto; grid-template-columns: 110px minmax(0, 1fr); }
+  .result-toolbar { flex-wrap: wrap; gap: 8px; }
+  .result-actions { flex-basis: 100%; }
+  .columns-menu { max-height: 48dvh; }
+}
+@media (max-width: 380px) {
+  .result-toolbar { gap: 6px; }
+  .view-tabs button { min-width: 62px; padding: 0 9px; }
 }
 
 @media (prefers-reduced-motion: reduce) {

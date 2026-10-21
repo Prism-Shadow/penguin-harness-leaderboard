@@ -358,7 +358,7 @@ def verify_frontend_contract() -> None:
         "The table scroll region must be named and keyboard accessible"
     )
     scroll_region = re.search(r"\.table-wrap\s*\{([^}]+)\}", css).group(1)
-    assert "overflow: auto" in scroll_region and "overscroll-behavior: contain" in scroll_region, (
+    assert "overflow-y: auto" in scroll_region and "overflow-x: hidden" in scroll_region and "overscroll-behavior: contain" in scroll_region, (
         "Table scrolling must stay inside the table viewport"
     )
     sticky_header = re.search(r"\.results-head th\s*\{([^}]+)\}", css).group(1)
@@ -409,14 +409,14 @@ def verify_frontend_contract() -> None:
     assert "function paretoPointAt(event)" in script, "Close chart points need unambiguous hit testing"
     assert "timeoutNote" in script and "harnessMode" in script, "Non-multiplier configuration missing in Details"
     column_contract = (
-        '["row_number", "rowNumber"]',
-        '["harness", "harness"]',
-        '["model", "model"]',
-        '["compression_trigger", "compressionColumn"]',
-        '["timeout_multiplier", "timeoutColumn"]',
-        '["accuracy", "resolutionRate"]',
-        '["total_cost_usd", "cost"]',
-        '["source_type", "source"]',
+        'key: "row_number", label: "rowNumber", default: true',
+        'key: "harness", label: "harness", default: true',
+        'key: "model", label: "model", default: true',
+        'key: "compression_trigger", label: "compressionColumn", default: true',
+        'key: "timeout_multiplier", label: "timeoutColumn", default: true',
+        'key: "accuracy", label: "resolutionRate", default: true',
+        'key: "total_cost_usd", label: "cost", default: true',
+        'key: "source_type", label: "source", default: true',
     )
     positions = [script.find(column) for column in column_contract]
     assert all(position >= 0 for position in positions), "A required table column is missing"
@@ -433,16 +433,17 @@ def verify_frontend_contract() -> None:
     )
     assert '<h2 id="pareto-title">Pareto Frontier</h2>' in html, "Minimal Pareto heading is missing"
     assert 'pareto-chart-meta' not in html and 'pareto-subtitle' not in html, "Removed chart annotations are still present"
-    assert 'const PUBLISHED_BENCHMARK_IDS = ["terminal-bench-2.1"]' in script, "Only TB 2.1 is ready for publication"
-    assert "PUBLISHED_BENCHMARK_IDS.includes(bench.id)" in script, "Unpublished benchmarks must be excluded before routing"
+    assert 'const PUBLISHED_BENCHMARK_IDS = ["terminal-bench-2.1"]' in script
+    assert "PUBLISHED_BENCHMARK_IDS.includes(bench.id)" in script, "Unsupported datasets must be excluded before routing"
+    assert 'id="benchmark-select"' in html and 'class="columns-toggle action-button"' in html
+    assert 'role="menuitemcheckbox"' in script and 'function visibleColumns()' in script
     assert 'event.target.closest(".harness-details-button")' in script, (
         "Harness detail trigger is not wired up"
     )
     assert 'aria-haspopup="dialog"' in script, "Harness detail trigger lacks dialog semantics"
     assert 'colspan="8"' in html, "Loading row does not span the eight table columns"
-    assert script.count('colspan="8"') == 2, (
-        "Empty and error rows do not span the eight table columns"
-    )
+    assert 'colspan="${visibleColumns().length}"' in script
+    assert 'colspan="${state.benchmark ? visibleColumns().length : 8}"' in script
     assert '["thinking_level", "thinkingLevel"]' not in script and 'class="thinking-cell' not in script, (
         "Thinking effort must not have a separate column"
     )
@@ -457,13 +458,13 @@ def verify_frontend_contract() -> None:
         "Confidence interval whisker styling is missing"
     )
     assert "function comparisonRanks(rows)" not in script, "Obsolete comparison rank logic remains"
-    assert '<td class="row-number-cell">${index + 1}</td>' in script, "Row numbers must follow display order"
+    assert 'row_number: () => ["row-number-cell", index + 1]' in script, "Row numbers must follow display order"
     assert 'if (key === "row_number")' in script, "Row number header must not offer a circular sort"
     assert 'sort: { key: "total_cost_usd", direction: "asc" }' in script, "Default ordering must be ascending total cost"
     assert 'sortInteracted: false' in script and script.count('state.sortInteracted && state.sort.key === key') == 2, "Default sorting must not highlight headers or cells"
     assert 'tbody tr:nth-child(-n + 3) .row-number-cell' in css, "Blue numbering must follow the first three displayed rows"
-    assert 'class="source-cell' in script, "Dedicated source column missing"
-    assert 'class="harness-meta"' in script, "Harness version must remain visible"
+    assert 'source_type: () => ["source-cell", sourceLabel(row)]' in script, "Dedicated source column missing"
+    assert 'class="harness-meta"' not in script, "Harness version must not add a second table line"
     assert script.count("costIncomplete:") == 2, "Detailed partial-cost disclosure must be bilingual"
     assert 't("runnerDefaultShort")' not in script and 't("partialCostShort")' not in script, "Repeated row annotations remain"
     assert script.count("modelRevisionConfirmed:") == 2, "Human-confirmed revision provenance must be bilingual"

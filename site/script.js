@@ -1,14 +1,28 @@
 const DATA_URL = "data/benchmarks.json";
-// Publish only benchmarks with full-suite Penguin results; retain other snapshots in the data.
+// Keep the selector ready for other benchmarks, with only the current bench enabled.
 const PUBLISHED_BENCHMARK_IDS = ["terminal-bench-2.1"];
 // Chart viewport only: results outside this range remain in the table and data.
 const PARETO_COST_MAX = 1200;
 const PARETO_COST_STEP = 300;
 const THEME_KEY = "penguin-leaderboard.theme";
 const LOCALE_KEY = "penguin-leaderboard.locale";
+const COLUMNS_KEY = "penguin-leaderboard.columns.v1";
+// Header, menu, body and exports share this canonical column order.
+const TABLE_COLUMNS = [
+  { key: "row_number", label: "rowNumber", default: true },
+  { key: "harness", label: "harness", default: true },
+  { key: "model", label: "model", default: true },
+  { key: "compression_trigger", label: "compressionColumn", default: true, value: row => row.run_config?.compression_trigger_label },
+  { key: "timeout_multiplier", label: "timeoutColumn", default: true },
+  { key: "accuracy", label: "resolutionRate", default: true },
+  { key: "total_tokens", label: "tokensColumn", value: row => row.total_tokens },
+  { key: "total_cost_usd", label: "cost", default: true },
+  { key: "source_type", label: "source", default: true },
+];
 
 const translations = {
   en: {
+    tokensColumn: "Tokens",
     skipToResults: "Skip to results",
     home: "Penguin Harness Leaderboard home",
     siteControls: "Site controls",
@@ -36,6 +50,9 @@ const translations = {
     showingResults: "Showing {shown} of {total} public results",
     filters: "Filters",
     clearFilters: "Clear all",
+    selectBenchmark: "Benchmark",
+    visibleColumns: "Visible columns",
+    resetColumns: "Reset columns",
     exportResults: "Copy / export",
     exportHint: "Copy / export results",
     copyLink: "Copy link",
@@ -175,6 +192,7 @@ const translations = {
     missingMeaning: "No verified value available; not zero, disabled, or a confirmed default.",
   },
   zh: {
+    tokensColumn: "Token",
     skipToResults: "跳到榜单",
     home: "Penguin Harness 榜单首页",
     siteControls: "网站控制",
@@ -202,6 +220,9 @@ const translations = {
     showingResults: "显示 {shown} / {total} 条公开结果",
     filters: "筛选",
     clearFilters: "清除全部",
+    selectBenchmark: "切换 Benchmark",
+    visibleColumns: "显示列",
+    resetColumns: "恢复默认列",
     exportResults: "复制 / 导出",
     exportHint: "复制 / 导出结果",
     copyLink: "复制链接",
@@ -352,10 +373,15 @@ const state = {
   view: "table",
   filterCategory: "source",
   paretoSelectedId: null,
+  columnsByBenchmark: {},
 };
 
 const elements = {
   toolbar: document.querySelector(".result-toolbar"),
+  benchmarkSelect: document.querySelector("#benchmark-select"),
+  columnsWrap: document.querySelector(".columns-menu-wrap"),
+  columnsToggle: document.querySelector(".columns-toggle"),
+  columnsMenu: document.querySelector(".columns-menu"),
   exportToggle: document.querySelector(".export-toggle"),
   exportMenu: document.querySelector(".export-menu"),
   copyLink: document.querySelector(".copy-link"),
@@ -473,6 +499,9 @@ function setCustomSelectOpen(widget, open, activePosition = "selected") {
     return;
   }
   closeCustomSelects(widget);
+  setFilterMenu(false);
+  setExportMenu(false);
+  setColumnsMenu(false);
   widget.menu.hidden = false;
   widget.wrapper.classList.add("is-open");
   widget.trigger.setAttribute("aria-expanded", "true");
@@ -640,6 +669,7 @@ function enhanceCustomSelect(select) {
 
 function enhanceCustomSelects() {
   enhanceCustomSelect(elements.localeSelect);
+  enhanceCustomSelect(elements.benchmarkSelect);
   document.addEventListener("pointerdown", (event) => {
     const active = [...customSelects.values()].find((widget) => !widget.menu.hidden);
     if (active && !active.wrapper.contains(event.target)) closeCustomSelect(active);
@@ -741,6 +771,13 @@ function formatCost(value) {
 function formatNumber(value) {
   if (value == null) return null;
   return new Intl.NumberFormat(state.locale === "zh" ? "zh-CN" : "en-US").format(value);
+}
+
+function formatTokens(value) {
+  if (value >= 1_000_000_000) return `${(value / 1_000_000_000).toFixed(1)}B`;
+  if (value >= 1_000_000) return `${(value / 1_000_000).toFixed(1)}M`;
+  if (value >= 1_000) return `${(value / 1_000).toFixed(1)}k`;
+  return formatNumber(value);
 }
 
 function formatExactCost(value) {
@@ -909,6 +946,7 @@ function setFilterMenu(open, focus = false) {
   elements.filterToggle.setAttribute("aria-expanded", String(open));
   if (open) {
     setExportMenu(false);
+    setColumnsMenu(false);
     closeCustomSelects();
     renderFilterMenu();
     if (focus) elements.filterCategories.querySelector("button").focus();
@@ -949,6 +987,8 @@ function setResultView(view, focus = false) {
   document.documentElement.dataset.resultView = state.view;
   setFilterMenu(false);
   setExportMenu(false);
+  setColumnsMenu(false);
+  elements.columnsWrap.hidden = state.view !== "table";
   elements.viewTabs.querySelectorAll("[data-view]").forEach((tab) => {
     const selected = tab.dataset.view === state.view;
     tab.setAttribute("aria-selected", String(selected));
@@ -971,7 +1011,8 @@ function sortedRows(rows) {
     if (key === "harness") return row.harness.label;
     if (key === "model") return row.model.label;
     if (key === "source_type") return sourceTypeLabel(row.source_type);
-    if (key === "compression_trigger") return row.run_config?.compression_trigger_label;
+    const column = TABLE_COLUMNS.find(column => column.key === key);
+    if (column?.value) return column.value(row);
     return row[key];
   };
   return [...rows].sort((left, right) => {
@@ -999,26 +1040,110 @@ function setSort(key) {
   syncResultUrl();
 }
 
+function availableColumns(benchmark = state.benchmark) {
+  return TABLE_COLUMNS.filter(column => !column.value || benchmark.results.some(row => {
+    const value = column.value(row);
+    return value != null && value !== "";
+  }));
+}
+
+function defaultColumnKeys(benchmark = state.benchmark) {
+  return availableColumns(benchmark).filter(column => column.default).map(column => column.key);
+}
+
+function normalizeColumnKeys(keys, benchmark = state.benchmark) {
+  const selected = Array.isArray(keys)
+    ? availableColumns(benchmark).filter(column => keys.includes(column.key)).map(column => column.key)
+    : [];
+  return selected.length ? selected : defaultColumnKeys(benchmark);
+}
+
+function visibleColumns() {
+  const keys = normalizeColumnKeys(state.columnsByBenchmark[state.benchmark.id]);
+  return availableColumns().filter(column => keys.includes(column.key));
+}
+
+function saveColumns() {
+  try { localStorage.setItem(COLUMNS_KEY, JSON.stringify(state.columnsByBenchmark)); } catch {}
+}
+
+function setColumnsMenu(open, focus = false) {
+  elements.columnsMenu.hidden = !open;
+  elements.columnsToggle.setAttribute("aria-expanded", String(open));
+  if (open) {
+    setFilterMenu(false);
+    setExportMenu(false);
+    closeCustomSelects();
+    renderColumnsMenu();
+    positionColumnsMenu();
+    if (focus) elements.columnsMenu.querySelector("button")?.focus();
+  } else if (focus) elements.columnsToggle.focus();
+}
+
+function positionColumnsMenu() {
+  if (elements.columnsMenu.hidden) return;
+  elements.columnsMenu.style.transform = "";
+  const bounds = elements.columnsMenu.getBoundingClientRect();
+  const shift = Math.max(12 - bounds.left, Math.min(0, innerWidth - 12 - bounds.right));
+  elements.columnsMenu.style.transform = `translateX(${shift}px)`;
+  elements.columnsMenu.style.maxHeight = `${Math.max(80, Math.min(530, innerHeight - bounds.top - 12))}px`;
+}
+
+function renderColumnsMenu() {
+  const keys = visibleColumns().map(column => column.key);
+  const custom = keys.join(",") !== defaultColumnKeys().join(",");
+  elements.columnsToggle.classList.toggle("has-custom-columns", custom);
+  elements.columnsMenu.innerHTML = availableColumns().map(column => {
+    const checked = keys.includes(column.key);
+    return `<button type="button" role="menuitemcheckbox" data-column="${column.key}" aria-checked="${checked}" aria-disabled="${checked && keys.length === 1}"><span>${escapeHtml(t(column.label))}</span><span aria-hidden="true">${checked ? "✓" : ""}</span></button>`;
+  }).join("") + (custom ? `<button type="button" role="menuitem" class="columns-reset">${escapeHtml(t("resetColumns"))}</button>` : "");
+}
+
+function changeColumns(key) {
+  const keys = visibleColumns().map(column => column.key);
+  if (key !== null && !availableColumns().some(column => column.key === key)) return;
+  if (keys.length === 1 && keys[0] === key) return;
+  const next = key === null ? defaultColumnKeys()
+    : keys.includes(key) ? keys.filter(item => item !== key) : [...keys, key];
+  state.columnsByBenchmark[state.benchmark.id] = normalizeColumnKeys(next);
+  saveColumns();
+  renderTable();
+  renderColumnsMenu();
+  syncResultUrl();
+  // Keep the menu open and keyboard focus on the choice just changed.
+  if (key === null) elements.columnsMenu.querySelector("button")?.focus();
+  else elements.columnsMenu.querySelector(`[data-column="${key}"]`)?.focus();
+}
+
+function fitTableColumns() {
+  if (!state.benchmark || !elements.tableWrap.clientWidth) return;
+  // Renormalize the visible columns so hiding a column gives its space back.
+  const wide = elements.tableWrap.clientWidth >= 1150;
+  const widths = { row_number: 60, harness: 110, model: 180, compression_trigger: wide ? 136 : 110,
+    timeout_multiplier: wide ? 144 : 114, accuracy: 170, total_tokens: 94, total_cost_usd: 90, source_type: wide ? 128 : 100 };
+  const growth = { harness: 1, model: 2, accuracy: 3 };
+  const columns = visibleColumns();
+  const totalWidth = columns.reduce((sum, {key}) => sum + widths[key], 0);
+  const totalGrowth = columns.reduce((sum, {key}) => sum + (growth[key] || 0), 0);
+  const remaining = elements.tableWrap.clientWidth - totalWidth;
+  elements.resultsHead.querySelectorAll("th").forEach((cell, index) => {
+    const {key} = columns[index];
+    const share = totalGrowth ? (growth[key] || 0) / totalGrowth : 1 / columns.length;
+    cell.style.width = `${Math.max(0, widths[key] + remaining * share)}px`;
+  });
+}
+
 function renderTableHead() {
-  const columns = [
-    ["row_number", "rowNumber"],
-    ["harness", "harness"],
-    ["model", "model"],
-    ["compression_trigger", "compressionColumn"],
-    ["timeout_multiplier", "timeoutColumn"],
-    ["accuracy", "resolutionRate"],
-    ["total_cost_usd", "cost"],
-    ["source_type", "source"],
-  ];
   const meanings = {
     row_number: "rowNumberMeaning", harness: "harnessMeaning", model: "modelMeaning",
     compression_trigger: "compressionMeaning", timeout_multiplier: "timeoutMeaning",
     accuracy: "rateMeaning", total_cost_usd: "costMeaning", source_type: "sourceMeaning",
   };
   const row = document.createElement("tr");
-  columns.forEach(([key, labelKey]) => {
+  visibleColumns().forEach(({key, label: labelKey}) => {
     const cell = document.createElement("th");
     cell.scope = "col";
+    cell.dataset.column = key;
     cell.className = `column-${key.replaceAll("_", "-")}${state.sortInteracted && state.sort.key === key ? " is-active" : ""}`;
     if (key === "row_number") {
       cell.textContent = t("rowNumber");
@@ -1028,7 +1153,8 @@ function renderTableHead() {
     const button = document.createElement("button");
     button.type = "button";
     button.className = "sort-button";
-    button.setAttribute("aria-label", `${t("sorting", { column: t(labelKey) })}. ${t(meanings[key])}`);
+    button.setAttribute("aria-label", t("sorting", { column: t(labelKey) })
+      + (meanings[key] ? `. ${t(meanings[key])}` : ""));
     button.textContent = t(labelKey);
     // Reserve the arrow slot on every sortable column so sorting never shifts widths.
     const arrow = document.createElement("span");
@@ -1044,6 +1170,7 @@ function renderTableHead() {
     row.append(cell);
   });
   elements.resultsHead.replaceChildren(row);
+  fitTableColumns();
 }
 
 function confidenceDescription(row) {
@@ -1156,29 +1283,27 @@ function renderTable() {
   });
 
   if (!rows.length) {
-    elements.resultsBody.innerHTML = `<tr><td class="empty-cell" colspan="8">${escapeHtml(t("noResults"))}</td></tr>`;
+    elements.resultsBody.innerHTML = `<tr><td class="empty-cell" colspan="${visibleColumns().length}">${escapeHtml(t("noResults"))}</td></tr>`;
     return;
   }
 
   elements.resultsBody.innerHTML = rows.map((row, index) => {
-    const config = row.run_config;
-    const active = (key) => state.sortInteracted && state.sort.key === key ? " is-active" : "";
-    return `
-      <tr>
-        <td class="row-number-cell">${index + 1}</td>
-        <td class="entity-cell harness-cell${active("harness")}">
-          ${harnessDetailsButton(row)}
-          ${harnessVersionLabel(row) ? `<div class="harness-meta"><span title="${escapeHtml(t(config ? "configuredVersion" : "harnessVersion"))}">${escapeHtml(harnessVersionLabel(row))}</span></div>` : ""}
-        </td>
-        <td class="entity-cell model-cell${active("model")}">
-          <div class="model-primary">${entityName(row.model)}${modelEffort(row)}</div>
-        </td>
-        <td class="config-cell${active("compression_trigger")}">${compressionCell(row)}</td>
-        <td class="config-cell${active("timeout_multiplier")}">${timeoutCell(row)}</td>
-        <td class="${active("accuracy").trim()}">${accuracyCell(row)}</td>
-        <td class="number-cell${active("total_cost_usd")}">${costCell(row)}</td>
-        <td class="source-cell${active("source_type")}">${sourceLabel(row)}</td>
-      </tr>`;
+    const cells = {
+      row_number: () => ["row-number-cell", index + 1],
+      harness: () => ["entity-cell harness-cell", harnessDetailsButton(row)],
+      model: () => ["entity-cell model-cell", `<div class="model-primary">${entityName(row.model)}${modelEffort(row)}</div>`],
+      compression_trigger: () => ["config-cell", compressionCell(row)],
+      timeout_multiplier: () => ["config-cell", timeoutCell(row)],
+      accuracy: () => ["", accuracyCell(row)],
+      total_tokens: () => ["number-cell", row.total_tokens == null ? missingValue(true) : escapeHtml(formatTokens(row.total_tokens))],
+      total_cost_usd: () => ["number-cell", costCell(row)],
+      source_type: () => ["source-cell", sourceLabel(row)],
+    };
+    return `<tr data-row-id="${escapeHtml(row.id)}">${visibleColumns().map(({key, label}) => {
+      const [className, content] = cells[key]();
+      const active = state.sortInteracted && state.sort.key === key ? " is-active" : "";
+      return `<td data-column="${key}" data-label="${escapeHtml(t(label))}" class="${className}${active}">${content}</td>`;
+    }).join("")}</tr>`;
   }).join("");
   elements.resultsBody.querySelectorAll(".harness-logo").forEach((image) => {
     image.addEventListener("error", () => { image.hidden = true; }, { once: true });
@@ -1804,6 +1929,7 @@ function syncResultUrl() {
   url.searchParams.delete("bench");
   url.searchParams.set("version", state.benchmark.version);
   url.searchParams.set("view", state.view);
+  url.searchParams.set("columns", visibleColumns().map(column => column.key).join(","));
   if (state.sortInteracted) {
     url.searchParams.set("sort", state.sort.key);
     url.searchParams.set("direction", state.sort.direction);
@@ -1831,6 +1957,15 @@ function renderBenchmark() {
   renderFilters();
   document.querySelector(".results-title").textContent = state.benchmark.name;
   document.querySelector(".table-caption").textContent = state.benchmark.name;
+  elements.benchmarkSelect.replaceChildren(...state.payload.benchmarks.map(bench => {
+    const option = document.createElement("option");
+    option.value = bench.id;
+    option.textContent = bench.name;
+    option.selected = bench.id === state.benchmark.id;
+    return option;
+  }));
+  refreshCustomSelect(customSelects.get(elements.benchmarkSelect));
+  renderColumnsMenu();
   renderResults();
 }
 
@@ -1850,6 +1985,7 @@ function setExportMenu(open, focus = false) {
   elements.exportToggle.setAttribute("aria-expanded", String(open));
   if (open) {
     setFilterMenu(false);
+    setColumnsMenu(false);
     closeCustomSelects();
     if (focus) elements.exportMenu.querySelector("button").focus();
   } else if (focus) elements.exportToggle.focus();
@@ -1909,12 +2045,28 @@ async function copyResultLink() {
   }
 }
 
-function selectBenchmark(id) {
+function selectBenchmark(id, { fromUrl = false } = {}) {
   const bench = state.payload.benchmarks.find((item) => item.id === id);
   if (!bench) return;
+  const switching = state.benchmark && state.benchmark.id !== id;
+  if (switching && !fromUrl) {
+    state.filters = { source: "", harness: "", model: "", thinking: "" };
+    state.sort = { key: "total_cost_usd", direction: "asc" };
+    state.sortInteracted = false;
+  }
   state.benchmark = bench;
+  const queryColumns = fromUrl ? new URLSearchParams(location.search).get("columns") : null;
+  state.columnsByBenchmark[id] = normalizeColumnKeys(queryColumns === null
+    ? state.columnsByBenchmark[id] : queryColumns.split(","));
   state.paretoSelectedId = null;
+  setFilterMenu(false);
+  setColumnsMenu(false);
+  setExportMenu(false);
+  elements.actionStatus.hidden = true;
+  clearTimeout(actionStatusTimer);
   renderBenchmark();
+  elements.tableWrap.scrollTop = 0;
+  elements.tableWrap.scrollLeft = 0;
 }
 
 function initialBenchmark(payload) {
@@ -1926,6 +2078,18 @@ function initialBenchmark(payload) {
     || payload.benchmarks[0];
 }
 
+function restoreResultUrl() {
+  const params = new URLSearchParams(location.search);
+  const sortKeys = TABLE_COLUMNS.filter(column => column.key !== "row_number").map(column => column.key);
+  state.sort = { key: "total_cost_usd", direction: "asc" };
+  state.sortInteracted = sortKeys.includes(params.get("sort")) && ["asc", "desc"].includes(params.get("direction"));
+  if (state.sortInteracted) state.sort = { key: params.get("sort"), direction: params.get("direction") };
+  const view = params.get("view") === "pareto" || location.hash === "#pareto" ? "pareto" : "table";
+  for (const key of Object.keys(state.filters)) state.filters[key] = params.get(key) || "";
+  selectBenchmark(initialBenchmark(state.payload).id, { fromUrl: true });
+  setResultView(view);
+}
+
 async function init() {
   // Escape the chart's scrolling/clipping container without changing the plot.
   document.body.append(elements.paretoTooltip);
@@ -1934,6 +2098,38 @@ async function init() {
     ? localePreference
     : state.locale;
   enhanceCustomSelects();
+  elements.benchmarkSelect.addEventListener("change", event => {
+    if (!state.benchmark) return;
+    // Keep browser back/forward useful across benchmark changes.
+    history.pushState({}, "", location.href);
+    selectBenchmark(event.target.value);
+  });
+  elements.columnsToggle.addEventListener("click", () => {
+    if (state.benchmark) setColumnsMenu(elements.columnsMenu.hidden);
+  });
+  elements.columnsToggle.addEventListener("keydown", event => {
+    if (event.key === "ArrowDown" && state.benchmark) {
+      event.preventDefault(); setColumnsMenu(true, true);
+    }
+    if (event.key === "Escape") setColumnsMenu(false, true);
+  });
+  elements.columnsMenu.addEventListener("click", event => {
+    const button = event.target.closest("button");
+    if (button?.dataset.column) changeColumns(button.dataset.column);
+    else if (button?.classList.contains("columns-reset")) changeColumns(null);
+  });
+  elements.columnsMenu.addEventListener("keydown", event => {
+    if (event.key === "Escape") { event.preventDefault(); setColumnsMenu(false, true); return; }
+    if (["ArrowDown", "ArrowUp", "Home", "End"].includes(event.key)) {
+      event.preventDefault();
+      const buttons = [...elements.columnsMenu.querySelectorAll("button")];
+      let index = buttons.indexOf(document.activeElement) + (event.key === "ArrowUp" ? -1 : 1);
+      if (event.key === "Home") index = 0;
+      if (event.key === "End") index = buttons.length - 1;
+      buttons[(index + buttons.length) % buttons.length]?.focus();
+    }
+  });
+  window.addEventListener("resize", positionColumnsMenu);
   elements.localeSelect.addEventListener("change", (event) => setLocale(event.target.value));
   elements.themeToggle.addEventListener("click", cycleTheme);
   document.querySelectorAll(".action-tooltip-wrap").forEach((wrapper) => {
@@ -2023,10 +2219,12 @@ async function init() {
   document.addEventListener("pointerdown", (event) => {
     if (!event.target.closest(".filter-menu-wrap")) setFilterMenu(false);
     if (!event.target.closest(".export-menu-wrap")) setExportMenu(false);
+    if (!event.target.closest(".columns-menu-wrap")) setColumnsMenu(false);
   });
   document.addEventListener("focusin", (event) => {
     if (!event.target.closest(".filter-menu-wrap")) setFilterMenu(false);
     if (!event.target.closest(".export-menu-wrap")) setExportMenu(false);
+    if (!event.target.closest(".columns-menu-wrap")) setColumnsMenu(false);
   });
   elements.viewTabs.addEventListener("click", (event) => {
     const tab = event.target.closest("[data-view]");
@@ -2137,26 +2335,23 @@ async function init() {
     state.payload.benchmarks = state.payload.benchmarks.filter((bench) =>
       PUBLISHED_BENCHMARK_IDS.includes(bench.id));
     if (!state.payload.benchmarks.length) throw new Error("No published benchmarks available");
-    const params = new URLSearchParams(location.search);
-    const sortKeys = ["harness", "model", "compression_trigger", "timeout_multiplier", "accuracy", "total_cost_usd", "source_type"];
-    if (sortKeys.includes(params.get("sort")) && ["asc", "desc"].includes(params.get("direction"))) {
-      state.sort = { key: params.get("sort"), direction: params.get("direction") };
-      state.sortInteracted = true;
-    }
-    const chartRequested = params.get("view") === "pareto" || location.hash === "#pareto";
-    for (const key of Object.keys(state.filters)) state.filters[key] = params.get(key) || "";
-    selectBenchmark(initialBenchmark(state.payload).id);
-    setResultView(chartRequested ? "pareto" : "table");
-    if (chartRequested) {
+    try {
+      const saved = JSON.parse(localStorage.getItem(COLUMNS_KEY));
+      if (saved && typeof saved === "object" && !Array.isArray(saved)) state.columnsByBenchmark = saved;
+    } catch {}
+    restoreResultUrl();
+    window.addEventListener("popstate", restoreResultUrl);
+    if (state.view === "pareto") {
       await document.fonts.ready;
       requestAnimationFrame(() => document.querySelector("#results").scrollIntoView({ block: "start", behavior: "instant" }));
     }
 
   } catch (error) {
     console.error(error);
-    elements.resultsBody.innerHTML = `<tr><td class="empty-cell" colspan="8">${escapeHtml(t("dataError"))}</td></tr>`;
+    elements.resultsBody.innerHTML = `<tr><td class="empty-cell" colspan="${state.benchmark ? visibleColumns().length : 8}">${escapeHtml(t("dataError"))}</td></tr>`;
     elements.resultCount.textContent = t("dataError");
   }
 }
 
+new ResizeObserver(fitTableColumns).observe(elements.tableWrap);
 init();

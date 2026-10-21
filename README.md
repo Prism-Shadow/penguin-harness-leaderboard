@@ -3,10 +3,10 @@
 A static GitHub Pages leaderboard for comparing the complete evaluation setup,
 not only the model. The page currently presents Penguin's full-suite Terminal-Bench
 2.1 experiments alongside official baselines from [tbench.ai](https://www.tbench.ai/)
-and separately labelled vendor reports. TB 3.0 and 4.0 reference snapshots remain
-in the repository but are not shown until full-suite Penguin results are available.
-The frontend publication list is `PUBLISHED_BENCHMARK_IDS` in `site/script.js`;
-links to unpublished versions fall back to TB 2.1. Available outputs for the
+and separately labelled vendor reports. The Benchmark selector currently has one
+option, Terminal-Bench 2.1. Other archived snapshots remain in the data unchanged.
+The frontend routing list is `PUBLISHED_BENCHMARK_IDS` in `site/script.js`;
+links to unknown versions fall back to TB 2.1. Available outputs for the
 six Penguin jobs were archived locally on 2026-09-14; source trace gaps and native
 JSONL format issues remain explicitly recorded, not presented as a complete archive.
 
@@ -16,7 +16,7 @@ with configuration before performance:
 | Column | Fixed comparison fields |
 | --- | --- |
 | Rank | Sequential position in the current filtered and sorted view, not an official rank |
-| Harness | Name + reported or configured version |
+| Harness | Name; version information remains in Details only |
 | Model | Model name followed by source-reported thinking effort in plain parentheses, when available |
 | Compact at | Context length that triggers compaction, not maximum context capacity |
 | Time budget | Reported scaling factor (e.g. 4×) for each task's original time limit; fixed durations are not converted into multipliers |
@@ -24,10 +24,21 @@ with configuration before performance:
 | Cost | Recorded USD total; incomplete billing is disclosed on hover and in Details |
 | Source | Terminal-Bench, Vendor, or Penguin |
 
-The eight display columns keep thinking effort beside the model, without a badge
+The eight default display columns keep thinking effort beside the model, without a badge
 or a separate column. The Benchmark's full
-name remains above the table, with a responsive 28–40px heading; with only
-TB 2.1 published, there is no version selector.
+name remains above the table, with a responsive 28–40px heading.
+The columns menu shows or removes actual header/body cells, allowing the table to
+redistribute its available width. Only token totals are optional,
+giving nine selectable columns for TB 2.1. Trial counts, release dates and Harness/model organizations
+remain in Details, not the column menu. Optional fields with no values anywhere
+in the selected dataset (including compaction in 3.0/4.0) are omitted from its menu.
+At least one column remains selected. Reset columns restores that dataset's defaults;
+Clear all still clears only filters. Column choices are stored separately per benchmark
+in localStorage and included in shared URLs; explicit URL columns override saved choices.
+Removed column keys in saved choices or old links are ignored; an empty remaining
+selection falls back to the current defaults.
+Changing benchmarks resets filters/sort/scroll while retaining the view and each
+benchmark's column choices. Browser back/forward restores the previous URL state.
 Default ordering is ascending recorded total cost,
 with missing totals last (per-task means are not substituted for totals).
 The default sort arrow is neutral; column highlighting starts only after a header is selected.
@@ -55,7 +66,7 @@ The left toolbar provides a download-tray icon for copy/export and a chain icon
 for copying the current filters link. Both have translated hover and keyboard
 hints that dismiss on click or Escape. Success feedback disappears after one
 second, with repeat actions restarting the timer. Markdown contains
-the complete filtered table in its current order; PNG/SVG exports contain the
+the complete filtered table in its current order and visible column selection; PNG/SVG exports contain the
 full table or the current Pareto chart, not just the visible scrollport.
 Exports are generated entirely in the browser, with local assets embedded.
 Shared links retain the benchmark, view, filters and sort. Clipboard failures
@@ -65,15 +76,19 @@ In Table mode, the results area fits the available viewport height: the benchmar
 title and controls stay visible while rows scroll inside the table. Column
 headers stick to the top of that scroll region at every screen width. Headers
 use uppercase text and the same foreground color as the body, with left-aligned
-labels on one line. Columns fit their longest label or value plus consistent
-padding; the score tracks retain their 260px width and use a 14px height. Horizontal scrolling inside
-the card exposes the remaining columns without shrinking the bars. Controls,
+labels. Columns share the available page width, with additional space for model
+names and resolution rates. The table has no horizontal scrolling. Score tracks
+retain a 14px height; in narrower columns they sit below the percentage to preserve
+useful bar length. Desktop rows have a uniform height, without Harness version sublines.
+Below 980px the selected fields stack within each record to avoid clipping or
+sideways scrolling; the sticky header retains the sorting controls.
+The widened results area and reduced vertical margins leave more room for rows. Controls,
 menus, badges, cards and dialogs use square corners. The region is keyboard focusable.
 Sorting or changing filters returns the rows to the top. Pareto retains its
 page-scrolling layout. Row dividers use a stronger neutral color in both themes.
 Reported ± intervals use the same size as the resolution rate and the same text
 color as timeout multipliers; their reserved space keeps score bars aligned.
-Error bars use thin black lines with vertical end caps in light mode and light
+Error bars use 2px black lines with short 10px vertical end caps in light mode and light
 neutral lines in dark mode, independent of the model-series fill colors.
 The score and interval geometry/data are unchanged.
 Harness versions align with the name text using the same icon-column spacing,
@@ -132,8 +147,8 @@ parameters are removed. Sources, cost coverage and configuration remain availabl
 in point tooltips and Details. Filter names remain accessible to screen readers
 without a redundant row of visible labels.
 This layout takes inspiration from [tbench](https://www.tbench.ai/?view=pareto).
-Versions without full-suite Penguin
-results are excluded from URL routing, not presented as empty pages.
+Version switching uses only records from the selected benchmark; it never carries
+Penguin rows into versions with no Penguin results.
 A reference point is not a controlled comparison against Penguin.
 
 Penguin uses circular markers and a dotted observed frontier. Labels contain
@@ -398,7 +413,7 @@ For browser checks of internal scrolling, sticky headers, external controls,
 light/dark styling and narrow viewports (requires Selenium, Chromium and
 chromedriver), start the local server above, then run:
 
-    python3 scripts/check_table_scroll.py --url http://127.0.0.1:8765/
+    python3 scripts/check_table_controls_browser.py --url http://127.0.0.1:8765/
     python3 scripts/check_result_actions.py --url http://127.0.0.1:8765/
 
 To update curated records and configuration supplements while retaining official

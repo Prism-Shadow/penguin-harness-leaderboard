@@ -42,9 +42,9 @@
         document.documentElement.lang = locale === "zh" ? "zh-CN" : "en";
       } catch {}
     </script>
-    <link rel="stylesheet" href="styles.css?v=20261020-model-colors" />
-    <script src="export.js?v=20261020-source-labels" defer></script>
-    <script src="script.js?v=20261020-penguin-ci" defer></script>
+    <link rel="stylesheet" href="styles.css?v=20261021-remote-type-a147340" />
+    <script src="export.js?v=20261021-table-fit" defer></script>
+    <script src="script.js?v=20261021-table-fit" defer></script>
   </head>
   <body>
     <a class="skip-link" href="#results" data-i18n="skipToResults">Skip to results</a>
@@ -124,6 +124,9 @@
               </div>
               <span class="action-status" role="status" aria-live="polite" hidden></span>
             </div>
+            <div class="benchmark-control">
+              <select id="benchmark-select" data-i18n-aria="selectBenchmark" aria-label="Benchmark"></select>
+            </div>
             <div class="filter-menu-wrap">
               <button class="filter-toggle" type="button" aria-haspopup="menu" aria-controls="filter-menu" aria-expanded="false" data-i18n-aria="filters" aria-label="Filters">
                 <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M4 4h16v3l-6 7v5l-4 2v-7L4 7Z"/></svg>
@@ -139,6 +142,12 @@
                 <select id="model-filter" class="model-filter" data-i18n-aria="modelFilter" aria-label="Filter by model"></select>
                 <select id="thinking-filter" class="thinking-filter" data-i18n-aria="thinkingFilter" aria-label="Filter by thinking level"></select>
               </div>
+            </div>
+            <div class="columns-menu-wrap">
+              <button class="columns-toggle action-button" type="button" aria-haspopup="menu" aria-controls="columns-menu" aria-expanded="false" data-i18n-aria="visibleColumns" aria-label="Visible columns">
+                <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><rect x="3" y="4" width="18" height="16"/><path d="M9 4v16M15 4v16"/></svg>
+              </button>
+              <div id="columns-menu" class="columns-menu" role="menu" data-i18n-aria="visibleColumns" aria-label="Visible columns" hidden></div>
             </div>
             <div class="view-tabs" role="tablist" data-i18n-aria="resultView" aria-label="Results view">
               <button id="table-tab" type="button" role="tab" aria-controls="table-panel" aria-selected="true" data-view="table" data-i18n="tableView">Table</button>

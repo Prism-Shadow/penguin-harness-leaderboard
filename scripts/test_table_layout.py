@@ -1,4 +1,4 @@
-"""Offline regression checks for the content-sized, eight-column table."""
+"""Offline regression checks for the viewport-fitting, configurable table."""
 
 import json
 from pathlib import Path
@@ -21,18 +21,18 @@ class TableLayoutTests(unittest.TestCase):
         return re.search(r"(?:^|\n)" + re.escape(selector) + r"\s*\{([^}]+)\}",
                          self.css).group(1)
 
-    def test_eight_columns_size_to_their_content(self):
-        header = self.script[self.script.index("function renderTableHead()"):
-                             self.script.index("function accuracyCell(")]
-        columns = re.findall(r'\["([^"]+)", "[^"]+"\]', header)
+    def test_eight_default_columns_share_the_available_width(self):
+        registry = self.script[self.script.index("const TABLE_COLUMNS ="):
+                               self.script.index("const translations =")]
+        columns = re.findall(r'key: "([^"]+)", label: "[^"]+", default: true', registry)
         self.assertEqual(columns, ["row_number", "harness", "model",
                                   "compression_trigger", "timeout_multiplier", "accuracy",
                                   "total_cost_usd", "source_type"])
         table = self.css_rule("table")
-        self.assertIn("width: max-content", table)
-        self.assertIn("min-width: 100%", table)
-        self.assertIn("table-layout: auto", table)
-        self.assertNotRegex(self.css, r"\.column-[\w-]+\s*\{[^}]*\bwidth:")
+        self.assertIn("width: 100%", table)
+        self.assertIn("table-layout: fixed", table)
+        self.assertIn("elements.tableWrap.clientWidth - totalWidth", self.script)
+        self.assertIn("new ResizeObserver(fitTableColumns)", self.script)
 
     def test_headers_use_dark_uppercase_left_aligned_text(self):
         self.assertIn('rowNumber: "RANK"', self.script)
@@ -43,25 +43,52 @@ class TableLayoutTests(unittest.TestCase):
         button = self.css_rule(".sort-button")
         self.assertIn("text-align: left", button)
         self.assertIn("text-transform: inherit", button)
-        self.assertIn("white-space: nowrap", button)
+        self.assertIn("white-space: normal", button)
         self.assertIn("justify-content: flex-start", button)
         self.assertIn("flex: 0 0 11px", self.css_rule(".sort-arrow"))
+
+    def test_original_typographic_scale_font_stack_and_colors(self):
+        self.assertIn('--sans: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "PingFang SC", "Microsoft YaHei", sans-serif;', self.css_rule(":root"))
+        self.assertIn("--text: #111827", self.css_rule(":root"))
+        self.assertIn("--muted: #6b7280", self.css_rule(":root"))
+        for selector in ("table", "th", ".entity-name", ".model-effort", ".rate-cell strong", ".rate-copy span", ".number-cell"):
+            self.assertIn("font-size: 14px", self.css_rule(selector))
+        self.assertIn("font-weight: 550", self.css_rule(".entity-name"))
+        self.assertIn("font-weight: 600", self.css_rule("th"))
+        self.assertIn("font-weight: 600", self.css_rule(".rate-cell strong"))
+        self.assertIn("font-weight: 400", self.css_rule(".model-effort"))
 
     def test_all_css_boxes_use_square_corners(self):
         radii = re.findall(r"\bborder-(?:[\w-]+-)?radius:\s*([^;]+);", self.css)
         self.assertTrue(radii)
         self.assertTrue(all(value == "0" for value in radii), radii)
 
-    def test_score_track_cannot_flex_shrink(self):
+    def test_score_track_fits_column_and_only_rows_scroll(self):
         rule = self.css_rule(".accuracy-track")
-        self.assertIn("width: 260px", rule)
-        self.assertIn("min-width: 260px", rule)
-        self.assertIn("flex: 0 0 260px", rule)
-        self.assertIn("overflow: auto", self.css_rule(".table-wrap"))
+        self.assertIn("width: 100%", rule)
+        self.assertIn("height: 14px", rule)
+        self.assertIn("@container score (max-width: 300px)", self.css)
+        self.assertIn("overflow-y: auto", self.css_rule(".table-wrap"))
+        self.assertIn("overflow-x: hidden", self.css_rule(".table-wrap"))
+
+    def test_uniform_rows_without_harness_version_subline(self):
+        self.assertIn("height: 72px", self.css_rule('.results-body tr[data-row-id]'))
+        renderer = self.script[self.script.index("function renderTable()"):
+                               self.script.index("function detailLink(")]
+        self.assertNotIn("harnessVersionLabel", renderer)
+        self.assertNotIn("harness-meta", self.script + self.css)
+        self.assertIn('t(config ? "configuredVersion" : "harnessVersion")', self.script)
+
+    def test_shorter_thicker_error_whiskers(self):
+        self.assertIn("height: 2px", self.css_rule(".accuracy-ci"))
+        cap = self.css_rule(".accuracy-cap")
+        self.assertIn("width: 2px", cap)
+        self.assertIn("height: 10px", cap)
 
     def test_loading_empty_and_error_rows_cover_all_columns(self):
         self.assertEqual(self.html.count('colspan="8"'), 1)
-        self.assertEqual(self.script.count('colspan="8"'), 2)
+        self.assertIn('colspan="${visibleColumns().length}"', self.script)
+        self.assertIn('colspan="${state.benchmark ? visibleColumns().length : 8}"', self.script)
         self.assertNotIn('colspan="9"', self.html + self.script)
 
     def test_effort_is_plain_muted_text_after_model_name(self):
